@@ -6,7 +6,7 @@ function exist_or_skip(filename, path_type)
 % * filename: directory or filename to look for
 % * path_path: 'dir' or 'file'
 narginchk(2,2)
-validateattr(path_type, {'char'}, {'vector'}, mfilename, 'dir or file', 2)
+validateattributes(path_type, {'char'}, {'vector'}, mfilename, 'dir or file', 2)
 
 if strcmp(path_type, 'file')
     if ~is_file(filename)

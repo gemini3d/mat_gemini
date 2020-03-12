@@ -41,12 +41,12 @@ sigx2 = p.Efield_fracwidth*(max(xg.x2)-min(xg.x2));
 sigx3 = p.Efield_fracwidth*(max(xg.x3)-min(xg.x3));
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
-time = tmin:config.dtE0:config.tdur;
+time = tmin:p.dtE0:p.tdur;
 Nt = length(time);
 %% SET UP TIME VARIABLES
-UTsec = config.UTsec0 + time;     %time given in file is the seconds from beginning of hour
+UTsec = p.UTsec0 + time;     %time given in file is the seconds from beginning of hour
 UThrs = UTsec / 3600;
-E.expdate = cat(2, repmat(config.ymd(:)',[Nt, 1]), UThrs', zeros(Nt, 1), zeros(Nt, 1));
+E.expdate = cat(2, repmat(p.ymd(:)',[Nt, 1]), UThrs', zeros(Nt, 1), zeros(Nt, 1));
 % t=datenum(E.expdate);
 %% CREATE DATA FOR BACKGROUND ELECTRIC FIELDS
 E.Exit = zeros(E.llon, E.llat, Nt);

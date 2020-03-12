@@ -17,17 +17,17 @@ function close_enough = allclose(actual, desired, rtol, atol)
 % if "actual" is within atol OR rtol of "desired", return true
 
 narginchk(2,4)
-validateattr(actual, {'numeric'}, {'nonempty'}, mfilename, 'measured values', 1)
-validateattr(desired, {'numeric'}, {'nonempty'}, mfilename, 'desired reference values', 2)
+validateattributes(actual, {'numeric'}, {'nonempty'}, mfilename, 'measured values', 1)
+validateattributes(desired, {'numeric'}, {'nonempty'}, mfilename, 'desired reference values', 2)
 if nargin < 3 || isempty(rtol)
   rtol=1e-8;
 else
-  validateattr(rtol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'relative tolerance', 3)
+  validateattributes(rtol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'relative tolerance', 3)
 end
 if nargin < 4 || isempty(atol)
   atol = 1e-9;
 else
-  validateattr(atol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'absolute tolerance', 4)
+  validateattributes(atol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'absolute tolerance', 4)
 end
 
 %% compare

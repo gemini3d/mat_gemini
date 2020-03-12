@@ -10,7 +10,7 @@ validateattributes(P, {'struct'}, {'scalar'}, mfilename, 'parameters', 5)
 ax = get_axes(h);
 hi = imagesc(x, y, Phitop, 'parent', ax);
 try %#ok<TRYNC> octave < 5
-  set(hi, 'alphadata', ~isnan(dat));
+  set(hi, 'alphadata', ~isnan(Phitop));
 end
 
 axes_tidy(ax, P)

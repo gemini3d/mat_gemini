@@ -1,4 +1,4 @@
-function plot3d_cart_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf, cmap)
+function plot3D_cart_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf, cmap)
 
 narginchk(6,8)
 
@@ -224,7 +224,7 @@ set(h,'alphadata',~isnan(parmp3))
 tight_axis(ha)
 colormap(ha,cmap)
 caxis(ha,caxlims)
-c=colorbar(hax);
+c=colorbar(ha);
 xlabel(c,parmlbl);
 xlabel(ha,'magnetic latitude (deg.)')
 ylabel(ha,'altitude (km)')

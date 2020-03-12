@@ -1,7 +1,9 @@
 function [t,ns,Ts,vs1,J1,J2,J3,v2,v3,Phitop]=readdata(lxs,filename)
 
 narginchk(2,2)
-validateattr(lxs, {'numeric'}, {'vector', 'numel', 3, 'positive'}, mfilename, 'grid dimensions', 1)
+validateattributes(lxs, {'numeric'}, {'vector', 'numel', 3, 'positive'}, mfilename, 'grid dimensions', 1)
+
+lsp = 7;
 
 filename = absolute_path(filename);
 assert(is_file(filename), [filename, 'is not found.'])
@@ -21,7 +23,7 @@ disp('READDATA --> Loaded parallel velocities...')
 
 Ts=fread(fid,prod(lxs)*lsp,'real*8');
 Ts=reshape(Ts,[lxs,lsp]);
-disp('READDATA --> Loaded temperatures...'))
+disp('READDATA --> Loaded temperatures...')
 
 if (~feof(fid))   %some files may not have electrodynamic info
     J1=fread(fid,lxs(1)*lxs(2)*lxs(3),'real*8');
@@ -71,7 +73,7 @@ if (lxs(2) == 1)    %a 2D simulations was done
     Ti=squeeze(Ti);
     Te=squeeze(Ts(:,:,:,lsp));
 
-    [X3,X1]=meshgrid(x3,x1);
+  %  [X3,X1]=meshgrid(x3,x1);
 else    %full 3D run
     Jpar=permute(J1(:,:,:),[3,2,1]);
     Jperp2=permute(J2(:,:,:),[3,2,1]);
@@ -86,7 +88,7 @@ else    %full 3D run
     Ti=permute(Ti,[3,2,1]);
     Te=permute(Ts(:,:,:,lsp),[3,2,1]);
 
-    [X2,X3,X1]=meshgrid(x2,x3,x1);
+    %[X2,X3,X1]=meshgrid(x2,x3,x1);
 end
 
 end

@@ -4,17 +4,31 @@ narginchk(1,1)
 
 [~,~,ext] = fileparts(filename);
 
+assert(is_file(filename), [filename,' is not a file.'])
+
 switch ext
-  case '.dat'
-  case {'.h5', '.nc'}, error('only raw is handled for now. Raise a Github Issue')
+  case '.dat', dat = read_raw(filename);
+  case {'.h5'}, dat= read_hdf5(filename);
+  case ('.nc'), dat = read_nc4(filename);
   otherwise, error(['unknown file type ',filename])
 end
 
-%% SIMULATION SIZE
-lxs = simsize(direc);
-%% SIMULATION RESULTS
-assert(is_file(filename), [filename,' is not a file.'])
+end % function
 
+
+function dat = read_hdf5(filename)
+ dat.ne = h5read(filename, '/neall');
+end % function
+
+function dat = read_nc4(filename)
+ dat.ne = ncread(filename, '/neall');
+end % function
+
+
+function dat = read_raw(filename)
+%% SIMULATION SIZE
+lxs = simsize(fileparts(filename));
+%% SIMULATION RESULTS
 fid=fopen(filename,'r');
 simdt(fid);
 

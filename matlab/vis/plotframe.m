@@ -154,6 +154,8 @@ end
 else    %short 2D simulation - put the entire time series in a single plot
 
 figure(h.f10) %#ok<*UNRCH>
+Rsp = 4;
+Csp = 3;
 ha = subplot(Rsp, Csp, it, 'parent',h.f10);
 nelim =  [9 11.3];
 plotfun(ymd,UTsec,xg,log10(ne), 'log_{10} n_e (m^{-3})',nelim,[dat.mlatsrc,dat.mlonsrc],ha);

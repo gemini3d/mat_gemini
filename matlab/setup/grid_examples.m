@@ -42,6 +42,8 @@ if ~exist('xg', 'var')
 %    xg=makegrid_tilteddipole_nonuniform_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_oneside_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
   else
+    p.glat = glat;
+    p.glon = glon;
     xg = makegrid_cart_3D(p);
   end
 end

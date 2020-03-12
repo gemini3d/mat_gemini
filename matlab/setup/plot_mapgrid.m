@@ -81,14 +81,14 @@ altlinestyle=':';    %line style for the "back" of the grid
 if (flag2D)    %2D grid, don't use a map to plot and show things in polar coordinates (maybe)
     thref=pi/2;
 
-    h=polar(thref-xg.theta(:,end),xg.r(:,end)/1e3);
+    h=polarplot(thref-xg.theta(:,end),xg.r(:,end)/1e3);
     set(h,'LineWidth',LW,'Color',[0 0 0]);
     hold on;
-    h=polar(thref-xg.theta(:,1),xg.r(:,1)/1e3);
+    h=polarplot(thref-xg.theta(:,1),xg.r(:,1)/1e3);
     set(h,'LineWidth',LW,'Color',[0 0 0]);
-    h=polar(thref-xg.theta(1,:),xg.r(1,:)/1e3);
+    h=polarplot(thref-xg.theta(1,:),xg.r(1,:)/1e3);
     set(h,'LineWidth',LW,'Color',[0 0 0]);
-    h=polar(thref-xg.theta(end,:),xg.r(end,:)/1e3);
+    h=polarplot(thref-xg.theta(end,:),xg.r(end,:)/1e3);
     set(h,'LineWidth',LW,'Color',[0 0 0]);
     ha=h;
 else    %this is a 3D grid and we can plot it on a map if the user has the appropriate toolbox(es)
@@ -259,13 +259,13 @@ if (flag2D)
         [THETAn,Rn]=meshgrid(thetan,rn);
 
         %Now plot the neutral grid
-        h=polar(thref-THETAn(:,end),Rn(:,end),altlinestyle);
+        h=polarplot(thref-THETAn(:,end),Rn(:,end),altlinestyle);
         set(h,'LineWidth',LW);
-        h=polar(thref-THETAn(:,1),Rn(:,1),altlinestyle);
+        h=polarplot(thref-THETAn(:,1),Rn(:,1),altlinestyle);
         set(h,'LineWidth',LW);
-        h=polar(thref-THETAn(1,:),Rn(1,:),altlinestyle);
+        h=polarplot(thref-THETAn(1,:),Rn(1,:),altlinestyle);
         set(h,'LineWidth',LW);
-        h=polar(thref-THETAn(end,:),Rn(end,:),altlinestyle);
+        h=polarplot(thref-THETAn(end,:),Rn(end,:),altlinestyle);
         set(h,'LineWidth',LW);
     end
 else     %full 3D grid
@@ -410,7 +410,7 @@ set(gca,'LineWidth',LW-0.5)
 if (flag2D)    %for 2D just plot Earth's surface for reference
     terr_theta=linspace(0,2*pi,100);
     terr_r=6370*ones(size(terr_theta));
-    h=polar(terr_theta,terr_r,'c:');
+    h=polarplot(terr_theta,terr_r,'c:');
     set(h,'LineWidth',LW);
 else
     if (flagmapping)
