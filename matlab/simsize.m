@@ -37,7 +37,9 @@ switch ext
         error(['did not find lxs, lx, lx1 in ', fn])
       end
     else
-      varnames = extractfield(h5info(fn).Datasets, 'Name');
+      % use temporary variable to be R2017b OK
+      finf = h5info(fn);
+      varnames = extractfield(finf.Datasets, 'Name');
 
       if any(strcmp('lxs', varnames))
         lxs = h5read(fn, '/lxs');
