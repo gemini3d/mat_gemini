@@ -52,7 +52,9 @@ switch ext
       end
     end
   case '.nc'
-    varnames = extractfield(ncinfo(fn).Variables, 'Name');
+    % use temporary variable to be R2017b OK
+    finf = ncinfo(fn);
+    varnames = extractfield(finf.Variables, 'Name');
 
     if any(strcmp('lxs', varnames))
       lxs = ncread(fn, '/lxs');
