@@ -1,4 +1,4 @@
-function strlab = datelab(ymd,UTsec)
+function strlab = datelab(ymd, UTsec)
 % convert gemini time format to string
 narginchk(2,2)
 validateattributes(ymd, {'numeric'}, {'vector', 'positive', 'numel', 3}, mfilename, 'year month day', 1)
@@ -6,7 +6,7 @@ validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'UT
 
 %% SECONDS
 if UTsec >= 86400
-  error('0 <= UTsec < 86400')
+  error('datelab:bounds_error', '0 <= UTsec < 86400')
 end
 
 % microsecond resolution
