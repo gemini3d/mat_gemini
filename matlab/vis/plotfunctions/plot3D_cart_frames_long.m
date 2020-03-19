@@ -3,7 +3,7 @@ function plot3D_cart_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf,
 narginchk(6,8)
 
 if nargin>=7  && ~isempty(sourceloc)
-  validateattr(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
   sourcemlat=sourceloc(1); sourcemlon=sourceloc(2);
 end
 
