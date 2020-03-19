@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    paths:
+    - "*.m"
+    - ".github/workflows/ci.yml"
+  pull_request:
+  release:
+
+jobs:
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt -yq update
+        sudo apt install -yq --no-install-recommends octave
+    - run: octave --eval "test_matlab"
+      working-directory: tests
