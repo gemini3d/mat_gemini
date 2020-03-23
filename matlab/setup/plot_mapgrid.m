@@ -4,10 +4,13 @@ narginchk(3,3)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename)
 validateattributes(flagsource, {'numeric'}, {'scalar'}, mfilename)
 validateattributes(neuinfo, {'struct'}, {'scalar'}, mfilename)
+
+
 %% INPUT COORDS NEED TO BE CONVERTED TO MAGNETIC
 mlon=xg.phi*180/pi;
 mlat=90-xg.theta*180/pi;
 dmlon=max(mlon(:))-min(mlon(:));
+dmlat=max(mlat(:))-min(mlat(:));
 
 
 %% ORGANIZE INPUT STRUCTURE
@@ -38,7 +41,7 @@ if flagsource ~= 0
 else     %no "epicenter" to track just use mean grid locations
     sourcemlon=mean(mlon(:));
     sourcemlat=mean(mlat(:));
-    sourcemlonplot=sourcemlon
+    sourcemlonplot=sourcemlon;
 end %if
 
 
@@ -52,7 +55,8 @@ else
     flag2D=false;
     if (flagmapping)
         ha=gca;
-        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+30),abs(sourcemlat)+30],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
+%        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+30),abs(sourcemlat)+30],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
+        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+dmlat/2+5),abs(sourcemlat)+dmlat/2+5],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
         plotfun=@plot3m;
     else
         ha=gca;
