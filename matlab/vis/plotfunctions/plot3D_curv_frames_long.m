@@ -1,23 +1,23 @@
 function h=plot3D_curv_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf, cmap)
 
 narginchk(4,9)
-validateattr(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 1)
-validateattr(UTsec, {'numeric'}, {'scalar'}, mfilename, 'UTC second', 2)
-validateattr(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
-validateattr(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',4)
+validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 1)
+validateattributes(UTsec, {'numeric'}, {'scalar'}, mfilename, 'UTC second', 2)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',4)
 if nargin<5, parmlbl=''; end
-validateattr(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 5)
+validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 5)
 
 if nargin<6
   caxlims=[];
 else
-  validateattr(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 6)
+  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 6)
 end
 
 if nargin<7  || isempty(sourceloc) % leave || for validate
   sourceloc = [];
 else
-  validateattr(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
 end
 if nargin<8 || isempty(hf)
   hf = figure();

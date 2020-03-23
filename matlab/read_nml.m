@@ -7,10 +7,15 @@ narginchk(1,1)
 
 filename = get_configfile(path);
 
+%% required groups
 p = read_nml_group(filename, 'base');
+p = read_nml_group(filename, 'flags');
+p = read_nml_group(filename, 'files');
 p.indat_file = absolute_path(p.indat_file);
 p.indat_size = absolute_path(p.indat_size);
 p.indat_grid = absolute_path(p.indat_grid);
+
+%% optional groups
 if ~isfield(p, 'simdir')
   p.simdir = fileparts(p.indat_size);
 end
@@ -19,8 +24,12 @@ if ~isfield(p, 'nml')
   p.nml = filename;
 end
 
-try %#ok<TRYNC>
-p = merge_struct(p, read_nml_group(filename, 'setup'));
+try % setup is only used if making a new simulation
+  p = merge_struct(p, read_nml_group(filename, 'setup'));
+catch excp
+  if ~strcmp(excp.identifier, 'read_nml_group:group_not_found')
+    rethrow(excp)
+  end
 end
 if isfield(p, 'eqdir')
   p.eqdir = absolute_path(p.eqdir);

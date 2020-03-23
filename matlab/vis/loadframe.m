@@ -1,9 +1,9 @@
 function dat = loadframe(direc,ymd,UTsec,flagoutput,mloc,xg,file_format, config_file, realbits)
 
 narginchk(3,9)
-validateattr(direc, {'char'}, {'vector'}, mfilename, 'data directory', 1)
-validateattr(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 2)
-validateattr(UTsec, {'numeric'}, {'vector'}, mfilename, 'UTC second', 3)
+validateattributes(direc, {'char'}, {'vector'}, mfilename, 'data directory', 1)
+validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 2)
+validateattributes(UTsec, {'numeric'}, {'vector'}, mfilename, 'UTC second', 3)
 
 if nargin < 9 || isempty(realbits), realbits = 64; end
 
@@ -16,21 +16,21 @@ if nargin < 5 || isempty(flagoutput) || isempty(mloc)
   flagoutput = p.flagoutput;
   mloc = p.mloc;
 end
-validateattr(flagoutput,{'numeric'},{'scalar'},mfilename,'output flag',4)
+validateattributes(flagoutput,{'numeric'},{'scalar'},mfilename,'output flag',4)
 
 if ~isempty(mloc)
-  validateattr(mloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'magnetic coordinates', 5)
+  validateattributes(mloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'magnetic coordinates', 5)
 end
 
 if nargin < 7 || isempty(file_format)
   file_format = 'auto';
 end
-validateattr(file_format, {'char'}, {'vector'}, mfilename, 'raw or hdf5', 7)
+validateattributes(file_format, {'char'}, {'vector'}, mfilename, 'raw or hdf5', 7)
 
 if nargin < 6 || isempty(xg)
   xg = readgrid([direc, '/inputs'], file_format, realbits);
 end
-validateattr(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
 
 direc = absolute_path(direc);

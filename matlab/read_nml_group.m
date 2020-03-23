@@ -15,7 +15,9 @@ while ~feof(fid)
   end
 end
 
-assert(~isempty(mgrp), ['did not find group ', group, ' in ', filename])
+if isempty(mgrp)
+  error('read_nml_group:group_not_found', ['did not find group ', group, ' in ', filename])
+end
 
 while ~feof(fid)
   line = fgetl(fid);
@@ -47,7 +49,9 @@ while ~feof(fid)
 end
 fclose(fid);
 
-assert(~isempty(mend), ['did not read end of group ', group, ' in ', filename])
+if isempty(mend)
+  error('read_nml_group:group_syntax',['did not read end of group ', group, ' in ', filename])
+end
 
 end % function
 
