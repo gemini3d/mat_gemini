@@ -70,8 +70,8 @@ switch flagoutput
 end
 
 %% SET MAGNETIC LATITUDE AND LONGITUDE OF THE SOURCE
-dat.mlatsrc=[];
-dat.mlonsrc=[];
+dat.mlatsrc=mloc(1);
+dat.mlonsrc=mloc(2);
 if nargout >= 2 && ~isempty(mloc)
   dat.mlatsrc=mloc(1);
   dat.mlonsrc=mloc(2);
