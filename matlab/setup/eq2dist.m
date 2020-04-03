@@ -16,35 +16,29 @@ addpath([cwd,'/../vis'])
 peq = read_config(p.eqdir);
 xgin = readgrid(p.eqdir, p.file_format);
 
-
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 [ymd_end,UTsec_end] = dateinc(peq.tdur,peq.ymd,peq.UTsec0);
 
-
 %% LOAD THE last equilibrium frame
 dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.file_format, p.eqdir);
-
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)
 check_drift(dat.vs1)
 check_temperature(dat.Ts)
 
-
 %% DO THE INTERPOLATION
 [nsi,vs1i,Tsi] = model_resample(xgin, dat.ns, dat.vs1, dat.Ts, xg);
-
 
 %% sanity check interpolated variables
 check_density(nsi)
 check_drift(vs1i)
 check_temperature(Tsi)
 
-
 %% WRITE OUT THE GRID
 writegrid(p, xg)
-writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.simdir, p.format, p.realbits);
+writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.simdir, p.file_format);
 
 end % function eq2dist
 

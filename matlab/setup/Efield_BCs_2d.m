@@ -117,10 +117,10 @@ assert(all(isfinite(E.Vmaxx3ist(:))), 'NaN in Vmaxx3ist')
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT TYPICALLY NEED TO BE SMOOTHED.
 
-switch p.format
+switch p.file_format
   case {'raw', 'dat'}, writeraw(dir_out, E, p)
   case {'h5', 'hdf5'}, writehdf5(dir_out, E, p)
-  otherwise, error(['unknown data format ', p.format])
+  otherwise, error(['unknown data format ', p.file_format])
 end
 
 if ~nargout, clear('E'), end

@@ -14,7 +14,7 @@ end
 
 %% deduce data file format from simsize format
 [~,~,ext] = fileparts(p.indat_size);
-p.format = ext(2:end);
+p.file_format = ext(2:end);
 
 end % function
 

@@ -19,7 +19,7 @@ Tsi=zeros(lx1,lx2,lx3,lsp);
 if lx3 > 1 && lx2 > 1 % 3-D
   disp('interpolating grid for 3-D simulation')
   [X2,X1,X3] = meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2),xgin.x3(3:end-2));
-  [X2i,X1i,X3i] = meshgrid(xg.x2(3:end-2),xg.x1(3:end-2),xg.x3(3:end-2));
+  [X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2),xg.x3(3:end-2)));
   for i=1:lsp
     tmpvar = interp3(X2,X1,X3,ns(:,:,:, i),X2i,X1i,X3i);
 %      inds=find(isnan(tmpvar));   %this doesn't need to be fixed
@@ -37,8 +37,12 @@ if lx3 > 1 && lx2 > 1 % 3-D
   end
 elseif lx3 == 1 % 2-D east-west
   disp('interpolating grid for 2-D simulation in x1, x2')
+  % to avoid IEEE754 rounding issues leading to bounds error,
+  % cast the arrays to the same precision,
+  % preferring float32 to save disk space and IO time
   [X2,X1]=meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2));
-  [X2i,X1i]=meshgrid(xg.x2(3:end-2),xg.x1(3:end-2));
+  [X2i,X1i]=meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)));
+
   for i = 1:lsp
     tmpvar=interp2(X2,X1,squeeze(ns(:,:,:, i)),X2i,X1i);
     nsi(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
@@ -67,8 +71,8 @@ elseif lx2 == 1 % 2-D north-south
   x1in_noghost = xgin.x1(3:end-2);
   [X1, X3] = ndgrid(x1in_noghost, x3in_noghost);
   % new grid
-  x3_noghost = xg.x3(3:end-2);
-  x1_noghost = xg.x1(3:end-2);
+  x3_noghost = single(xg.x3(3:end-2));
+  x1_noghost = single(xg.x1(3:end-2));
   [X1i, X3i] = ndgrid(x1_noghost, x3_noghost);
   % remove degenerate dimension
   ns = permute(ns, [1, 3, 4, 2]);

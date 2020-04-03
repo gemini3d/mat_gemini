@@ -47,7 +47,7 @@ end
 pg = precip_grid(xg, p, llat, llon);
 
 for i = i_on:i_off
-   Qit(:,:,i) = precip_gaussian2d(pg, p.Qprecip);
+   Qit(:,:,i) = precip_gaussian2d(pg, p.Qprecip, p.Qprecip_background);
   E0it(:,:,i) = p.E0precip;
 end
 
@@ -63,18 +63,18 @@ end
 outdir = absolute_path([p.simdir, '/inputs/prec_inputs/']);
 makedir(outdir)
 
-switch p.format
+switch p.file_format
   case {'h5','hdf5'}, write_hdf5(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it)
   case {'dat','raw'}, write_raw(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it, p.realbits)
-  otherwise, error(['unknown file format ', p.format])
+  case {'nc'}, error('see Python code in gemini repo for NetCDF4')
+  otherwise, error(['unknown file format ', p.file_format])
 end
 
 end % function
 
 
 function write_hdf5(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it)
-narginchk(10,10)
-
+narginchk(9,9)
 fn = [outdir, '/simsize.h5'];
 disp(['write ', fn])
 h5save(fn, '/llon', int32(llon))

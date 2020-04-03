@@ -1,8 +1,5 @@
 function xgf = makegrid_cart_3D(p)
 %% make 3D grid and save to disk
-arguments
-  p (1,1) struct
-end
 
 %% create altitude grid
 %p.alt_min = 80e3;
@@ -12,7 +9,7 @@ if isfield(p, 'alt_min') && isfield(p, 'alt_max') && isfield(p, 'alt_scale') && 
   z = altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eqdir') && is_file(p.eqdir)
   disp(['makegrid_cart_3D: reusing grid from ', p.eqdir])
-  xeq = readgrid(p.eqdir, p.format, p.realbits);
+  xeq = readgrid(p.eqdir, p.file_format, p.realbits);
   z = xeq.x1;
   clear('xeq')
 else
