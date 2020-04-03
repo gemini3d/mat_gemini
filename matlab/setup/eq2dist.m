@@ -14,7 +14,7 @@ addpath([cwd,'/../vis'])
 
 %% READ Equilibrium SIMULATION INFO
 peq = read_config(p.eqdir);
-xgin = readgrid(p.eqdir, p.format, p.realbits);
+xgin = readgrid(p.eqdir, p.file_format);
 
 
 %% END FRAME time of equilibrium simulation
@@ -23,7 +23,7 @@ xgin = readgrid(p.eqdir, p.format, p.realbits);
 
 
 %% LOAD THE last equilibrium frame
-dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.format, p.eqdir);
+dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.file_format, p.eqdir);
 
 
 %% sanity check equilibrium simulation input to interpolation

@@ -16,7 +16,7 @@ while ~feof(fid)
 end
 
 if isempty(mgrp)
-  error('read_nml_group:group_not_found', ['did not find group ', group, ' in ', filename])
+  error('read_nml_group:group_not_found', ['did not find group "', group, '" in ', filename])
 end
 
 while ~feof(fid)

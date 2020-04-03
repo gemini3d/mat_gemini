@@ -10,7 +10,8 @@ if exist('datetime', 'file')  % Matlab >= R2014b
   t1 = t0 + seconds(UTsec) + seconds(dt);
 
   ymdnew = [t1.Year, t1.Month, t1.Day];
-  UTsecnew = seconds(t1 - t0);
+  t1_midnight = datetime(t1.Year, t1.Month, t1.Day);
+  UTsecnew = seconds(t1 - t1_midnight);
 else
   [ymdnew, UTsecnew] = dateinc_old(dt, ymd, UTsec);
 end
