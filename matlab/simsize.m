@@ -8,11 +8,11 @@ if is_file(path)
   if strcmp(stem, 'simsize')
     fn = path;
   else
-    fn = [fileparts(path), '/inputs/simsize', ext];
+    fn = [fileparts(path), '/simsize', ext];
   end
 elseif is_folder(path)
   for ext = {'.h5', '.dat'}
-    fn = [path, '/inputs/simsize',ext{:}];
+    fn = [path, '/simsize',ext{:}];
     if is_file(fn)
       break
     end
