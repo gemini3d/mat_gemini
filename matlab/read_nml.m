@@ -9,8 +9,8 @@ filename = get_configfile(path);
 
 %% required groups
 p = read_nml_group(filename, 'base');
-p = read_nml_group(filename, 'flags');
-p = read_nml_group(filename, 'files');
+p = merge_struct(p, read_nml_group(filename, 'flags'));
+p = merge_struct(p, read_nml_group(filename, 'files'));
 p.indat_file = absolute_path(p.indat_file);
 p.indat_size = absolute_path(p.indat_size);
 p.indat_grid = absolute_path(p.indat_grid);

@@ -27,14 +27,17 @@ exe = absolute_path([exeloc,'/msis_setup']);
 if ispc, exe = [exe, '.exe']; end
 
 if ~is_file(exe)
-  src = [absolute_path([cwd,'/../../../GEMINI/src/vendor/msis00/msis00_gfortran.f']), ' ', ...
-         absolute_path([cwd,'/../../../GEMINI/src/neutral/msis_driver.f90'])];    %this makes some assumptions about where the MSIS source code lies
+  src = [absolute_path([cwd,'/../../../gemini/src/vendor/msis00/msis00_gfortran.f']), ' ', ...
+         absolute_path([cwd,'/../../../gemini/src/neutral/msis_driver.f90'])];
   % -static avoids problems with missing .so or .dll, from Matlab's
-  % internal shell (MZ - but causes some issues on MACOS, this is just a
-  % mess right now...
+  % internal shell
   fc = getenv('FC');
   if isempty(fc)
-    fc = '/usr/local/bin/gfortran -std=legacy -w';
+    if ismac
+      fc = '/usr/local/bin/gfortran -std=legacy -w';
+    else
+      fc = 'gfortran -static -std=legacy -w';   
+    end
   end
   cmd = [fc, ' ', src,' -o ',exe];
   disp(cmd)

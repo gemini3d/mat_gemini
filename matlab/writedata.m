@@ -8,7 +8,7 @@ function writedata(ymd, UTsec,ns,vsx1,Ts, outdir, file_format, realbits)
 % INPUT ARRAYS SHOULD BE TRIMMED TO THE CORRECT SIZE
 % I.E. THEY SHOULD NOT INCLUDE GHOST CELLS
 
-narginchk(8,8)
+narginchk(7,8)
 validateattributes(ymd, {'numeric'}, {'vector', 'positive', 'numel', 3}, mfilename, 'year, month, day', 1)
 validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'seconds since UT midnight', 2)
 validateattributes(ns, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'density', 3)
@@ -16,14 +16,16 @@ validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 4)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 5)
 validateattributes(outdir, {'char'}, {'vector'}, mfilename, 'output directory',6)
 validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',7)
+if nargin==7, realbits=64; end
 validateattributes(realbits, {'numeric'}, {'scalar','integer'},mfilename, '32 or 64',8)
 
 outdir = absolute_path(outdir);
 makedir(outdir)
 
 switch file_format
-  case {'h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
-  case {'dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
+  case {'.h5','h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
+  case {'.dat','dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
+  case{'nc','.nc'}, error('NetCDF4 is supported by Python in main gemini/ repo')
   otherwise, error('unknown file_format')
 end
 

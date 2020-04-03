@@ -9,10 +9,11 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 outdir = absolute_path(p.simdir);
 makedir(outdir)
 
-switch p.format
-  case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
-  case {'h5','hdf5'}, write_hdf5(outdir, xg)
-  otherwise, error(['unknown file format ', p.format])
+switch p.file_format
+  case {'.dat', 'dat','raw'}, write_raw(outdir, xg, p.realbits)
+  case {'.h5', 'h5','hdf5'}, write_hdf5(outdir, xg)
+  case{'.nc', 'nc'}, error ('the Python code in GEMINI repo handles NetCDF4, but not Matlab.')
+  otherwise, error(['unknown file format ', p.file_format])
 end
 
 end % function

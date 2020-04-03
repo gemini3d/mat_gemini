@@ -2,6 +2,7 @@ function model_setup(p)
 %% determines what kind of setup is needed and does it.
 
 %% parse input
+narginchk(1,1)
 if isa(p, 'struct')
   validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 elseif isa(p, 'char')
@@ -11,7 +12,6 @@ elseif isa(p, 'char')
 else
   error('model_setup needs path to config.nml')
 end
-
 
 %% is this equilibrium or interpolated simulation
 if isfield(p, 'eqdir')
