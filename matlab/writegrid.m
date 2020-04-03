@@ -6,7 +6,7 @@ narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
-outdir = absolute_path(p.simdir);
+outdir = [absolute_path(p.simdir),'/inputs'];
 makedir(outdir)
 
 switch p.file_format

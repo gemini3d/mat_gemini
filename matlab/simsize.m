@@ -5,14 +5,14 @@ narginchk(1,1)
 fn = [];
 if is_file(path)
   [~, stem, ext] = fileparts(path);
-  if strcmp(stem, 'simsize')
+  if strcmp(stem, '/inputs/simsize')
     fn = path;
   else
-    fn = [fileparts(path), '/simsize', ext];
+    fn = [fileparts(path), '/inputs/simsize', ext];
   end
 elseif is_folder(path)
   for ext = {'.h5', '.dat'}
-    fn = [path, '/simsize',ext{:}];
+    fn = [path, '/inputs/simsize',ext{:}];
     if is_file(fn)
       break
     end
