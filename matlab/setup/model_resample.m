@@ -19,7 +19,7 @@ Tsi=zeros(lx1,lx2,lx3,lsp);
 if lx3 > 1 && lx2 > 1 % 3-D
   disp('interpolating grid for 3-D simulation')
   [X2,X1,X3] = meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2),xgin.x3(3:end-2));
-  [X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2),xg.x3(3:end-2)));
+  [X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)), single(xg.x3(3:end-2)) );
   for i=1:lsp
     tmpvar = interp3(X2,X1,X3,ns(:,:,:, i),X2i,X1i,X3i);
 %      inds=find(isnan(tmpvar));   %this doesn't need to be fixed
