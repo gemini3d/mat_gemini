@@ -47,8 +47,8 @@ end
 pg = precip_grid(xg, p, llat, llon);
 
 for i = i_on:i_off
-   Qit(:,:,i) = precip_gaussian2d(pg);
-  E0it(:,:,i) = 5e3;
+   Qit(:,:,i) = precip_gaussian2d(pg, p.Qprecip);
+  E0it(:,:,i) = p.E0precip;
 end
 
 %% CONVERT THE ENERGY TO EV

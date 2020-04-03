@@ -31,14 +31,14 @@ lonbuf = 1/100 * (mlonmax-mlonmin);
 E.mlat = linspace(mlatmin-latbuf, mlatmax+latbuf, E.llat);
 E.mlon = linspace(mlonmin-lonbuf, mlonmax+lonbuf, E.llon);
 [E.MLON, E.MLAT] = ndgrid(E.mlon, E.mlat);
-mlonmean = mean(E.mlon);
-mlatmean = mean(E.mlat);
+p.mlonmean = mean(E.mlon);
+p.mlatmean = mean(E.mlat);
 
 %% WIDTH OF THE DISTURBANCE
-mlatsig = p.Efield_fracwidth*(mlatmax-mlatmin);
-mlonsig = p.Efield_fracwidth*(mlonmax-mlonmin);
-sigx2 = p.Efield_fracwidth*(max(xg.x2)-min(xg.x2));
-sigx3 = p.Efield_fracwidth*(max(xg.x3)-min(xg.x3));
+p.mlatsig = p.Efield_fracwidth*(mlatmax-mlatmin);
+p.mlonsig = p.Efield_fracwidth*(mlonmax-mlonmin);
+p.sigx2 = p.Efield_fracwidth*(max(xg.x2)-min(xg.x2));
+p.sigx3 = p.Efield_fracwidth*(max(xg.x3)-min(xg.x3));
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
 time = tmin:p.dtE0:p.tdur;
@@ -62,29 +62,17 @@ E.Vmaxx2ist = zeros(E.llat, Nt);
 E.Vminx3ist = zeros(E.llon, Nt);
 E.Vmaxx3ist = zeros(E.llon, Nt);
 
-if lx3 == 1 % east-west
-  pk = p.Etarg * sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
-elseif lx2 == 1 % north-south
-  pk = p.Etarg * sigx3 .* xg.h3(lx1, 1, floor(lx3/2)) .* sqrt(pi)./2;
-else % 3D
-  pk = p.Etarg * sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
-end
-
-% x2ctr = 1/2*(xg.x2(lx2) + xg.x2(1));
-for i = 1:Nt
-  E.Vmaxx1it(:,:,i) = pk .* erf((E.MLON-mlonmean)/mlonsig) .* erf((E.MLAT-mlatmean)/mlatsig);
+%% synthesize feature
+if isfield(E, 'Etarg')
+  E = Efield_target(p, xg, lx2, lx3, Nt, E);
+elseif isfield(E, 'Jtarg')
+  E = Jcurrent_target(p, Nt, E);
+else
+  error('Efield_BCs_3d: unknown target feature')
 end
 
 %% check for NaNs
-% this is also done in Fortran, but just to help ensure results.
-assert(all(isfinite(E.Exit(:))), 'NaN in Exit')
-assert(all(isfinite(E.Eyit(:))), 'NaN in Eyit')
-assert(all(isfinite(E.Vminx1it(:))), 'NaN in Vminx1it')
-assert(all(isfinite(E.Vmaxx1it(:))), 'NaN in Vmaxx1it')
-assert(all(isfinite(E.Vminx2ist(:))), 'NaN in Vminx2ist')
-assert(all(isfinite(E.Vmaxx2ist(:))), 'NaN in Vmaxx2ist')
-assert(all(isfinite(E.Vminx3ist(:))), 'NaN in Vminx3ist')
-assert(all(isfinite(E.Vmaxx3ist(:))), 'NaN in Vmaxx3ist')
+nan_check(E)
 
 %% SAVE THESE DATA TO APPROPRIATE FILES
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
@@ -99,6 +87,49 @@ end
 
 if ~nargout, clear('E'), end
 
+end % function
+
+
+function E = Jcurrent_target(p, Nt, E)
+
+S = p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean - 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
+
+for i = 2:Nt
+  E.Vmaxx1it(:,:,i) = S - p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/ 2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean + 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
+end
+
+end % function
+
+
+function E = Efield_target(p, xg, lx2, lx3, Nt, E)
+%% create feature defined by Efield
+if lx3 == 1 % east-west
+  S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+elseif lx2 == 1 % north-south
+  S = p.Etarg * p.sigx3 .* xg.h3(lx1, 1, floor(lx3/2)) .* sqrt(pi)./2;
+else % 3D
+  S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+end
+
+% x2ctr = 1/2*(xg.x2(lx2) + xg.x2(1));
+for i = 1:Nt
+  E.Vmaxx1it(:,:,i) = S .* erf((E.MLON - p.mlonmean) / p.mlonsig) .* erf((E.MLAT - p.mlatmean) / p.mlatsig);
+end
+
+end % function
+
+
+function nan_check(E)
+
+%% this is also done in Fortran, but just to help ensure results.
+assert(all(isfinite(E.Exit(:))), 'NaN in Exit')
+assert(all(isfinite(E.Eyit(:))), 'NaN in Eyit')
+assert(all(isfinite(E.Vminx1it(:))), 'NaN in Vminx1it')
+assert(all(isfinite(E.Vmaxx1it(:))), 'NaN in Vmaxx1it')
+assert(all(isfinite(E.Vminx2ist(:))), 'NaN in Vminx2ist')
+assert(all(isfinite(E.Vmaxx2ist(:))), 'NaN in Vmaxx2ist')
+assert(all(isfinite(E.Vminx3ist(:))), 'NaN in Vminx3ist')
+assert(all(isfinite(E.Vmaxx3ist(:))), 'NaN in Vmaxx3ist')
 end % function
 
 
