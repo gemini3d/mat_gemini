@@ -13,6 +13,17 @@ switch ext
   otherwise, error(['unknown file type ',filename])
 end
 
+dat.filename=filename;
+dat.Ti=[];
+dat.Te=[];
+dat.v1=[];
+dat.v2=[];
+dat.v3=[];
+dat.J1=[];
+dat.J2=[];
+dat.J3=[];
+dat.Phitop=[];
+
 end % function
 
 

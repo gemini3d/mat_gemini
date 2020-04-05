@@ -63,7 +63,7 @@ E.Vminx3ist = zeros(E.llon, Nt);
 E.Vmaxx3ist = zeros(E.llon, Nt);
 
 %% synthesize feature
-if isfield(E, 'Etarg')
+if isfield(E, 'Etarg')    %MZ - shouldn't this be p.Etarg???
   E = Efield_target(p, xg, lx2, lx3, Nt, E);
 elseif isfield(E, 'Jtarg')
   E = Jcurrent_target(p, Nt, E);
