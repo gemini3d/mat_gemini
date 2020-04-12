@@ -27,7 +27,8 @@ end
 
 varnames = {};
 if is_file(filename)
-  varnames = extractfield(h5info(filename).Datasets, 'Name');
+  ds = h5info(filename).Datasets;
+  varnames = {ds(:).Name};
 end
 
 if any(strcmp(varname, varnames) | strcmp(varname(2:end), varnames))

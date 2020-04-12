@@ -39,7 +39,8 @@ switch ext
     else
       % use temporary variable to be R2017b OK
       finf = h5info(fn);
-      varnames = extractfield(finf.Datasets, 'Name');
+      ds = finf.Datasets;
+      varnames = {ds(:).Name};
 
       if any(strcmp('lxs', varnames))
         lxs = h5read(fn, '/lxs');
