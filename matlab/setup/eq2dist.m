@@ -5,12 +5,10 @@ narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 
-
 %% Paths
 % this script is called from numerous places, so ensure necessary path
 cwd = fileparts(mfilename('fullpath'));
 addpath([cwd,'/../vis'])
-
 
 %% READ Equilibrium SIMULATION INFO
 peq = read_config(p.eqdir);
