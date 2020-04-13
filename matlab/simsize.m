@@ -11,7 +11,7 @@ if is_file(path)
     fn = [fileparts(path), '/simsize', ext];
   end
 elseif is_folder(path)
-  for ext = {'.h5', '.dat'}
+  for ext = {'.h5', '.nc', '.dat'}
     fn = [path, '/simsize',ext{:}];
     if is_file(fn)
       break
