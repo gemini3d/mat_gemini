@@ -20,29 +20,16 @@ narginchk(2,2)
 validateattributes(p, {'struct'}, {'scalar'})
 validateattributes(xg, {'struct'}, {'scalar'})
 
+%% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-exeloc = [cwd,'/../build'];
-makedir(exeloc)
-exe = absolute_path([exeloc,'/msis_setup']);
+src_dir = absolute_path([cwd, '/../../']);
+build_dir = [src_dir, '/build'];
+exe = [build_dir,'/msis_setup'];
 if ispc, exe = [exe, '.exe']; end
 
+%% build exe if not present
 if ~is_file(exe)
-  src = [absolute_path([cwd,'/../../../gemini/src/vendor/msis00/msis00_gfortran.f']), ' ', ...
-         absolute_path([cwd,'/../../../gemini/src/neutral/msis_driver.f90'])];
-  % -static avoids problems with missing .so or .dll, from Matlab's
-  % internal shell
-  fc = getenv('FC');
-  if isempty(fc)
-    if ismac
-      fc = '/usr/local/bin/gfortran -std=legacy -w';
-    else
-      fc = 'gfortran -static -std=legacy -w';   
-    end
-  end
-  cmd = [fc, ' ', src,' -o ',exe];
-  disp(cmd)
-  status = system(cmd);
-  assert(status==0, 'failed to compile MSISe00')
+  cmake(src_dir, build_dir)
 end
 assert(is_file(exe), ['MSIS setup executable not found: ', exe])
 %% SPECIFY SIZES ETC.
