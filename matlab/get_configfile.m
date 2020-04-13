@@ -20,7 +20,7 @@ else
   error(['could not find config file in ', path])
 end
 
-assert(is_file(filename), ['could not find config file in ', filename])
+assert(is_file(filename), ['could not find config file in ', path])
 
 end % function
 
