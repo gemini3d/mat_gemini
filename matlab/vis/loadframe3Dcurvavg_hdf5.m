@@ -1,11 +1,6 @@
 function dat = loadframe3Dcurvavg_hdf5(filename)
 
 narginchk(1,1)
-%% SIMULATION SIZE
-lxs = simsize(filename);
-%% SIMULATION GRID FILE
-% (NOTE THAT THIS IS NOT THE ENTIRE THING - THAT NEEDS TO BE DONE WITH READGRID.M.  WE NEED THIS HERE TO DO MESHGRIDS
-% [x1, x2, x3] = simaxes(filename);
 %% SIMULATIONS RESULTS
 assert(is_file(filename), [filename,' does not exist '])
 dat.filename = filename;
@@ -14,8 +9,8 @@ dat.filename = filename;
 
 if isoctave
   D = load(filename);
-%   simdate(1:3) = D.time.ymd;
-%   simdate(4) = D.time.UThour;
+  %dat.simdate(1:3) = D.time.ymd;
+  %dat.simdate(4) = D.time.UThour;
   dat.ne = D.neall;
   dat.v1 = D.v1avgall;
   dat.Ti = D.Tavgall;
@@ -27,8 +22,8 @@ if isoctave
   dat.v3 = D.v3avgall;
   dat.Phitop = D.Phiall;
 else
-%   simdate(1:3) = h5read(filename, '/time/ymd');
-%   simdate(4) = h5read(filename, '/time/UThour');
+  %dat.simdate(1:3) = h5read(filename, '/time/ymd');
+  %dat.simdate(4) = h5read(filename, '/time/UThour');
   %% Number densities
   dat.ne = h5read(filename, '/neall');
   %% Parallel Velocities

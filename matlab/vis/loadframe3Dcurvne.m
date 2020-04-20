@@ -24,6 +24,8 @@ dat.J2=[];
 dat.J3=[];
 dat.Phitop=[];
 
+lxs = simsize(filename);
+
 if any(lxs(2:3) == 1)    % 2D sim
   dat.ne = squeeze(dat.ne);
 end

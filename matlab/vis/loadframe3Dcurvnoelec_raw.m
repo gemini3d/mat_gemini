@@ -9,7 +9,7 @@ assert(is_file(fsimres), [filename,' is not a file.'])
 dat.filename = filename;
 
 fid = fopen(filename, 'r');
-simdt(fid);
+dat.simdate = simdt(fid);
 
 dat.ns = read4D(fid, lsp, lxs);
 dat.vs1 = read4D(fid, lsp, lxs);

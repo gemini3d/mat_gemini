@@ -10,6 +10,9 @@ switch ext
   otherwise, error(['unknown file type', filename])
 end
 
+lsp = 7;
+lxs = simsize(filename);
+
 dat.v1 = squeeze(sum(dat.ns(:,:,:,1:6) .* dat.vs1(:,:,:,1:6), 4) ./ dat.ns(:,:,:,lsp));
 
 %% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET

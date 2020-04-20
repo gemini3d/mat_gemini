@@ -10,6 +10,8 @@ switch ext
   otherwise, error(['unknown file type ',filename])
 end
 
+lxs = simsize(filename);
+
 %% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
 if any(lxs(2:3) == 1)    %a 2D simulations was done in x1 and x3
   dat.ne = squeeze(dat.ne);

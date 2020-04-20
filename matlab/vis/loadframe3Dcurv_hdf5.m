@@ -1,9 +1,6 @@
 function dat = loadframe3Dcurv_hdf5(fn)
 
 narginchk(1,1)
-%% SIMULATION SIZE
-lsp=7;
-lxs = simsize(fn);
 %% SIMULATION RESULTS
 assert(is_file(fn), [fn,' is not a file.'])
 dat.filename = fn;

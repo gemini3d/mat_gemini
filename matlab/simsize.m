@@ -4,11 +4,11 @@ narginchk(1,1)
 
 fn = [];
 if is_file(path)
-  [~, stem, ext] = fileparts(path);
+  [direc, stem, ext] = fileparts(path);
   if strcmp(stem, 'simsize')
     fn = path;
   else
-    if strcmp(stem, 'inputs')
+    if strcmp(stem, 'inputs') || any(strfind(direc, 'inputs'))
       part = '/simsize';
     else
       part = '/inputs/simsize';
