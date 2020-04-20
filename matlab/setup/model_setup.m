@@ -13,6 +13,9 @@ else
   error('model_setup needs path to config.nml')
 end
 
+makedir(p.simdir)
+copy_file(p.nml, p.simdir)
+
 %% is this equilibrium or interpolated simulation
 if isfield(p, 'eqdir')
   model_setup_interp(p)

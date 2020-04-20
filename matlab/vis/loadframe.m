@@ -46,19 +46,21 @@ end
 
 for ext = suffix
   stem = stem0;
-  filename = [direc, filesep, stem, ext{1}];
+  filename = [direc, '/', stem, ext{1}];
   if is_file(filename)
     break
   end
   % switch microsecond to one for first time step
   stem(end) = '1';
-  filename = [direc, filesep,stem, ext{1}];
+  filename = [direc, '/', stem, ext{1}];
   if is_file(filename)
     break
   end
 end
 
-assert(is_file(filename), ['loadframe: ', filename, ' does not exist.'])
+if ~is_file(filename)
+  error('loadframe:file_not_found', filename)
+end
 
 switch flagoutput
   case 1
