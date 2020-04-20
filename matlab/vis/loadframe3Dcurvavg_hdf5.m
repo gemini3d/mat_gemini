@@ -46,17 +46,5 @@ else
   %% Topside potential
   dat.Phitop = h5read(filename, '/Phiall');
 end
-%% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
-if any(lxs(2:3) == 1)    %a 2D simulations was done in x1 and x3
-  dat.ne = squeeze(dat.ne);
-  dat.v1 = squeeze(dat.v1);
-  dat.Ti = squeeze(dat.Ti);
-  dat.Te = squeeze(dat.Te);
-  dat.J1 = squeeze(dat.J1);
-  dat.J2 = squeeze(dat.J2);
-  dat.J3 = squeeze(dat.J3);
-  dat.v2 = squeeze(dat.v2);
-  dat.v3 = squeeze(dat.v3);
-end
 
 end % function

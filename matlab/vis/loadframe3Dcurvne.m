@@ -24,6 +24,9 @@ dat.J2=[];
 dat.J3=[];
 dat.Phitop=[];
 
+if any(lxs(2:3) == 1)    % 2D sim
+  dat.ne = squeeze(dat.ne);
+end
 end % function
 
 
@@ -48,14 +51,6 @@ ns=reshape(ns, lxs);
 
 fclose(fid);
 
-%REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
-if (lxs(2) == 1)    %a 2D simulations was done
-  dat.ne = squeeze(ns(:,:,:));
-%  [X3,X1]=meshgrid(x3,x1);
-else    %full 3D run
-%  ne=permute(ns(:,:,:),[3,2,1]);
-  dat.ne = ns;
-%  [X2,X3,X1]=meshgrid(x2,x3,x1);
-end
+dat.ne = ns;
 
 end % function
