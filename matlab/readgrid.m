@@ -1,28 +1,30 @@
-function xgf = readgrid(path, file_format, realbits)
+function xgf = readgrid(path, realbits)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
-narginchk(1,3)
-if nargin < 2 || isempty(file_format), file_format = 'auto'; end
-validateattributes(file_format, {'char'}, {'vector'}, mfilename, 'raw or hdf5', 2)
-if nargin < 3 || isempty(realbits), realbits = 64; end
-validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 or 64', 3)
+% we don't use file_format because the output / new simulation may be in
+% one file format while the equilibrium sim was in another file format
+narginchk(1,2)
+if nargin < 2 || isempty(realbits), realbits = 64; end
+validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 or 64', 2)
 
 path = absolute_path(path);
 if is_file(path)
   path = fileparts(path);
 end
 
-switch file_format
-  case {'dat','raw'}, xgf = read_raw(path, realbits);
-  case {'h5','hdf5'}, xgf = read_hdf5(path);
-  otherwise
-    if is_file([path, '/simsize.h5'])
-      xgf = read_hdf5(path);
-    elseif is_file([path,'/simsize.dat'])
-      xgf = read_raw(path, realbits);
-    else
-      error(['no simsize file found in ',path])
-    end
+suffixes = {'.h5', '.nc', '.dat'};
+
+for suffix = suffixes
+  if is_file([path, '/inputs/simsize', suffix{:}])
+    break
+  end
+end
+
+switch suffix{:}
+  case '.dat', xgf = read_raw(path, realbits);
+  case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
+  case '.nc', error('readgrid:not_implemented', 'TODO: implement NetCDF4')
+  otherwise, error('readgrid:value_error', ['file format unknown: ',suffix{:}])
 end
 
 end % function

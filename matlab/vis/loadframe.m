@@ -28,7 +28,7 @@ end
 validateattributes(file_format, {'char'}, {'vector'}, mfilename, 'raw or hdf5', 7)
 
 if nargin < 6 || isempty(xg)
-  xg = readgrid([direc, '/inputs'], file_format, realbits);
+  xg = readgrid([direc, '/inputs'], realbits);
 end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 

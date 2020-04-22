@@ -9,7 +9,7 @@ if isfield(p, 'alt_min') && isfield(p, 'alt_max') && isfield(p, 'alt_scale') && 
   z = altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eqdir') && is_file(p.eqdir)
   disp(['makegrid_cart_3D: reusing grid from ', p.eqdir])
-  xeq = readgrid(p.eqdir, p.file_format, p.realbits);
+  xeq = readgrid(p.eqdir, p.realbits);
   z = xeq.x1;
   clear('xeq')
 else

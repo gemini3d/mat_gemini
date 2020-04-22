@@ -12,7 +12,7 @@ addpath([cwd,'/../vis'])
 
 %% READ Equilibrium SIMULATION INFO
 peq = read_config(p.eqdir);
-xgin = readgrid(p.eqdir, p.file_format);
+xgin = readgrid(p.eqdir);
 
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
