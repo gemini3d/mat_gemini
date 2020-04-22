@@ -89,7 +89,7 @@ end
 %}
 
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = loadframe(direc,ymd,UTsec, p.flagoutput, p.mloc, xg, p.file_format);
+dat = loadframe(direc,ymd,UTsec, p.flagoutput, p.mloc, xg);
 disp([dat.filename, ' => ', func2str(plotfun)])
 
 %% UNTIL WE PROVIDE A WAY FOR THE USER TO SPECIFY COLOR AXES, JUST TRY TO SET THEM AUTOMATICALLY

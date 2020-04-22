@@ -19,7 +19,7 @@ xgin = readgrid(p.eqdir);
 [ymd_end,UTsec_end] = dateinc(peq.tdur,peq.ymd,peq.UTsec0);
 
 %% LOAD THE last equilibrium frame
-dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.file_format, p.eqdir);
+dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.eqdir);
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)
