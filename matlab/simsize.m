@@ -24,7 +24,9 @@ elseif is_folder(path)
   end
 end
 
-assert(is_file(fn), [fn,' is not a file.'])
+if ~is_file(fn)
+  error('simsize:file_not_found', fn)
+end
 [~,~,ext] = fileparts(fn);
 
 switch ext
@@ -39,7 +41,7 @@ switch ext
         % octave bug: octave_base_value::int32_scalar_value(): wrong type argument 'int32 matrix'
         lxs = [d.lx1; d.lx2; d.lx3];
       else
-        error(['did not find lxs, lx, lx1 in ', fn])
+        error('simsize:lookup_error', ['did not find lxs, lx, lx1 in ', fn])
       end
     else
       % use temporary variable to be R2017b OK
@@ -54,13 +56,13 @@ switch ext
       elseif any(strcmp('lx1', varnames))
         lxs = [h5read(fn, '/lx1'), h5read(fn, '/lx2'), h5read(fn, '/lx3')];
       else
-        error(['did not find lxs, lx, lx1 in ', fn])
+        error('simsize:lookup_error', ['did not find lxs, lx, lx1 in ', fn])
       end
     end
   case '.nc'
     % use temporary variable to be R2017b OK
     finf = ncinfo(fn);
-    varnames = extractfield(finf.Variables, 'Name');
+    varnames = {finf.Variables(:).Name};
 
     if any(strcmp('lxs', varnames))
       lxs = ncread(fn, '/lxs');
@@ -73,7 +75,7 @@ switch ext
     fid = fopen(fn, 'r');
     lxs = fread(fid, 3, 'integer*4');
     fclose(fid);
-  otherwise, error(['unknown simsize file type ',fn])
+  otherwise, error('simsize:value_error', ['unknown simsize file type ',fn])
 end
 
 lxs = lxs(:).';  % needed for concatenation
