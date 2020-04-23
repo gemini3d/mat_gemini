@@ -33,8 +33,10 @@ else
   dat.Te = h5read(filename, '/TEall');
   %% Current densities
   dat.J1 = h5read(filename, '/J1all');
-  dat.J2 = permute(h5read(filename, '/J2all'), [1,3,2]);
-  dat.J3 = permute(h5read(filename, '/J3all'), [1,3,2]);
+%  dat.J2 = permute(h5read(filename, '/J2all'), [1,3,2]);
+%  dat.J3 = permute(h5read(filename, '/J3all'), [1,3,2]);
+  dat.J2 = h5read(filename, '/J2all');
+  dat.J3 = h5read(filename, '/J3all');
   %% Perpendicular drifts
   dat.v2 = h5read(filename, '/v2avgall');
   dat.v3 = h5read(filename, '/v3avgall');

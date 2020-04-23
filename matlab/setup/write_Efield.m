@@ -91,7 +91,7 @@ for i = 1:Nt
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
 %  fwrite(fid, p.flagdirich, 'int32');
-  fwrite(fid, p.flagdirich, freal);   %FIXME - fortran code still wants this to be real...
+  fwrite(fid, p.Eflagdirich, freal);   %FIXME - fortran code still wants this to be real...
   fwrite(fid, E.Exit(:,:,i), freal);
   fwrite(fid, E.Eyit(:,:,i), freal);
   fwrite(fid, E.Vminx1it(:,:,i), freal);
