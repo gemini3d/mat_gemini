@@ -9,7 +9,9 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 % this script is called from numerous places, so ensure necessary path
 cwd = fileparts(mfilename('fullpath'));
 addpath([cwd,'/../vis'])
-
+%% copy config file
+makedir(p.simdir)
+copy_file(p.nml, p.simdir)
 %% READ Equilibrium SIMULATION INFO
 peq = read_config(p.eqdir);
 xgin = readgrid(p.eqdir);
@@ -34,7 +36,7 @@ check_density(nsi)
 check_drift(vs1i)
 check_temperature(Tsi)
 
-%% WRITE OUT THE GRID
+%% write the interpolated grid and data
 writegrid(p, xg)
 writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.simdir, p.file_format);
 
