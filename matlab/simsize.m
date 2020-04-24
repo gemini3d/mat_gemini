@@ -2,6 +2,7 @@ function lxs = simsize(path)
 
 narginchk(1,1)
 
+%% FIXME:  MZ - I have all kinds of issues with this block of code not finding the file and I'm not entirely sure why...
 fn = [];
 if is_file(path)
   [direc, stem, ext] = fileparts(path);
@@ -17,7 +18,7 @@ if is_file(path)
   end
 elseif is_folder(path)
   for ext = {'.h5', '.nc', '.dat'}
-    fn = [path, '/simsize',ext{:}];
+    fn = [path, '/inputs/simsize',ext{:}];
     if is_file(fn)
       break
     end
