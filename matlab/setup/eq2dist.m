@@ -11,7 +11,7 @@ cwd = fileparts(mfilename('fullpath'));
 addpath([cwd,'/../vis'])
 %% copy config file
 makedir(p.simdir)
-copy_file(p.nml, p.simdir)
+%copy_file(p.nml, p.simdir)
 %% READ Equilibrium SIMULATION INFO
 peq = read_config(p.eqdir);
 xgin = readgrid(p.eqdir);

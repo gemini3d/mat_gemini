@@ -1,4 +1,5 @@
 function x = xgrid(xdist, lxp)
+
 narginchk(2,2)
 validateattributes(xdist, {'numeric'}, {'scalar','positive'}, mfilename, 'one-way x-distance from origin (meters)',1)
 validateattributes(lxp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of x-points',2)

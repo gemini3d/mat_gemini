@@ -8,7 +8,7 @@ if is_file(path)
   if strcmp(stem, 'simsize')
     fn = path;
   else
-    if strcmp(stem, 'inputs') || any(strfind(direc, 'inputs'))
+    if strcmp(stem, 'inputs') || any(strfind(direc, 'inputs')) || is_file([direc,'/simsize',ext])    %this doesn't properly detect the situation where simsize is in base directory...
       part = '/simsize';
     else
       part = '/inputs/simsize';

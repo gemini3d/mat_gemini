@@ -1,31 +1,58 @@
 function grid_examples()
 
+% %% Iowa grid for AGU 2019
+% dtheta=16;
+% dphi=29;
+% lp=100;
+% lq=200;
+% lphi=40;
+% altmin=80e3;
+% %glat=40;   %38.9609;
+% glat=41.5;   %38.9609;
+% glon=360-94.088;
+% gridflag=1;
+% flagsource=1;
+% iscurv=true;
+% 
+% 
+% %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
+% % Iowa example
+% neuinfo.sourcelat=38.9609;
+% neuinfo.sourcelong=360-94.088;
+% neuinfo.neugridtype=3;    %1 = Cartesian neutral grid (2D), 2 - axisymmetric (2D), 3 - 3D Cartesian
+% neuinfo.zmin=0;
+% neuinfo.zmax=375;
+% neuinfo.xmin=-1200;
+% neuinfo.xmax=1200;
+% neuinfo.ymin=-1200;
+% neuinfo.ymax=1200;
+% neuinfo.rhomax=[];        %meaningless in 3D situations
+
+
 %% Iowa grid for AGU 2019
-dtheta=16;
-dphi=29;
+dtheta=12;
+dphi=20;
 lp=100;
 lq=200;
 lphi=40;
 altmin=80e3;
-%glat=40;   %38.9609;
-glat=41.5;   %38.9609;
-glon=360-94.088;
+glat=28.52;   %38.9609;
+glon=360-73.09;
 gridflag=1;
 flagsource=1;
 iscurv=true;
 
 
 %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
-% Iowa example
-neuinfo.sourcelat=38.9609;
-neuinfo.sourcelong=360-94.088;
+neuinfo.sourcelat=28.52;
+neuinfo.sourcelong=360-73.09;
 neuinfo.neugridtype=3;    %1 = Cartesian neutral grid (2D), 2 - axisymmetric (2D), 3 - 3D Cartesian
 neuinfo.zmin=0;
-neuinfo.zmax=375;
-neuinfo.xmin=-1200;
-neuinfo.xmax=1200;
-neuinfo.ymin=-1200;
-neuinfo.ymax=1200;
+neuinfo.zmax=600;
+neuinfo.xmin=-750;
+neuinfo.xmax=750;
+neuinfo.ymin=-750;
+neuinfo.ymax=750;
 neuinfo.rhomax=[];        %meaningless in 3D situations
 
 

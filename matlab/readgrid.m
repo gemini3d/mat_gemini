@@ -15,8 +15,8 @@ end
 suffixes = {'.h5', '.nc', '.dat'};
 
 for suffix = suffixes
-%  if is_file([path, '/inputs/simsize', suffix{:}])
-  if is_file([path, '/simsize', suffix{:}])
+  if is_file([path, '/inputs/simsize', suffix{:}])
+%  if is_file([path, '/simsize', suffix{:}])
     break
   end
 end
