@@ -53,7 +53,7 @@ p = read_config([direc, '/inputs']);
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(xg)
   disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
-  xg = readgrid([direc, '/inputs']);
+  xg = readgrid([direc,'/inputs']);
 end
 
 if nargin<7 || isempty(h)
