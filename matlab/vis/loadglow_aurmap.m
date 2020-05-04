@@ -11,7 +11,7 @@ validateattributes(lwave, {'numeric'}, {'scalar', 'integer', 'positive'})
 switch ext
   case '.dat', cAur = loadglow_aurmap_raw(filename, lx2, lx3, lwave);
   case '.h5', cAur = loadglow_aurmap_hdf5(filename);
-  otherwise, error(['unknown file type ',filename])
+  otherwise, error('loadglow_aurmap:value_error %s', filename)
 end
 
 end

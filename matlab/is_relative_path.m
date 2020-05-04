@@ -4,7 +4,7 @@ function isrel = is_relative_path(path)
 isrel = strcmp(path(1), '.');
 if isrel, return, end
 
-isrel = ~contains(path, filesep);
+isrel = ~contains(path, {filesep, '/'});
 if isrel, return, end
 
 isrel =  isletter(path(1)) && ~strcmp(path(2), ':');

@@ -10,7 +10,10 @@ if ~is_folder(path)
   mkdir(path);
 end
 
-assert(is_folder(path), [path, ' does not exist'])
+if ~is_folder(path)
+  error('makedir:not_a_directory %s', path)
+end
+
 end
 
 

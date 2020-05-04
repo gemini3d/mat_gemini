@@ -66,8 +66,8 @@ makedir(outdir)
 switch p.file_format
   case {'h5','hdf5'}, write_hdf5(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it)
   case {'dat','raw'}, write_raw(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it, p.realbits)
-  case {'nc'}, error('see Python code in gemini repo for NetCDF4')
-  otherwise, error(['unknown file format ', p.file_format])
+  case {'nc'}, error('particles_BCs:not_implemented', 'NetCDF4')
+  otherwise, error('particles_BCs:value_error', 'unknown file format %s', p.file_format)
 end
 
 end % function
@@ -91,7 +91,7 @@ for i = 1:Nt
   UTsec = expdate(i,4)*3600 + expdate(i,5)*60 + expdate(i,6);
   ymd = expdate(i, 1:3);
 
-  fn = [outdir, filesep, datelab(ymd,UTsec), '.h5'];
+  fn = [outdir, '/', datelab(ymd,UTsec), '.h5'];
   disp(['writing ', fn])
 
   h5save(fn, '/Qp', Qit(:,:,i), [], freal)
@@ -125,7 +125,7 @@ for i = 1:Nt
   UTsec = expdate(i,4)*3600 + expdate(i,5)*60 + expdate(i,6);
   ymd = expdate(i, 1:3);
 
-  filename = [outdir, filesep, datelab(ymd,UTsec), '.dat'];
+  filename = [outdir, '/', datelab(ymd,UTsec), '.dat'];
   disp(['writing ', filename])
 
   fid = fopen(filename,'w');

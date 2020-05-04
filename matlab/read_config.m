@@ -6,10 +6,10 @@ filename = get_configfile(path);
 
 [~,~,ext] = fileparts(filename);
 
-switch ext
+switch lower(ext)
   case '.nml', p = read_nml(filename);
   case '.ini', p = read_ini(filename);
-  otherwise, error(['not sure how to read config file ', filename])
+  otherwise, error('read_config:value_error %s', filename)
 end
 
 %% deduce data file format from simsize format

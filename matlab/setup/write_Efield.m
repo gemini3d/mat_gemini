@@ -7,8 +7,8 @@ nan_check(E)
 switch cfg.file_format
   case {'raw', 'dat'}, write_raw(dir_out, E, cfg)
   case {'h5', 'hdf5'}, write_hdf5(dir_out, E, cfg)
-  case {'nc'}, error('for NetCDF4 see gemini repo python code')
-  otherwise, error(['unknown data format ', cfg.file_format])
+  case {'nc'}, error('write_Efield:not_implemented', 'NetCDF4')
+  otherwise, error('write_Efield:value_error %s', cfg.file_format)
 end
 
 end
@@ -50,7 +50,7 @@ for i = 1:Nt
   UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
   ymd = E.expdate(i, 1:3);
 
-  fn = [dir_out, filesep, datelab(ymd,UTsec), '.h5'];
+  fn = [dir_out, '/', datelab(ymd,UTsec), '.h5'];
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   h5save(fn, '/flagdirich', int32(p.Eflagdirich))
@@ -85,7 +85,7 @@ Nt = size(E.expdate, 1);
 for i = 1:Nt
   UTsec = E.expdate(i,4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
   ymd = E.expdate(i,1:3);
-  filename = [dir_out, filesep, datelab(ymd,UTsec), '.dat'];
+  filename = [dir_out, '/', datelab(ymd,UTsec), '.dat'];
   disp(['write: ',filename])
   fid = fopen(filename, 'w');
 

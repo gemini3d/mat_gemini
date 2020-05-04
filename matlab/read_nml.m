@@ -17,7 +17,8 @@ p.indat_grid = absolute_path(p.indat_grid);
 
 %% optional groups
 if ~isfield(p, 'simdir')
-  p.simdir = fileparts(p.indat_size);
+  % assumes that simsize.* are always under foo/inputs/
+  p.simdir = absolute_path(fileparts(p.indat_size));
 end
 
 if ~isfield(p, 'nml')

@@ -291,4 +291,4 @@ end
 
 %SAVE THE DATA TO A .MAT FILE IN CASE WE3 NEED IT LATER
 t=datenum(simdate_series);
-save([direc,filesep,'vTEC.mat'],'mlat','mlong','t','simdate_series','*vTEC*','-v7');
+save([direc,'/vTEC.mat'],'mlat','mlong','t','simdate_series','*vTEC*','-v7');

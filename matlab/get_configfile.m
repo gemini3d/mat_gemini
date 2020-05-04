@@ -11,17 +11,17 @@ if is_file(path)
 elseif is_folder(path)
   names = {'config.nml', 'inputs/config.nml', 'config.ini', 'inputs/config.ini'};
   for s = names
-    filename = [path, filesep, s{:}];
+    filename = [path, '/', s{:}];
     if is_file(filename)
       break
     end
   end
 else
-  error('get_configfile:file_not_found', path)
+  error('get_configfile:file_not_found %s', path)
 end
 
 if ~is_file(filename)
-  error('get_configfile:file_not_found', path)
+  error('get_configfile:file_not_found %s', path)
 end
 
 end % function

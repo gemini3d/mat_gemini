@@ -11,7 +11,7 @@ validateattributes(path_type, {'char'}, {'vector'}, mfilename, 'dir or file', 2)
 if strcmp(path_type, 'file')
     if ~is_file(filename)
       if isinteractive
-        error([filename, ' is not a file.'])
+        error('exist_or_skip:file_not_found %s', filename)
       else
         fprintf(2, [filename, ' is not a file.\n'])
         exit(77)
@@ -20,7 +20,7 @@ if strcmp(path_type, 'file')
 elseif strcmp(path_type, 'dir')
     if ~is_folder(filename)
       if isinteractive
-        error([filename, ' is not a directory.'])
+        error('exist_or_skip:not_a_directory %s', filename)
       else
         fprintf(2, [filename, ' is not a directory.\n'])
         exit(77)

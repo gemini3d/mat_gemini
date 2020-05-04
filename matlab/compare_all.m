@@ -36,14 +36,14 @@ refdir = absolute_path(refdir);
 exist_or_skip(outdir, 'dir')
 exist_or_skip(refdir, 'dir')
 %% check that paths not the same
-if strcmp(outdir, refdir), error([outdir, ' and ', refdir, ' directories are the same']), end
+if strcmp(outdir, refdir), error('compare_all:value_error', [outdir, ' and ', refdir, ' directories are the same']), end
 %% READ IN THE SIMULATION INFORMATION
-params = read_config([outdir, filesep, 'inputs']);
+params = read_config([outdir, '/inputs']);
 
 lxs = simsize(outdir);
 lxs_ref = simsize(refdir);
 if ~all(lxs==lxs_ref)
-  error(['ref dims ',int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
+  error('compare_all:value_error', ['ref dims ',int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
 end
 
 disp(['sim grid dimensions: ',num2str(lxs)])
@@ -104,7 +104,7 @@ for it=1:Nt
 end
 
 if ok ~= 0
-  error([int2str(ok), ' compare errors'])
+  error('compare_all:value_error', [int2str(ok), ' compare errors'])
 else
   disp(['OK: Gemini output comparison of ',int2str(Nt),' time steps.'])
 end

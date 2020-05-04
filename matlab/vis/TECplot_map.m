@@ -8,7 +8,7 @@ makedir([direc, '/TECplots_eps']);    %store output plots with the simulation da
 
 
 %LOAD THE COMPUTED MAGNETIC FIELD DATA
-load([direc,filesep,'vTEC.mat']);
+load([direc,'/vTEC.mat']);
 lt=numel(t);
 mlon=mlong;
 
