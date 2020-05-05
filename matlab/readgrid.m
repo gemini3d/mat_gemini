@@ -23,7 +23,7 @@ for suffix = suffixes
 end
 
 if ~is_file(simsize_fn)
-  error('readgrid:file_not_found %s/simsize.*', path)
+  error('readgrid:file_not_found', 'could not find %s/simsize.*', path)
 end
 
 switch suffix{:}
