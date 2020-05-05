@@ -17,8 +17,8 @@ makedir(outdir)
 switch p.file_format
   case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
   case {'h5','hdf5'}, write_hdf5(outdir, xg)
-  case {'nc'}, error ('writegrid:not_implemented', 'NetCDF4')
-  otherwise, error('writegrid:value_error %s', p.file_format)
+  case {'nc'}, error('writegrid:not_implemented', 'NetCDF4')
+  otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
 end % function
