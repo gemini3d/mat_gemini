@@ -15,17 +15,22 @@ end
 suffixes = {'.h5', '.nc', '.dat'};
 
 for suffix = suffixes
-%  if is_file([path, '/inputs/simsize', suffix{:}])
-  if is_file([path, '/simsize', suffix{:}])
+%  if is_file([path, '/inputs/simsize', suffix{:}])  % assume inputs is part of the path
+  simsize_fn = [path, '/simsize', suffix{:}];
+  if is_file(simsize_fn)
     break
   end
+end
+
+if ~is_file(simsize_fn)
+  error('readgrid:file_not_found %s', path)
 end
 
 switch suffix{:}
   case '.dat', xgf = read_raw(path, realbits);
   case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
-  case '.nc', error('readgrid:not_implemented', 'TODO: implement NetCDF4')
-  otherwise, error('readgrid:value_error', ['file format unknown: ',suffix{:}])
+  case '.nc', error('readgrid:not_implemented', 'NetCDF4')
+  otherwise, error('readgrid:value_error %s', suffix{:})
 end
 
 end % function

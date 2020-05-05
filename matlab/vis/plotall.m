@@ -73,7 +73,7 @@ elseif isoctave || isinteractive
     pause
   end
 else
-  error('No Matlab / Octave desktop so cannot plot. Was also not told to save')
+  error('plotall:runtime_error', 'No Matlab / Octave desktop so cannot plot. Was also not told to save')
 end % if saveplots
 
 if is_folder([direc, '/aurmaps']) % glow sim

@@ -25,8 +25,8 @@ makedir(outdir)
 switch file_format
   case {'.h5','h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
   case {'.dat','dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
-  case{'nc','.nc'}, error('NetCDF4 is supported by Python in main gemini/ repo')
-  otherwise, error('unknown file_format')
+  case{'nc','.nc'}, error('writedata:not_implemented', 'NetCDF4')
+  otherwise, error('writedata:value_error', 'unknown file_format')
 end
 
 end % function

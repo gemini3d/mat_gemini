@@ -3,14 +3,14 @@ function model_setup(p)
 
 %% parse input
 narginchk(1,1)
-if isa(p, 'struct')
+if isstruct(p)
   validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
-elseif isa(p, 'char')
+elseif ischar(p)
   % path to config.nml
   validateattributes(p, {'char'}, {'vector'}, mfilename, 'parameters', 1)
   p = read_nml(p);
 else
-  error('model_setup needs path to config.nml')
+  error('model_setup:value_error', 'need path to config.nml')
 end
 
 makedir(p.simdir)

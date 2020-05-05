@@ -21,7 +21,7 @@ if nargin >= 5 && ~isempty(dtype)
       if ~isa(A, 'single')
         A = single(A);
       end
-    otherwise, error('h5save:type_error', dtype)
+    otherwise, error('h5save:type_error %s', dtype)
   end
 end
 
@@ -51,7 +51,7 @@ if any(strcmp(varname, varnames) | strcmp(varname(2:end), varnames))
   elseif all(diskshape == fliplr(sizeA))
     h5write(filename, varname, A.', start, fliplr(sizeA))
   else
-    error('h5save:value_error', ['shape of ',varname,': ',int2str(sizeA),' does not match existing HDF5 shape: ', int2str(diskshape)])
+    error('h5save:value_error %s', ['shape of ',varname,': ',int2str(sizeA),' does not match existing HDF5 shape: ', int2str(diskshape)])
   end
 else % new variable
   if ~ismatrix(A)

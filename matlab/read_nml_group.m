@@ -16,7 +16,7 @@ while ~feof(fid)
 end
 
 if isempty(mgrp)
-  error('read_nml_group:group_not_found', ['did not find group "', group, '" in ', filename])
+  error('read_nml_group:group_not_found %s', ['did not find group "', group, '" in ', filename])
 end
 
 while ~feof(fid)
@@ -50,7 +50,7 @@ end
 fclose(fid);
 
 if isempty(mend)
-  error('read_nml_group:group_syntax',['did not read end of group ', group, ' in ', filename])
+  error('read_nml_group:group_syntax %s',['did not read end of group ', group, ' in ', filename])
 end
 
 end % function

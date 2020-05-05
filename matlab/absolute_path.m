@@ -14,9 +14,13 @@ if isoctave
 else
   if is_relative_path(path)
     % TODO: handle .file or .path/.file
-    path = [pwd, filesep, path];
+    path = [pwd, '/', path];
   end
-  abspath = char(java.io.File(path).getCanonicalPath());
+  try
+    abspath = char(java.io.File(path).getCanonicalPath());
+  catch exc
+    error('absolute_path:value_error %s', path)
+  end
 end
 
 % debugging

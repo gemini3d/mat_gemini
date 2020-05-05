@@ -70,7 +70,7 @@ fout = [tempdir, '/msis_setup_output.dat'];
 cmd = [exe,' ',fin,' ',fout,' ',int2str(lz)];
 disp(cmd)
 [status, msg] = system(cmd);   %output written to file
-if status~=0, error(['msis setup failed: ',msg]), end
+if status~=0, error('msis_matlab3D:runtime_error %s', msg), end
 
 fid=fopen(fout,'r');
 msisdat=fread(fid,lz*11,'real*4=>real*8');

@@ -76,7 +76,7 @@ if isfield(p, 'Etarg')
 elseif isfield(p, 'Jtarg')
   E = Jcurrent_target(p, Nt, E);
 else
-  error('Efield_BCs_3d: unknown target feature')
+  error('Efield_BCs_3d:lookup_error', 'unknown target feature')
 end
 
 %% SAVE THESE DATA TO APPROPRIATE FILES

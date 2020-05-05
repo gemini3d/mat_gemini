@@ -6,21 +6,26 @@ narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
-%outdir = absolute_path(p.simdir);
-outdir=p.outdir;   %the output directory for the simulation grids may be different, e.g. "inputs" than the base simdir
+ %the output directory for the simulation grids may be different, e.g. "inputs" than the base simdir
+if isfield(p, 'outdir')
+   outdir = absolute_path(p.outdir);
+else
+   outdir = absolute_path(p.simdir);
+end
 makedir(outdir)
 
 switch p.file_format
-  case {'.dat', 'dat','raw'}, write_raw(outdir, xg, p.realbits)
-  case {'.h5', 'h5','hdf5'}, write_hdf5(outdir, xg)
-  case{'.nc', 'nc'}, error ('the Python code in GEMINI repo handles NetCDF4, but not Matlab.')
-  otherwise, error(['unknown file format ', p.file_format])
+  case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
+  case {'h5','hdf5'}, write_hdf5(outdir, xg)
+  case {'nc'}, error ('writegrid:not_implemented', 'NetCDF4')
+  otherwise, error('writegrid:value_error %s', p.file_format)
 end
 
 end % function
 
 
 function write_hdf5(dir_out, xg)
+
 
 fn = [dir_out, '/simsize.h5'];
 disp(['write ',fn])

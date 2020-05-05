@@ -90,7 +90,7 @@ elseif lx2 == 1 % 2-D north-south
     Tsi(:,:,:, i) = F(X1i, X3i);
   end
 else
-  error('Not sure if this is 2-D or 3-D')
+  error('model_resample:value_error', 'Not sure if this is 2-D or 3-D')
 end %if
 
 end %function model_resample

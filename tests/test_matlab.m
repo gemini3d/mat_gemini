@@ -18,8 +18,5 @@ assert(utsec == 1500.5)
 %% test2d_eq
 model_setup('test2d_eq')
 
-%% test2d_fang
-model_setup('test2d_fang')
-
 % done
 disp('OK: gemini-matlab tests')

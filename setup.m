@@ -4,12 +4,12 @@ function setup()
 cwd = fileparts(mfilename('fullpath'));
 
 for p = {'matlab', 'matlab/vis', 'matlab/vis/plotfunctions', 'matlab/setup', 'matlab/setup/gridgen'}
-  addpath([cwd, filesep, p{:}])
+  addpath([cwd, '/', p{:}])
 end
 
 gemini_root = absolute_path([cwd, '/../gemini/']);
 if ~isfolder(gemini_root)
-  error('could not find the Gemini Fortran code root folder')
+  error('setup:file_not_found', 'could not find the Gemini Fortran code root folder')
 end
 
 setenv('GEMINI_MATLAB', [cwd, '/matlab'])

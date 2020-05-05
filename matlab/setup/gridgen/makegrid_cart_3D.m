@@ -13,15 +13,14 @@ elseif isfield(p, 'eqdir') && is_file(p.eqdir)
   z = xeq.x1;
   clear('xeq')
 else
-  error('must specify altitude grid parameters or grid file to reuse')
+  error('makegrid_cart_3D:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
 end
 
 %% TRANSVERSE GRID (BASED ON SIZE OF CURRENT REGION SPECIFIED ABOVE)
 % EAST
-x2parms=p.x2parms;
-if (exist('x2parms','var'))
+if isfield(p, 'x2parms')
     disp('Nonuniform x2 grid chosen...')
-    x = xgrid(p.xdist, p.lxp, x2parms);   %last argument optional for nonuniform x2 spacing
+    x = xgrid(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
 else
     disp('Uniform x2 grid chosen...')    
     x = xgrid(p.xdist, p.lxp);    
