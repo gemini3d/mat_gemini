@@ -23,4 +23,4 @@ else
 end
 
 % done
-disp('OK: gemini-matlab tests')
+disp('OK: gemini-matlab')
