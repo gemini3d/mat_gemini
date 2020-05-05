@@ -35,7 +35,7 @@ end % function
 function write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
 fn = [outdir,'/initial_conditions.h5'];
 disp(['write ',fn])
-if isfile(fn), delete(fn), end
+if is_file(fn), delete(fn), end
 
 h5save(fn, '/ymd', int32(ymd))
 
