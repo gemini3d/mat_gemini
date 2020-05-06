@@ -14,7 +14,7 @@ if isoctave
 else
   if is_relative_path(path)
     % TODO: handle .file or .path/.file
-    path = [pwd, '/', path];
+    path = fulllfile(pwd, path);
   end
   try
     abspath = char(java.io.File(path).getCanonicalPath());
