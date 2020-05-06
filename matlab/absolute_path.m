@@ -2,6 +2,10 @@
 function abspath = absolute_path(path)
 % path need not exist, but absolute path is returned
 %
+% NOTE: some network file systems are not resolvable by Matlab Java
+% subsystem, but are sometimes still valid--so we warn and return
+% unmodified path if this occurs.
+%
 % NOTE: GNU Octave is weaker at this, especially if /foo/bar/../baz and "bar"
 % doesn't exist, it may just return the input unmodified.
 
@@ -18,8 +22,9 @@ else
   end
   try
     abspath = char(java.io.File(path).getCanonicalPath());
-  catch exc
-    error('absolute_path:value_error', 'could not make absolute path from %s', path)
+  catch
+    fprintf(2, 'could not make absolute path from %s', path)
+    abspath = path;
   end
 end
 
