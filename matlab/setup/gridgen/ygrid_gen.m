@@ -1,4 +1,5 @@
-function y = ygrid(ydist, lyp)
+function y = ygrid_gen(ydist, lyp)
+%% generate a 1D grid
 narginchk(2,2)
 validateattributes(ydist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way y-distance from origin (meters)',1)
 validateattributes(lyp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of y-points',2)

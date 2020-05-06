@@ -20,14 +20,14 @@ end
 % EAST
 if isfield(p, 'x2parms')
     disp('Nonuniform x2 grid chosen...')
-    x = xgrid(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
+    x = xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
 else
-    disp('Uniform x2 grid chosen...')    
-    x = xgrid(p.xdist, p.lxp);    
+    disp('Uniform x2 grid chosen...')
+    x = xgrid_gen(p.xdist, p.lxp);
 end
 
 % NORTH
-y = ygrid(p.ydist, p.lyp);
+y = ygrid_gen(p.ydist, p.lyp);
 
 %% COMPUTE CELL WALL LOCATIONS
 lx2 = length(x);

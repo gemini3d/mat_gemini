@@ -1,4 +1,6 @@
-function x = xgrid(xdist,lxp,xparms)
+function x = xgrid_gen(xdist,lxp,xparms)
+%% generate a 1D grid
+% not named "xgrid" to avoid conflict with Matlab toolbox
 
 narginchk(2,3)
 validateattributes(xdist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way x-distance from origin (meters)',1)
@@ -28,7 +30,7 @@ else   %nonuniform grid; assume we are degrading resolution near the edges - thi
     dxincr=xparms(3);     % max step size increase for grid
     ell=xparms(4);        % transition length of degradation
     x2=xmax-degdist;
-    
+
     %x(1)=0;
     x(1)=1/2*dx0;    %start offset from zero so we can have an even number (better for mpi)
     gridctr=0;
@@ -39,7 +41,7 @@ else   %nonuniform grid; assume we are degrading resolution near the edges - thi
         ix=ix+1;
     end %while
     x=[-fliplr(x),x];
-    
+
     %x=[-fliplr(x(2:end)),x];
 end %if
 
