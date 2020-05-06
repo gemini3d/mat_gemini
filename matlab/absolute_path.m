@@ -23,7 +23,7 @@ else
   try
     abspath = char(java.io.File(path).getCanonicalPath());
   catch
-    fprintf(2, 'could not make absolute path from %s', path)
+    % fprintf(2, 'could not make absolute path from %s\n', path)
     abspath = path;
   end
 end
