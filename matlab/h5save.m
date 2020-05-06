@@ -21,7 +21,7 @@ if nargin >= 5 && ~isempty(dtype)
       if ~isa(A, 'single')
         A = single(A);
       end
-    otherwise, error('h5save:type_error %s', dtype)
+    otherwise, error('h5save:type_error', 'unknown data type %s', dtype)
   end
 end
 
@@ -51,7 +51,7 @@ if any(strcmp(varname, varnames) | strcmp(varname(2:end), varnames))
   elseif all(diskshape == fliplr(sizeA))
     h5write(filename, varname, A.', start, fliplr(sizeA))
   else
-    error('h5save:value_error %s', ['shape of ',varname,': ',int2str(sizeA),' does not match existing HDF5 shape: ', int2str(diskshape)])
+    error('h5save:value_error', 'shape of %s  %d does not match existing HDF5 shape %d',varname, sizeA, diskshape)
   end
 else % new variable
   if ~ismatrix(A)
@@ -60,7 +60,7 @@ else % new variable
     switch ndims(A)
       case 4, chunksize = [sizeA(1), sizeA(2), 1, sizeA(4)];
       case 3, chunksize = [sizeA(1), sizeA(2), 1];
-      otherwise, error('h5save:fixme', 'bigger than 4 dims')
+      otherwise, error('h5save:fixme', '%s is bigger than 4 dims', varname)
     end
     h5create(filename, varname, sizeA, 'DataType', class(A), ...
       'Deflate', 1, 'Fletcher32', true, 'Shuffle', true, 'ChunkSize', chunksize)

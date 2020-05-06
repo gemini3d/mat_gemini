@@ -48,7 +48,7 @@ for ext = suffix
 end
 
 if ~is_file(filename)
-  error('loadframe:file_not_found %s', filename)
+  error('loadframe:file_not_found', 'could not find %s', filename)
 end
 
 switch flagoutput

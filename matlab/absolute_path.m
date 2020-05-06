@@ -2,7 +2,7 @@
 function abspath = absolute_path(path)
 % path need not exist, but absolute path is returned
 %
-% NOTE: Octave is weaker at this, especially if /foo/bar/../baz and "bar"
+% NOTE: GNU Octave is weaker at this, especially if /foo/bar/../baz and "bar"
 % doesn't exist, it may just return the input unmodified.
 
 narginchk(1,1)
@@ -19,7 +19,7 @@ else
   try
     abspath = char(java.io.File(path).getCanonicalPath());
   catch exc
-    error('absolute_path:value_error %s', path)
+    error('absolute_path:value_error', 'could not make absolute path from %s', path)
   end
 end
 

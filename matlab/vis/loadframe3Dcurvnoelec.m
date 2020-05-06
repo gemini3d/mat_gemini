@@ -9,7 +9,7 @@ switch ext
   case '.h5', dat = loadframe3Dcurvnoelec_hdf5(filename);
   case '.dat', dat = loadframe3Dcurvnoelec_raw(filename);
   case '.nc', error('loadframe3Dcurvnoelec:not_implemented', 'NetCDF4')
-  otherwise, error('loadframe3Dcurvnoelec:not_implemented %s',filename)
+  otherwise, error('loadframe3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
 end
 
 %% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET

@@ -11,7 +11,7 @@ if ~is_folder(path)
 end
 
 if ~is_folder(path)
-  error('makedir:not_a_directory %s', path)
+  error('makedir:not_a_directory', 'not a directory %s', path)
 end
 
 end

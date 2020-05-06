@@ -10,7 +10,7 @@ switch ext
   case '.dat', dat = read_raw(filename);
   case {'.h5'}, dat= read_hdf5(filename);
   case ('.nc'), dat = read_nc4(filename);
-  otherwise, error('loadframe3Dcurvne:not_implemented %s',filename)
+  otherwise, error('loadframe3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
 
 dat.filename=filename;

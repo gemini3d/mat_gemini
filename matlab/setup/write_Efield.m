@@ -8,7 +8,7 @@ switch cfg.file_format
   case {'raw', 'dat'}, write_raw(dir_out, E, cfg)
   case {'h5', 'hdf5'}, write_hdf5(dir_out, E, cfg)
   case {'nc'}, error('write_Efield:not_implemented', 'NetCDF4')
-  otherwise, error('write_Efield:value_error %s', cfg.file_format)
+  otherwise, error('write_Efield:value_error', 'unknown file format %s', cfg.file_format)
 end
 
 end

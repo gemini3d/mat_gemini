@@ -8,18 +8,17 @@ These scripts form the basic core needed to work with Gemini to:
 * read simulation output
 * plot simulation
 
-However, since the transition to Python, it was decided to move the Matlab scripts out to reduce maintenance effort.
-They remain as a canonical known-working reference.
-
 ## Usage
 
-To enable these scripts, each time you startup Matlab to work with Gemini, run from this directory in Matlab:
+To enable these scripts, each time you startup Matlab to work with Gemini, run from the "gemini-matlab/" directory in Matlab:
 
 ```matlab
 setup
 ```
 
-That just adds paths to Matlab.
-If you prefer, you can add this to your Matlab
-[startup.m](https://www.mathworks.com/help/matlab/ref/startup.html)
-to always enable Gemini.
+## Notes
+
+### GNU Octave
+
+These scripts generally do NOT fully work from GNU Octave since at least through Octave 5.x, Octave does not have full HDF5 support.
+Note that Octave's `save('-hdf5','out.h5',...)` saves the variables in a fixed layout that's not usable for Gemini.

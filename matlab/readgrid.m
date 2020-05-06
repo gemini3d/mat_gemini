@@ -30,7 +30,7 @@ switch suffix{:}
   case '.dat', xgf = read_raw(path, realbits);
   case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
   case '.nc', error('readgrid:not_implemented', 'NetCDF4')
-  otherwise, error('readgrid:value_error %s', suffix{:})
+  otherwise, error('readgrid:value_error', 'unknown file type %s', suffix{:})
 end
 
 end % function

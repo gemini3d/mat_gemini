@@ -17,11 +17,11 @@ elseif is_folder(path)
     end
   end
 else
-  error('get_configfile:file_not_found %s', path)
+  error('get_configfile:file_not_found', 'could not find %s', path)
 end
 
 if ~is_file(filename)
-  error('get_configfile:file_not_found %s', path)
+  error('get_configfile:file_not_found', 'could not find %s', path)
 end
 
 end % function

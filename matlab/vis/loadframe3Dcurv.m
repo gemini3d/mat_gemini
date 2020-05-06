@@ -7,7 +7,7 @@ switch ext
   case '.h5', dat = loadframe3Dcurv_hdf5(filename);
   case '.dat', dat = loadframe3Dcurv_raw(filename);
   case '.nc', error('loadframe3Dcurv:not_implemented', 'NetCDF4')
-  otherwise, error('loadframe3Dcurv:value_error %s', filename)
+  otherwise, error('loadframe3Dcurv:value_error', 'unknown file type %s', filename)
 end
 
 lsp = 7;
