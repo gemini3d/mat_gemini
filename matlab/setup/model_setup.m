@@ -1,5 +1,8 @@
 function model_setup(p)
 %% determines what kind of setup is needed and does it.
+% this is a top-level script, so be sure environment is setup
+cwd = fileparts(mfilename('fullpath'));
+run([cwd, '/../../setup.m'])
 
 %% parse input
 narginchk(1,1)
