@@ -3,6 +3,10 @@
 cwd = fileparts(mfilename('fullpath'));
 run([cwd, '/../setup.m'])
 
+if exist('checkcode', 'file')
+  checkcode_recursive(fullfile(cwd,'..'))
+end
+
 %% config.nml load test
 
 p = read_config([cwd, '/test2d_fang/config.nml']);
