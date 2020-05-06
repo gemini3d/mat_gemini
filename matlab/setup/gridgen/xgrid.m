@@ -1,7 +1,7 @@
 function x = xgrid(xdist,lxp,xparms)
 
 narginchk(2,3)
-validateattributes(xdist, {'numeric'}, {'scalar','positive'}, mfilename, 'one-way x-distance from origin (meters)',1)
+validateattributes(xdist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way x-distance from origin (meters)',1)
 validateattributes(lxp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of x-points',2)
 if (~exist('xparms','var'))
     xparms=[];

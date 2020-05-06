@@ -1,6 +1,6 @@
 function y = ygrid(ydist, lyp)
 narginchk(2,2)
-validateattributes(ydist, {'numeric'}, {'scalar','positive'}, mfilename, 'one-way y-distance from origin (meters)',1)
+validateattributes(ydist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way y-distance from origin (meters)',1)
 validateattributes(lyp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of y-points',2)
 
 ymin = -ydist/2;
