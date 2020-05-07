@@ -140,7 +140,7 @@ for ix3=1:lx3
       if xg.r(1,1)>xg.r(2,1)
           iref=inds1(1);
       else
-        iref=inds1(numel(inds1));
+        iref=inds1(end);
       end
       n0=nmolc(iref);
       ms=30.5*amu;

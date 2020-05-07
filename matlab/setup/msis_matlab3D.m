@@ -23,8 +23,8 @@ validateattributes(xg, {'struct'}, {'scalar'})
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
 src_dir = absolute_path([cwd, '/../../']);
-build_dir = [src_dir, '/build'];
-exe = [build_dir,'/msis_setup'];
+build_dir = fullfile(src_dir, 'build');
+exe = fullfile(build_dir, 'msis_setup');
 if ispc, exe = [exe, '.exe']; end
 
 %% build exe if not present

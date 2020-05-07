@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(MSIS LANGUAGES Fortran)
 
-
 if(NOT gemini_root)
   if(DEFINED ENV{GEMINI_ROOT})
     set(gemini_root $ENV{GEMINI_ROOT})
