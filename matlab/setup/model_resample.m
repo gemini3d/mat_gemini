@@ -40,6 +40,9 @@ elseif lx3 == 1 % 2-D east-west
   % to avoid IEEE754 rounding issues leading to bounds error,
   % cast the arrays to the same precision,
   % preferring float32 to save disk space and IO time
+  if length(xgin.x2(3:end-2)) < 2
+    error('model_resample:value_error', 'the equilibrium simulation has the opposite 2D orientation (north-south) to the new simulation (east-west)')
+  end
   [X2,X1]=meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2));
   [X2i,X1i]=meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)));
 
@@ -57,7 +60,11 @@ elseif lx2 == 1 % 2-D north-south
   disp('interpolating grid for 2-D simulation in x1, x3')
   % original grid, a priori the first 2 and last 2 values are ghost cells
   % on each axis
-  %
+
+    if length(xgin.x3(3:end-2)) < 2
+    error('model_resample:value_error', 'the equilibrium simulation has the opposite 2D orientation (east-west) to the new simulation (north-south)')
+  end
+
   % Detect old non-padded grid and workaround
   if allclose(xgin.x3(1), xg.x3(3), [], 1)
     % old sim, no external ghost cells.
