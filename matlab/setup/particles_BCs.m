@@ -60,7 +60,7 @@ end
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT NEED TO BE SMOOTHED.
 
-outdir = absolute_path([p.simdir, '/inputs/prec_inputs/']);
+outdir = absolute_path(p.prec_dir);
 makedir(outdir)
 
 switch p.file_format
@@ -75,14 +75,14 @@ end % function
 
 function write_hdf5(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it)
 narginchk(9,9)
-fn = [outdir, '/simsize.h5'];
+fn = fullfile(outdir, 'simsize.h5');
 disp(['write ', fn])
 h5save(fn, '/llon', int32(llon))
 h5save(fn, '/llat', int32(llat))
 
 freal = 'float32';
 
-fn = [outdir, '/simgrid.h5'];
+fn = fullfile(outdir, 'simgrid.h5');
 disp(['write ', fn])
 h5save(fn, '/mlon', mlon, [], freal)
 h5save(fn, '/mlat', mlat, [], freal)
@@ -91,7 +91,7 @@ for i = 1:Nt
   UTsec = expdate(i,4)*3600 + expdate(i,5)*60 + expdate(i,6);
   ymd = expdate(i, 1:3);
 
-  fn = [outdir, '/', datelab(ymd,UTsec), '.h5'];
+  fn = fullfile(outdir, [datelab(ymd,UTsec), '.h5']);
   disp(['writing ', fn])
 
   h5save(fn, '/Qp', Qit(:,:,i), [], freal)
@@ -104,7 +104,7 @@ end % function
 function write_raw(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it, realbits)
 narginchk(10,10)
 
-filename=[outdir, '/simsize.dat'];
+filename= fullfile(outdir, 'simsize.dat');
 disp(['write ', filename])
 fid=fopen(filename, 'w');
 fwrite(fid,llon,'integer*4');
@@ -113,7 +113,7 @@ fclose(fid);
 
 freal = ['float', int2str(realbits)];
 
-filename=[outdir, '/simgrid.dat'];
+filename=fullfile(outdir, 'simgrid.dat');
 disp(['write ', filename])
 
 fid=fopen(filename,'w');
@@ -125,7 +125,7 @@ for i = 1:Nt
   UTsec = expdate(i,4)*3600 + expdate(i,5)*60 + expdate(i,6);
   ymd = expdate(i, 1:3);
 
-  filename = [outdir, '/', datelab(ymd,UTsec), '.dat'];
+  filename = fullfile(outdir, [datelab(ymd,UTsec), '.dat']);
   disp(['writing ', filename])
 
   fid = fopen(filename,'w');
