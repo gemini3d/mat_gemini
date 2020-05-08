@@ -7,51 +7,29 @@ narginchk(1,2)
 if nargin < 2 || isempty(realbits), realbits = 64; end
 validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 or 64', 2)
 
-path = absolute_path(path);
-if is_file(path)
-  path = fileparts(path);
-end
+[path, suffix] = get_simsize_path(path);
 
-suffixes = {'.h5', '.nc', '.dat'};
-
-for suffix = suffixes
-%  if is_file([path, '/inputs/simsize', suffix{:}])  % assume inputs is part of the path
-  simsize_fn = [path, '/simsize', suffix{:}];
-  if is_file(simsize_fn)
-    break
-  end
-end
-
-if ~is_file(simsize_fn)
-  error('readgrid:file_not_found', 'could not find %s/simsize.*', path)
-end
-
-switch suffix{:}
+switch suffix
   case '.dat', xgf = read_raw(path, realbits);
   case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
   case '.nc', error('readgrid:not_implemented', 'NetCDF4')
-  otherwise, error('readgrid:value_error', 'unknown file type %s', suffix{:})
+  otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
 end
 
 end % function
 
 
 function xgf = read_hdf5(path)
-for f = {[path, '/inputs/simsize.h5'], [path, '/simsize.h5']}
-  sizefn = f{:};
-  if is_file(sizefn)
-    break
-  end
-end
-assert(is_file(sizefn), [sizefn, ' not found'])
 
-for f = {[path, '/inputs/simgrid.h5'], [path, '/simgrid.h5']}
-  fn = f{:};
-  if is_file(fn)
-    break
-  end
+sizefn = fullfile(path, 'simsize.h5');
+if ~is_file(sizefn)
+  error('readgrid:read_hdf5', '%s not found', sizefn)
 end
-assert(is_file(fn), [fn, ' not found'])
+
+fn = fullfile(path, 'simgrid.h5');
+if ~is_file(fn)
+  error('readgrid:read_hdf5', '%s not found', fn)
+end
 
 xgf.filename = fn;
 

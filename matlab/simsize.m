@@ -2,34 +2,8 @@ function lxs = simsize(path)
 
 narginchk(1,1)
 
-%% FIXME:  MZ - I have all kinds of issues with this block of code not finding the file and I'm not entirely sure why...
-fn = [];
-if is_file(path)
-  [direc, stem, ext] = fileparts(path);
-  if strcmp(stem, 'simsize')
-    fn = path;
-  else
-    if strcmp(stem, 'inputs') || any(strfind(direc, 'inputs')) || is_file([direc,'/simsize',ext])
-      % this doesn't properly detect the situation where simsize is in base directory...
-      part = '/simsize';
-    else
-      part = '/inputs/simsize';
-    end
-    fn = [fileparts(path),part, ext];
-  end
-elseif is_folder(path)
-  for ext = {'.h5', '.nc', '.dat'}
-    fn = [path, '/inputs/simsize',ext{:}];
-    if is_file(fn)
-      break
-    end
-  end
-end
-
-if ~is_file(fn)
-  error('simsize:file_not_found', 'could not find %s', fn)
-end
-[~,~,ext] = fileparts(fn);
+[path, ext] = get_simsize_path(path);
+fn = fullfile(path, 'simsize.h5');
 
 switch ext
   case '.h5'
