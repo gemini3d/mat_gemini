@@ -93,7 +93,8 @@ function E = Jcurrent_target(p, Nt, E)
 
 S = p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean - 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
 
-for i = 2:Nt
+for i = 1:Nt
+  E.flagdirich(i)=0;    %could have different boundary types for different times
   E.Vmaxx1it(:,:,i) = S - p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/ 2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean + 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
 end
 
@@ -112,6 +113,7 @@ end
 
 % x2ctr = 1/2*(xg.x2(lx2) + xg.x2(1));
 for i = 1:Nt
+  E.flagdirich(i)=1;
   E.Vmaxx1it(:,:,i) = S .* erf((E.MLON - p.mlonmean) / p.mlonsig) .* erf((E.MLAT - p.mlatmean) / p.mlatsig);
 end
 

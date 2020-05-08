@@ -53,7 +53,7 @@ for i = 1:Nt
   fn = [dir_out, '/', datelab(ymd,UTsec), '.h5'];
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  h5save(fn, '/flagdirich', int32(p.Eflagdirich))
+  h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
   h5save(fn, '/Exit', E.Exit(:,:,i), [], freal)
   h5save(fn, '/Eyit', E.Eyit(:,:,i), [], freal)
   h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), [], freal)
