@@ -37,7 +37,10 @@ function dat = read_hdf5(filename)
 end % function
 
 function dat = read_nc4(filename)
- dat.ne = ncread(filename, '/neall');
+try
+  pkg load netcdf
+end
+dat.ne = ncread(filename, 'neall');
 end % function
 
 

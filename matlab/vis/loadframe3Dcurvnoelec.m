@@ -8,7 +8,7 @@ narginchk(1,1)
 switch ext
   case '.h5', dat = loadframe3Dcurvnoelec_hdf5(filename);
   case '.dat', dat = loadframe3Dcurvnoelec_raw(filename);
-  case '.nc', error('loadframe3Dcurvnoelec:not_implemented', 'NetCDF4')
+  case '.nc', dat = loadframe3Dcurvnoelec_nc4(filename);
   otherwise, error('loadframe3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
 end
 

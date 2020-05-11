@@ -6,7 +6,7 @@ narginchk(1,1)
 switch ext
   case '.h5', dat = loadframe3Dcurvavg_hdf5(filename);
   case '.dat', dat = loadframe3Dcurvavg_raw(filename);
-  case '.nc', error('loadframe3Dcurvavg:not_implemented', 'NetCDF4 not yet handled in Matlab')
+  case '.nc', dat = loadframe3Dcurvavg_nc4(filename);
   otherwise, error('loadframe3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
 

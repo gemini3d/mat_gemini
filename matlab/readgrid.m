@@ -12,7 +12,7 @@ validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 
 switch suffix
   case '.dat', xgf = read_raw(path, realbits);
   case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
-  case '.nc', error('readgrid:not_implemented', 'NetCDF4')
+  case '.nc', xgf = read_nc4(path);
   otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
 end
 
@@ -72,6 +72,51 @@ else
 end
 
 end  % function read_hdf5
+
+
+function xgf = read_nc4(path)
+
+try
+  pkg load netcdf
+end
+
+sizefn = fullfile(path, 'simsize.nc');
+if ~is_file(sizefn)
+  error('readgrid:read_nc4', '%s not found', sizefn)
+end
+
+fn = fullfile(path, 'simgrid.nc');
+if ~is_file(fn)
+  error('readgrid:read_nc4', '%s not found', fn)
+end
+
+xgf.filename = fn;
+
+try
+  xgf.lx = ncread(sizefn, 'lx');
+catch
+  xgf.lx = [ncread(sizefn, 'lx1'), ncread(sizefn, 'lx2'), ncread(sizefn, 'lx3')];
+end
+xgf.x1 = ncread(fn, 'x1');
+xgf.x1i = ncread(fn, 'x1i');
+xgf.dx1b = ncread(fn, 'dx1b');
+xgf.dx1h = ncread(fn, 'dx1h');
+xgf.x2 = ncread(fn, 'x2');
+xgf.x3 = ncread(fn, 'x3');
+
+xgf.h1 = ncread(fn, 'h1');
+xgf.h2 = ncread(fn, 'h2');
+xgf.h3 = ncread(fn, 'h3');
+
+xgf.alt = ncread(fn, 'alt');
+xgf.glat = ncread(fn, 'glat');
+xgf.glon = ncread(fn, 'glon');
+
+xgf.r = ncread(fn, 'r');
+xgf.theta = ncread(fn, 'theta');
+xgf.phi = ncread(fn, 'phi');
+
+end  % function read_nc4
 
 
 function xgf = read_raw(path, realbits)
