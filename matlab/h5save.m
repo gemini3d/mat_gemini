@@ -30,9 +30,9 @@ try
   diskshape = h5info(filename, varname).Dataspace.Size;
   if length(diskshape) >= 2
     if diskshape(1) == 1 % isrow
-      start = ones(ndims(A),1);
-    elseif diskshape(2) == 1 % iscolumn
       start = ones(1,ndims(A));
+    elseif diskshape(2) == 1 % iscolumn
+      start = ones(ndims(A),1);
     else
       start = ones(1,ndims(A));
     end
@@ -45,10 +45,10 @@ try
   elseif all(diskshape == fliplr(sizeA))
     h5write(filename, varname, A.', start, fliplr(sizeA))
   else
-    error('h5save:value_error', 'shape of %s  %d does not match existing HDF5 shape %d',varname, sizeA, diskshape)
+    error('h5save:value_error', 'shape of %s does not match existing HDF5 shape %d %d %d %d  %d %d %d %d',varname, sizeA, diskshape)
   end
 catch excp % new variable
-  if ~strcmp(excp.identifier, {'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'})
+  if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
     rethrow(excp)
   end
 
