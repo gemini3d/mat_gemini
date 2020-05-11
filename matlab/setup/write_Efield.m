@@ -36,6 +36,9 @@ if is_file(fn), delete(fn), end
 h5save(fn, '/llon', int32(E.llon))
 h5save(fn, '/llat', int32(E.llat))
 
+llon = E.llon;
+llat = E.llat;
+
 fn = fullfile(dir_out, 'simgrid.h5');
 if is_file(fn), delete(fn), end
 
@@ -54,14 +57,14 @@ for i = 1:Nt
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   h5save(fn, '/flagdirich', int32(p.Eflagdirich))
-  h5save(fn, '/Exit', E.Exit(:,:,i), [], freal)
-  h5save(fn, '/Eyit', E.Eyit(:,:,i), [], freal)
-  h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), [], freal)
-  h5save(fn, '/Vmaxx1it', E.Vmaxx1it(:,:,i), [], freal)
-  h5save(fn, '/Vminx2ist', E.Vminx2ist(:,i), [], freal)
-  h5save(fn, '/Vmaxx2ist', E.Vmaxx2ist(:,i), [], freal)
-  h5save(fn, '/Vminx3ist', E.Vminx3ist(:,i), [], freal)
-  h5save(fn, '/Vmaxx3ist', E.Vmaxx3ist(:,i), [], freal)
+  h5save(fn, '/Exit', E.Exit(:,:,i), [llon, llat], freal)
+  h5save(fn, '/Eyit', E.Eyit(:,:,i), [llon, llat], freal)
+  h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), [llon, llat], freal)
+  h5save(fn, '/Vmaxx1it', E.Vmaxx1it(:,:,i), [llon, llat], freal)
+  h5save(fn, '/Vminx2ist', E.Vminx2ist(:,i), llat, freal)
+  h5save(fn, '/Vmaxx2ist', E.Vmaxx2ist(:,i), llat, freal)
+  h5save(fn, '/Vminx3ist', E.Vminx3ist(:,i), llon, freal)
+  h5save(fn, '/Vmaxx3ist', E.Vmaxx3ist(:,i), llon, freal)
 end
 end % function
 
