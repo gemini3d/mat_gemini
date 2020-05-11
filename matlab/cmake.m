@@ -4,10 +4,23 @@ function cmake(srcdir, builddir)
 
 narginchk(2,2)
 
+ret = system(['cmake --version']);
+if ret ~= 0
+  error('cmake:environment_error', 'CMake not found')
+end
+
 ret = system(['cmake -S', srcdir, ' -B', builddir]);
-assert(ret==0, 'error configuring MSIS')
+if ret ~= 0
+  delete(fullfile(builddir, 'CMakeCache.txt'))
+  ret = system(['cmake -S', srcdir, ' -B', builddir]);
+end
+if ret~=0
+  error('cmake:runtime_error', 'error configuring MSIS')
+end
 
 ret = system(['cmake --build ',builddir,' --parallel']);
-assert(ret==0, 'error building MSIS')
-
+if ret ~= 0
+  error('cmake:runtime_error', 'error building MSIS')
 end
+
+end % function
