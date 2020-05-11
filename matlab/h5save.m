@@ -25,13 +25,7 @@ if nargin >= 5 && ~isempty(dtype)
   end
 end
 
-varnames = {};
-if is_file(filename)
-  ds = h5info(filename).Datasets;
-  varnames = {ds(:).Name};
-end
-
-if any(strcmp(varname, varnames) | strcmp(varname(2:end), varnames))
+try
   % existing variable
   diskshape = h5info(filename, varname).Dataspace.Size;
   if length(diskshape) >= 2
@@ -53,7 +47,11 @@ if any(strcmp(varname, varnames) | strcmp(varname(2:end), varnames))
   else
     error('h5save:value_error', 'shape of %s  %d does not match existing HDF5 shape %d',varname, sizeA, diskshape)
   end
-else % new variable
+catch excp % new variable
+  if ~strcmp(excp.identifier, {'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'})
+    rethrow(excp)
+  end
+
   if ~ismatrix(A)
     % enable Gzip compression--remember Matlab's dim order is flipped from
     % C / Python
