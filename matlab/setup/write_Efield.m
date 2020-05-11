@@ -53,7 +53,7 @@ for i = 1:Nt
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.h5']);
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
+  h5save(fn, '/flagdirich', int32(p.Eflagdirich))
   h5save(fn, '/Exit', E.Exit(:,:,i), [], freal)
   h5save(fn, '/Eyit', E.Eyit(:,:,i), [], freal)
   h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), [], freal)
@@ -93,7 +93,7 @@ for i = 1:Nt
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.nc']);
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
+  ncsave(fn, 'flagdirich', int32(p.Eflagdirich))
   ncsave(fn, 'Exit', E.Exit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Eyit', E.Eyit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), [dlon, dlat], freal)
