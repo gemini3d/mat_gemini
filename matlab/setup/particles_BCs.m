@@ -51,6 +51,9 @@ for i = i_on:i_off
   E0it(:,:,i) = p.E0precip;
 end
 
+if any(~isfinite(Qit)), error('particle_BCs:value_error', 'precipitation flux not finite'), end
+if any(~isfinite(E0it)), error('particle_BCs:value_error', 'E0 not finite'), end
+
 %% CONVERT THE ENERGY TO EV
 %E0it = max(E0it,0.100);
 %E0it = E0it*1e3;
@@ -94,8 +97,8 @@ for i = 1:Nt
   fn = fullfile(outdir, [datelab(ymd,UTsec), '.h5']);
   disp(['writing ', fn])
 
-  h5save(fn, '/Qp', Qit(:,:,i), [], freal)
-  h5save(fn, '/E0p', E0it(:,:,i), [], freal)
+  h5save(fn, '/Qp', Qit(:,:,i), [llon, llat], freal)
+  h5save(fn, '/E0p', E0it(:,:,i),[llon, llat], freal)
 end
 
 end % function
