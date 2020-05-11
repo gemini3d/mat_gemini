@@ -13,8 +13,11 @@ switch lower(ext)
 end
 
 %% deduce data file format from simsize format
-[~,~,ext] = fileparts(p.indat_size);
-p.file_format = ext(2:end);
+% needs to be here and in read_nml
+if ~isfield(p, 'file_format')
+  [~,~,ext] = fileparts(p.indat_size);
+  p.file_format = ext(2:end);
+end
 
 end % function
 

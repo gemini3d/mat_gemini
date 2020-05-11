@@ -14,6 +14,11 @@ p = merge_struct(p, read_nml_group(filename, 'files'));
 p.indat_file = absolute_path(p.indat_file);
 p.indat_size = absolute_path(p.indat_size);
 p.indat_grid = absolute_path(p.indat_grid);
+%% deduce data file format from simsize format
+if ~isfield(p, 'file_format')
+  [~,~,ext] = fileparts(p.indat_size);
+  p.file_format = ext(2:end);
+end
 
 %% optional groups
 if ~isfield(p, 'simdir')
