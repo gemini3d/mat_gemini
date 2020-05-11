@@ -17,7 +17,7 @@ makedir(outdir)
 switch p.file_format
   case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
   case {'h5','hdf5'}, write_hdf5(outdir, xg)
-  case {'nc'}, error('writegrid:not_implemented', 'NetCDF4')
+  case {'nc', 'nc4'}, write_nc4(outdir, xg)
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
@@ -25,7 +25,6 @@ end % function
 
 
 function write_hdf5(dir_out, xg)
-
 
 fn = [dir_out, '/simsize.h5'];
 disp(['write ',fn])
@@ -102,6 +101,107 @@ h5save(fn, '/phi', xg.phi, [lx1, lx2, lx3], freal)
 h5save(fn, '/x', xg.x, [lx1, lx2, lx3], freal)
 h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
 h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
+
+end % function
+
+
+function write_nc4(dir_out, xg)
+
+try
+  pkg load netcdf
+end
+
+fn = [dir_out, '/simsize.nc'];
+disp(['write ',fn])
+if is_file(fn), delete(fn), end
+
+ncsave(fn, 'lx1', int32(xg.lx(1)))
+ncsave(fn, 'lx2', int32(xg.lx(2)))
+ncsave(fn, 'lx3', int32(xg.lx(3)))
+
+lx1 = xg.lx(1);
+lx2 = xg.lx(2);
+lx3 = xg.lx(3);
+
+fn = [dir_out, '/simgrid.nc'];
+disp(['write ',fn])
+if is_file(fn), delete(fn), end
+
+freal = 'float32';
+Ng = 4; % number of ghost cells
+
+% matlab, octave can't have dim name and var name the same.
+% this is not a problem in Python.
+dimx1 = {'dimx1', lx1};
+dimx2 = {'dimx2', lx2};
+dimx3 = {'dimx3', lx3};
+dimx1i = {'dimx1i', lx1+1};
+dimx2i = {'dimx2i', lx2+1};
+dimx3i = {'dimx3i', lx3+1};
+dimx1d = {'dimx1d', lx1+Ng-1};
+dimx2d = {'dimx2d', lx2+Ng-1};
+dimx3d = {'dimx3d', lx3+Ng-1};
+dimx1ghost = {'dimx1ghost', lx1 + Ng};
+dimx2ghost = {'dimx2ghost', lx2 + Ng};
+dimx3ghost = {'dimx3ghost', lx3 + Ng};
+dimecef = {'ecef', 3};
+
+ncsave(fn, 'x1', xg.x1, dimx1ghost, freal)
+ncsave(fn, 'x1i', xg.x1i, dimx1i, freal)
+ncsave(fn, 'dx1b', xg.dx1b, dimx1d,freal)
+ncsave(fn, 'dx1h', xg.dx1h, dimx1, freal)
+ncsave(fn, 'x2', xg.x2, dimx2ghost, freal)
+ncsave(fn, 'x2i', xg.x2i, dimx2i, freal)
+ncsave(fn, 'dx2b', xg.dx2b, dimx2d,freal)
+ncsave(fn, 'dx2h', xg.dx2h, dimx2, freal)
+ncsave(fn, 'x3', xg.x3, dimx3ghost, freal)
+ncsave(fn, 'x3i', xg.x3i, dimx3i, freal)
+ncsave(fn, 'dx3b', xg.dx3b, dimx3d,freal)
+ncsave(fn, 'dx3h', xg.dx3h, dimx3, freal)
+
+ncsave(fn, 'h1', xg.h1, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
+ncsave(fn, 'h2', xg.h2, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
+ncsave(fn, 'h3', xg.h3, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
+
+ncsave(fn, 'h1x1i', xg.h1x1i, [dimx1i, dimx2, dimx3], freal)
+ncsave(fn, 'h2x1i', xg.h2x1i, [dimx1i, dimx2, dimx3], freal)
+ncsave(fn, 'h3x1i', xg.h3x1i, [dimx1i, dimx2, dimx3], freal)
+
+ncsave(fn, 'h1x2i', xg.h1x2i, [dimx1, dimx2i, dimx3], freal)
+ncsave(fn, 'h2x2i', xg.h2x2i, [dimx1, dimx2i, dimx3], freal)
+ncsave(fn, 'h3x2i', xg.h3x2i, [dimx1, dimx2i, dimx3], freal)
+
+ncsave(fn, 'h1x3i', xg.h1x3i, [dimx1, dimx2, dimx3i], freal)
+ncsave(fn, 'h2x3i', xg.h2x3i, [dimx1, dimx2, dimx3i], freal)
+ncsave(fn, 'h3x3i', xg.h3x3i, [dimx1, dimx2, dimx3i], freal)
+
+ncsave(fn, 'gx1', xg.gx1, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'gx2', xg.gx2, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'gx3', xg.gx3, [dimx1, dimx2, dimx3], freal)
+
+ncsave(fn, 'alt', xg.alt, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'glat', xg.glat, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'glon', xg.glon, [dimx1, dimx2, dimx3], freal)
+
+ncsave(fn, 'Bmag', xg.Bmag, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'I', xg.I, [dimx2, dimx3], freal)
+ncsave(fn, 'nullpts', xg.nullpts, [dimx1, dimx2, dimx3], freal)
+
+ncsave(fn, 'e1', xg.e1, [dimx1, dimx2, dimx3, dimecef], freal)
+ncsave(fn, 'e2', xg.e2, [dimx1, dimx2, dimx3, dimecef], freal)
+ncsave(fn, 'e3', xg.e3, [dimx1, dimx2, dimx3, dimecef], freal)
+
+ncsave(fn, 'er', xg.er, [dimx1, dimx2, dimx3, dimecef], freal)
+ncsave(fn, 'etheta', xg.etheta, [dimx1, dimx2, dimx3, dimecef], freal)
+ncsave(fn, 'ephi', xg.ephi, [dimx1, dimx2, dimx3, dimecef], freal)
+
+ncsave(fn, 'r', xg.r, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'theta', xg.theta, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'phi', xg.phi, [dimx1, dimx2, dimx3], freal)
+
+ncsave(fn, 'x', xg.x, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'y', xg.y, [dimx1, dimx2, dimx3], freal)
+ncsave(fn, 'z', xg.z, [dimx1, dimx2, dimx3], freal)
 
 end % function
 

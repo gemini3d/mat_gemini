@@ -23,9 +23,9 @@ outdir = absolute_path(outdir);
 makedir(outdir)
 
 switch file_format
-  case {'.h5','h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
-  case {'.dat','dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
-  case{'nc','.nc'}, error('writedata:not_implemented', 'NetCDF4')
+  case {'h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
+  case {'dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
+  case {'nc','nc4'}, write_nc4(outdir, ymd, UTsec, ns, vsx1, Ts)
   otherwise, error('writedata:value_error', 'unknown file_format %s', file_format)
 end
 
@@ -33,7 +33,7 @@ end % function
 
 
 function write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
-fn = [outdir,'/initial_conditions.h5'];
+fn = fullfile(outdir,'initial_conditions.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -49,9 +49,33 @@ h5save(fn, '/Ts', Ts, [], freal)
 end % function
 
 
+function write_nc4(outdir, ymd, UTsec, ns, vsx1, Ts)
+
+try
+  pkg load netcdf
+end
+
+fn = fullfile(outdir, 'initial_conditions.nc');
+disp(['write ',fn])
+if is_file(fn), delete(fn), end
+
+ncsave(fn, 'ymd', int32(ymd), {'time', 3})
+
+freal = 'float32';
+dimspec = {'x1', size(ns, 1), 'x2', size(ns, 2), 'x3', size(ns,3), 'species', 7};
+
+ncsave(fn, 'UTsec', UTsec)
+ncsave(fn, 'ns', ns, dimspec, freal)
+ncsave(fn, 'vsx1', vsx1, dimspec, freal)
+ncsave(fn, 'Ts', Ts, dimspec, freal)
+
+end % function
+
+
+
 function write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
 
-fn = [outdir,'/initial_conditions.dat'];
+fn = fullfile(outdir,'initial_conditions.dat');
 disp(['write ',fn])
 fid=fopen(fn, 'w');
 

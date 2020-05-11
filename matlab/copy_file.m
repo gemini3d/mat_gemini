@@ -5,8 +5,8 @@ narginchk(2,2)
 fin = absolute_path(in);
 fout = absolute_path(out);
 if strcmp(fileparts(fin), fout)
-  fprintf(2, 'skipping copy of file onto itself: %s\n', fin)
+  fprintf(2, 'skipping copy of file onto itself: %s\n', fin);
   return
 end
-copyfile(absolute_path(in), absolute_path(out))
+copyfile(absolute_path(in), absolute_path(out));
 end
