@@ -20,5 +20,5 @@ setup
 
 ### GNU Octave
 
-These scripts generally do NOT fully work from GNU Octave since at least through Octave 5.x, Octave does not have full HDF5 support.
-Note that Octave's `save('-hdf5','out.h5',...)` saves the variables in a fixed layout that's not usable for Gemini.
+GNU Octave currently can do NetCDF4, but not HDF5.
+Octave's `save('-hdf5','out.h5',...)` saves the variables in a fixed layout that's not usable for Gemini.

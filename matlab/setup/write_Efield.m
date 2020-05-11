@@ -7,7 +7,7 @@ nan_check(E)
 switch cfg.file_format
   case {'raw', 'dat'}, write_raw(dir_out, E, cfg)
   case {'h5', 'hdf5'}, write_hdf5(dir_out, E, cfg)
-  case {'nc'}, error('write_Efield:not_implemented', 'NetCDF4')
+  case {'nc', 'nc4'},  write_nc4(dir_out, E, cfg)
   otherwise, error('write_Efield:value_error', 'unknown file format %s', cfg.file_format)
 end
 
@@ -31,12 +31,12 @@ end % function
 function write_hdf5(dir_out, E, p)
 narginchk(3,3)
 
-fn = [dir_out, '/simsize.h5'];
+fn = fullfile(dir_out, 'simsize.h5');
 if is_file(fn), delete(fn), end
 h5save(fn, '/llon', int32(E.llon))
 h5save(fn, '/llat', int32(E.llat))
 
-fn = [dir_out, '/simgrid.h5'];
+fn = fullfile(dir_out, 'simgrid.h5');
 if is_file(fn), delete(fn), end
 
 freal = 'float32';
@@ -50,7 +50,7 @@ for i = 1:Nt
   UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
   ymd = E.expdate(i, 1:3);
 
-  fn = [dir_out, '/', datelab(ymd,UTsec), '.h5'];
+  fn = fullfile(dir_out, [datelab(ymd,UTsec), '.h5']);
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
@@ -64,6 +64,47 @@ for i = 1:Nt
   h5save(fn, '/Vmaxx3ist', E.Vmaxx3ist(:,i), [], freal)
 end
 end % function
+
+
+function write_nc4(dir_out, E, p)
+narginchk(3,3)
+
+fn = fullfile(dir_out, 'simsize.nc');
+if is_file(fn), delete(fn), end
+ncsave(fn, 'llon', int32(E.llon))
+ncsave(fn, 'llat', int32(E.llat))
+
+fn = fullfile(dir_out, 'simgrid.nc');
+if is_file(fn), delete(fn), end
+
+freal = 'float32';
+dlon = {'lon', E.llon};
+dlat = {'lat', E.llat};
+
+ncsave(fn, 'mlon', E.mlon, dlon, freal)
+ncsave(fn, 'mlat', E.mlat, dlat, freal)
+
+disp(['write to ', dir_out])
+Nt = size(E.expdate, 1);
+for i = 1:Nt
+  UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
+  ymd = E.expdate(i, 1:3);
+
+  fn = fullfile(dir_out, [datelab(ymd,UTsec), '.nc']);
+
+  %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
+  ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
+  ncsave(fn, 'Exit', E.Exit(:,:,i), [dlon, dlat], freal)
+  ncsave(fn, 'Eyit', E.Eyit(:,:,i), [dlon, dlat], freal)
+  ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), [dlon, dlat], freal)
+  ncsave(fn, 'Vmaxx1it', E.Vmaxx1it(:,:,i), [dlon, dlat], freal)
+  ncsave(fn, 'Vminx2ist', E.Vminx2ist(:,i), dlat, freal)
+  ncsave(fn, 'Vmaxx2ist', E.Vmaxx2ist(:,i), dlat, freal)
+  ncsave(fn, 'Vminx3ist', E.Vminx3ist(:,i), dlon, freal)
+  ncsave(fn, 'Vmaxx3ist', E.Vmaxx3ist(:,i), dlon, freal)
+end
+end % function
+
 
 
 function write_raw(dir_out, E, p)

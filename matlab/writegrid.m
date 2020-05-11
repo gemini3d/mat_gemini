@@ -37,7 +37,7 @@ lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
-fn = [dir_out, '/simgrid.h5'];
+fn = fullfile(dir_out, 'simgrid.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -111,7 +111,7 @@ try
   pkg load netcdf
 end
 
-fn = [dir_out, '/simsize.nc'];
+fn = fullfile(dir_out, 'simsize.nc');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -210,7 +210,7 @@ function write_raw(outdir, xg, realbits)
 
 freal = ['float', int2str(realbits)];
 
-filename = [outdir, '/simsize.dat'];
+filename = fullfile(outdir, 'simsize.dat');
 disp(['write ',filename])
 fid = fopen(filename, 'w');
 fwrite(fid, xg.lx, 'integer*4');

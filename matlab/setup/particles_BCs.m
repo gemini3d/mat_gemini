@@ -66,7 +66,7 @@ makedir(outdir)
 switch p.file_format
   case {'h5','hdf5'}, write_hdf5(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it)
   case {'dat','raw'}, write_raw(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it, p.realbits)
-  case {'nc'}, error('particles_BCs:not_implemented', 'NetCDF4')
+  case {'nc', 'nc4'}, write_nc4(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it)
   otherwise, error('particles_BCs:value_error', 'unknown file format %s', p.file_format)
 end
 
@@ -101,6 +101,35 @@ end
 end % function
 
 
+function write_nc4(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it)
+narginchk(9,9)
+
+fn = fullfile(outdir, 'simsize.nc');
+disp(['write ', fn])
+ncsave(fn, 'llon', int32(llon))
+ncsave(fn, 'llat', int32(llat))
+
+freal = 'float32';
+
+fn = fullfile(outdir, 'simgrid.nc');
+disp(['write ', fn])
+ncsave(fn, 'mlon', mlon, {'lon', length(mlon)}, freal)
+ncsave(fn, 'mlat', mlat, {'lat', length(mlat)}, freal)
+
+for i = 1:Nt
+  UTsec = expdate(i,4)*3600 + expdate(i,5)*60 + expdate(i,6);
+  ymd = expdate(i, 1:3);
+
+  fn = fullfile(outdir, [datelab(ymd,UTsec), '.nc']);
+  disp(['writing ', fn])
+
+  ncsave(fn, 'Qp', Qit(:,:,i), {'lon', length(mlon), 'lat', length(mlat)}, freal)
+  ncsave(fn, 'E0p', E0it(:,:,i), {'lon', length(mlon), 'lat', length(mlat)}, freal)
+end
+
+end % function
+
+
 function write_raw(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it, realbits)
 narginchk(10,10)
 
@@ -113,7 +142,7 @@ fclose(fid);
 
 freal = ['float', int2str(realbits)];
 
-filename=fullfile(outdir, 'simgrid.dat');
+filename = fullfile(outdir, 'simgrid.dat');
 disp(['write ', filename])
 
 fid=fopen(filename,'w');
