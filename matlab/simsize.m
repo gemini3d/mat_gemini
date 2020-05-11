@@ -3,10 +3,11 @@ function lxs = simsize(path)
 narginchk(1,1)
 
 [path, ext] = get_simsize_path(path);
-fn = fullfile(path, 'simsize.h5');
+%fn = fullfile(path, 'simsize.h5');
 
 switch ext
   case '.h5'
+    fn=fullfile(path, 'simsize.h5');
     if isoctave
       d = load(fn);
       if isfield(d, 'lxs')
@@ -37,6 +38,7 @@ switch ext
     end
   case '.nc'
     % use temporary variable to be R2017b OK
+    fn=fullfile(path, 'simsize.nc');
     finf = ncinfo(fn);
     varnames = {finf.Variables(:).Name};
 
@@ -48,6 +50,7 @@ switch ext
       lxs = [ncread(fn, '/lx1'), ncread(fn, '/lx2'), ncread(fn, '/lx3')];
     end
   case '.dat'
+    fn=fullfile(path, 'simsize.dat');
     fid = fopen(fn, 'r');
     lxs = fread(fid, 3, 'integer*4');
     fclose(fid);
