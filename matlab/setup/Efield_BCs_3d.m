@@ -37,10 +37,11 @@ p.mlonmean = mean(E.mlon);
 p.mlatmean = mean(E.mlat);
 
 %% WIDTH OF THE DISTURBANCE
-p.mlatsig = p.Efield_fracwidth*(mlatmax-mlatmin);
-p.mlonsig = p.Efield_fracwidth*(mlonmax-mlonmin);
-p.sigx2 = p.Efield_fracwidth*(max(xg.x2)-min(xg.x2));
-p.sigx3 = p.Efield_fracwidth*(max(xg.x3)-min(xg.x3));
+p.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
+p.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
+
+p.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
+p.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
 time = tmin:p.dtE0:p.tdur;
@@ -62,6 +63,7 @@ else
   E.Eyit = zeros(E.llon, E.llat, Nt);
 end
 %% CREATE DATA FOR BOUNDARY CONDITIONS FOR POTENTIAL SOLUTION
+%E.flagdirich=zeros(1,Nt);
 E.Vminx1it = zeros(E.llon,E.llat, Nt);
 E.Vmaxx1it = zeros(E.llon,E.llat, Nt);
 %these are just slices
@@ -93,7 +95,7 @@ function E = Jcurrent_target(p, Nt, E)
 
 S = p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean - 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
 
-for i = 1:Nt
+for i = 6:Nt
   E.flagdirich(i)=0;    %could have different boundary types for different times
   E.Vmaxx1it(:,:,i) = S - p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/ 2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean + 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
 end

@@ -9,7 +9,7 @@ if mlon_sigma < eps(1), mlon_sigma = eps(1); end
 
 Q = Qpeak * ...
     exp(-(pg.MLON - pg.mlon_mean).^2 / (2*mlon_sigma^2)) .* ...
-    exp(-(pg.MLAT - pg.mlat_mean).^2 / (2*mlat_sigma^2));
+    exp(-(pg.MLAT - pg.mlat_mean -1.5*mlat_sigma).^2 / (2*mlat_sigma^2));
 
 Q(Q < Qbackground) = Qbackground;
 

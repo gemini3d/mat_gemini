@@ -66,6 +66,7 @@ if any(~isfinite(E0it)), error('particle_BCs:value_error', 'E0 not finite'), end
 outdir = absolute_path(p.prec_dir);
 makedir(outdir)
 
+disp(['write to ',outdir])
 switch p.file_format
   case {'h5','hdf5'}, write_hdf5(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it)
   case {'dat','raw'}, write_raw(outdir, llon, llat, pg.mlon, pg.mlat, expdate, Nt, Qit, E0it, p.realbits)
@@ -79,14 +80,12 @@ end % function
 function write_hdf5(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it)
 narginchk(9,9)
 fn = fullfile(outdir, 'simsize.h5');
-disp(['write ', fn])
 h5save(fn, '/llon', int32(llon))
 h5save(fn, '/llat', int32(llat))
 
 freal = 'float32';
 
 fn = fullfile(outdir, 'simgrid.h5');
-disp(['write ', fn])
 h5save(fn, '/mlon', mlon, [], freal)
 h5save(fn, '/mlat', mlat, [], freal)
 
@@ -95,7 +94,6 @@ for i = 1:Nt
   ymd = expdate(i, 1:3);
 
   fn = fullfile(outdir, [datelab(ymd,UTsec), '.h5']);
-  disp(['writing ', fn])
 
   h5save(fn, '/Qp', Qit(:,:,i), [llon, llat], freal)
   h5save(fn, '/E0p', E0it(:,:,i),[llon, llat], freal)
@@ -108,14 +106,12 @@ function write_nc4(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it)
 narginchk(9,9)
 
 fn = fullfile(outdir, 'simsize.nc');
-disp(['write ', fn])
 ncsave(fn, 'llon', int32(llon))
 ncsave(fn, 'llat', int32(llat))
 
 freal = 'float32';
 
 fn = fullfile(outdir, 'simgrid.nc');
-disp(['write ', fn])
 ncsave(fn, 'mlon', mlon, {'lon', length(mlon)}, freal)
 ncsave(fn, 'mlat', mlat, {'lat', length(mlat)}, freal)
 
@@ -124,7 +120,6 @@ for i = 1:Nt
   ymd = expdate(i, 1:3);
 
   fn = fullfile(outdir, [datelab(ymd,UTsec), '.nc']);
-  disp(['writing ', fn])
 
   ncsave(fn, 'Qp', Qit(:,:,i), {'lon', length(mlon), 'lat', length(mlat)}, freal)
   ncsave(fn, 'E0p', E0it(:,:,i), {'lon', length(mlon), 'lat', length(mlat)}, freal)
@@ -137,7 +132,6 @@ function write_raw(outdir, llon, llat, mlon, mlat, expdate, Nt, Qit, E0it, realb
 narginchk(10,10)
 
 filename= fullfile(outdir, 'simsize.dat');
-disp(['write ', filename])
 fid=fopen(filename, 'w');
 fwrite(fid,llon,'integer*4');
 fwrite(fid,llat,'integer*4');
@@ -146,7 +140,6 @@ fclose(fid);
 freal = ['float', int2str(realbits)];
 
 filename = fullfile(outdir, 'simgrid.dat');
-disp(['write ', filename])
 
 fid=fopen(filename,'w');
 fwrite(fid,mlon, freal);
@@ -158,7 +151,6 @@ for i = 1:Nt
   ymd = expdate(i, 1:3);
 
   filename = fullfile(outdir, [datelab(ymd,UTsec), '.dat']);
-  disp(['writing ', filename])
 
   fid = fopen(filename,'w');
   fwrite(fid,Qit(:,:,i), freal);
