@@ -20,9 +20,9 @@ flagglow = 0
 /
 
 &files
-indat_size = '~/simulations/test2dew_fang/inputs/simsize.h5'
-indat_grid = '~/simulations/test2dew_fang/inputs/simgrid.h5'
-indat_file = '~/simulations/test2dew_fang/inputs/initial_conditions.h5'
+indat_size = '~/simulations/test2dew_fang/inputs/simsize.nc'
+indat_grid = '~/simulations/test2dew_fang/inputs/simgrid.nc'
+indat_file = '~/simulations/test2dew_fang/inputs/initial_conditions.nc'
 /
 
 &setup
