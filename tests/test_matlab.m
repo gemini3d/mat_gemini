@@ -1,15 +1,14 @@
 % test basic functions
-
-cwd = fileparts(mfilename('fullpath'));
-run([cwd, '/../setup.m'])
-
 if exist('checkcode', 'file')
   checkcode_recursive(fullfile(cwd,'..'))
 end
 
+tic
+cwd = fileparts(mfilename('fullpath'));
+run([cwd, '/../setup.m'])
 %% config.nml load test
 
-p = read_config([cwd, '/test2d_fang/config.nml']);
+p = read_config([cwd, '/test2dew_fang/config.nml']);
 
 assert(p.xdist == 200000)
 
@@ -21,7 +20,7 @@ assert(utsec == 1500.5)
 
 %% test2d_eq_hdf5
 if exist('h5create', 'file')
-  model_setup('test2d_eq')
+  model_setup('test2dew_eq')
 else
   disp('SKIP: missing HDF5')
 end
@@ -31,10 +30,11 @@ try
   pkg load netcdf
 end
 if exist('nccreate', 'file')
-  model_setup('test2d_eq/config_nc4.nml')
+  model_setup('test2dew_eq/config_nc4.nml')
 else
   disp('SKIP: missing NetCDF4')
 end
 
 % done
+toc
 disp('OK: gemini-matlab')
