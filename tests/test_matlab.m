@@ -38,13 +38,29 @@ if exist('nccreate', 'file')
 else
   disp('SKIP: missing NetCDF4')
 end
-%% test2d_fang
-try
-  model_setup('test2dew_fang')
-catch e
-  if ~strcmp(e.identifier, 'readgrid:file_not_found')
-    rethrow(e)
+%% test2d_fang_hdf5
+if exist('h5create', 'file')
+  try
+    model_setup('test2dew_fang')
+  catch e
+    if ~strcmp(e.identifier, 'readgrid:file_not_found')
+      rethrow(e)
+    end
   end
+else
+  fprintf(2, 'SKIP: missing HDF5')
+end
+%% test2d_fang_nc
+if exist('nccreate', 'file')
+  try
+    model_setup('test2dew_fang/config_nc4.nml')
+  catch e
+    if ~strcmp(e.identifier, 'readgrid:file_not_found')
+      rethrow(e)
+    end
+  end
+else
+  disp('SKIP: missing NetCDF4')
 end
 
 % done
