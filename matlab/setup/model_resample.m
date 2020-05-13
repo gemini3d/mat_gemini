@@ -61,7 +61,7 @@ elseif lx2 == 1 % 2-D north-south
   % original grid, a priori the first 2 and last 2 values are ghost cells
   % on each axis
 
-    if length(xgin.x3(3:end-2)) < 2
+  if length(xgin.x3(3:end-2)) < 2
     error('model_resample:value_error', 'the equilibrium simulation has the opposite 2D orientation (east-west) to the new simulation (north-south)')
   end
 
