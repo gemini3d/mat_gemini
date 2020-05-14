@@ -12,8 +12,11 @@ if is_file(path)
   elseif is_file([fullfile(path,'inputs/simsize'), ext])
     path = fullfile(path, 'inputs');
     return
+  elseif is_file([fullfile(path,'simsize'), ext])
+    path = fullfile(path);
+    return    
   else
-    error('get_simsize_path:file_not_found', 'could not find %s/simsize.%s', path, ext)
+    error('get_simsize_path:file_not_found', 'could not find %s/simsize%s', path, ext)
   end
 end
 %% directory given
