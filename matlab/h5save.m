@@ -29,13 +29,8 @@ try
   % existing variable
   diskshape = h5info(filename, varname).Dataspace.Size;
   if length(diskshape) >= 2
-    if diskshape(1) == 1 % isrow
+     % start is always a row vector, regardless of shape of array
       start = ones(1,ndims(A));
-    elseif diskshape(2) == 1 % iscolumn
-      start = ones(ndims(A),1);
-    else
-      start = ones(1,ndims(A));
-    end
   else
     start = 1;
   end
