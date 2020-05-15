@@ -1,4 +1,4 @@
-function Efield_BCs_3d(p, xg)
+function Efield_BCs(p, xg)
 
 narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'sim parameters', 1)

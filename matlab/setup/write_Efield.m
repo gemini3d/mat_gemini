@@ -5,9 +5,9 @@ narginchk(3,3)
 nan_check(E)
 
 switch cfg.file_format
-  case {'raw', 'dat'}, write_raw(dir_out, E, cfg)
-  case {'h5', 'hdf5'}, write_hdf5(dir_out, E, cfg)
-  case {'nc', 'nc4'},  write_nc4(dir_out, E, cfg)
+  case {'raw', 'dat'}, write_raw(dir_out, E)
+  case {'h5', 'hdf5'}, write_hdf5(dir_out, E)
+  case {'nc', 'nc4'},  write_nc4(dir_out, E, cfg.realbits)
   otherwise, error('write_Efield:value_error', 'unknown file format %s', cfg.file_format)
 end
 
@@ -28,8 +28,8 @@ assert(all(isfinite(E.Vmaxx3ist(:))), 'NaN in Vmaxx3ist')
 end % function
 
 
-function write_hdf5(dir_out, E, p)
-narginchk(3,3)
+function write_hdf5(dir_out, E)
+narginchk(2, 2)
 
 fn = fullfile(dir_out, 'simsize.h5');
 if is_file(fn), delete(fn), end
@@ -69,8 +69,8 @@ end
 end % function
 
 
-function write_nc4(dir_out, E, p)
-narginchk(3,3)
+function write_nc4(dir_out, E)
+narginchk(2, 2)
 
 fn = fullfile(dir_out, 'simsize.nc');
 if is_file(fn), delete(fn), end
@@ -96,7 +96,7 @@ for i = 1:Nt
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.nc']);
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  ncsave(fn, 'flagdirich', int32(p.Eflagdirich))
+  ncsave(fn, 'flagdirich', int32(E.flagdirich))
   ncsave(fn, 'Exit', E.Exit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Eyit', E.Eyit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), [dlon, dlat], freal)
@@ -110,10 +110,10 @@ end % function
 
 
 
-function write_raw(dir_out, E, p)
+function write_raw(dir_out, E, realbits)
 narginchk(3,3)
 
-freal = ['float', int2str(p.realbits)];
+freal = ['float', int2str(realbits)];
 
 fid = fopen([dir_out, '/simsize.dat'], 'w');
 fwrite(fid, E.llon, 'integer*4');
@@ -135,7 +135,7 @@ for i = 1:Nt
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
 %  fwrite(fid, p.flagdirich, 'int32');
-  fwrite(fid, p.Eflagdirich, freal);   %FIXME - fortran code still wants this to be real...
+  fwrite(fid, E.flagdirich(i), freal);   %FIXME - fortran code still wants this to be real...
   fwrite(fid, E.Exit(:,:,i), freal);
   fwrite(fid, E.Eyit(:,:,i), freal);
   fwrite(fid, E.Vminx1it(:,:,i), freal);
