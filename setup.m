@@ -1,10 +1,6 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
-if ~isempty(getenv('GEMINI_MATLAB'))
-  return
-end
-
 cwd = fileparts(mfilename('fullpath'));
 R = fullfile(cwd, 'matlab');
 for p = {'', 'vis', 'vis/plotfunctions', 'setup', 'setup/gridgen'}
