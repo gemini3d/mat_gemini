@@ -26,7 +26,7 @@ assert(utsec == 1500.5)
 if exist('h5create', 'file')
   model_setup('test2dew_eq')
 else
-  fprintf(2, 'SKIP: missing HDF5')
+  fprintf(2, 'SKIP: missing HDF5\n')
 end
 
 %% test2d_eq_nc4
@@ -36,7 +36,7 @@ end
 if exist('nccreate', 'file')
   model_setup('test2dew_eq/config_nc4.nml')
 else
-  disp('SKIP: missing NetCDF4')
+  disp('SKIP: missing NetCDF4\n')
 end
 %% test2d_fang_hdf5
 if exist('h5create', 'file')
@@ -48,7 +48,7 @@ if exist('h5create', 'file')
     end
   end
 else
-  fprintf(2, 'SKIP: missing HDF5')
+  fprintf(2, 'SKIP: missing HDF5\n')
 end
 %% test2d_fang_nc
 if exist('nccreate', 'file')
@@ -60,7 +60,7 @@ if exist('nccreate', 'file')
     end
   end
 else
-  disp('SKIP: missing NetCDF4')
+  disp('SKIP: missing NetCDF4\n')
 end
 
 % done

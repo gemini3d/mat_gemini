@@ -59,7 +59,7 @@ else
   % new variable
   if isscalar(A)
     nccreate(filename, varname, 'Datatype', class(A))
-  elseif length(sizeA) >= 1 && length(sizeA) < 3
+  elseif isvector(A) || ismatrix(A)
     nccreate(filename, varname, 'Dimensions', dims, 'Datatype', class(A))
   else
     % enable Gzip compression--remember Matlab's dim order is flipped from
@@ -71,8 +71,8 @@ else
     end
     % "Datatype" to be Octave case-sensitive keyword compatible
     nccreate(filename, varname, 'Dimensions', dims, ...
-      'Datatype', class(A)) %, ...
-      %'DeflateLevel', 1, 'Shuffle', true, 'ChunkSize', chunksize)
+      'Datatype', class(A), ...
+      'DeflateLevel', 1, 'Shuffle', true, 'ChunkSize', chunksize)
   end
   ncwrite(filename, varname, A)
 end
