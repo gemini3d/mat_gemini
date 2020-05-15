@@ -37,11 +37,14 @@ p.mlonmean = mean(E.mlon);
 p.mlatmean = mean(E.mlat);
 
 %% WIDTH OF THE DISTURBANCE
-p.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
-p.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
-
-p.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
-p.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
+if isfield(p, 'Efield_latwidth')
+  p.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
+  p.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
+end
+if isfield(p, 'Efield_lonwidth')
+   p.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
+   p.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
+end
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
 time = tmin:p.dtE0:p.tdur;
@@ -74,7 +77,7 @@ E.Vmaxx3ist = zeros(E.llon, Nt);
 
 %% synthesize feature
 if isfield(p, 'Etarg')
-  E = Efield_target(p, xg, lx2, lx3, Nt, E);
+  E = Efield_target(p, xg, lx1, lx2, lx3, Nt, E);
 elseif isfield(p, 'Jtarg')
   E = Jcurrent_target(p, Nt, E);
 else
@@ -92,7 +95,7 @@ end % function
 
 
 function E = Jcurrent_target(p, Nt, E)
-
+narginchk(3,3)
 S = p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean - 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
 
 for i = 6:Nt
@@ -103,20 +106,24 @@ end
 end % function
 
 
-function E = Efield_target(p, xg, lx2, lx3, Nt, E)
+function E = Efield_target(p, xg, lx1, lx2, lx3, Nt, E)
+narginchk(7,7)
 %% create feature defined by Efield
 if lx3 == 1 % east-west
   S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+  taper = erf((E.MLON - p.mlonmean) / p.mlonsig);
 elseif lx2 == 1 % north-south
   S = p.Etarg * p.sigx3 .* xg.h3(lx1, 1, floor(lx3/2)) .* sqrt(pi)./2;
+  taper = erf((E.MLAT - p.mlatmean) / p.mlatsig);
 else % 3D
   S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+  taper = erf((E.MLON - p.mlonmean) / p.mlonsig) .* erf((E.MLAT - p.mlatmean) / p.mlatsig);
 end
 
 % x2ctr = 1/2*(xg.x2(lx2) + xg.x2(1));
 for i = 1:Nt
   E.flagdirich(i)=1;
-  E.Vmaxx1it(:,:,i) = S .* erf((E.MLON - p.mlonmean) / p.mlonsig) .* erf((E.MLAT - p.mlatmean) / p.mlatsig);
+  E.Vmaxx1it(:,:,i) = S .* taper;
 end
 
 end % function

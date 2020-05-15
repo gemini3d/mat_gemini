@@ -44,7 +44,7 @@ Qprecip = 10
 Qprecip_background = 0.0
 E0precip = 5e3
 Etarg = 50e-3   ! V/m
-Efield_fracwidth = 0.142857
+Efield_lonwidth = 0.142857
 Eflagdirich = 1
 eqdir = '~/simulations/test2dew_eq'
 /

@@ -5,9 +5,9 @@ narginchk(3,3)
 nan_check(E)
 
 switch cfg.file_format
-  case {'raw', 'dat'}, write_raw(dir_out, E)
   case {'h5', 'hdf5'}, write_hdf5(dir_out, E)
-  case {'nc', 'nc4'},  write_nc4(dir_out, E, cfg.realbits)
+  case {'nc', 'nc4'},  write_nc4(dir_out, E)
+  case {'raw', 'dat'}, write_raw(dir_out, E, cfg.realbits)
   otherwise, error('write_Efield:value_error', 'unknown file format %s', cfg.file_format)
 end
 
@@ -96,7 +96,7 @@ for i = 1:Nt
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.nc']);
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  ncsave(fn, 'flagdirich', int32(E.flagdirich))
+  ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
   ncsave(fn, 'Exit', E.Exit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Eyit', E.Eyit(:,:,i), [dlon, dlat], freal)
   ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), [dlon, dlat], freal)
