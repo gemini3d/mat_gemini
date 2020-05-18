@@ -15,18 +15,11 @@ indat_file = '~/simulations/test2dew_eq/inputs/initial_conditions.h5'
 /
 
 &flags
-potsolve = 0                  ! potsolve:  how are we solving electrodynamics?   0 - no; 1 - electrostatic; 2 - inductive
-flagperiodic = 0
+potsolve = 0             ! solve electrodynamics?   0 - no; 1 - electrostatic; 2 - inductive
 flagoutput = 1
-flagcap = 0
-flagdneu = 0
-flagprecfile = 0
-flagE0file = 0
-flagglow = 0
 /
 
 &setup
-file_format = 'h5'
 glat = 67.11
 glon = 212.95
 xdist = 1200e3              ! eastward distance (meters)
