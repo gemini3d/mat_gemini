@@ -30,39 +30,42 @@ if ~isfield(p, 'nml')
   p.nml = filename;
 end
 
-try % setup is only used if making a new simulation
-  p = merge_struct(p, read_nml_group(filename, 'setup'));
+p = read_if_present(p, filename, 'setup');
+if isfield(p, 'eqdir')
+  p.eqdir = absolute_path(p.eqdir);
+end
+
+read_if_present(p, filename, 'neutral_perturb');
+if ~isfield(p, 'mloc')
+  p.mloc=[];
+end
+
+p = read_if_present(p, filename,  'precip');
+if isfield(p, 'prec_dir')
+  p.prec_dir = absolute_path(p.prec_dir);
+end
+
+p = read_if_present(p, filename, 'efield');
+if isfield(p, 'E0_dir')
+  p.E0_dir = absolute_path(p.E0_dir);
+end
+
+p = read_if_present(p, filename, 'glow');
+
+end % function
+
+function p = read_if_present(p, filename, group)
+narginchk(3, 3)
+
+try
+  p = merge_struct(p, read_nml_group(filename, group));
 catch excp
   if ~strcmp(excp.identifier, 'read_nml_group:group_not_found')
     rethrow(excp)
   end
 end
-if isfield(p, 'eqdir')
-  p.eqdir = absolute_path(p.eqdir);
-end
 
-if isfield(p, 'flagdneu') && p.flagdneu
-  p = merge_struct(p, read_nml_group(filename, 'neutral_perturb'));
 end
-if ~isfield(p, 'mloc')
-  p.mloc=[];
-end
-
-if isfield(p, 'flagprecfile') && p.flagprecfile
-  p = merge_struct(p, read_nml_group(filename, 'precip'));
-  p.prec_dir = absolute_path(p.prec_dir);
-end
-
-if isfield(p, 'flagE0file') && p.flagE0file
-  p = merge_struct(p, read_nml_group(filename, 'efield'));
-  p.E0_dir = absolute_path(p.E0_dir);
-end
-
-if isfield(p, 'flagglow') && p.flagglow
-  p = merge_struct(p, read_nml_group(filename, 'glow'));
-end
-
-end % function
 
 % Copyright 2020 Michael Hirsch, Ph.D.
 

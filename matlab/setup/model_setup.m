@@ -1,4 +1,4 @@
-function model_setup(p)
+function p = model_setup(p)
 %% determines what kind of setup is needed and does it.
 % this is a top-level script, so be sure environment is setup
 cwd = fileparts(mfilename('fullpath'));
@@ -26,4 +26,5 @@ else
   model_setup_equilibrium(p)
 end
 
+if ~nargout, clear('p'), end
 end % function

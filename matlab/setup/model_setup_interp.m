@@ -10,12 +10,12 @@ xg = makegrid_cart_3D(p);
 eq2dist(p, xg);
 
 %% potential boundary conditions
-if isfield(p, 'flagE0file') && p.flagE0file
+if isfield(p, 'E0_dir')
   Efield_BCs(p, xg);
 end
 
 %% aurora
-if isfield(p, 'flagprecfile') && p.flagprecfile
+if isfield(p, 'prec_dir')
   particles_BCs(p, xg)
 end
 
