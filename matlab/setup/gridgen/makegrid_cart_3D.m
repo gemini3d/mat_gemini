@@ -48,6 +48,8 @@ zi(2:lx1)=1/2*(z(2:lx1)+z(1:lx1-1));
 zi(1)=z(1)-1/2*(z(2)-z(1));
 zi(lx1+1)=z(lx1)+1/2*(z(lx1)-z(lx1-1));
 
+disp(sprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d',lx1-4,lx2-4,lx3-4));
+
 %% GRAVITATIONAL FIELD COMPONENTS IN DIPOLE SYSTEM
 Re=6370e3;
 G=6.67428e-11;
@@ -89,7 +91,6 @@ yECEF=r.*sin(theta).*sin(phi);
 zECEF=r.*cos(theta);
 
 %% COMPUTE SPHERICAL ECEF UNIT VECTORS - CARTESIAN-ECEF COMPONENTS
-disp('MAKEGRID_CART_3D.M --> Calculating spherical unit vectors')
 er(:,:,:,1)=sin(theta).*cos(phi);    %xECEF-component of er
 er(:,:,:,2)=sin(theta).*sin(phi);    %yECEF
 er(:,:,:,3)=cos(theta);              %zECEF
