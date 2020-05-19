@@ -8,12 +8,12 @@ switch ext
   case 'nc'
     filename = 'config_nc4.nml';
     if exist('nccreate', 'file') ~= 2
-      fprintf(2, 'SKIP: %s\n', name);
+      fprintf(2, 'SKIP: %s due to no NetCDF4 library\n', name);
       return
     end
   case 'h5'
     if  exist('h5create', 'file') ~= 2
-      fprintf(2, 'SKIP: %s\n', name);
+      fprintf(2, 'SKIP: %s due to no HDF5 library\n', name);
       return
   end
 end
@@ -32,8 +32,10 @@ try
   end
 
 catch e
-  if ~strcmp(e.identifier, 'readgrid:file_not_found')
-    rethrow(e)
+  switch e.identifier
+    case 'readgrid:file_not_found', fprintf(2, 'SKIP: %s due to no simgrid file\n', name)
+    case 'loadframe:file_not_found', fprintf(2, 'SKIP: %s due to no data file\n', name)
+    otherwise, rethrow(e)
   end
 end
 
