@@ -4,36 +4,49 @@ function cmake(srcdir, builddir)
 
 narginchk(2,2)
 
-%> required for matlab 2020a on macOS
-pathfix='';
-pathfix='export PATH=$PATH:/usr/local/bin &&';
+%% MacOS workaround
+% Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
+% Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
 
-ret = system([pathfix,' cmake --version']);
+env_fix = '';
+if ismac
+  env_fix = 'export PATH=$PATH:/usr/local/bin &&';
+end
+
+ret = system([env_fix,' cmake --version']);
 if ret ~= 0
   error('cmake:environment_error', 'CMake not found')
 end
 
-tail = '';
-if ispc && isempty(getenv('CMAKE_GENERATOR'))
-  ret = system('ninja --version');
-  if ret==0
-    tail = ' -G Ninja';
-  else
-    tail = ' -G MinGW Makefiles';
+%% Windows CMake generator default
+% For legacy reasons, CMake on Windows defaults to Visual Studio.
+% Visual Studio is not typically useful for Fortran,
+% so we default to Ninja or MinGW Makefiles
+cmake_gen = '';
+if ispc
+  if isempty(getenv('CMAKE_GENERATOR'))
+    ret = system('ninja --version');
+    if ret==0
+      cmake_gen = ' -G Ninja';
+    else
+      cmake_gen = ' -G MinGW Makefiles';
+    end
   end
 end
 
-ret = system([pathfix,' cmake -S', srcdir, ' -B', builddir]);
+ret = system([env_fix,' cmake -S', srcdir, ' -B', builddir, cmake_gen]);
 if ret ~= 0
+  % maybe we have a prior build from a different compiler,
+  % let's try a fresh CMake configuration
   delete(fullfile(builddir, 'CMakeCache.txt'))
-  ret = system([pathfix,' cmake -S', srcdir, ' -B', builddir]);
+  ret = system([env_fix,' cmake -S', srcdir, ' -B', builddir, cmake_gen]);
 end
 if ret~=0
   error('cmake:runtime_error', 'error configuring with CMake')
 end
 
 %ret = system(['cmake --build ',builddir,' --parallel']);
-ret = system([pathfix,' cmake --build ',builddir,' --parallel']);
+ret = system([env_fix,' cmake --build ',builddir,' --parallel']);
 if ret ~= 0
   error('cmake:runtime_error', 'error building with CMake')
 end
