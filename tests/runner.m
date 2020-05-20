@@ -12,10 +12,10 @@ switch ext
       return
     end
   case 'h5'
-    if  exist('h5create', 'file') ~= 2
+    if exist('h5create', 'file') ~= 2
       fprintf(2, 'SKIP: %s due to no HDF5 library\n', name);
       return
-  end
+    end
 end
 
 try
