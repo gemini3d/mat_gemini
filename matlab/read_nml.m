@@ -7,10 +7,10 @@ narginchk(1,1)
 
 filename = get_configfile(path);
 
-%% required groups
-p = read_nml_group(filename, 'base');
-p = merge_struct(p, read_nml_group(filename, 'flags'));
-p = merge_struct(p, read_nml_group(filename, 'files'));
+%% required namelists
+p = read_namelist(filename, 'base');
+p = merge_struct(p, read_namelist(filename, 'flags'));
+p = merge_struct(p, read_namelist(filename, 'files'));
 p.indat_file = absolute_path(p.indat_file);
 p.indat_size = absolute_path(p.indat_size);
 p.indat_grid = absolute_path(p.indat_grid);
@@ -20,7 +20,7 @@ if ~isfield(p, 'file_format')
   p.file_format = ext(2:end);
 end
 
-%% optional groups
+%% optional namelists
 if ~isfield(p, 'simdir')
   % assumes that simsize.* are always under foo/inputs/
   p.simdir = absolute_path(fileparts(p.indat_size));
@@ -54,13 +54,13 @@ p = read_if_present(p, filename, 'glow');
 
 end % function
 
-function p = read_if_present(p, filename, group)
+function p = read_if_present(p, filename, namelist)
 narginchk(3, 3)
 
 try
-  p = merge_struct(p, read_nml_group(filename, group));
+  p = merge_struct(p, read_namelist(filename, namelist));
 catch excp
-  if ~strcmp(excp.identifier, 'read_nml_group:group_not_found')
+  if ~strcmp(excp.identifier, 'read_namelist:namelist_not_found')
     rethrow(excp)
   end
 end

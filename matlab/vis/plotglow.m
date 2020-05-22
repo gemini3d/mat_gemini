@@ -2,10 +2,11 @@ function plotglow(direc, saveplot_fmt, visible)
 % plots Gemini-Glow auroral emissions
 narginchk(1,3)
 if nargin<2, saveplot_fmt={'png'}; end  %e.g. {'png'} or {'png', 'eps'}
+if nargin<3, visible = 'on'; end
 
 assert(is_folder(direc), [direc, ' is not a directory.'])
-config_dir = [direc, '/inputs'];
-aurora_dir = [direc, '/aurmaps'];
+config_dir = fullfile(direc, 'inputs');
+aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
 wavelengths = {'3371', '4278', '5200', '5577', '6300', '7320', '10400', ...
@@ -13,7 +14,7 @@ wavelengths = {'3371', '4278', '5200', '5577', '6300', '7320', '10400', ...
 
 %READ IN SIMULATION INFO
 params = read_config(config_dir);
-%glow_params = read_nml_group([config_dir, '/config.nml'], 'glow');
+%glow_params = read_namelist([config_dir, '/config.nml'], 'glow');
 
 %READ IN THE GRID
 xg = readgrid(config_dir);
@@ -63,6 +64,7 @@ narginchk(4,6)
 validateattributes(x2, {'numeric'}, {'vector'}, mfilename)
 validateattributes(bFrame, {'numeric'}, {'ndims', 2}, mfilename)
 validateattributes(wavelengths, {'cell'}, {'vector'}, mfilename)
+if nargin < 6, visible = 'on'; end
 
 if nargin < 5 || isempty(hf)
   hf = make_glowfig(visible);
@@ -88,6 +90,7 @@ validateattributes(x3, {'numeric'}, {'vector'}, mfilename)
 validateattributes(bFrame, {'numeric'}, {'ndims', 3}, mfilename)
 validateattributes(time_str, {'cell'}, {'vector'}, mfilename)
 validateattributes(wavelengths, {'cell'}, {'vector'}, mfilename)
+if nargin < 7, visible = 'on'; end
 
 if nargin < 5 || isempty(hf)
   hf = make_glowfig(visible);

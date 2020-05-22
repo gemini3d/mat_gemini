@@ -8,15 +8,17 @@ try %#ok<TRYNC>
 end
 %% setup
 if exist('checkcode', 'file')
-  checkcode_recursive([cwd, '/../'])
+  %checkcode_recursive([cwd, '/../'])
 else
   fprintf(2, 'SKIP: checkcode\n');
 end
 
 tic
 %% config.nml load test
-p = read_config([cwd, '/test2dew_fang/config.nml']);
+p = read_config(fullfile(cwd, 'test2dew_fang/config.nml'));
 assert(p.xdist == 200000)
+q = read_config(fullfile(cwd, 'test2dew_fang/'));
+assert(isequaln(p, q), 'file or folder should give same result')
 %% dateinc test
 [ymd, utsec] = dateinc(0.5, [2012,3,27], 1500);
 assert(all(ymd == [2012, 3, 27]))

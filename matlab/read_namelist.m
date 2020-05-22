@@ -1,56 +1,52 @@
-function params = read_nml_group(filename, group)
+function params = read_namelist(filename, namelist)
 
 narginchk(2,2)
 assert(is_file(filename), [filename, ' not found.'])
-validateattributes(group, {'char'}, {'vector'}, mfilename, 'nml group name', 2)
+validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2)
 
 params = struct();
 
 fid=fopen(filename);
 while ~feof(fid)
   line = fgetl(fid);
-  mgrp = regexp(line, ['^\s*&', group], 'match');
+  mgrp = regexp(line, ['^\s*&(', namelist, ')'], 'match');
   if ~isempty(mgrp)
      break
   end
 end
 
 if isempty(mgrp)
-  error('read_nml_group:group_not_found', 'did not find group %s in %s', group, filename)
+  error('read_namelist:namelist_not_found', 'did not find namelist %s in %s', namelist, filename)
 end
 
 while ~feof(fid)
   line = fgetl(fid);
-  % detect end of group
+  % detect end of namelist
   mend = regexp(line, '^\s*/\s*$', 'match');
   if ~isempty(mend)
      break
   end
 
-  comment_line = regexp(line, '^\s*!', 'match');
-  if ~isempty(comment_line)
+  pat = "^\s*(\w+)\s*=\s*[''\""]?([^!'\""]*)[''\""]?\s*(?:!+.*)*$";
+  matches = regexp(line, pat, 'tokens');
+  if isempty(matches)  % blank, commented or malformed line
     continue
   end
 
-  [k, v] = strtok(line, '=');
-  if isempty(k) || isempty(v)  % blank or malformed line
-    continue
-  end
-  v = strtok(v(2:end), '!');  % discard comments
   % need textscan instead of sscanf to handle corner cases
-  vals = cell2mat(textscan(v, '%f','Delimiter',','));
+  vals = cell2mat(textscan(matches{1}{2}, '%f','Delimiter',','));
   if isempty(vals)  % must be a string
-    vals = strtrim(strrep(v, char(39), ''));
+    vals = matches{1}{2};
   else
     vals = vals(:).';
   end
 
-  params.(strtrim(k)) = vals;
+  params.(matches{1}{1}) = vals;
 end
 fclose(fid);
 
 if isempty(mend)
-  error('read_nml_group:group_syntax', 'did not read end of group %s in %s', group, filename)
+  error('read_namelist:namelist_syntax', 'did not read end of namelist %s in %s', namelist, filename)
 end
 
 end % function
