@@ -18,8 +18,6 @@ tic
 p = read_config(fullfile(cwd, 'test2dew_fang', 'config.nml'));
 assert(p.xdist == 200000)
 q = read_config(fullfile(cwd, 'test2dew_fang'));
-p
-q
 assert(isequaln(p, q), 'file or folder should give same result')
 %% dateinc test
 [ymd, utsec] = dateinc(0.5, [2012,3,27], 1500);
