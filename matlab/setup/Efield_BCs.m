@@ -92,7 +92,11 @@ end
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT TYPICALLY NEED TO BE SMOOTHED.
 
-write_Efield(p, E, dir_out)
+if strcmp(p.file_format, 'raw')
+  write_Efield_raw(E, dir_out, p.file_format, p.realbits)
+else
+  write_Efield(E, dir_out, p.file_format)
+end
 
 end % function
 
