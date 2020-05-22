@@ -33,17 +33,17 @@ lonbuf = 1/100 * (mlonmax-mlonmin);
 E.mlat = linspace(mlatmin-latbuf, mlatmax+latbuf, E.llat);
 E.mlon = linspace(mlonmin-lonbuf, mlonmax+lonbuf, E.llon);
 [E.MLON, E.MLAT] = ndgrid(E.mlon, E.mlat);
-p.mlonmean = mean(E.mlon);
-p.mlatmean = mean(E.mlat);
+E.mlonmean = mean(E.mlon);
+E.mlatmean = mean(E.mlat);
 
 %% WIDTH OF THE DISTURBANCE
 if isfield(p, 'Efield_latwidth')
-  p.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
-  p.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
+  E.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
+  E.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
 end
 if isfield(p, 'Efield_lonwidth')
-   p.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
-   p.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
+   E.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
+   E.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
 end
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
@@ -65,8 +65,9 @@ if isfield(p, 'Eyit')
 else
   E.Eyit = zeros(E.llon, E.llat, Nt);
 end
+
 %% CREATE DATA FOR BOUNDARY CONDITIONS FOR POTENTIAL SOLUTION
-%E.flagdirich=zeros(1,Nt);
+% if 0 data is interpreted as FAC, else we interpret it as potential
 E.Vminx1it = zeros(E.llon,E.llat, Nt);
 E.Vmaxx1it = zeros(E.llon,E.llat, Nt);
 %these are just slices
@@ -77,9 +78,11 @@ E.Vmaxx3ist = zeros(E.llon, Nt);
 
 %% synthesize feature
 if isfield(p, 'Etarg')
-  E = Efield_target(p, xg, lx1, lx2, lx3, Nt, E);
+  E.Etarg = p.Etarg;
+  E = Efield_target(E, xg, lx1, lx2, lx3, Nt);
 elseif isfield(p, 'Jtarg')
-  E = Jcurrent_target(p, Nt, E);
+  E.Jtarg = p.Jtarg;
+  E = Jcurrent_target(E, Nt);
 else
   error('Efield_BCs_3d:lookup_error', 'unknown target feature')
 end
@@ -94,30 +97,30 @@ write_Efield(p, E, dir_out)
 end % function
 
 
-function E = Jcurrent_target(p, Nt, E)
-narginchk(3,3)
-S = p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean - 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
+function E = Jcurrent_target(E, Nt)
+narginchk(2,2)
+S = E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
 
 for i = 6:Nt
   E.flagdirich(i)=0;    %could have different boundary types for different times
-  E.Vmaxx1it(:,:,i) = S - p.Jtarg * exp(-(E.MLON - p.mlonmean).^2/ 2 / p.mlonsig^2) .* exp(-(E.MLAT - p.mlatmean + 1.5 * p.mlatsig).^2/ 2 / p.mlatsig^2);
+  E.Vmaxx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
 end
 
 end % function
 
 
-function E = Efield_target(p, xg, lx1, lx2, lx3, Nt, E)
-narginchk(7,7)
+function E = Efield_target(E, xg, lx1, lx2, lx3, Nt)
+narginchk(6,6)
 %% create feature defined by Efield
 if lx3 == 1 % east-west
-  S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
-  taper = erf((E.MLON - p.mlonmean) / p.mlonsig);
+  S = E.Etarg * E.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+  taper = erf((E.MLON - E.mlonmean) / E.mlonsig);
 elseif lx2 == 1 % north-south
-  S = p.Etarg * p.sigx3 .* xg.h3(lx1, 1, floor(lx3/2)) .* sqrt(pi)./2;
-  taper = erf((E.MLAT - p.mlatmean) / p.mlatsig);
+  S = E.Etarg * E.sigx3 .* xg.h3(lx1, 1, floor(lx3/2)) .* sqrt(pi)./2;
+  taper = erf((E.MLAT - E.mlatmean) / E.mlatsig);
 else % 3D
-  S = p.Etarg * p.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
-  taper = erf((E.MLON - p.mlonmean) / p.mlonsig) .* erf((E.MLAT - p.mlatmean) / p.mlatsig);
+  S = E.Etarg * E.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
+  taper = erf((E.MLON - E.mlonmean) / E.mlonsig) .* erf((E.MLAT - E.mlatmean) / E.mlatsig);
 end
 
 % x2ctr = 1/2*(xg.x2(lx2) + xg.x2(1));
