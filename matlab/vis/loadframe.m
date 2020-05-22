@@ -8,7 +8,7 @@ validateattributes(UTsec, {'numeric'}, {'vector'}, mfilename, 'UTC second', 3)
 if nargin < 8 || isempty(realbits), realbits = 64; end
 
 if nargin < 7 || isempty(config_file)
-  config_file = [direc, '/inputs'];
+  config_file = fullfile(direc, 'inputs');
 end
 
 if nargin < 5 || isempty(flagoutput) || isempty(mloc)
@@ -23,10 +23,9 @@ if ~isempty(mloc)
 end
 
 if nargin < 6 || isempty(xg)
-  xg = readgrid([direc, '/inputs'], realbits);
+  xg = readgrid(fullfile(direc, 'inputs'), realbits);
 end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
-
 
 direc = absolute_path(direc);
 
@@ -35,13 +34,13 @@ stem0 = datelab(ymd, UTsec);
 suffix = {'.h5', '.nc', '.dat'};
 for ext = suffix
   stem = stem0;
-  filename = [direc, '/', stem, ext{1}];
+  filename = fullfile(direc, [stem, ext{1}]);
   if is_file(filename)
     break
   end
   % switch microsecond to one for first time step
   stem(end) = '1';
-  filename = [direc, '/', stem, ext{1}];
+  filename = fullfile(direc, [stem, ext{1}]);
   if is_file(filename)
     break
   end
@@ -67,6 +66,34 @@ if ~isempty(mloc)
 else
     dat.mlatsrc=[];
     dat.mlonsrc=[];
+end
+%% ensure input/simgrid matches data
+% if overwrote one directory or the other, a size mismatch can result
+dat_shape = size(dat.ns, 1:3);
+% we check each dimension because of possibility of 2D dimension swapping
+% x1
+if dat_shape(1) ~= xg.lx(1)
+  error('loadframe:value_error', 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), xg.lx(1))
+end
+% x2
+if dat_shape(2) ~= xg.lx(2)
+  if dat_shape(2) == 1 || xg.lx(2) == 1
+    if dat_shape(2) ~= xg.lx(3) % check for swap
+      error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), xg.lx(2))
+    end
+  else
+    error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), xg.lx(2))
+  end
+end
+% x3
+if dat_shape(3) ~= xg.lx(3)
+  if dat_shape(3) == 1 || xg.lx(3) == 1
+    if dat_shape(3) ~= xg.lx(2) % check for swap
+      error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
+    end
+  else
+    error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
+  end
 end
 
 end % function

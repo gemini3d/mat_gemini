@@ -1,14 +1,14 @@
 % test basic functions
 
 cwd = fileparts(mfilename('fullpath'));
-run([cwd, '/../setup.m'])
+run(fullfile(cwd, '../setup.m'))
 
 try %#ok<TRYNC>
   pkg('load', 'netcdf')
 end
 %% setup
 if exist('checkcode', 'file')
-  checkcode_recursive([cwd, '/../'])
+  checkcode_recursive(fullfile(cwd, '..'))
 else
   fprintf(2, 'SKIP: checkcode\n');
 end

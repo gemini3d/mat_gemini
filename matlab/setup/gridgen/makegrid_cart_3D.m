@@ -48,7 +48,7 @@ zi(2:lx1)=1/2*(z(2:lx1)+z(1:lx1-1));
 zi(1)=z(1)-1/2*(z(2)-z(1));
 zi(lx1+1)=z(lx1)+1/2*(z(lx1)-z(lx1-1));
 
-disp(sprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d',lx1-4,lx2-4,lx3-4));
+fprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d\n',lx1-4,lx2-4,lx3-4);
 
 %% GRAVITATIONAL FIELD COMPONENTS IN DIPOLE SYSTEM
 Re=6370e3;
