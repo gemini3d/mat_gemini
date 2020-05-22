@@ -1,10 +1,9 @@
-function pg = precip_grid(xg, p, llat, llon)
+function pg = precip_grid(xg, p, pg)
 
-narginchk(4, 4)
+narginchk(3, 3)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, "spatial grid", 1)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, "params", 2)
-validateattributes(llat, {'numeric'}, {'scalar', 'integer', 'positive'}, mfilename, 'number of latitude', 3)
-validateattributes(llat, {'numeric'}, {'scalar', 'integer', 'positive'}, mfilename, 'number of longitude', 4)
+validateattributes(pg, {'struct'}, {'scalar'}, mfilename, 'precipitation params', 3)
 
 thetamin = min(xg.theta(:));
 thetamax = max(xg.theta(:));
@@ -17,16 +16,19 @@ mlonmax = max(xg.phi(:))*180/pi;
 latbuf = 1/100*(mlatmax-mlatmin);
 lonbuf = 1/100*(mlonmax-mlonmin);
 % create the lat,lon grid
-pg.mlat = linspace(mlatmin-latbuf,mlatmax+latbuf,llat);
-pg.mlon = linspace(mlonmin-lonbuf,mlonmax+lonbuf,llon);
+pg.mlat = linspace(mlatmin-latbuf,mlatmax+latbuf, pg.llat);
+pg.mlon = linspace(mlonmin-lonbuf,mlonmax+lonbuf, pg.llon);
 [pg.MLON, pg.MLAT] = ndgrid(pg.mlon, pg.mlat);
 pg.mlon_mean = mean(pg.mlon);
 pg.mlat_mean = mean(pg.mlat);
 
-%% disturbance width
-mlatsig = p.precip_latwidth*(mlatmax-mlatmin);
-% to avoid divide by zero below
-pg.mlat_sigma = max(mlatsig, 0.01);
-pg.mlon_sigma = p.precip_lonwidth*(mlonmax-mlonmin);
+%% disturbance extents
+% avoid divide by zero
+if isfield(p, 'precip_latwidth')
+  pg.mlat_sigma = max(p.precip_latwidth*(mlatmax-mlatmin), 0.01);
+end
+if isfield(p, 'precip_lonwidth')
+  pg.mlon_sigma = max(p.precip_lonwidth*(mlonmax-mlonmin), 0.01);
+end
 
 end % function

@@ -21,7 +21,7 @@ else
 end
 
 if ~is_file(filename)
-  error('get_configfile:file_not_found', 'could not find %s', path)
+  error('get_configfile:file_not_found', 'could not find config.nml under %s', path)
 end
 
 end % function

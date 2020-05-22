@@ -93,7 +93,7 @@ end
 % THE EFIELD DATA DO NOT TYPICALLY NEED TO BE SMOOTHED.
 
 if strcmp(p.file_format, 'raw')
-  write_Efield_raw(E, dir_out, p.file_format, p.realbits)
+  write_Efield_raw(E, dir_out, p.realbits)
 else
   write_Efield(E, dir_out, p.file_format)
 end
