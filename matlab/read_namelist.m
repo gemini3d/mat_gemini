@@ -27,7 +27,7 @@ while ~feof(fid)
      break
   end
 
-  pat = "^\s*(\w+)\s*=\s*[''\""]?([^!'\""]*)[''\""]?\s*(?:!+.*)*$";
+  pat = "^\s*(\w+)\s*=\s*[''\""]?([^!'\""]*)[''\""]?";
   matches = regexp(line, pat, 'tokens');
   if isempty(matches)  % blank, commented or malformed line
     continue
