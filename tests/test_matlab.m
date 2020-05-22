@@ -36,6 +36,18 @@ runner('test2dew_glow_h5')
 %% test2dew_glow_nc
 runner('test2dew_glow_nc')
 
+%% test3d_eq_hdf5
+runner('test3d_eq_h5')
+%% test3d_eq_nc4
+runner('test3d_eq_nc')
+%% test3d_fang_h5
+runner('test3d_fang_h5')
+%% test3d_fang_nc
+runner('test3d_fang_nc')
+%% test3d_glow_h5
+runner('test3d_glow_h5')
+%% test3d_glow_nc
+runner('test3d_glow_nc')
 % done
 toc
 disp('OK: gemini-matlab')

@@ -14,9 +14,9 @@ flagoutput = 1
 /
 
 &files
-indat_size = 'tests/data/test3d_glow/inputs/simsize.h5'
-indat_grid = 'tests/data/test3d_glow/inputs/simgrid.h5'
-indat_file = 'tests/data/test3d_glow/inputs/initial_conditions.h5'
+indat_size = '~/simulations/test3d_glow/inputs/simsize.h5'
+indat_grid = '~/simulations/test3d_glow/inputs/simgrid.h5'
+indat_file = '~/simulations/test3d_glow/inputs/initial_conditions.h5'
 /
 
 &setup
@@ -40,17 +40,17 @@ E0precip = 5e3
 Etarg = 50e-3   ! V/m
 Efield_latwidth = 0
 Efield_lonwidth = 0.142857
-eqdir = 'tests/data/test3d_eq'
+eqdir = '~/simulations/test3d_eq'
 /
 
 &precip
 dtprec = 5.0
-prec_dir = 'tests/data/test3d_glow/inputs/precip/'
+prec_dir = '~/simulations/test3d_glow/inputs/precip/'
 /
 
 &efield
 dtE0 = 1.0
-E0_dir = 'tests/data/test3d_glow/inputs/Efield/'
+E0_dir = '~/simulations/test3d_glow/inputs/Efield/'
 /
 
 &glow
