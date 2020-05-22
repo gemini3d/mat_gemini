@@ -11,7 +11,7 @@ if is_file(path)
 elseif is_folder(path)
   names = {'config.nml', 'inputs/config.nml', 'config.ini', 'inputs/config.ini'};
   for s = names
-    filename = [path, '/', s{:}];
+    filename = fullfile(path, s{:});
     if is_file(filename)
       break
     end
