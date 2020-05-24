@@ -69,6 +69,8 @@ else
   xgf.r = h5read(fn, '/r');
   xgf.theta = h5read(fn, '/theta');
   xgf.phi = h5read(fn, '/phi');
+  
+  xgf.Bmag=h5read(fn,'/Bmag');
 end
 
 end  % function read_hdf5
@@ -116,6 +118,7 @@ xgf.r = ncread(fn, 'r');
 xgf.theta = ncread(fn, 'theta');
 xgf.phi = ncread(fn, 'phi');
 
+xgf.Bmag=ncread(fn, 'Bmag');
 end  % function read_nc4
 
 
