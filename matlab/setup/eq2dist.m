@@ -13,6 +13,10 @@ addpath([cwd,'/../vis'])
 makedir(p.simdir)
 %copy_file(p.nml, p.simdir)
 %% READ Equilibrium SIMULATION INFO
+if ~is_folder(p.eqdir)
+  error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?', p.eqdir)
+end
+
 peq = read_config(p.eqdir);
 xgin = readgrid(p.eqdir);
 
