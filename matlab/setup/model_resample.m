@@ -18,22 +18,25 @@ Tsi=zeros(lx1,lx2,lx3,lsp);
 %% INTERPOLATE ONTO NEWER GRID
 if lx3 > 1 && lx2 > 1 % 3-D
   disp('interpolating grid for 3-D simulation')
-  [X2,X1,X3] = meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2),xgin.x3(3:end-2));
-  [X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)), single(xg.x3(3:end-2)) );
+  %[X2,X1,X3] = meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2),xgin.x3(3:end-2));
+  %[X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)), single(xg.x3(3:end-2)) );
+  Xold = {xgin.x1(3:end-2),xgin.x2(3:end-2),xgin.x3(3:end-2)};
+  Xnew = {single(xg.x1(3:end-2)), single(xg.x2(3:end-2)), single(xg.x3(3:end-2))};
   for i=1:lsp
-    tmpvar = interp3(X2,X1,X3,ns(:,:,:, i),X2i,X1i,X3i);
-%      inds=find(isnan(tmpvar));   %this doesn't need to be fixed
-%      automatically; the user needs to be aware that they are doing
-%      something that is going to likely make the simulation fail or give
-%      non-useful results...
-%      tmpvar(inds)=1e0;
-    nsi(:,:,:, i) = tmpvar;
+%     tmpvar = interp3(X2,X1,X3,ns(:,:,:, i),X2i,X1i,X3i);
+%     nsi(:,:,:, i) = tmpvar;
+    F = griddedInterpolant(Xold, ns(:,:,:, i), 'linear', 'none');
+    nsi(:,:,:, i) = F(Xnew);
 
-    tmpvar = interp3(X2,X1,X3,vs1(:,:,:, i),X2i,X1i,X3i);
-    vs1i(:,:,:, i) = tmpvar;
+%     tmpvar = interp3(X2,X1,X3,vs1(:,:,:, i),X2i,X1i,X3i);
+%     vs1i(:,:,:, i) = tmpvar;
+    F = griddedInterpolant(Xold, vs1(:,:,:, i), 'linear', 'none');
+    vs1i(:,:,:, i) = F(Xnew);
 
-    tmpvar = interp3(X2,X1,X3,Ts(:,:,:, i),X2i,X1i,X3i);
-    Tsi(:,:,:, i) = tmpvar;
+%     tmpvar = interp3(X2,X1,X3,Ts(:,:,:, i),X2i,X1i,X3i);
+%     Tsi(:,:,:, i) = tmpvar;
+    F = griddedInterpolant(Xold, Ts(:,:,:, i), 'linear', 'none');
+    Tsi(:,:,:, i) = F(Xnew);
   end
 elseif lx3 == 1 % 2-D east-west
   disp('interpolating grid for 2-D simulation in x1, x2')
@@ -43,18 +46,28 @@ elseif lx3 == 1 % 2-D east-west
   if length(xgin.x2(3:end-2)) < 2
     error('model_resample:value_error', 'the equilibrium simulation has the opposite 2D orientation (north-south) to the new simulation (east-west)')
   end
-  [X2,X1]=meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2));
-  [X2i,X1i]=meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)));
+%   [X2,X1]=meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2));
+%   [X2i,X1i]=meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)));
+
+  Xold = {xgin.x1(3:end-2), xgin.x2(3:end-2)};
+  Xnew = {single(xg.x1(3:end-2)), single(xg.x2(3:end-2))};
 
   for i = 1:lsp
-    tmpvar=interp2(X2,X1,squeeze(ns(:,:,:, i)),X2i,X1i);
-    nsi(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+%     tmpvar=interp2(X2,X1,squeeze(ns(:,:,:, i)),X2i,X1i);
+%     nsi(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+    F = griddedInterpolant(Xold, squeeze(ns(:,:,:, i)), 'linear', 'none');
+    nsi(:,:,:, i) = F(Xnew);
 
-    tmpvar=interp2(X2,X1,squeeze(vs1(:,:,:, i)),X2i,X1i);
-    vs1i(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+%     tmpvar=interp2(X2,X1,squeeze(vs1(:,:,:, i)),X2i,X1i);
+%     vs1i(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+    F = griddedInterpolant(Xold, squeeze(vs1(:,:,:, i)), 'linear', 'none');
+    vs1i(:,:,:, i) = F(Xnew);
 
-    tmpvar=interp2(X2,X1,squeeze(Ts(:,:,:, i)),X2i,X1i);
-    Tsi(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+%     tmpvar=interp2(X2,X1,squeeze(Ts(:,:,:, i)),X2i,X1i);
+%     Tsi(:,:,:, i)=reshape(tmpvar,[lx1,lx2,1]);
+    F = griddedInterpolant(Xold, squeeze(Ts(:,:,:, i)), 'linear', 'none');
+    Tsi(:,:,:, i) = F(Xnew);
+
   end
 elseif lx2 == 1 % 2-D north-south
   disp('interpolating grid for 2-D simulation in x1, x3')
@@ -76,25 +89,27 @@ elseif lx2 == 1 % 2-D north-south
     x3in_noghost = xgin.x3(3:end-2);
   end
   x1in_noghost = xgin.x1(3:end-2);
-  [X1, X3] = ndgrid(x1in_noghost, x3in_noghost);
+  % [X1, X3] = ndgrid(x1in_noghost, x3in_noghost);
+  Xold = {x1in_noghost, x3in_noghost};
   % new grid
   x3_noghost = single(xg.x3(3:end-2));
   x1_noghost = single(xg.x1(3:end-2));
-  [X1i, X3i] = ndgrid(x1_noghost, x3_noghost);
+  % [X1i, X3i] = ndgrid(x1_noghost, x3_noghost);
+  Xnew = {x1_noghost, x3_noghost};
   % remove degenerate dimension
   ns = permute(ns, [1, 3, 4, 2]);
   vs1 = permute(vs1, [1, 3, 4, 2]);
   Ts = permute(Ts, [1, 3, 4, 2]);
   % for each species
   for i = 1:lsp
-    F = griddedInterpolant(X1, X3, ns(:,:, i), 'linear', 'none');
-    nsi(:,:,:, i) = F(X1i, X3i);
+    F = griddedInterpolant(Xold, ns(:,:, i), 'linear', 'none');
+    nsi(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(X1, X3, vs1(:,:, i), 'linear', 'none');
-    vs1i(:,:,:, i) = F(X1i, X3i);
+    F = griddedInterpolant(Xold, vs1(:,:, i), 'linear', 'none');
+    vs1i(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(X1, X3, Ts(:,:, i), 'linear', 'none');
-    Tsi(:,:,:, i) = F(X1i, X3i);
+    F = griddedInterpolant(Xold, Ts(:,:, i), 'linear', 'none');
+    Tsi(:,:,:, i) = F(Xnew);
   end
 else
   error('model_resample:value_error', 'Not sure if this is 2-D or 3-D')
