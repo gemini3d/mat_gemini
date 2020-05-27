@@ -10,11 +10,16 @@ if is_file(path)
   filename = path;
 elseif is_folder(path)
   names = {'config.nml', 'inputs/config.nml', 'config.ini', 'inputs/config.ini'};
-  for s = names
-    filename = fullfile(path, s{:});
-    if is_file(filename)
-      break
-    end
+  filename = check_names(path, names);
+
+  if ~is_file(filename)
+    files = dir(fullfile(path, 'inputs/config*.nml'));
+    filename = check_names(fullfile(path, 'inputs'), {files.name});
+  end
+
+  if ~is_file(filename)
+    files = dir(fullfile(path, 'config*.nml'));
+    filename = check_names(path, {files.name});
   end
 else
   error('get_configfile:file_not_found', 'could not find %s', path)
@@ -25,6 +30,23 @@ if ~is_file(filename)
 end
 
 end % function
+
+
+function filename = check_names(path, names)
+narginchk(2,2)
+validateattributes(path, {'char'}, {'vector'})
+assert(iscell(names), 'names is a cell vector of filenames')
+
+filename = '';
+
+for s = names
+  filename = fullfile(path, s{:});
+  if is_file(filename)
+    break
+  end
+end
+
+end
 
 % Copyright 2020 Michael Hirsch, Ph.D.
 
