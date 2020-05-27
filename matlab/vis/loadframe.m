@@ -70,7 +70,8 @@ end
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
 %dat_shape = size(dat.ns, 1:3);
-dat_shape=size(dat.ne);     %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
+dat_shape=size(dat.ne, 1:3);
+%MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 % we check each dimension because of possibility of 2D dimension swapping
 % x1
 if dat_shape(1) ~= xg.lx(1)
