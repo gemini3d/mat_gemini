@@ -1,6 +1,9 @@
 function write_Efield(E, dir_out, file_format)
 
 narginchk(3,3)
+validateattributes(E, {'struct'}, {'scalar'})
+validateattributes(dir_out, {'char'}, {'vector'})
+validateattributes(file_format, {'char'}, {'vector'})
 
 nan_check(E)
 
@@ -14,6 +17,7 @@ end
 
 
 function nan_check(E)
+narginchk(1,1)
 
 %% this is also done in Fortran, but just to help ensure results.
 assert(all(isfinite(E.Exit(:))), 'NaN in Exit')
