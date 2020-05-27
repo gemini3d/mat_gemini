@@ -11,7 +11,7 @@ cwd = fileparts(mfilename('fullpath'));
 addpath([cwd,'/../vis'])
 %% copy config file
 makedir(p.outdir)
-%copy_file(p.nml, p.outdir)
+copy_file(p.nml, p.outdir)
 %% READ Equilibrium SIMULATION INFO
 if ~is_folder(p.eqdir)
   error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?', p.eqdir)
