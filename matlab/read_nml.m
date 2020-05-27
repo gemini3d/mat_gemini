@@ -21,9 +21,8 @@ if ~isfield(p, 'file_format')
 end
 
 %% optional namelists
-if ~isfield(p, 'simdir')
-  % assumes that simsize.* are always under foo/inputs/
-  p.simdir = absolute_path(fileparts(p.indat_size));
+if ~isfield(p, 'outdir')
+  p.outdir = absolute_path(fileparts(p.indat_size));
 end
 
 if ~isfield(p, 'nml')

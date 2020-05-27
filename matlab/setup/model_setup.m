@@ -16,8 +16,8 @@ else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
-makedir(p.simdir)
-copy_file(p.nml, p.simdir)
+makedir(p.outdir)
+copy_file(p.nml, p.outdir)
 
 %% is this equilibrium or interpolated simulation
 if isfield(p, 'eqdir')

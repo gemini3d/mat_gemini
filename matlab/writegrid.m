@@ -7,17 +7,12 @@ validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters'
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
  %the output directory for the simulation grids may be different, e.g. "inputs" than the base simdir
-if isfield(p, 'outdir')
-   outdir = absolute_path(p.outdir);
-else
-   outdir = absolute_path(p.simdir);
-end
-makedir(outdir)
+makedir(p.outdir)
 
 switch p.file_format
-  case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
-  case {'h5','hdf5'}, write_hdf5(outdir, xg)
-  case {'nc', 'nc4'}, write_nc4(outdir, xg)
+  case {'h5','hdf5'}, write_hdf5(p.outdir, xg)
+  case {'nc', 'nc4'}, write_nc4(p.outdir, xg)
+  case {'dat','raw'}, write_raw(p.outdir, xg, p.realbits)
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
