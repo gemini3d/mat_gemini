@@ -2,6 +2,7 @@ function model_setup_equilibrium(p)
 %% setup equilibrium simulation
 % this is to be called by model_setup.m
 
+narginchk(1,1)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 %% GRID GENERATION
 xg = makegrid_cart_3D(p);
