@@ -1,6 +1,7 @@
 function isrel = is_relative_path(path)
 %% detect if a path is relative
 
+narginchk(1,1)
 isrel = strcmp(path(1), '.');
 if isrel, return, end
 
