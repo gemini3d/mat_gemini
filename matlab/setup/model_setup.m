@@ -5,8 +5,9 @@ narginchk(1,1)
 
 % this is a top-level script, so be sure environment is setup
 cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
-
+if ~exist('is_file', 'file')
+  run(fullfile(cwd, '../../setup.m'))
+end
 %% parse input
 narginchk(1,1)
 if isstruct(p)

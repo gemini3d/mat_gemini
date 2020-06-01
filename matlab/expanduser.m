@@ -11,24 +11,19 @@ function expanded = expanduser(p)
 %   See also absolute_path
 
 narginchk(1,1)
-validateattributes(p, {'char'}, {'vector'})
 
+validateattributes(p, {'char'}, {'vector'})
 %% GNU Octave
 if isoctave
   expanded = tilde_expand(p);
   return
 end
 
-%% Matlab >= R2014b
-try %#ok<TRYNC>
-  expanded = char(py.pathlib.Path(p).expanduser());
-  return
-end
-
-%% Matlab < R2014b
+%% Matlab
 expanded = p;
+
 if strcmp(expanded(1), '~')
-  expanded = [homepath(), expanded(2:end)];
+  expanded = fullfile(char(java.lang.System.getProperty("user.home")), expanded(2:end));
 end
 
 end %function

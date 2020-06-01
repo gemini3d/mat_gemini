@@ -6,10 +6,12 @@ function abspath = absolute_path(path)
 % subsystem, but are sometimes still valid--so we warn and return
 % unmodified path if this occurs.
 %
-% NOTE: GNU Octave is weaker at this, especially if /foo/bar/../baz and "bar"
-% doesn't exist, it may just return the input unmodified.
+% NOTE: GNU Octave is weaker at this.
+% example input: /foo/bar/../baz
+% if "bar" doesn't exist, make_absolute_filename() may just return the input unmodified.
 
 narginchk(1,1)
+
 % have to expand ~ first
 path = expanduser(path);
 
