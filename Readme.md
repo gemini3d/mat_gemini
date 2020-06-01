@@ -16,6 +16,14 @@ To enable these scripts, each time you startup Matlab to work with Gemini, run f
 setup
 ```
 
+### Run Gemini
+
+To run a Gemini simulation based on a directory's config.nml, from Matlab or GNU Octave:
+
+```matlab
+run_gemini('/path/to/config.nml', '/path/to/output')
+```
+
 ## Notes
 
 ### GNU Octave

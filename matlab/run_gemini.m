@@ -6,9 +6,6 @@ if nargin < 3
   gemini_exe = [];
 end
 
-cwd = fileparts(mfilename('fullpath'));
-addpath(cwd)
-
 if isoctave
   % NOTE: due to Octave on Windows overriding system MinGW,
   % you may need to compile Gemini.bin with -static option.
@@ -22,13 +19,22 @@ gemini_exe = get_gemini_exe(gemini_exe);
 %% ensure mpiexec is available
 [ret, ~] = system('mpiexec -help');
 assert(ret == 0, 'mpiexec not found')
-%% assemble command
-cfgfile = get_configfile(cfgfile);
-cmd = sprintf('mpiexec -n %d %s %s %s', np, gemini_exe, cfgfile, outdir);
+%% check if model needs to be setup
+cfg = read_config(cfgfile);
+cfg.outdir = fullfile(outdir, 'inputs');
+
+for k = {'indat_size', 'indat_grid', 'indat_file'}
+  if ~isfile(cfg.(k{:}))
+    model_setup(cfg)
+    break
+  end
+end
+%% assemble run command
+cmd = sprintf('mpiexec -n %d %s %s %s', np, gemini_exe, cfg.nml, outdir);
 disp(cmd)
 %% dry run
 [ret, msg] = system([cmd, ' -dryrun']);
-assert(ret==77, ['Gemini dryrun failed: ', msg])
+assert(ret==0, ['Gemini dryrun failed: ', msg])
 %% run simulation
 ret = system(cmd);
 assert(ret==0, 'Gemini run failed')

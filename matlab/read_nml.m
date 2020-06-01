@@ -21,9 +21,12 @@ if ~isfield(p, 'file_format')
 end
 
 %% optional namelists
-if ~isfield(p, 'outdir')
-  p.outdir = absolute_path(fileparts(p.indat_size));
-end
+% I think we should force users to specify output directory if not in
+% config.nml
+%
+% if ~isfield(p, 'outdir')
+%   p.outdir = absolute_path(fullfile(fileparts(p.indat_size), '..'));
+% end
 
 if ~isfield(p, 'nml')
   p.nml = filename;
