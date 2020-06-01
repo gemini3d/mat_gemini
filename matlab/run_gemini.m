@@ -1,6 +1,10 @@
-function run_gemini(cfgfile, outdir)
+function run_gemini(cfgfile, outdir, gemini_exe)
 % consider the full-featured gemini/job.py
-narginchk(2,2)
+narginchk(2,3)
+
+if nargin < 3
+  gemini_exe = [];
+end
 
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
@@ -14,30 +18,41 @@ else
   np = maxNumCompThreads;
 end
 %% get gemini.bin executable
-gemini_root = getenv('GEMINI_ROOT');
-if isempty(gemini_root)
-  gemini_root = absolute_path(fullfile(cwd, '../gemini'));
-end
-assert(isfolder(gemini_root), 'Gemini3D directory not found')
-gemexe = fullfile(gemini_root, 'build/gemini.bin');
-if ispc
-  gemexe = [gemexe, '.exe'];
-end
-assert(isfile(gemexe), 'Gemini.bin executable not found')
+gemini_exe = get_gemini_exe(gemini_exe);
 %% ensure mpiexec is available
 [ret, ~] = system('mpiexec -help');
 assert(ret == 0, 'mpiexec not found')
 %% assemble command
 cfgfile = get_configfile(cfgfile);
-cmd = sprintf('mpiexec -n %d %s %s %s', np, gemexe, cfgfile, outdir);
+cmd = sprintf('mpiexec -n %d %s %s %s', np, gemini_exe, cfgfile, outdir);
 disp(cmd)
-%% sanity check gemini.bin executable
-ret = system(gemexe);
-assert(ret==77, ['problem with ', gemexe])
 %% dry run
-ret = system([cmd, ' -dryrun']);
-assert(ret==77, 'Gemini dryrun failed')
+[ret, msg] = system([cmd, ' -dryrun']);
+assert(ret==77, ['Gemini dryrun failed: ', msg])
 %% run simulation
 ret = system(cmd);
 assert(ret==0, 'Gemini run failed')
+end % function
+
+
+function gemini_exe = get_gemini_exe(gemini_exe)
+
+narginchk(0,1)
+
+if nargin == 0 || isempty(gemini_exe)
+  gemini_root = getenv('GEMINI_ROOT');
+  assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
+  assert(isfolder(gemini_root), 'Gemini3D directory not found')
+  gemini_exe = fullfile(gemini_root, 'build/gemini.bin');
+  if ispc
+    gemini_exe = [gemini_exe, '.exe'];
+  end
+end
+
+assert(isfile(gemini_exe), 'Gemini.bin executable not found')
+
+%% sanity check gemini.bin executable
+[ret, msg] = system(gemini_exe);
+assert(ret==77, ['problem with ', gemini_exe, ': ', msg])
+
 end % function
