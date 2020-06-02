@@ -32,12 +32,11 @@ disp(['sim grid dimensions: ',num2str(lxs)])
 
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
-params = read_config([direc, '/inputs']);
+params = read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(xg)
-  disp('Reloading grid...')
-  xg = readgrid([direc, '/inputs']);
+  xg = readgrid(direc);
 end
 
 plotfun = grid2plotfun(plotfun, xg);
@@ -76,7 +75,7 @@ else
   error('plotall:runtime_error', 'No Matlab / Octave desktop so cannot plot. Was also not told to save')
 end % if saveplots
 
-if is_folder([direc, '/aurmaps']) % glow sim
+if is_folder(fullfile(direc, 'aurmaps')) % glow sim
   plotglow(direc, saveplot_fmt, visible)
 end
 

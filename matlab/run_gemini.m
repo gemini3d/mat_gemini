@@ -59,6 +59,6 @@ assert(isfile(gemini_exe), 'Gemini.bin executable not found')
 
 %% sanity check gemini.bin executable
 [ret, msg] = system(gemini_exe);
-assert(ret==77, ['problem with ', gemini_exe, ': ', msg])
+assert(ret==0, ['problem with ', gemini_exe, ': ', msg])
 
 end % function
