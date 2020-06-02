@@ -19,6 +19,9 @@ else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
+if ~isfield(p, 'outdir')
+  p.outdir = absolute_path(fullfile(fileparts(p.indat_size), '..'));
+end
 makedir(p.outdir)
 copy_file(p.nml, p.outdir)
 

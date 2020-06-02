@@ -6,7 +6,7 @@ validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2
 
 params = struct();
 
-fid=fopen(filename);
+fid = fopen(filename);
 while ~feof(fid)
   line = fgetl(fid);
   mgrp = regexp(line, ['^\s*&(', namelist, ')'], 'match');
@@ -16,6 +16,7 @@ while ~feof(fid)
 end
 
 if isempty(mgrp)
+  fclose(fid); % this is necessary to avoid dangling handles on catch
   error('read_namelist:namelist_not_found', 'did not find namelist %s in %s', namelist, filename)
 end
 
