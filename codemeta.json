@@ -1,0 +1,42 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "license": "https://spdx.org/licenses/Apache-2.0",
+    "codeRepository": "https://github.com/gemini3d/gemini-matlab",
+    "contIntegration": "https://github.com/gemini3d/gemini-matlab/actions",
+    "dateModified": "2020-06-04",
+    "downloadUrl": "https://github.com/gemini3d/gemini-matlab/releases",
+    "issueTracker": "https://github.com/gemini3d/gemini-matlab/issues",
+    "name": "Gemini3D-Matlab",
+    "version": "1.1.2",
+    "identifier": "10.5281/zenodo.3877445",
+    "description": "Core Matlab scripts for Gemini3D",
+    "applicationCategory": "Interface",
+    "developmentStatus": "active",
+    "funder": {
+        "@type": "Organization",
+        "name": "NSF"
+    },
+    "keywords": [
+        "ionosphere",
+        "aurora"
+    ],
+    "programmingLanguage": [
+        "Matlab",
+        "GNU Octave"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-9837-059X",
+            "givenName": "Matthew",
+            "familyName": "Zettergren"
+        },
+        {
+            "@type": "Person",
+            "@id": "https://orcid.org/0000-0002-1637-6526",
+            "givenName": "Michael",
+            "familyName": "Hirsch"
+        }
+    ]
+}
