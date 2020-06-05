@@ -7,8 +7,8 @@ function s1 = merge_struct(s1, s2, overwrite)
 
 narginchk(2, 3)
 
-validateattributes(s1, {'struct'}, {'scalar'})
-validateattributes(s2, {'struct'}, {'scalar'})
+validateattributes(s1, {'struct'}, {'scalar'},1)
+validateattributes(s2, {'struct'}, {'scalar'},2)
 if nargin < 3
   overwrite = false;
 end

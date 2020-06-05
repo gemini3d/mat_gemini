@@ -54,9 +54,12 @@ end
 
 p = read_if_present(p, filename, 'glow');
 
+p = read_if_present(p, filename, 'milestone');
+
 end % function
 
 function p = read_if_present(p, filename, namelist)
+% read a namelist, if it exists, otherwise don't modify the input struct
 narginchk(3, 3)
 
 try
