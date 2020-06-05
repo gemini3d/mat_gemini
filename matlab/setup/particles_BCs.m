@@ -49,7 +49,7 @@ pg = precip_grid(xg, p, pg);
 % NOTE: in future, E0 could be made time-dependent in config.nml as 1D array
 for i = i_on:i_off
    pg.Qit(:,:,i) = precip_gaussian2d(pg, p.Qprecip, p.Qprecip_background);
-   p.gE0it(:,:,i) = p.E0precip;
+   pg.E0it(:,:,i) = p.E0precip;
 end
 
 if any(~isfinite(pg.Qit)), error('particle_BCs:value_error', 'precipitation flux not finite'), end

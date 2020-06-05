@@ -1,11 +1,12 @@
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_highres_var/';
 %simname='test3d_fang_mag/';
-simname='mooreOK3D_hemis_medres/'
+%simname='mooreOK3D_hemis_medres/'
 %simname='iowa3D_hemis_medres2/'
 %simname='iowa3D_hemis_medres2_control/'
-basedir='~/SDHCcard/'
-%basedir='~/simulations/'
+%basedir='~/SDHCcard/'
+basedir='tohoku20113D_lowres/'
+basedir='~/simulations/'
 direc=[basedir,simname];
 makedir([direc, '/Brplots'])
 makedir([direc, '/Brplots_eps'])
@@ -33,10 +34,10 @@ fclose(fid);
 %REORGANIZE THE FIELD POINTS (PROBLEM-SPECIFIC)
 %ltheta=10;
 %lphi=10;
-ltheta=192;
-lphi=192;
-%ltheta=20;
-%lphi=20;
+%ltheta=192;
+%lphi=192;
+ltheta=20;
+lphi=20;
 %ltheta=1600;
 %lphi=1;
 r=reshape(r(:),[ltheta,lphi]);
@@ -100,7 +101,7 @@ fprintf('...Done reading data...\n');
 %STORE THE DATA IN A MATLAB FILE FOR LATER USE
 save([direc,'/magfields_fort.mat'],'simdate_series','mlat','mlon','Brt','Bthetat','Bphit','mloc');
 
-%{
+
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING
 llonp=200;
 llatp=200;
@@ -270,4 +271,3 @@ for it=1:lt-1
 %    end
     axis(ax);
 end
-%}
