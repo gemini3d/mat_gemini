@@ -1,5 +1,7 @@
-function dat = loadframe(direc,ymd,UTsec,flagoutput,mloc,xg, config_file, realbits)
+function dat = loadframe(direc,ymd,UTsec,flagoutput,mloc,xg,config_file,realbits)
 
+
+%% Error checking and setup
 narginchk(3,8)
 validateattributes(direc, {'char'}, {'vector'}, mfilename, 'data directory', 1)
 validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 2)
@@ -43,12 +45,9 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 filename = get_frame_filename(direc, ymd, UTsec);
 
 switch flagoutput
-  case 1
-    dat = loadframe3Dcurv(filename);
-  case 2
-    dat = loadframe3Dcurvavg(filename);
-  otherwise
-    dat = loadframe3Dcurvne(filename);
+  case 1, dat = loadframe3Dcurv(filename);
+  case 2,dat = loadframe3Dcurvavg(filename);
+  otherwise, dat = loadframe3Dcurvne(filename);
 end
 
 %% SET MAGNETIC LATITUDE AND LONGITUDE OF THE SOURCE
