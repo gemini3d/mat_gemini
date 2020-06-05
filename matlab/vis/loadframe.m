@@ -43,13 +43,32 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
 %% LOAD DIST. FILE
 filename = get_frame_filename(direc, ymd, UTsec);
-
-switch flagoutput
-  case 1, dat = loadframe3Dcurv(filename);
-  case 2,dat = loadframe3Dcurvavg(filename);
-  otherwise, dat = loadframe3Dcurvne(filename);
+[~,~,ext] = fileparts(filename);
+% This is messy but it was difficult to have the milestone check before
+% deciding what type of file is being read...  May be a more elegant way to
+% rewrite. 
+if strcmp(ext,'.h5')
+  % regardless of what the output type is if variabl nsall exists we need
+  % to do a full read; this is a bit messy because loadframe will check
+  % again below if h5 is used...
+  if (h5exists(filename,'/nsall'))
+   disp('Full or milestone input detected.')
+   dat = loadframe3Dcurv(filename); 
+  else   %only two possibilities left
+    switch flagoutput
+      case 1, dat = loadframe3Dcurv(filename);
+      case 2, dat = loadframe3Dcurvavg(filename);
+      otherwise, error('Problem with file input selection related to milestone detection.')
+    end %switch
+  end
+else    
+  % currently only HDF5 supports milestones
+  switch flagoutput
+    case 1, dat = loadframe3Dcurv(filename);
+    case 2,dat = loadframe3Dcurvavg(filename);
+    otherwise, dat = loadframe3Dcurvne(filename);
+  end
 end
-
 %% SET MAGNETIC LATITUDE AND LONGITUDE OF THE SOURCE
 if ~isempty(mloc)
     dat.mlatsrc=mloc(1);
