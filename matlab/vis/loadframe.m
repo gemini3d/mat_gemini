@@ -23,7 +23,7 @@ if ~isempty(mloc)
 end
 
 if nargin < 6 || isempty(xg)
-  xg = readgrid(fullfile(direc, 'inputs'), realbits);
+  xg = readgrid(direc, realbits);
 end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 

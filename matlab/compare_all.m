@@ -1,7 +1,8 @@
-function ok = compare_all(outdir, refdir)
-
-% the absolute and relative tolerance account for slight IEEE-754 based differences,
-% including non-associativity of floating-point arithmetic.
+function compare_all(outdir, refdir, only)
+% compare entire output directory data files, and input files
+%
+% absolute and relative tolerance account for slight IEEE-754 based differences,
+% including non-associative, non-commutative floating-point arithmetic.
 % these parameters are a bit arbitrary.
 
 % per MZ Oct 17, 2018:
@@ -15,20 +16,23 @@ function ok = compare_all(outdir, refdir)
 % ne=1e7 m-3
 % vi,v2,v3=2 m/s
 % J1,J2,J3 = 1e-9
-narginchk(2,2)
 
-addpath([fileparts(mfilename('fullpath')), '/vis'])
+narginchk(2,3)
+
+if nargin < 3, only = []; end
+
+addpath(fullfile(fileparts(mfilename('fullpath')), 'vis'))
 
 tol.rtol = 1e-5;
 tol.rtolN = 1e-5;
 tol.rtolT = 1e-5;
 tol.rtolJ = 1e-5;
 tol.rtolV = 1e-5;
-tol.atol=1e-8;
-tol.atolN=1e9;
-tol.atolT=100;
-tol.atolJ=1e-7;
-tol.atolV=50;
+tol.atol = 1e-8;
+tol.atolN = 1e9;
+tol.atolT = 100;
+tol.atolJ = 1e-7;
+tol.atolV = 50;
 
 outdir = absolute_path(outdir);
 refdir = absolute_path(refdir);
@@ -36,14 +40,38 @@ refdir = absolute_path(refdir);
 exist_or_skip(outdir, 'dir')
 exist_or_skip(refdir, 'dir')
 %% check that paths not the same
-if strcmp(outdir, refdir), error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir), end
+if strcmp(outdir, refdir)
+  error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir)
+end
+
+%% check output dirs
+out_ok = 0;
+if isempty(only) || any(strcmp(only, 'out'))
+  out_ok = compare_output(outdir, refdir, tol);
+end
+%% check input dirs
+in_ok = 0;
+if isempty(only) || any(strcmp(only, 'in'))
+  in_ok = compare_input(outdir, refdir, tol);
+end
+%% finish up
+if out_ok ~= 0 || in_ok ~= 0
+  error('compare_all:value_error', '%d output, %d input: compare errors', out_ok, in_ok)
+end
+
+end % function
+
+
+function ok = compare_output(outdir, refdir, tol)
+
+narginchk(3,3)
 %% READ IN THE SIMULATION INFORMATION
-params = read_config([outdir, '/inputs']);
+params = read_config(outdir);
 
 lxs = simsize(outdir);
 lxs_ref = simsize(refdir);
-if ~all(lxs==lxs_ref)
-  error('compare_all:value_error', 'ref dims %d != this sim dims %d', lxs_ref, lxs)
+if any(lxs ~= lxs_ref)
+  error('compare_all:value_error', ['ref dims ', int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
 end
 
 disp(['sim grid dimensions: ',num2str(lxs)])
@@ -56,10 +84,10 @@ assert(Nt > 1, [outdir, ' simulation did not run long enough'])
 ymd=params.ymd;
 UTsec=params.UTsec0;
 
-ok = false;
+ok = 0;
 
-for it=1:Nt
-  st = ['UTsec ', num2str(times(it))];
+for i = 1:Nt
+  st = ['UTsec ', num2str(times(i))];
   out = loadframe(outdir,ymd,UTsec);
   ref = loadframe(refdir,ymd,UTsec);
 
@@ -81,37 +109,57 @@ for it=1:Nt
   ok = ok + ~assert_allclose(out.J3,ref.J3,tol.rtolJ,tol.atolJ,['J3 ', st], true);
 
   %% assert time steps have unique output (earth always rotating...)
-  if it>1
+  if i > 1
     ok = ok + ~assert_allclose(Ne,out.ne,tol.rtol,tol.atol,['Ne ', st,' too similar to prior step'],true, true);
     %ok = ok + ~assert_allclose(v1,out.v1,tol.rtol,tol.atol,['V1 ', st,' too similar to prior step'],true, true);
     ok = ok + ~assert_allclose(v2,out.v2,tol.rtol,tol.atol,['V2 ', st,' too similar to prior step'],true, true);
     ok = ok + ~assert_allclose(v3,out.v3,tol.rtol,tol.atol,['V3 ', st,' too similar to prior step'],true, true);
   end
-  if it==3
+  if i == 3
    %ok = ok + ~assert_allclose(Ti,out.Ti,tol.rtol,tol.atol,['Ti ', st,' too similar to prior step'],true, true);
     ok = ok + ~assert_allclose(Te,out.Te,tol.rtol,tol.atol,['Te ', st,' too similar to prior step'],true, true);
   end
-  if it==2
+  if i == 2
     ok = ok + ~assert_allclose(J1,out.J1,tol.rtol,tol.atol,['J1 ', st,' too similar to prior step'],true,true, true);
     ok = ok + ~assert_allclose(J2,out.J2,tol.rtol,tol.atol,['J2 ', st,' too similar to prior step'],true,true, true);
     ok = ok + ~assert_allclose(J3,out.J3,tol.rtol,tol.atol,['J3 ', st,' too similar to prior step'],true,true, true);
   end
 
-  Ne = out.ne; v1=out.v1; v2=out.v2; v3=out.v3; Ti=out.Ti; Te=out.Te; J1=out.J1; J2=out.J2; J3=out.J3;
+  Ne = out.ne;
+  v1=out.v1; v2=out.v2; v3=out.v3;
+  Ti=out.Ti; Te=out.Te;
+  J1=out.J1; J2=out.J2; J3=out.J3;
 
   [ymd,UTsec] = dateinc(params.dtout,ymd,UTsec);
 
-end
+end % for
 
 if ok == 0
-  disp(['OK: Gemini output comparison of ',int2str(Nt),' time steps.'])
-else
-  error('compare_all:value_error', '%d compare errors', ok)
+  fprintf('OK: Gemini output comparison of %d time steps.\n', Nt)
 end
 
-if nargout==0, clear('ok'), end
+end % function compare_output
 
-end % function
+function ok = compare_input(outdir, refdir, tol)
+
+new_params = read_config(outdir);
+ref_params = read_config(refdir);
+
+
+new = loadframe3Dcurvnoelec(new_params.indat_file);
+ref = loadframe3Dcurvnoelec(ref_params.indat_file);
+
+ok = 0;
+
+ok = ok + ~assert_allclose(new.ns, ref.ns, tol.rtolN, tol.atolN, 'Ns', true);
+ok = ok + ~assert_allclose(new.Ts, ref.Ts, tol.rtolT, tol.atolT, 'Ts', true);
+ok = ok + ~assert_allclose(new.vs1, ref.vs1, tol.rtolV, tol.atolV, 'vs', true);
+
+if ok == 0
+  disp('OK: Gemini input comparison')
+end
+
+end % function compare_input
 
 % Copyright 2020 Michael Hirsch, Ph.D.
 
