@@ -42,8 +42,8 @@ end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
 %% LOAD DIST. FILE
-filename = get_frame_filename(direc, ymd, UTsec);
-[~,~,ext] = fileparts(filename);
+
+
 % This is messy but it was difficult to have the milestone check before
 % deciding what type of file is being read...  May be a more elegant way to
 % rewrite. 
