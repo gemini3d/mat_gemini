@@ -25,6 +25,9 @@ if nargin >= 5 && ~isempty(dtype)
   end
 end
 
+filename = absolute_path(filename);
+% allows ~/data/foo.h5
+
 try
   % existing variable
   diskshape = h5info(filename, varname).Dataspace.Size;
