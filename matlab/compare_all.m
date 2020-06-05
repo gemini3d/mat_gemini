@@ -43,6 +43,7 @@ exist_or_skip(refdir, 'dir')
 if strcmp(outdir, refdir)
   error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir)
 end
+%% times
 
 %% check output dirs
 out_ok = 0;
@@ -76,18 +77,14 @@ end
 
 disp(['sim grid dimensions: ',num2str(lxs)])
 
-%% TIMES OF INTEREST
-times = params.UTsec0:params.dtout:params.UTsec0 + params.tdur;
-Nt = length(times);
-assert(Nt > 1, [outdir, ' simulation did not run long enough'])
-
-ymd=params.ymd;
-UTsec=params.UTsec0;
+UTsec = params.UTsec0:params.dtout:params.UTsec0 + params.tdur;
+ymd = params.ymd;
+Nt = length(UTsec);
 
 ok = 0;
 
 for i = 1:Nt
-  st = ['UTsec ', num2str(times(i))];
+  st = ['UTsec ', num2str(UTsec(i))];
   out = loadframe(outdir,ymd,UTsec);
   ref = loadframe(refdir,ymd,UTsec);
 
@@ -141,13 +138,17 @@ end
 end % function compare_output
 
 function ok = compare_input(outdir, refdir, tol)
+narginchk(3,3)
+
+ref_params = read_config(refdir);
+ref_indir = fullfile(refdir, 'inputs');
+[~, ref_name, ref_ext] = fileparts(ref_params.indat_file);
+ref = loadframe3Dcurvnoelec(fullfile(ref_indir, [ref_name, ref_ext]));
 
 new_params = read_config(outdir);
-ref_params = read_config(refdir);
-
-
-new = loadframe3Dcurvnoelec(new_params.indat_file);
-ref = loadframe3Dcurvnoelec(ref_params.indat_file);
+new_indir = fullfile(outdir, 'inputs');
+[~, new_name, new_ext] = fileparts(ref_params.indat_file);
+new = loadframe3Dcurvnoelec(fullfile(new_indir, [new_name, new_ext]));
 
 ok = 0;
 
@@ -155,6 +156,45 @@ ok = ok + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atol, 'Ns', true);
 ok = ok + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atol, 'Ts', true);
 ok = ok + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true);
 
+UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
+ymd = new_params.ymd;
+Nt = length(UTsec);
+
+%% precipitation
+prec_errs = 0;
+[~, name, ext] = fileparts(new_params.prec_dir);
+prec_path = fullfile(new_indir, [name, ext]);
+
+[~, name, ext] = fileparts(ref_params.prec_dir);
+ref_prec_path = fullfile(ref_indir, [name, ext]);
+
+if is_folder(prec_path)
+  % often we reuse precipitation inputs without copying over files
+  for i = 1:Nt
+    st = ['UTsec ', num2str(UTsec(i))];
+    ref = load_precip(get_frame_filename(ref_prec_path, ymd, UTsec(i)));
+    new = load_precip(get_frame_filename(prec_path, ymd, UTsec(i)));
+
+    for k = {'E0', 'Q'}
+      b = ref.(k{:});
+      a = new.(k{:});
+
+      if all(size(a) ~= size(b))
+        error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+      end
+
+      if ~allclose(a, b, tol.rtol, tol.atol)
+        prec_errs = prec_errs + 1;
+        fprintf(2, "mismatch: %s %s\n", k{:}, st)
+      end
+    end
+  end
+
+  ok = ok + prec_errs;
+
+else
+  fprintf(2, "SKIP: precipitation %s \n", prec_path)
+end
 if ok == 0
   disp('OK: Gemini input comparison')
 end
