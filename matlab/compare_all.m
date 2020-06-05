@@ -85,8 +85,8 @@ ok = 0;
 
 for i = 1:Nt
   st = ['UTsec ', num2str(UTsec(i))];
-  out = loadframe(outdir,ymd,UTsec);
-  ref = loadframe(refdir,ymd,UTsec);
+  out = loadframe(outdir,ymd,UTsec(i));
+  ref = loadframe(refdir,ymd,UTsec(i));
 
   ok = ok + ~assert_allclose(out.ne,ref.ne,tol.rtolN,tol.atolN,['Ne ',st], true);
 
@@ -126,8 +126,6 @@ for i = 1:Nt
   v1=out.v1; v2=out.v2; v3=out.v3;
   Ti=out.Ti; Te=out.Te;
   J1=out.J1; J2=out.J2; J3=out.J3;
-
-  [ymd,UTsec] = dateinc(params.dtout,ymd,UTsec);
 
 end % for
 
