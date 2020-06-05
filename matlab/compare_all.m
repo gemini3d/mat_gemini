@@ -151,9 +151,9 @@ ref = loadframe3Dcurvnoelec(ref_params.indat_file);
 
 ok = 0;
 
-ok = ok + ~assert_allclose(new.ns, ref.ns, tol.rtolN, tol.atolN, 'Ns', true);
-ok = ok + ~assert_allclose(new.Ts, ref.Ts, tol.rtolT, tol.atolT, 'Ts', true);
-ok = ok + ~assert_allclose(new.vs1, ref.vs1, tol.rtolV, tol.atolV, 'vs', true);
+ok = ok + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atol, 'Ns', true);
+ok = ok + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atol, 'Ts', true);
+ok = ok + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true);
 
 if ok == 0
   disp('OK: Gemini input comparison')
