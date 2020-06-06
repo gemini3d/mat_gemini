@@ -14,9 +14,7 @@ if isoctave
   dat.Ts = D.Tsall;
 else
 
-  finf = h5info(filename);
-  varnames = {finf.Datasets.Name};
-  grpnames = {finf.Groups};
+  [varnames, grpnames] = h5variables(filename);
 
   if any(strcmp('time', grpnames))
     i = '/time';

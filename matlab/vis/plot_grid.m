@@ -25,4 +25,5 @@ plot(ax, xg.x3/1e3, 'marker', '.')
 ylabel(ax, 'x3 [km]')
 xlabel(ax, 'index (dimensionless)')
 title(ax, ['x3 (northward)  N=',int2str(length(xg.x3))])
-end
+
+end % function

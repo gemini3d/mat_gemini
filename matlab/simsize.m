@@ -21,10 +21,7 @@ switch ext
         error('simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
       end
     else
-      % use temporary variable to be R2017b OK
-      finf = h5info(fn);
-      ds = finf.Datasets;
-      varnames = {ds(:).Name};
+      varnames = h5variables(fn);
 
       if any(strcmp('lxs', varnames))
         lxs = h5read(fn, '/lxs');
