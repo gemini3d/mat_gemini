@@ -21,36 +21,17 @@ end % function
 
 function xgf = read_hdf5(path)
 
-sizefn = fullfile(path, 'simsize.h5');
-if ~is_file(sizefn)
-  error('readgrid:read_hdf5', '%s not found', sizefn)
-end
-
 fn = fullfile(path, 'simgrid.h5');
 if ~is_file(fn)
-  error('readgrid:read_hdf5', '%s not found', fn)
+  error('readgrid:read_hdf5:file_not_found', '%s not found', fn)
 end
 
 xgf.filename = fn;
+xgf.lx = simsize(path);
 
 if isoctave
-  L = load(sizefn);
   xgf = load(fn);
-
-  try
-    xgf.lx = L.lx;
-  catch
-    % octave bug: error: octave_base_value::int32_scalar_value(): wrong type argument 'int32 matrix'
-    xgf.lx = [L.lx1; L.lx2; L.lx3];
-  end
-
 else
-
-  try
-    xgf.lx = h5read(sizefn, '/lx');
-  catch
-    xgf.lx = [h5read(sizefn, '/lx1'), h5read(sizefn, '/lx2'), h5read(sizefn, '/lx3')];
-  end
   xgf.x1 = h5read(fn, '/x1');
   xgf.x1i = h5read(fn, '/x1i');
   xgf.dx1b = h5read(fn, '/dx1b');
@@ -82,23 +63,14 @@ try
   pkg load netcdf
 end
 
-sizefn = fullfile(path, 'simsize.nc');
-if ~is_file(sizefn)
-  error('readgrid:read_nc4', '%s not found', sizefn)
-end
-
 fn = fullfile(path, 'simgrid.nc');
 if ~is_file(fn)
-  error('readgrid:read_nc4', '%s not found', fn)
+  error('readgrid:read_nc4:file_not_found', '%s not found', fn)
 end
 
 xgf.filename = fn;
+xgf.lx = simsize(path);
 
-try
-  xgf.lx = ncread(sizefn, 'lx');
-catch
-  xgf.lx = [ncread(sizefn, 'lx1'), ncread(sizefn, 'lx2'), ncread(sizefn, 'lx3')];
-end
 xgf.x1 = ncread(fn, 'x1');
 xgf.x1i = ncread(fn, 'x1i');
 xgf.dx1b = ncread(fn, 'dx1b');
@@ -124,25 +96,14 @@ end  % function read_nc4
 
 function xgf = read_raw(path, realbits)
 
-
-%% Size file
-for f = {[path, '/inputs/simsize.dat'], [path, '/simsize.dat']}
-  sizefn = f{:};
-  if is_file(sizefn)
-    break
-  end
+filename = fullfile(path, 'simgrid.dat');
+if ~is_file(fileanme)
+  error('readgrid:read_raw:file_not_found', '%s not found', filename)
 end
-assert(is_file(sizefn), [sizefn, ' not found'])
 
-%filename=[path, '/inputs/simsize.dat'];
-filename=sizefn;
-assert(is_file(filename), [filename,' is not a file.'])
-
-fid=fopen(filename,'r');
-
+xgf.lx = simsize(path);
 xgf.filename = filename;
-xgf.lx=fread(fid,3,'integer*4');
-fclose(fid);
+
 lx1=xgf.lx(1); lx2=xgf.lx(2); lx3=xgf.lx(3);
 lgrid=lx1*lx2*lx3;
 lgridghost=(lx1+4)*(lx2+4)*(lx3+4);
@@ -151,21 +112,10 @@ gridsizeghost=[lx1+4,lx2+4,lx3+4];
 
 
 %% Grid file
-for f = {[path, '/inputs/simgrid.dat'], [path, '/simgrid.dat']}
-  fn = f{:};
-  if is_file(fn)
-    break
-  end
-end
-assert(is_file(fn), [fn, ' not found'])
 
-%fin = [path, '/inputs/simgrid.dat'];
-fin=fn;
-assert(is_file(fin), [fin, ' is not a file.'])
+freal = ['float', int2str(realbits)];
 
-freal = ['float',int2str(realbits)];
-
-fid=fopen(fin,'r');
+fid = fopen(filename, 'r');
 
 xgf.x1=fread(fid,lx1+4, freal);    %coordinate values
 xgf.x1i=fread(fid,lx1+1, freal);
@@ -249,7 +199,7 @@ if ~feof(fid)
   tmp=fread(fid,ltmp, freal);   %4D unit vectors (in cartesian components)
 
   if (feof(fid))    %for whatever reason, we sometimes don't hit eof until after first unit vector read...
-     return;   %lazy as hell
+    return;   %lazy as hell
   end
 
   xgf.e1=reshape(tmp,tmpsize);
