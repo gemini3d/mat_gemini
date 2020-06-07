@@ -1,13 +1,16 @@
 function [path, ext] = get_simsize_path(path)
-%% find the path where simsize.* is, and its suffix
+%% find the path (directory, even if given filename) where simsize.* is
+% also return the suffix
+% the filename MUST be simsize.{h5,nc,dat}
 
 narginchk(1,1)
 
 %% full filename give
 path = absolute_path(path);
+
 if is_file(path)
   [path, stem, ext] = fileparts(path);
-  if strcmp(stem, 'simsize')
+  if strcmp(stem, 'simsize') && ~isempty(ext)
     return
   elseif is_file([fullfile(path,'inputs/simsize'), ext])
     path = fullfile(path, 'inputs');
