@@ -22,7 +22,7 @@ validateattributes(xg, {'struct'}, {'scalar'})
 
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-src_dir = absolute_path([cwd, '/../../']);
+src_dir = absolute_path(fullfile(cwd, '../..'));
 build_dir = fullfile(src_dir, 'build');
 exe = fullfile(build_dir, 'msis_setup');
 if ispc, exe = [exe, '.exe']; end
@@ -51,7 +51,7 @@ iyd = yearshort*1000+doy;
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt(:)<=0)=1;
 %% FIND A UNIQUE IDENTIFIER FOR THE INPUT FILE
-fin = [tempdir, '/msis_setup_input.dat'];
+fin = fullfile(tempdir, 'msis_setup_input.dat');
 %% CREATE AND INPUT FILE FOR FORTRAN PROGRAM
 fid=fopen(fin,'w');
 fwrite(fid,iyd,'integer*4');
@@ -66,7 +66,7 @@ fwrite(fid,glon,'real*4');
 fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
-fout = [tempdir, '/msis_setup_output.dat'];
+fout = fullfile(tempdir, 'msis_setup_output.dat');
 cmd = [exe,' ',fin,' ',fout,' ',int2str(lz)];
 disp(cmd)
 [status, msg] = system(cmd);   %output written to file

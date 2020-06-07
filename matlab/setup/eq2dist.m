@@ -1,14 +1,14 @@
 function [nsi,vs1i,Tsi] = eq2dist(p, xg)
 % read and interpolate equilibrium simulation data, writing new
 % interpolated grid.
+
 narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 
 %% Paths
 % this script is called from numerous places, so ensure necessary path
-cwd = fileparts(mfilename('fullpath'));
-addpath([cwd,'/../vis'])
+addpath(fullfile(fileparts(mfilename('fullpath')), '../vis'))
 %% copy config file
 makedir(p.outdir)
 copy_file(p.nml, p.outdir)
@@ -18,8 +18,9 @@ if ~is_folder(p.eqdir)
 end
 
 peq = read_config(p.eqdir);
-xgin = readgrid(p.eqdir);
+[xgin, ok] = readgrid(p.eqdir);
 
+assert(ok, ['problem with input grid ', p.eqdir])
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 [ymd_end,UTsec_end] = dateinc(peq.tdur,peq.ymd,peq.UTsec0);

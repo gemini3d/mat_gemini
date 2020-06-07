@@ -6,7 +6,14 @@ narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
- %the output directory for the simulation grids may be different, e.g. "inputs" than the base simdir
+%% sanity check grid
+ok = check_grid(xg);
+if ~ok
+  error('writegrid:value_error', 'problematic grid values')
+end
+
+%% output directory for the simulation grids may be different
+% e.g. "inputs" than the base simdir
 makedir(p.outdir)
 
 switch p.file_format
@@ -21,7 +28,7 @@ end % function
 
 function write_hdf5(dir_out, xg)
 
-fn = [dir_out, '/simsize.h5'];
+fn = fullfile(dir_out, 'simsize.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 h5save(fn, '/lx1', int32(xg.lx(1)))
@@ -102,7 +109,7 @@ end % function
 
 function write_nc4(dir_out, xg)
 
-try
+try %#ok<TRYNC>
   pkg load netcdf
 end
 
@@ -118,7 +125,7 @@ lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
-fn = [dir_out, '/simgrid.nc'];
+fn = fullfile(dir_out, 'simgrid.nc');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -211,7 +218,7 @@ fid = fopen(filename, 'w');
 fwrite(fid, xg.lx, 'integer*4');
 fclose(fid);
 
-fid = fopen([outdir, '/simgrid.dat'], 'w');
+fid = fopen(fullfile(outdir, 'simgrid.dat'), 'w');
 
 fwrite(fid,xg.x1, freal);    %coordinate values
 fwrite(fid,xg.x1i, freal);

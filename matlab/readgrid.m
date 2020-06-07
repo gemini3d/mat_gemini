@@ -1,4 +1,4 @@
-function xgf = readgrid(path, realbits)
+function [xg, ok] = readgrid(path, realbits)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
@@ -10,10 +10,15 @@ validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 
 [path, suffix] = get_simsize_path(path);
 
 switch suffix
-  case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
-  case '.nc', xgf = read_nc4(path);
-  case '.dat', xgf = read_raw(path, realbits);
+  case {'.h5', '.hdf5'}, xg = read_hdf5(path);
+  case '.nc', xg = read_nc4(path);
+  case '.dat', xg = read_raw(path, realbits);
   otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
+end
+
+ok = check_grid(xg);
+if ~ok
+  warning('readgrid:value_error', '%s grid has unsuitable values', path)
 end
 
 end % function
