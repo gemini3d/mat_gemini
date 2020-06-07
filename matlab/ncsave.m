@@ -30,7 +30,7 @@ end
 
 vars = {};
 if is_file(filename)
-  vars = {ncinfo(filename).Variables.Name};
+  vars = ncvariables(filename);
 end
 
 if any(strcmp(vars, varname))

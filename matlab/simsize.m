@@ -60,8 +60,8 @@ function lxs = read_nc(path)
 
 % use temporary variable to be R2017b OK
 fn = fullfile(path, 'simsize.nc');
-finf = ncinfo(fn);
-varnames = {finf.Variables(:).Name};
+
+varnames = ncvariables(fn);
 
 if any(strcmp('lxs', varnames))
   lxs = ncread(fn, '/lxs');

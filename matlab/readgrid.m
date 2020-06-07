@@ -10,9 +10,9 @@ validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 
 [path, suffix] = get_simsize_path(path);
 
 switch suffix
-  case '.dat', xgf = read_raw(path, realbits);
   case {'.h5', '.hdf5'}, xgf = read_hdf5(path);
   case '.nc', xgf = read_nc4(path);
+  case '.dat', xgf = read_raw(path, realbits);
   otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
 end
 
@@ -32,27 +32,11 @@ xgf.lx = simsize(path);
 if isoctave
   xgf = load(fn);
 else
-  xgf.x1 = h5read(fn, '/x1');
-  xgf.x1i = h5read(fn, '/x1i');
-  xgf.dx1b = h5read(fn, '/dx1b');
-  xgf.dx1h = h5read(fn, '/dx1h');
-  xgf.x2 = h5read(fn, '/x2');
-  xgf.x3 = h5read(fn, '/x3');
-
-  xgf.h1 = h5read(fn, '/h1');
-  xgf.h2 = h5read(fn, '/h2');
-  xgf.h3 = h5read(fn, '/h3');
-
-  xgf.alt = h5read(fn, '/alt');
-  xgf.glat = h5read(fn, '/glat');
-  xgf.glon = h5read(fn, '/glon');
-
-  xgf.r = h5read(fn, '/r');
-  xgf.theta = h5read(fn, '/theta');
-  xgf.phi = h5read(fn, '/phi');
-  
-  xgf.Bmag=h5read(fn,'/Bmag');
+  for v = h5variables(fn)
+    xgf.(v{:}) = h5read(fn, ['/',v{:}]);
+  end
 end
+
 
 end  % function read_hdf5
 
@@ -71,26 +55,10 @@ end
 xgf.filename = fn;
 xgf.lx = simsize(path);
 
-xgf.x1 = ncread(fn, 'x1');
-xgf.x1i = ncread(fn, 'x1i');
-xgf.dx1b = ncread(fn, 'dx1b');
-xgf.dx1h = ncread(fn, 'dx1h');
-xgf.x2 = ncread(fn, 'x2');
-xgf.x3 = ncread(fn, 'x3');
+for v = ncvariables(fn)
+  xgf.(v{:}) = ncread(fn, v{:});
+end
 
-xgf.h1 = ncread(fn, 'h1');
-xgf.h2 = ncread(fn, 'h2');
-xgf.h3 = ncread(fn, 'h3');
-
-xgf.alt = ncread(fn, 'alt');
-xgf.glat = ncread(fn, 'glat');
-xgf.glon = ncread(fn, 'glon');
-
-xgf.r = ncread(fn, 'r');
-xgf.theta = ncread(fn, 'theta');
-xgf.phi = ncread(fn, 'phi');
-
-xgf.Bmag=ncread(fn, 'Bmag');
 end  % function read_nc4
 
 
