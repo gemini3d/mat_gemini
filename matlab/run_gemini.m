@@ -6,14 +6,8 @@ if nargin < 3
   gemini_exe = [];
 end
 
-if isoctave
-  % NOTE: due to Octave on Windows overriding system MinGW,
-  % you may need to compile Gemini.bin with -static option.
-  % this was not fixed by addpath(getenv('MINGWROOT'))
-  np = idivide(nproc, 2);  % assume hyperthreading
-else
-  np = maxNumCompThreads;
-end
+np = get_cpu_count();
+
 %% get gemini.bin executable
 gemini_exe = get_gemini_exe(gemini_exe);
 %% ensure mpiexec is available
