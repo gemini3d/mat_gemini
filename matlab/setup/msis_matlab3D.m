@@ -43,7 +43,7 @@ f107a = p.activ(1);
 f107 = p.activ(2);
 ap = p.activ(3);
 ap3 = p.activ(3);
-doy = datenum(p.ymd(1), p.ymd(2), p.ymd(3)) - datenum(p.ymd(1),1,1) + 1;
+doy = day_of_year(p.ymd);
 
 disp(['MSIS00 using DOY:  ',int2str(doy)])
 yearshort = mod(p.ymd(1),100);
