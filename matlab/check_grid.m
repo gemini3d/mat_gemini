@@ -8,16 +8,31 @@ tol_inc = 0.1;
 
 ok = true;
 %% check for monotonic increasing
-ok = ok && is_monotonic_increasing(xg.x1, tol_inc, 'x1');
-ok = ok && is_monotonic_increasing(xg.x2, tol_inc, 'x2');
-ok = ok && is_monotonic_increasing(xg.x3, tol_inc, 'x3');
+for k = {'x1', 'x1i', 'dx1h', 'x2', 'x2i', 'x3', 'x3i'}
+  ok = ok && is_monotonic_increasing(xg.(k{:}), tol_inc, k{:});
 end
+
+%% geo lat/lon
+
+if ~all(xg.glat <= 90 & xg.glat >= -90)
+  warning('geo latitude outside expected range')
+  ok = false;
+end
+
+if ~all(xg.glon >= 0 & xg.glon <= 360)
+  warning('geo longitude outside expected range')
+  ok = false;
+end
+
+end % function
 
 
 function ok = is_monotonic_increasing(A, tol, name)
 
-validateattributes(A, {'numeric'}, {'vector'})
-validateattributes(tol, {'numeric'}, {'scalar'})
+narginchk(3,3)
+validateattributes(A, {'numeric'}, {'vector'}, 1)
+validateattributes(tol, {'numeric'}, {'scalar'}, 2)
+validateattributes(name, {'char'}, {'vector'}, 3)
 
 ok = all(diff(A) > tol);
 

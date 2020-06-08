@@ -19,11 +19,11 @@ end
 %% TRANSVERSE GRID (BASED ON SIZE OF CURRENT REGION SPECIFIED ABOVE)
 % EAST
 if isfield(p, 'x2parms')
-    disp('Nonuniform x2 grid chosen...')
-    x = xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
+  disp('Nonuniform x2 grid chosen...')
+  x = xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
 else
-    disp('Uniform x2 grid chosen...')
-    x = xgrid_gen(p.xdist, p.lxp);
+  disp('Uniform x2 grid chosen...')
+  x = xgrid_gen(p.xdist, p.lxp);
 end
 
 % NORTH
