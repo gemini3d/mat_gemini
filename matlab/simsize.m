@@ -5,12 +5,9 @@ narginchk(1,1)
 [path, ext] = get_simsize_path(path);
 
 switch ext
-  case '.h5'
-    lxs = read_h5(path);
-  case '.nc'
-    lxs = read_nc(path);
-  case '.dat'
-    lxs = read_raw(path);
+  case '.h5', lxs = read_h5(path);
+  case '.nc', lxs = read_nc(path);
+  case '.dat', lxs = read_raw(path);
   otherwise, error('simsize:value_error', 'unknown simsize file type %s', fn)
 end
 

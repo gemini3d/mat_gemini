@@ -6,8 +6,6 @@ if nargin < 3
   gemini_exe = [];
 end
 
-np = get_mpi_count();
-
 %% get gemini.bin executable
 gemini_exe = get_gemini_exe(gemini_exe);
 %% ensure mpiexec is available
@@ -24,6 +22,7 @@ for k = {'indat_size', 'indat_grid', 'indat_file'}
   end
 end
 %% assemble run command
+np = get_mpi_count(cfg.indat_size);
 prepend = octave_mingw_path();
 cmd = sprintf('mpiexec -n %d %s %s %s', np, gemini_exe, cfg.nml, outdir);
 disp(cmd)
