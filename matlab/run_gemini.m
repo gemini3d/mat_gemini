@@ -30,35 +30,14 @@ for k = {'indat_size', 'indat_grid', 'indat_file'}
   end
 end
 %% assemble run command
+prepend = octave_mingw_path();
 cmd = sprintf('mpiexec -n %d %s %s %s', np, gemini_exe, cfg.nml, outdir);
 disp(cmd)
+cmd = [prepend, ' ', cmd];
 %% dry run
 [ret, msg] = system([cmd, ' -dryrun']);
 assert(ret==0, ['Gemini dryrun failed: ', msg])
 %% run simulation
 ret = system(cmd);
 assert(ret==0, 'Gemini run failed')
-end % function
-
-
-function gemini_exe = get_gemini_exe(gemini_exe)
-
-narginchk(0,1)
-
-if nargin == 0 || isempty(gemini_exe)
-  gemini_root = getenv('GEMINI_ROOT');
-  assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
-  assert(isfolder(gemini_root), 'Gemini3D directory not found')
-  gemini_exe = fullfile(gemini_root, 'build/gemini.bin');
-  if ispc
-    gemini_exe = [gemini_exe, '.exe'];
-  end
-end
-
-assert(isfile(gemini_exe), 'Gemini.bin executable not found')
-
-%% sanity check gemini.bin executable
-[ret, msg] = system(gemini_exe);
-assert(ret==0, ['problem with ', gemini_exe, ': ', msg])
-
 end % function

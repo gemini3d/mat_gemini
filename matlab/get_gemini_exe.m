@@ -1,0 +1,30 @@
+function exe = get_gemini_exe(exe)
+
+narginchk(0,1)
+
+if nargin == 0 || isempty(exe)
+  exe = find_gemini();
+end
+
+assert(isfile(exe), 'Gemini.bin executable not found')
+
+%% sanity check gemini.bin executable
+prepend = octave_mingw_path();
+[ret, msg] = system([prepend, ' ', exe]);
+assert(ret==0, ['problem with ', exe, ': ', msg])
+
+end % function
+
+
+function exe = find_gemini()
+narginchk(0,0)
+
+gemini_root = getenv('GEMINI_ROOT');
+assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
+assert(isfolder(gemini_root), 'Gemini3D directory not found')
+exe = fullfile(gemini_root, 'build/gemini.bin');
+if ispc
+  exe = [exe, '.exe'];
+end
+
+end

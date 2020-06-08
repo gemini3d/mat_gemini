@@ -15,19 +15,21 @@ assert(isfolder(topdir), [topdir, ' is not a folder'])
 
 %% run each simulation
 if isempty(only)
-  names = dir(fullfile(topdir));
+  found = dir(fullfile(topdir));
 else
-  names = dir(fullfile(topdir, ['*', only, '*']));
+  found = dir(fullfile(topdir, ['*', only, '*']));
 end
-names = {names.name};
-for c = names
-  [~, name] = fileparts(c{:});
 
-  if size(name) < 2 % not an expected directory
-    continue
+names = {};
+for i = 1:size(found)
+  if found(i).isdir && length(found(i).name) > 2
+    [~, name] = fileparts(found(i).name);
+    names{i} = name; %#ok<AGROW>
   end
+end
 
-  run_gemini(fullfile(topdir, name), fullfile(outdir, name), gemini_exe)
+for i = 1:length(names)
+  run_gemini(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe)
 end
 
 end % function
