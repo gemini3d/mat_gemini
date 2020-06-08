@@ -11,7 +11,7 @@ if nargin < 4
   gemini_exe = [];
 end
 
-assert(isfolder(topdir), [topdir, ' is not a folder'])
+assert(is_folder(topdir), [topdir, ' is not a folder'])
 
 %% run each simulation
 if isempty(only)

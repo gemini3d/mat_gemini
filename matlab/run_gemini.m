@@ -24,7 +24,7 @@ cfg = read_config(cfgfile);
 cfg.outdir = fullfile(outdir, 'inputs');
 
 for k = {'indat_size', 'indat_grid', 'indat_file'}
-  if ~isfile(cfg.(k{:}))
+  if ~is_file(cfg.(k{:}))
     model_setup(cfg)
     break
   end
