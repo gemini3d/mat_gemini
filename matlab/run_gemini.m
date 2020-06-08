@@ -6,7 +6,7 @@ if nargin < 3
   gemini_exe = [];
 end
 
-np = get_cpu_count();
+np = get_mpi_count();
 
 %% get gemini.bin executable
 gemini_exe = get_gemini_exe(gemini_exe);
