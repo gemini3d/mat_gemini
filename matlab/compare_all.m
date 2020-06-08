@@ -138,6 +138,10 @@ end % function compare_output
 function errs = compare_input(outdir, refdir, tol)
 narginchk(3,3)
 
+%% check simulation grid
+compare_grid(outdir, refdir, tol)
+
+%% check initial condition data
 ref_params = read_config(refdir);
 ref_indir = fullfile(refdir, 'inputs');
 [~, ref_name, ref_ext] = fileparts(ref_params.indat_file);
@@ -170,6 +174,43 @@ end
 end % function compare_input
 
 
+function compare_grid(outdir, refdir, tol)
+narginchk(3,3)
+
+[ref, ok] = readgrid(refdir);
+assert(ok, ['reference grid bad values', refdir])
+
+[new, ok] = readgrid(outdir);
+assert(ok, ['grid has bad values', outdir])
+
+errs = 0;
+for k = h5variables(ref.filename)
+  if ~isnumeric(ref.(k{:}))
+    % metadata
+    continue
+  end
+
+  b = ref.(k{:});
+  a = new.(k{:});
+
+  if any(size(a) ~= size(b))
+    error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+  end
+
+  if ~allclose(a, b, tol.rtol, tol.atol)
+    errs = errs + 1;
+    warning("mismatch: %s\n", k{:})
+  end
+end
+
+if errs == 0
+  disp(['OK: simulation input grid', outdir])
+end
+
+
+end % function
+
+
 function errs = compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol)
 
 errs = 0;
@@ -194,7 +235,7 @@ for i = 1:size(UTsec)
     b = ref.(k{:});
     a = new.(k{:});
 
-    if all(size(a) ~= size(b))
+    if any(size(a) ~= size(b))
       error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
     end
 
@@ -237,7 +278,9 @@ for i = 1:size(UTsec)
     b = ref.(k{:});
     a = new.(k{:});
 
-    assert(all(size(a) == size(b)), [k, ': ref shape ', size(b), ' != data shape ', size(a)])
+    if any(size(a) ~= size(b))
+      error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+    end
 
     if ~allclose(a, b, tol.rtol, tol.atol)
       errs = errs + 1;
