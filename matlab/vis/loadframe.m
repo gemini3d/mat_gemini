@@ -23,7 +23,10 @@ if ~isempty(mloc)
 end
 
 if nargin < 6 || isempty(xg)
-  xg = readgrid(direc, realbits);
+  [xg, ok] = readgrid(direc, realbits);
+  if ~ok
+    error('loadframe:value_error', 'grid did not have appropriate parameters')
+  end
 end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
@@ -50,7 +53,7 @@ end
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
 %dat_shape = size(dat.ns, 1:3);
-dat_shape=size(dat.ne, 1:3);
+dat_shape = size(dat.ne, 1:3);
 %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 % we check each dimension because of possibility of 2D dimension swapping
 % x1

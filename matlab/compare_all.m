@@ -183,16 +183,58 @@ if is_folder(prec_path)
 
       if ~allclose(a, b, tol.rtol, tol.atol)
         prec_errs = prec_errs + 1;
-        fprintf(2, "mismatch: %s %s\n", k{:}, st)
+        warning("mismatch: %s %s\n", k{:}, st)
       end
     end
+  end % for i
+
+  if prec_errs == 0
+    disp(['OK: precipitation input ', prec_path])
+  end
+  ok = ok + prec_errs;
+else
+  fprintf(2, 'SKIP: precipitation %s\n', prec_path)
+end
+
+%% Efield
+efield_errs = 0;
+[~, name, ext] = fileparts(new_params.E0_dir);
+efield_path = fullfile(new_indir, [name, ext]);
+
+[~, name, ext] = fileparts(ref_params.E0_dir);
+ref_efield_path = fullfile(ref_indir, [name, ext]);
+
+if is_folder(efield_path)
+% often we reuse Efield inputs without copying over files
+  for i = 1:Nt
+    st = ['UTsec ', num2str(UTsec(i))];
+    ref = load_Efield(get_frame_filename(ref_efield_path, ymd, UTsec(i)));
+    new = load_Efield(get_frame_filename(efield_path, ymd, UTsec(i)));
+
+
+    for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
+      b = ref.(k{:});
+      a = new.(k{:});
+
+      assert(all(size(a) == size(b)), [k, ': ref shape ', size(b), ' != data shape ', size(a)])
+
+      if ~allclose(a, b, tol.rtol, tol.atol)
+        efield_errs = efield_errs + 1;
+        warning("mismatch: %s %s\n", k{:}, st)
+      end
+    end
+  end % for i
+
+  if efield_errs == 0
+    disp(['OK: Efield input ', efield_path])
   end
 
-  ok = ok + prec_errs;
+  ok = ok + efield_errs;
 
 else
-  fprintf(2, "SKIP: precipitation %s \n", prec_path)
+  fprintf(2, "SKIP: Efield %s \n", efield_path)
 end
+
 if ok == 0
   disp('OK: Gemini input comparison')
 end
