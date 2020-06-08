@@ -135,7 +135,7 @@ end
 
 end % function compare_output
 
-function ok = compare_input(outdir, refdir, tol)
+function errs = compare_input(outdir, refdir, tol)
 narginchk(3,3)
 
 ref_params = read_config(refdir);
@@ -148,98 +148,109 @@ new_indir = fullfile(outdir, 'inputs');
 [~, new_name, new_ext] = fileparts(ref_params.indat_file);
 new = loadframe3Dcurvnoelec(fullfile(new_indir, [new_name, new_ext]));
 
-ok = 0;
+errs = 0;
 
-ok = ok + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atol, 'Ns', true);
-ok = ok + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atol, 'Ts', true);
-ok = ok + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true);
+errs = errs + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atol, 'Ns', true);
+errs = errs + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atol, 'Ts', true);
+errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true);
 
 UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
-ymd = new_params.ymd;
-Nt = length(UTsec);
-
 %% precipitation
-prec_errs = 0;
-[~, name, ext] = fileparts(new_params.prec_dir);
-prec_path = fullfile(new_indir, [name, ext]);
-
-[~, name, ext] = fileparts(ref_params.prec_dir);
-ref_prec_path = fullfile(ref_indir, [name, ext]);
-
-if is_folder(prec_path)
-  % often we reuse precipitation inputs without copying over files
-  for i = 1:Nt
-    st = ['UTsec ', num2str(UTsec(i))];
-    ref = load_precip(get_frame_filename(ref_prec_path, ymd, UTsec(i)));
-    new = load_precip(get_frame_filename(prec_path, ymd, UTsec(i)));
-
-    for k = {'E0', 'Q'}
-      b = ref.(k{:});
-      a = new.(k{:});
-
-      if all(size(a) ~= size(b))
-        error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
-      end
-
-      if ~allclose(a, b, tol.rtol, tol.atol)
-        prec_errs = prec_errs + 1;
-        warning("mismatch: %s %s\n", k{:}, st)
-      end
-    end
-  end % for i
-
-  if prec_errs == 0
-    disp(['OK: precipitation input ', prec_path])
-  end
-  ok = ok + prec_errs;
-else
-  fprintf(2, 'SKIP: precipitation %s\n', prec_path)
-end
+errs = errs + compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
 
 %% Efield
-efield_errs = 0;
-[~, name, ext] = fileparts(new_params.E0_dir);
-efield_path = fullfile(new_indir, [name, ext]);
+errs = errs + compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
 
-[~, name, ext] = fileparts(ref_params.E0_dir);
-ref_efield_path = fullfile(ref_indir, [name, ext]);
+%% final
 
-if is_folder(efield_path)
-% often we reuse Efield inputs without copying over files
-  for i = 1:Nt
-    st = ['UTsec ', num2str(UTsec(i))];
-    ref = load_Efield(get_frame_filename(ref_efield_path, ymd, UTsec(i)));
-    new = load_Efield(get_frame_filename(efield_path, ymd, UTsec(i)));
-
-
-    for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
-      b = ref.(k{:});
-      a = new.(k{:});
-
-      assert(all(size(a) == size(b)), [k, ': ref shape ', size(b), ' != data shape ', size(a)])
-
-      if ~allclose(a, b, tol.rtol, tol.atol)
-        efield_errs = efield_errs + 1;
-        warning("mismatch: %s %s\n", k{:}, st)
-      end
-    end
-  end % for i
-
-  if efield_errs == 0
-    disp(['OK: Efield input ', efield_path])
-  end
-
-  ok = ok + efield_errs;
-
-else
-  fprintf(2, "SKIP: Efield %s \n", efield_path)
-end
-
-if ok == 0
+if errs == 0
   disp('OK: Gemini input comparison')
 end
 
 end % function compare_input
+
+
+function errs = compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol)
+
+errs = 0;
+[~, name, ext] = fileparts(new_params.prec_dir);
+prec_path = fullfile(new_indir, [name, ext]);
+
+if ~is_folder(prec_path)
+  fprintf(2, ['SKIP: precipitation ', prec_path])
+  return
+end
+
+[~, name, ext] = fileparts(ref_params.prec_dir);
+ref_prec_path = fullfile(ref_indir, [name, ext]);
+
+% often we reuse precipitation inputs without copying over files
+for i = 1:size(UTsec)
+  st = ['UTsec ', num2str(UTsec(i))];
+  ref = load_precip(get_frame_filename(ref_prec_path, ref_params.ymd, UTsec(i)));
+  new = load_precip(get_frame_filename(prec_path, new_params.ymd, UTsec(i)));
+
+  for k = {'E0', 'Q'}
+    b = ref.(k{:});
+    a = new.(k{:});
+
+    if all(size(a) ~= size(b))
+      error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+    end
+
+    if ~allclose(a, b, tol.rtol, tol.atol)
+      errs = errs + 1;
+      warning("mismatch: %s %s\n", k{:}, st)
+    end
+  end
+end % for i
+
+if errs == 0
+  disp(['OK: precipitation input ', prec_path])
+end
+
+end % function
+
+
+function errs = compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol)
+
+errs = 0;
+[~, name, ext] = fileparts(new_params.E0_dir);
+efield_path = fullfile(new_indir, [name, ext]);
+
+if ~is_folder(efield_path)
+  fprintf(2, "SKIP: Efield %s \n", efield_path)
+  return
+end
+
+[~, name, ext] = fileparts(ref_params.E0_dir);
+ref_efield_path = fullfile(ref_indir, [name, ext]);
+
+% often we reuse Efield inputs without copying over files
+for i = 1:size(UTsec)
+  st = ['UTsec ', num2str(UTsec(i))];
+  ref = load_Efield(get_frame_filename(ref_efield_path, ref_params.ymd, UTsec(i)));
+  new = load_Efield(get_frame_filename(efield_path, new_params.ymd, UTsec(i)));
+
+
+  for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
+    b = ref.(k{:});
+    a = new.(k{:});
+
+    assert(all(size(a) == size(b)), [k, ': ref shape ', size(b), ' != data shape ', size(a)])
+
+    if ~allclose(a, b, tol.rtol, tol.atol)
+      errs = errs + 1;
+      warning("mismatch: %s %s\n", k{:}, st)
+    end
+  end
+end % for i
+
+if errs == 0
+  disp(['OK: Efield input ', efield_path])
+end
+
+end % function
 
 % Copyright 2020 Michael Hirsch, Ph.D.
 
