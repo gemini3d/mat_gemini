@@ -28,8 +28,10 @@ for i = 1:size(found)
   end
 end
 
+gem_params = struct('overwrite', true, 'mpiexec', []);
+
 for i = 1:length(names)
-  run_gemini(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe)
+  run_gemini(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
 end
 
 end % function
