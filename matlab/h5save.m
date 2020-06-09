@@ -21,8 +21,17 @@ if nargin >= 5 && ~isempty(dtype)
       if ~isa(A, 'single')
         A = single(A);
       end
+    case {'char', 'string'}
+      if ~isstring(A)
+        A = string(A);
+      end
     otherwise, error('h5save:type_error', 'unknown data type %s', dtype)
   end
+end
+
+if ischar(A)
+  A = string(A);
+  sizeA = size(A);
 end
 
 filename = absolute_path(filename);

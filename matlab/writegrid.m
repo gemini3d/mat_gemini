@@ -16,6 +16,8 @@ end
 % e.g. "inputs" than the base simdir
 makedir(p.outdir)
 
+xg.git = git_revision();
+
 switch p.file_format
   case {'h5','hdf5'}, write_hdf5(p.outdir, xg)
   case {'nc', 'nc4'}, write_nc4(p.outdir, xg)
@@ -103,6 +105,17 @@ h5save(fn, '/phi', xg.phi, [lx1, lx2, lx3], freal)
 h5save(fn, '/x', xg.x, [lx1, lx2, lx3], freal)
 h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
 h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
+
+%% metadata
+
+h5save(fn, '/meta/matlab_version', version())
+
+if isfield(xg, 'git')
+  h5save(fn, '/meta/git_version', xg.git.git_version)
+  h5save(fn, '/meta/git_commit', xg.git.commit)
+  h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
+  h5save(fn, '/meta/git_branch', xg.git.branch)
+end
 
 end % function
 

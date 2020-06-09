@@ -58,7 +58,6 @@ r=z+Re;
 g=G*Me./r.^2;
 gz=repmat(-1*g,[1,lx2,lx3]);
 
-
 %DISTANCE EW AND NS (FROM ENU (or UEN in our case - cyclic permuted) COORD. SYSTEM) NEED TO BE CONVERTED TO DIPOLE SPHERICAL AND THEN
 %GLAT/GLONG - BASICALLY HERE WE ARE MAPPING THE CARTESIAN GRID ONTO THE
 %SURFACE OF A SPHERE THEN CONVERTING TO GEOGRAPHIC.
@@ -107,7 +106,6 @@ e1=er;    %up is the same cirection as from ctr of earth
 e2=ephi;    %e2 is same as ephi
 e3=-1*etheta;    %etheta is positive south, e3 is pos. north
 
-
 % STORE RESULTS IN GRID DATA STRUCTURE
 xg.x1=z; xg.x2=x; xg.x3=y;
 xg.x1i=zi; xg.x2i=xi; xg.x3i=yi;
@@ -137,15 +135,15 @@ xg.h1x1i=ones(lx(1)+1,lx(2),lx(3)); xg.h2x1i=ones(lx(1)+1,lx(2),lx(3)); xg.h3x1i
 xg.h1x2i=ones(lx(1),lx(2)+1,lx(3)); xg.h2x2i=ones(lx(1),lx(2)+1,lx(3)); xg.h3x2i=ones(lx(1),lx(2)+1,lx(3));
 xg.h1x3i=ones(lx(1),lx(2),lx(3)+1); xg.h2x3i=ones(lx(1),lx(2),lx(3)+1); xg.h3x3i=ones(lx(1),lx(2),lx(3)+1);
 
-%Cartesian, ECEF representation of curvilinar coordinates
+% Cartesian, ECEF representation of curvilinar coordinates
 xg.e1=e1; xg.e2=e2; xg.e3=e3;
 
-%ECEF spherical coordinates
+% ECEF spherical coordinates
 xg.r=r; xg.theta=theta; xg.phi=phi;
 xg.rx1i=[]; xg.thetax1i=[];
 xg.rx2i=[]; xg.thetax2i=[];
 
-%These are cartesian representations of the ECEF, spherical unit vectors
+% These are cartesian representations of the ECEF, spherical unit vectors
 xg.er=er; xg.etheta=etheta; xg.ephi=ephi;
 
 xg.I = p.Bincl * ones([lx2,lx3]);
