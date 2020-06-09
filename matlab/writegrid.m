@@ -110,7 +110,7 @@ h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 if verLessThan('matlab', '9.8')
   metafn = fullfile(fileparts(fn), 'setup_meta.nml');
   fid = fopen(metafn, 'w');
-  fprintf(fid, '%s', '&setup_meta\n');
+  fprintf(fid, '%s\n', '&setup_meta');
   fprintf(fid, 'matlab_version = %s\n', version());
   fprintf(fid, 'git_version = %s\n', xg.git.git_version);
   fprintf(fid, 'git_commit = %s\n', xg.git.commit);
