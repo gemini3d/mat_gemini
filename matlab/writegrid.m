@@ -107,14 +107,25 @@ h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
 h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 
 %% metadata
-
-h5save(fn, '/meta/matlab_version', version())
-
-if isfield(xg, 'git')
-  h5save(fn, '/meta/git_version', xg.git.git_version)
-  h5save(fn, '/meta/git_commit', xg.git.commit)
-  h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
-  h5save(fn, '/meta/git_branch', xg.git.branch)
+if verLessThan('matlab', '9.8')
+  metafn = fullfile(fileparts(fn), 'setup_meta.nml');
+  fid = fopen(metafn, 'w');
+  fprintf(fid, '%s', '&setup_meta\n');
+  fprintf(fid, 'matlab_version = %s\n', version());
+  fprintf(fid, 'git_version = %s\n', xg.git.git_version);
+  fprintf(fid, 'git_commit = %s\n', xg.git.commit);
+  fprintf(fid, 'git_porcelain = %s\n', xg.git.porcelain);
+  fprintf(fid, 'git_branch = %s\n', xg.git.branch);
+  fprintf(fid, '%s', '/\n');
+  fclose(fid);
+else  % >= R2020a
+  h5save(fn, '/meta/matlab_version', version())
+  if isfield(xg, 'git')
+    h5save(fn, '/meta/git_version', xg.git.git_version)
+    h5save(fn, '/meta/git_commit', xg.git.commit)
+    h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
+    h5save(fn, '/meta/git_branch', xg.git.branch)
+  end
 end
 
 end % function
