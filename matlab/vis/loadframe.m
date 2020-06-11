@@ -23,6 +23,7 @@ if nargin < 4 || isempty(flagoutput)
     rethrow(excp)
   end
   flagoutput = p.flagoutput;
+  mloc = p.mloc;
 end
 validateattributes(flagoutput,{'numeric'},{'scalar', 'integer'},mfilename,'output flag',4)
 
@@ -49,7 +50,7 @@ filename = get_frame_filename(direc, ymd, UTsec);
 % rewrite.
 if strcmp(ext,'.h5')
   % regardless of what the output type is if variabl nsall exists we need
-  % to do a full read; this is a bit wasteful because loadframe will check
+  % to do a full read; this is a bit messy because loadframe will check
   % again below if h5 is used...
   if (h5exists(filename,'/nsall'))
    disp('Full or milestone input detected.')
@@ -108,7 +109,7 @@ if xg.lx(3) > 1
     else
       error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
     end
-  end
+ end
 end
 
 end % function
