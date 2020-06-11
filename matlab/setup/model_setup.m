@@ -20,7 +20,7 @@ else
 end
 
 if ~isfield(p, 'outdir')
-  p.outdir = absolute_path(fullfile(fileparts(p.indat_size), '..'));
+  p.outdir = absolute_path(fileparts(p.indat_size));
 end
 makedir(p.outdir)
 copy_file(p.nml, p.outdir)

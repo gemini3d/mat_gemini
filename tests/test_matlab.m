@@ -1,6 +1,8 @@
 % test basic functions
 
 cwd = fileparts(mfilename('fullpath'));
+addpath(cwd) % since we have to cd() in runner()
+
 run(fullfile(cwd, '../setup.m'))
 
 try %#ok<TRYNC>
@@ -15,9 +17,9 @@ end
 
 tic
 %% config.nml unit test
-p = read_config(fullfile(cwd, 'test2dew_fang', 'config.nml'));
+p = read_config(fullfile(cwd, 'future/test2dew_fang', 'config.nml'));
 assert(p.xdist == 200000)
-q = read_config(fullfile(cwd, 'test2dew_fang'));
+q = read_config(fullfile(cwd, 'future/test2dew_fang'));
 assert(isequaln(p, q), 'file or folder should give same result')
 %% dateinc unit test
 [ymd, utsec] = dateinc(0.5, [2012,3,27], 1500);
@@ -34,30 +36,17 @@ assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,36], 28) == 18, 'max_mpi fail 28 cpu')
 %% test2dew_eq_hdf5
-runner('test2dew_eq_h5')
-%% test2dew_eq_nc4
-runner('test2dew_eq_nc')
+runner('2d_eq', 'h5')
 %% test2dew_fang_h5
-runner('test2dew_fang_h5')
-%% test2dew_fang_nc
-runner('test2dew_fang_nc')
+runner('2d_fang', 'h5')
 %% test2dew_glow_h5
-runner('test2dew_glow_h5')
-%% test2dew_glow_nc
-runner('test2dew_glow_nc')
-
+runner('2d_glow', 'h5')
 %% test3d_eq_hdf5
-runner('test3d_eq_h5')
-%% test3d_eq_nc4
-runner('test3d_eq_nc')
+runner('3d_eq', 'h5')
 %% test3d_fang_h5
-runner('test3d_fang_h5')
-%% test3d_fang_nc
-runner('test3d_fang_nc')
+runner('3d_fang', 'h5')
 %% test3d_glow_h5
-runner('test3d_glow_h5')
-%% test3d_glow_nc
-runner('test3d_glow_nc')
+runner('3d_glow', 'h5')
 % done
 toc
 disp('OK: gemini-matlab')

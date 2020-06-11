@@ -7,12 +7,12 @@ function results = checkcode_recursive(folder, verbose)
 narginchk(0,2)
 if nargin < 1, folder = pwd; end
 if nargin < 2, verbose = false; end
-assert(isfolder(folder), [folder, ' is not a folder'])
+assert(is_folder(folder), '%s is not a folder', folder)
 
 flist = dir([folder, '/**/*.m']);
 N = length(flist);
 
-disp(['checking ', int2str(N), ' Matlab files under ', folder])
+fprintf('checking %s Matlab files under ', folder)
 
 h = waitbar(0);
 
@@ -24,7 +24,7 @@ for i = 1:N
     [~, stem] = fileparts(file);
     results.(stem) = res;
     if verbose
-      disp([file, ' has ', int2str(length(res)), ' lint messages.'])
+      fprintf('%s has %d lint messages.', file, length(res));
     end
   end
 end % for
