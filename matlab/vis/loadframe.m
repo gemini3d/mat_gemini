@@ -79,10 +79,7 @@ else
 end
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
-% (keeping R2017b compatibility
-dat_shape(1) = size(dat.ne,1);
-dat_shape(2) = size(dat.ne,2);
-dat_shape(3) = size(dat.ne,3);
+dat_shape = size(dat.ne);
 %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 % we check each dimension because of possibility of 2D dimension swapping
 % x1
