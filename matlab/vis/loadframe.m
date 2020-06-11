@@ -42,14 +42,14 @@ end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
 %% LOAD DIST. FILE
-
+filename = get_frame_filename(direc, ymd, UTsec);
 
 % This is messy but it was difficult to have the milestone check before
 % deciding what type of file is being read...  May be a more elegant way to
 % rewrite. 
 if strcmp(ext,'.h5')
   % regardless of what the output type is if variabl nsall exists we need
-  % to do a full read; this is a bit messy because loadframe will check
+  % to do a full read; this is a bit wasteful because loadframe will check
   % again below if h5 is used...
   if (h5exists(filename,'/nsall'))
    disp('Full or milestone input detected.')
@@ -79,8 +79,10 @@ else
 end
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
-dat_shape = size(dat.ne);
-dat_shape(3) = size(dat.ne, 3);  % in case of 2D dat.ne, this is how to use Matlab implicit 3d with size.
+% (keeping R2017b compatibility
+dat_shape(1) = size(dat.ne,1);
+dat_shape(2) = size(dat.ne,2);
+dat_shape(3) = size(dat.ne,3);
 %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 % we check each dimension because of possibility of 2D dimension swapping
 % x1
