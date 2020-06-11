@@ -8,40 +8,37 @@ validateattributes(h, {'struct'}, {'vector'}, mfilename, 'figure handles', 5)
 
 if isempty(saveplot_fmt)
   return
-elseif ischar(saveplot_fmt)
+end
+if ischar(saveplot_fmt)
   saveplot_fmt = {saveplot_fmt};
 end
 
-assert(is_folder(direc), [direc, ' is not a directory.'])
-
-dpi = '-r150';
+dpi = 150;
 % filename has the suffix, let's ditch the suffix.
 [~, stem] = fileparts(filename);
 
-plotdir = [direc, '/plots'];
+plotdir = fullfile(direc, 'plots');
 
 makedir(plotdir)
 
 disp(['writing plots to ', plotdir])
 
-for i=1:length(saveplot_fmt)
-
-  [flag, suffix] = printflag(saveplot_fmt{i});
+for fmt = saveplot_fmt
 
   if flagoutput~=3
-    print(h.f1,flag,[plotdir, '/v1-', stem, suffix], dpi)
-    print(h.f2,flag,[plotdir, '/Ti-', stem, suffix], dpi)
-    print(h.f3,flag,[plotdir, '/Te-', stem, suffix], dpi)
-    print(h.f4,flag,[plotdir, '/J1-', stem, suffix], dpi)
-    print(h.f5,flag,[plotdir, '/v2-', stem, suffix], dpi)
-    print(h.f6,flag,[plotdir, '/v3-', stem, suffix], dpi)
-    print(h.f7,flag,[plotdir, '/J2-', stem, suffix], dpi)
-    print(h.f8,flag,[plotdir, '/J3-', stem, suffix], dpi)
+    export_graphics(h.f1, fullfile(plotdir, ['v1-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f2, fullfile(plotdir, ['Ti-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f3, fullfile(plotdir, ['Te-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f4, fullfile(plotdir, ['J1-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f5, fullfile(plotdir, ['v2-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f6, fullfile(plotdir, ['v3-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f7, fullfile(plotdir, ['J2-', stem, '.', fmt{:}]), 'Resolution', dpi)
+    export_graphics(h.f8, fullfile(plotdir, ['J3-', stem, '.', fmt{:}]), 'Resolution', dpi)
     if ~isempty(h.f9)
-      print(h.f9,flag,[plotdir, '/Phitop-', stem, suffix], dpi)
+      export_graphics(h.f9, fullfile(plotdir, ['Phitop-', stem, '.', fmt{:}]), 'Resolution', dpi)
     end
   end
-  print(h.f10,flag,[plotdir, '/ne-', stem, suffix], dpi)
+  export_graphics(h.f10, fullfile(plotdir, ['ne-', stem, '.', fmt{:}]), 'Resolution', dpi)
 end % for
 
 end % function

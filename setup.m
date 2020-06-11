@@ -3,9 +3,7 @@ function setup()
 narginchk(0,0)
 
 cwd = fileparts(mfilename('fullpath'));
-
-paths = genpath(fullfile(cwd, 'matlab'));
-addpath(paths)
+addpath(genpath(fullfile(cwd, 'matlab')))
 
 gemini_root = absolute_path(fullfile(cwd, '../gemini/'));
 if is_folder(gemini_root)

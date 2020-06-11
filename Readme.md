@@ -10,11 +10,19 @@ These scripts form the basic core needed to work with Gemini to:
 
 ## Usage
 
-To enable these scripts, each time you startup Matlab to work with Gemini, run from the "gemini-matlab/" directory in Matlab:
+To add paths to all the gemini-matlab functions, from the "gemini-matlab/" directory in Matlab:
 
 ```matlab
 setup
 ```
+
+### Plot all simulation outputs
+
+```matlab
+plot_all('~/data/mysim', 'png')
+```
+
+Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just displays the plots without saving.
 
 ### Run Gemini
 

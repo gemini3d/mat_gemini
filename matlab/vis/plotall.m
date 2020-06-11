@@ -68,7 +68,7 @@ elseif isoctave || isinteractive
     plotframe(direc, ymd(i,:), UTsec(i), saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    disp(''), disp('** press any key to plot next time step, or Ctrl C to stop**')
+    fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
     pause
   end
 else
