@@ -19,8 +19,8 @@ Tsi=zeros(lx1,lx2,lx3,lsp);
 if lx3 > 1 && lx2 > 1 % 3-D
   disp('interpolating grid for 3-D simulation')
   if exist('griddedInterpolant', 'file')
-    Xold = {xgin.x1(3:end-2),xgin.x2(3:end-2),xgin.x3(3:end-2)};
-    Xnew = {single(xg.x1(3:end-2)), single(xg.x2(3:end-2)), single(xg.x3(3:end-2))};
+    Xold = {squeeze(xgin.x1(3:end-2)), squeeze(xgin.x2(3:end-2)), squeeze(xgin.x3(3:end-2))};
+    Xnew = {squeeze(single(xg.x1(3:end-2))), squeeze(single(xg.x2(3:end-2))), squeeze(single(xg.x3(3:end-2)))};
   else
     [X2,X1,X3] = meshgrid(xgin.x2(3:end-2),xgin.x1(3:end-2),xgin.x3(3:end-2));
     [X2i,X1i,X3i] = meshgrid(single(xg.x2(3:end-2)), single(xg.x1(3:end-2)), single(xg.x3(3:end-2)) );
