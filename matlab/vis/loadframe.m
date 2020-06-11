@@ -43,17 +43,17 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
 
 %% LOAD DIST. FILE
 filename = get_frame_filename(direc, ymd, UTsec);
-
+[~,~,ext] = fileparts(filename);
 % This is messy but it was difficult to have the milestone check before
 % deciding what type of file is being read...  May be a more elegant way to
-% rewrite. 
+% rewrite.
 if strcmp(ext,'.h5')
   % regardless of what the output type is if variabl nsall exists we need
   % to do a full read; this is a bit wasteful because loadframe will check
   % again below if h5 is used...
   if (h5exists(filename,'/nsall'))
    disp('Full or milestone input detected.')
-   dat = loadframe3Dcurv(filename); 
+   dat = loadframe3Dcurv(filename);
   else   %only two possibilities left
     switch flagoutput
       case 1, dat = loadframe3Dcurv(filename);
@@ -61,7 +61,7 @@ if strcmp(ext,'.h5')
       otherwise, error('Problem with file input selection related to milestone detection.')
     end %switch
   end
-else    
+else
   % currently only HDF5 supports milestones
   switch flagoutput
     case 1, dat = loadframe3Dcurv(filename);
