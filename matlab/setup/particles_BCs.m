@@ -51,7 +51,7 @@ if ~isfield(p, 'Qprecip')
 else
   Qprecip = p.Qprecip;
   Qprecip_bg = p.Qprecip_background;
-  E0pecip = p.E0precip;
+  E0precip = p.E0precip;
 end
 
 precip = precip_grid(xg, p, precip);
