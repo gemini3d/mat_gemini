@@ -28,6 +28,21 @@ if ~is_file(zipfile)
   web_save(zipfile, url)
 end
 
+%% md5sum check
+% this is a workaround for Octave 4.4 that inserts a trailing underscore
+if isfield(urls.(['x', test_name]), 'md5')
+  k = 'md5';
+else
+  k = 'md5_';
+end
+exp_hash = urls.(['x', test_name]).(k);
+hash = md5sum(zipfile);
+if ~isempty(hash)
+  if ~strcmpi(hash, exp_hash)
+    warning('%s md5 hash does not match, file may be corrupted or incorrect data', zipfile)
+  end
+end
+%% extract
 unzip(zipfile, data_dir)
 
 end % function
