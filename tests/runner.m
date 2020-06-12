@@ -9,7 +9,7 @@ cwd = fileparts(mfilename('fullpath'));
 % in the right working dir
 cd(fullfile(cwd,'..'))
 
-ref_dir = fullfile(cwd, 'reference');
+ref_dir = fullfile(cwd, 'data');
 test_dir = fullfile(ref_dir, ['test', name]);
 %% check if capaable of requested file format
 if ~check_file_format(file_format)
@@ -19,25 +19,32 @@ end
 %% get files if needed
 download_and_extract(name, ref_dir)
 %% setup new test data
+p = read_nml(test_dir);
+p.file_format = file_format;
+p.outdir = fullfile(tempdir, name, 'inputs');
+
 try
-  p = read_nml(test_dir);
-  p.file_format = file_format;
   p = model_setup(p);
-
-  if isfield(p, 'E0_dir')
-    assert(is_file(fullfile(p.E0_dir, ['20130220_18000.000000.', ext])), '%s Efield file missing', name)
-  end
-
-  if isfield(p, 'prec_dir')
-    assert(is_file(fullfile(p.prec_dir, ['20130220_18000.000000.', ext])), '%s precip file missing', name)
-  end
-
 catch e
   switch e.identifier
-    case 'get_frame_filename:file_not_found', fprintf(2, 'SKIP: %s due to no data file\n', name)
+    case 'get_frame_filename:file_not_found'
+      fprintf(2, 'SKIP: %s due to no data file\n', name)
+      return
     otherwise, rethrow(e)
   end
 end
+
+assert(is_file(p.indat_size), 'sim imput data was not written to %s', p.outdir)
+
+if isfield(p, 'E0_dir')
+  assert(is_file(fullfile(p.E0_dir, ['20130220_18000.000000.', ext])), '%s Efield file missing', name)
+end
+
+if isfield(p, 'prec_dir')
+  assert(is_file(fullfile(p.prec_dir, ['20130220_18000.000000.', ext])), '%s precip file missing', name)
+end
+
+
 
 end  % function
 

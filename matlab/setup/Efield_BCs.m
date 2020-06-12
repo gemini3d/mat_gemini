@@ -38,12 +38,19 @@ E.mlatmean = mean(E.mlat);
 
 %% WIDTH OF THE DISTURBANCE
 if isfield(p, 'Efield_latwidth')
-  E.mlatsig = p.Efield_latwidth*(mlatmax-mlatmin);
-  E.sigx3 = p.Efield_latwidth*(max(xg.x3)-min(xg.x3));
+  [E.mlatsig, E.sigx3] = Esigma(p.Efield_latwidth, mlatmax, mlatmin, xg.x3);
 end
 if isfield(p, 'Efield_lonwidth')
-   E.mlonsig = p.Efield_lonwidth*(mlonmax-mlonmin);
-   E.sigx2 = p.Efield_lonwidth*(max(xg.x2)-min(xg.x2));
+   [E.mlonsig, E.sigx2] = Esigma(p.Efield_lonwidth, mlonmax, mlonmin, xg.x2);
+end
+if isfield(p, 'Efield_fracwidth')
+  fprintf(2, 'WARNING: Efield_fracwidth is deprecated. Please use Efield_lonwidth or Efield_latwidth\n')
+  if E.llat ~= 1
+    [E.mlatsig, E.sigx3] = Esigma(p.Efield_fracwidth, mlatmax, mlatmin, xg.x3);
+  end
+  if E.llon ~= 1
+    [E.mlonsig, E.sigx2] = Esigma(p.Efield_fracwidth, mlonmax, mlonmin, xg.x2);
+  end
 end
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
 tmin = 0;
@@ -132,5 +139,14 @@ for i = 1:Nt
   E.flagdirich(i)=1;
   E.Vmaxx1it(:,:,i) = S .* taper;
 end
+
+end % function
+
+
+function [wsig, xsig] = Esigma(pwidth, pmax, pmin, px)
+narginchk(4,4)
+
+wsig = pwidth * (pmax - pmin);
+xsig = pwidth * (max(px) - min(px));
 
 end % function
