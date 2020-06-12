@@ -4,9 +4,6 @@ function write_precip(pg, outdir, file_format)
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT NEED TO BE SMOOTHED.
 
-outdir = absolute_path(outdir);
-makedir(outdir)
-
 disp(['write to ',outdir])
 switch file_format
   case {'h5','hdf5'}, write_hdf5(outdir, pg)

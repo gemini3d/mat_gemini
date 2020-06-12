@@ -4,7 +4,7 @@ narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'sim parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'})
 
-dir_out = absolute_path(p.E0_dir);
+dir_out = p.E0_dir;
 makedir(dir_out);
 
 lx1 = xg.lx(1);

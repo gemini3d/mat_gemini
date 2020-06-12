@@ -161,11 +161,15 @@ errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true)
 UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
 %% precipitation
 if isfield(new_params, 'prec_dir')
-  errs = errs + compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
+  prec_dir = fullfile(outdir, 'inputs', path_tail(new_params.prec_dir));
+  ref_prec_dir = ref_params.prec_dir;
+  errs = errs + compare_precip(new_params.ymd, UTsec, prec_dir, ref_prec_dir, tol);
 end
 %% Efield
 if isfield(new_params, 'E0_dir')
-  errs = errs + compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
+  E0_dir = fullfile(outdir, path_tail(new_params.E0_dir));
+  ref_E0_dir = ref_params.E0_dir;
+  errs = errs + compare_efield(new_params.ymd, UTsec, E0_dir, ref_E0_dir, tol);
 end
 %% final
 
@@ -206,32 +210,27 @@ for k = h5variables(ref.filename)
 end
 
 if errs == 0
-  disp(['OK: simulation input grid', outdir])
+  disp(['OK: simulation input grid ', outdir])
 end
 
 
 end % function
 
 
-function errs = compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol)
+function errs = compare_precip(ymd, UTsec, prec_dir, ref_prec_dir, tol)
 
 errs = 0;
-[~, name, ext] = fileparts(new_params.prec_dir);
-prec_path = fullfile(new_indir, [name, ext]);
 
-if ~is_folder(prec_path)
-  fprintf(2, 'SKIP: precipitation %s \n', prec_path)
+if ~is_folder(prec_dir)
+  fprintf(2, 'SKIP: precipitation %s \n', prec_dir)
   return
 end
-
-[~, name, ext] = fileparts(ref_params.prec_dir);
-ref_prec_path = fullfile(ref_indir, [name, ext]);
 
 % often we reuse precipitation inputs without copying over files
 for i = 1:size(UTsec)
   st = ['UTsec ', num2str(UTsec(i))];
-  ref = load_precip(get_frame_filename(ref_prec_path, ref_params.ymd, UTsec(i)));
-  new = load_precip(get_frame_filename(prec_path, new_params.ymd, UTsec(i)));
+  ref = load_precip(get_frame_filename(ref_prec_dir, ymd, UTsec(i)));
+  new = load_precip(get_frame_filename(prec_dir, ymd, UTsec(i)));
 
   for k = {'E0', 'Q'}
     b = ref.(k{:});
@@ -249,31 +248,26 @@ for i = 1:size(UTsec)
 end % for i
 
 if errs == 0
-  disp(['OK: precipitation input ', prec_path])
+  disp(['OK: precipitation input ', prec_dir])
 end
 
 end % function
 
 
-function errs = compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol)
+function errs = compare_efield(ymd, UTsec, E0_dir, ref_E0_dir, tol)
 
 errs = 0;
-[~, name, ext] = fileparts(new_params.E0_dir);
-efield_path = fullfile(new_indir, [name, ext]);
 
-if ~is_folder(efield_path)
-  fprintf(2, "SKIP: Efield %s \n", efield_path)
+if ~is_folder(E0_dir)
+  fprintf(2, "SKIP: Efield %s \n", E0_dir)
   return
 end
-
-[~, name, ext] = fileparts(ref_params.E0_dir);
-ref_efield_path = fullfile(ref_indir, [name, ext]);
 
 % often we reuse Efield inputs without copying over files
 for i = 1:size(UTsec)
   st = ['UTsec ', num2str(UTsec(i))];
-  ref = load_Efield(get_frame_filename(ref_efield_path, ref_params.ymd, UTsec(i)));
-  new = load_Efield(get_frame_filename(efield_path, new_params.ymd, UTsec(i)));
+  ref = load_Efield(get_frame_filename(ref_E0_dir, ymd, UTsec(i)));
+  new = load_Efield(get_frame_filename(E0_dir, ymd, UTsec(i)));
 
 
   for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
@@ -292,7 +286,7 @@ for i = 1:size(UTsec)
 end % for i
 
 if errs == 0
-  disp(['OK: Efield input ', efield_path])
+  disp(['OK: Efield input ', E0_dir])
 end
 
 end % function

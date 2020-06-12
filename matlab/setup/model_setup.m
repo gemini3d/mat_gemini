@@ -25,7 +25,13 @@ end
 makedir(p.outdir)
 fprintf('copying config.nml to %s\n', p.outdir);
 copy_file(p.nml, p.outdir)
-
+%% allow output to new directory
+if isfield(p, 'prec_dir')
+  p.prec_dir = fullfile(p.outdir, path_tail(p.prec_dir));
+end
+if isfield(p, 'E0_dir')
+  p.E0_dir = fullfile(p.outdir, path_tail(p.E0_dir));
+end
 %% is this equilibrium or interpolated simulation
 if isfield(p, 'eqdir')
   model_setup_interp(p)

@@ -3,6 +3,10 @@ function particles_BCs(p, xg)
 narginchk(2,2)
 validateattributes(p, {'struct'}, {'scalar'})
 validateattributes(xg, {'struct'}, {'scalar'})
+
+outdir = p.prec_dir;
+makedir(outdir)
+
 %% CREATE PRECIPITATION CHARACTERISTICS data
 % number of grid cells.
 % This will be interpolated to grid, so 100x100 is arbitrary
@@ -70,9 +74,9 @@ if any(~isfinite(precip.E0it)), error('particle_BCs:value_error', 'E0 not finite
 %E0it = E0it*1e3;
 
 if strcmp(p.file_format, 'raw')
-  write_precip_raw(precip, p.prec_dir, p.realbits)
+  write_precip_raw(precip, outdir, p.realbits)
 else
-  write_precip(precip, p.prec_dir, p.file_format)
+  write_precip(precip, outdir, p.file_format)
 end
 
 end % function

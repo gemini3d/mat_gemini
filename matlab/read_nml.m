@@ -43,14 +43,10 @@ if ~isfield(p, 'mloc')
 end
 
 p = read_if_present(p, filename,  'precip');
-if isfield(p, 'prec_dir')
-  p.prec_dir = absolute_path(p.prec_dir);
-end
+% don't make prec_dir absolute here, to respect upcoming p.outdir
 
 p = read_if_present(p, filename, 'efield');
-if isfield(p, 'E0_dir')
-  p.E0_dir = absolute_path(p.E0_dir);
-end
+% don't make E0_dir absolute here, to respect upcoming p.outdir
 
 p = read_if_present(p, filename, 'glow');
 
