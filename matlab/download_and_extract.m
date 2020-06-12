@@ -18,7 +18,14 @@ urls = ini2struct(fullfile(cwd, '../tests/url.ini'));
 zipfile = fullfile(data_dir, ['test', test_name, '.zip']);
 
 if ~is_file(zipfile)
-  web_save(zipfile, urls.(['x', test_name]).url)
+  % this is a workaround for Octave 4.4 that inserts a trailing underscore
+  if isfield(urls.(['x', test_name]), 'url')
+    k = 'url';
+  else
+    k = 'url_';
+  end
+  url = urls.(['x', test_name]).(k);
+  web_save(zipfile, url)
 end
 
 unzip(zipfile, data_dir)
