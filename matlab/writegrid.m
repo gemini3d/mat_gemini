@@ -112,20 +112,20 @@ h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
 h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 
 %% metadata
-
-if ~verLessThan('matlab', '9.8')
-  try
-    h5save(fn, '/meta/matlab_version', version())
-    if isfield(xg, 'git')
-      h5save(fn, '/meta/git_version', xg.git.git_version)
-      h5save(fn, '/meta/git_commit', xg.git.commit)
-      h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
-      h5save(fn, '/meta/git_branch', xg.git.branch)
-    end
-  catch
-    warning('could not write metadata to HDF5, logged same metadata to setup_meta.nml')
-  end
-end
+% seems HDF5 is too buggy for strings in Matlab
+% if ~verLessThan('matlab', '9.8')
+%   try
+%     h5save(fn, '/meta/matlab_version', version())
+%     if isfield(xg, 'git')
+%       h5save(fn, '/meta/git_version', xg.git.git_version)
+%       h5save(fn, '/meta/git_commit', xg.git.commit)
+%       h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
+%       h5save(fn, '/meta/git_branch', xg.git.branch)
+%     end
+%   catch excp
+%     warning('could not write metadata to HDF5, logged same metadata to setup_meta.nml')
+%   end
+% end
 
 end % function
 

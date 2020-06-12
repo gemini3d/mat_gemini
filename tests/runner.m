@@ -37,14 +37,12 @@ end
 assert(is_file(p.indat_size), 'sim imput data was not written to %s', p.outdir)
 
 if isfield(p, 'E0_dir')
-  assert(is_file(fullfile(p.E0_dir, ['20130220_18000.000000.', ext])), '%s Efield file missing', name)
+  assert(is_file(fullfile(p.E0_dir, ['20130220_18300.000000.', file_format])), '%s Efield file missing', name)
 end
 
 if isfield(p, 'prec_dir')
-  assert(is_file(fullfile(p.prec_dir, ['20130220_18000.000000.', ext])), '%s precip file missing', name)
+  assert(is_file(fullfile(p.prec_dir, ['20130220_18300.000000.', file_format])), '%s precip file missing', name)
 end
-
-
 
 end  % function
 

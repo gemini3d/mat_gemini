@@ -44,7 +44,7 @@ if isfield(p, 'Efield_lonwidth')
    [E.mlonsig, E.sigx2] = Esigma(p.Efield_lonwidth, mlonmax, mlonmin, xg.x2);
 end
 if isfield(p, 'Efield_fracwidth')
-  fprintf(2, 'WARNING: Efield_fracwidth is deprecated. Please use Efield_lonwidth or Efield_latwidth\n')
+  warning('Efield_fracwidth is deprecated. Please use Efield_lonwidth or Efield_latwidth')
   if E.llat ~= 1
     [E.mlatsig, E.sigx3] = Esigma(p.Efield_fracwidth, mlatmax, mlatmin, xg.x3);
   end
