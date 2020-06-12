@@ -12,7 +12,7 @@ end
 %% sanity check gemini.bin executable
 prepend = octave_mingw_path();
 [ret, msg] = system([prepend, ' ', exe]);
-assert(ret==0, ['problem with ', exe, ': ', msg])
+assert(ret==0, 'problem with %s: %s', exe, msg)
 
 end % function
 

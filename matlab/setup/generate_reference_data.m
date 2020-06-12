@@ -7,7 +7,10 @@ narginchk(2,4)
 if nargin < 3, only = ''; end
 if nargin < 4, gemini_exe = []; end
 
-assert(is_folder(topdir), [topdir, ' is not a folder'])
+topdir = expanduser(topdir);
+outdir = expanduser(outdir);
+
+assert(is_folder(topdir), '%s is not a folder', topdir)
 
 %% run each simulation
 names = get_testnames(topdir, only);

@@ -1,7 +1,8 @@
-function p = model_setup(p)
+function p = model_setup(p, outdir)
 %% determines what kind of setup is needed and does it.
 
-narginchk(1,1)
+narginchk(1, 2)
+if nargin < 2, outdir = []; end
 
 % this is a top-level script, so be sure environment is setup
 cwd = fileparts(mfilename('fullpath'));
@@ -9,7 +10,6 @@ if ~exist('is_file', 'file')
   run(fullfile(cwd, '../../setup.m'))
 end
 %% parse input
-narginchk(1,1)
 if isstruct(p)
   % pass
 elseif ischar(p)
@@ -19,9 +19,15 @@ else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
-if ~isfield(p, 'outdir')
-  p.outdir = absolute_path(fileparts(p.indat_size));
+if isempty(outdir)
+  if ~isfield(p, 'outdir') || isempty(p.outdir)
+    error('model_setup:file_not_found', 'please specify outdir or p.outdir')
+  end
+else
+  % override with outdir regardless
+  p.outdir = outdir;
 end
+
 makedir(p.outdir)
 fprintf('copying config.nml to %s\n', p.outdir);
 copy_file(p.nml, p.outdir)
