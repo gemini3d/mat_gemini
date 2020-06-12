@@ -167,7 +167,7 @@ if isfield(new_params, 'prec_dir')
 end
 %% Efield
 if isfield(new_params, 'E0_dir')
-  E0_dir = fullfile(outdir, path_tail(new_params.E0_dir));
+  E0_dir = fullfile(outdir, 'inputs', path_tail(new_params.E0_dir));
   ref_E0_dir = ref_params.E0_dir;
   errs = errs + compare_efield(new_params.ymd, UTsec, E0_dir, ref_E0_dir, tol);
 end
@@ -221,11 +221,6 @@ function errs = compare_precip(ymd, UTsec, prec_dir, ref_prec_dir, tol)
 
 errs = 0;
 
-if ~is_folder(prec_dir)
-  fprintf(2, 'SKIP: precipitation %s \n', prec_dir)
-  return
-end
-
 % often we reuse precipitation inputs without copying over files
 for i = 1:size(UTsec)
   st = ['UTsec ', num2str(UTsec(i))];
@@ -257,11 +252,6 @@ end % function
 function errs = compare_efield(ymd, UTsec, E0_dir, ref_E0_dir, tol)
 
 errs = 0;
-
-if ~is_folder(E0_dir)
-  fprintf(2, "SKIP: Efield %s \n", E0_dir)
-  return
-end
 
 % often we reuse Efield inputs without copying over files
 for i = 1:size(UTsec)
