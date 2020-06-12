@@ -2,3 +2,5 @@ build*/
 resources/project/
 *.asv
 *.m~
+tests/reference
+tests/data
