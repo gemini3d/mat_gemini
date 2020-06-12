@@ -3,7 +3,9 @@ function h5save(filename, varname, A, sizeA, dtype)
 narginchk(3, 5)
 
 if nargin < 4 || isempty(sizeA)
-  if isvector(A)
+  if isscalar(A)
+    sizeA = 1;
+  elseif isvector(A)
     sizeA = length(A);
   else
     sizeA = size(A);
@@ -43,11 +45,13 @@ try
   if length(diskshape) >= 2
      % start is always a row vector, regardless of shape of array
       start = ones(1,ndims(A));
-  else
+  elseif ~isempty(diskshape)
     start = 1;
   end
 
-  if all(diskshape == sizeA)
+  if isscalar(A)
+    h5write(filename, varname, A)
+  elseif all(diskshape == sizeA)
     h5write(filename, varname, A, start, sizeA)
   elseif all(diskshape == fliplr(sizeA))
     h5write(filename, varname, A.', start, fliplr(sizeA))
