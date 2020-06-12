@@ -1,4 +1,4 @@
-function compare_all(outdir, refdir, only)
+function ok = compare_all(outdir, refdir, only)
 % compare entire output directory data files, and input files
 %
 % absolute and relative tolerance account for slight IEEE-754 based differences,
@@ -160,11 +160,13 @@ errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true)
 
 UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
 %% precipitation
-errs = errs + compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
-
+if isfield(new_params, 'prec_dir')
+  errs = errs + compare_precip(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
+end
 %% Efield
-errs = errs + compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
-
+if isfield(new_params, 'E0_dir')
+  errs = errs + compare_efield(UTsec, new_params, new_indir, ref_params, ref_indir, tol);
+end
 %% final
 
 if errs == 0
@@ -218,7 +220,7 @@ errs = 0;
 prec_path = fullfile(new_indir, [name, ext]);
 
 if ~is_folder(prec_path)
-  fprintf(2, ['SKIP: precipitation ', prec_path])
+  fprintf(2, 'SKIP: precipitation %s \n', prec_path)
   return
 end
 

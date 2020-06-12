@@ -34,15 +34,9 @@ catch e
   end
 end
 
-assert(is_file(p.indat_size), 'sim imput data was not written to %s', p.outdir)
+%% check generated files
 
-if isfield(p, 'E0_dir')
-  assert(is_file(fullfile(p.E0_dir, ['20130220_18300.000000.', file_format])), '%s Efield file missing', name)
-end
-
-if isfield(p, 'prec_dir')
-  assert(is_file(fullfile(p.prec_dir, ['20130220_18300.000000.', file_format])), '%s precip file missing', name)
-end
+compare_all(fullfile(p.outdir, '..'), test_dir, 'in')
 
 end  % function
 
