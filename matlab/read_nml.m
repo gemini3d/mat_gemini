@@ -11,9 +11,7 @@ filename = get_configfile(path);
 p = read_namelist(filename, 'base');
 p = merge_struct(p, read_namelist(filename, 'flags'));
 p = merge_struct(p, read_namelist(filename, 'files'));
-p.indat_file = absolute_path(p.indat_file);
-p.indat_size = absolute_path(p.indat_size);
-p.indat_grid = absolute_path(p.indat_grid);
+
 %% deduce data file format from simsize format
 if ~isfield(p, 'file_format')
   [~,~,ext] = fileparts(p.indat_size);
@@ -25,7 +23,7 @@ end
 % config.nml
 %
 % if ~isfield(p, 'outdir')
-%   p.outdir = absolute_path(fullfile(fileparts(p.indat_size), '..'));
+%   p.outdir = fullfile(fileparts(p.indat_size), '..');
 % end
 
 if ~isfield(p, 'nml')
@@ -33,9 +31,6 @@ if ~isfield(p, 'nml')
 end
 
 p = read_if_present(p, filename, 'setup');
-if isfield(p, 'eqdir')
-  p.eqdir = absolute_path(p.eqdir);
-end
 
 read_if_present(p, filename, 'neutral_perturb');
 if ~isfield(p, 'mloc')

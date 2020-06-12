@@ -11,8 +11,7 @@ validateattributes(variable, {'char'}, {'vector'}, 2)
 
 exists = false;
 
-filename = absolute_path(filename);
-% allows ~/data/foo.h5
+filename = expanduser(filename);
 
 if ~is_file(filename)
   warning([filename, ' does not exist'])

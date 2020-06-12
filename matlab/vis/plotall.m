@@ -3,8 +3,8 @@ function xg = plotall(direc, saveplot_fmt, plotfun, xg, visible)
 narginchk(1,5)
 
 validateattributes(direc, {'char'}, {'vector'}, mfilename, 'path to data', 1)
-direc = absolute_path(direc);
-assert(is_folder(direc), [direc, ' is not a directory'])
+
+assert(is_folder(direc), '%s is not a directory', direc)
 
 if nargin<2, saveplot_fmt={}; end  %e.g. {'png'} or {'png', 'eps'}
 

@@ -8,6 +8,16 @@ function expanded = expanduser(p)
 %   that can't handle ~ and Matlab does not consider it a bug per conversations with
 %   Mathworks staff
 %
+%  Benchmark: on laptop and Matlab R2020a
+%
+%   about 200 microseconds
+%   f = @() expanduser('~/foo');
+%   timeit(f)
+%
+%   about 2 microseconds:
+%   f = @() expanduser('foo');
+%   timeit(f)
+%
 %   See also absolute_path
 
 narginchk(1,1)
@@ -23,7 +33,20 @@ end
 expanded = p;
 
 if strcmp(expanded(1), '~')
-  expanded = fullfile(char(java.lang.System.getProperty("user.home")), expanded(2:end));
+
+  home = [];
+  if isunix
+    home = getenv('HOME');
+  elseif ispc
+    home = getenv('USERPROFILE');
+  end
+
+  if isempty(home)
+    % this is 100x slower than getenv() on Matlab R2020a
+    home = char(java.lang.System.getProperty("user.home"));
+  end
+
+  expanded = fullfile(home, expanded(2:end));
 end
 
 end %function

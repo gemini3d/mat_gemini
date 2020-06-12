@@ -9,10 +9,7 @@ function fsize = h5size(filename, variable)
 narginchk(2,2)
 validateattributes(variable, {'char'}, {'vector'}, 2)
 
-filename = absolute_path(filename);
-% allows ~/data/foo.h5
-
-finf = h5info(filename, variable);
+finf = h5info(expanduser(filename), variable);
 fsize = finf.Dataspace.Size;
 
 end % function

@@ -22,7 +22,7 @@ validateattributes(xg, {'struct'}, {'scalar'})
 
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-src_dir = absolute_path(fullfile(cwd, '../..'));
+src_dir = fullfile(cwd, '../..');
 build_dir = fullfile(src_dir, 'build');
 exe = fullfile(build_dir, 'msis_setup');
 if ispc, exe = [exe, '.exe']; end
@@ -31,7 +31,7 @@ if ispc, exe = [exe, '.exe']; end
 if ~is_file(exe)
   cmake(src_dir, build_dir)
 end
-assert(is_file(exe), ['MSIS setup executable not found: ', exe])
+assert(is_file(exe), 'MSIS setup executable not found: %s', exe)
 %% SPECIFY SIZES ETC.
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 alt=xg.alt(:)/1e3;

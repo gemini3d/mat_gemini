@@ -1,6 +1,8 @@
 function last = path_tail(direc)
 % get last part of directory path
 % if filename, return filename with suffix
+narginchk(1, 1)
+validateattributes(direc, {'char'}, {'vector'})
 
 direc = strrep(direc, '\', '/');
 % this breaks for escaped spaces "\ "

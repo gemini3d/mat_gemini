@@ -1,17 +1,17 @@
-function makedir(path)
+function makedir(direc)
 %% malformed paths can be "created" but are not accessible.
 % This function workaround that bug in Matlab mkdir().
 %
 narginchk(1,1)
 
-path = absolute_path(path);
+direc = expanduser(direc);
 
-if ~is_folder(path)
-  mkdir(path);
+if ~is_folder(direc)
+  mkdir(direc);
 end
 
-if ~is_folder(path)
-  error('makedir:not_a_directory', 'not a directory %s', path)
+if ~is_folder(direc)
+  error('makedir:not_a_directory', 'not a directory %s', direc)
 end
 
 end

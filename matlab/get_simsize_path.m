@@ -5,9 +5,6 @@ function [path, ext] = get_simsize_path(path)
 
 narginchk(1,1)
 
-%% full filename give
-path = absolute_path(path);
-
 if is_file(path)
   [path, stem, ext] = fileparts(path);
   if strcmp(stem, 'simsize') && ~isempty(ext)
@@ -17,7 +14,7 @@ if is_file(path)
     return
   elseif is_file([fullfile(path,'simsize'), ext])
     path = fullfile(path);
-    return    
+    return
   else
     error('get_simsize_path:file_not_found', 'could not find %s/simsize%s', path, ext)
   end

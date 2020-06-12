@@ -19,7 +19,6 @@ validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',7)
 if nargin==7, realbits=64; end
 validateattributes(realbits, {'numeric'}, {'scalar','integer'},mfilename, '32 or 64',8)
 
-outdir = absolute_path(outdir);
 makedir(outdir)
 
 switch file_format

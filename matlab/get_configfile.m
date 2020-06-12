@@ -3,9 +3,6 @@ function filename = get_configfile(path)
 
 narginchk(1,1)
 
-% necessary for Matlab
-path = absolute_path(path);
-
 if is_file(path)
   filename = path;
 elseif is_folder(path)

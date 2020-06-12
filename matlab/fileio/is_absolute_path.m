@@ -1,16 +1,15 @@
-%!assert(islogical(is_file))
-%!test ~is_file('0984yr09uj8yfeaas918whfe98h41phfoiSDVarasAf8da1jflasjfdsdf');
-%!test is_file('.');
+function isrel = is_absolute_path(path)
+%% true if path is absolute. Path need not yet exist.
 
-function ret = is_file(path)
-% overloading doesn't work in Octave since it is a core *library* function
-% there doesn't appear to be a solution besides renaming this function.
 narginchk(1,1)
 
-if exist('isfile', 'builtin') == 5 || exist('isfile', 'file') == 2
-  ret = isfile(path);
+path = expanduser(path);
+% both matlab and octave need expanduser
+
+if isoctave
+  isrel = is_absolute_filename(path);
 else
-  ret = exist(path, 'file') == 2;
+  isrel = java.io.File(path).isAbsolute();
 end
 
 end % function

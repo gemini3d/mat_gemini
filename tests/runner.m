@@ -13,7 +13,7 @@ ref_dir = fullfile(cwd, 'data');
 test_dir = fullfile(ref_dir, ['test', name]);
 %% check if capaable of requested file format
 if ~check_file_format(file_format)
-  fprintf(2, 'SKIP: %s % due to missing library\n', name, file_format);
+  fprintf(2, 'SKIP: %s %s due to missing library\n', name, file_format);
   return
 end
 %% get files if needed
@@ -51,7 +51,7 @@ narginchk(1,1)
 if strcmp(file_format, 'nc')
   ok = logical(exist('nccreate', 'file'));
 elseif strcmp(file_format, 'h5')
-  ok = logical(exist('h5create', 'file') == 2);
+  ok = logical(exist('h5create', 'file'));
 else
   ok = false;
 end

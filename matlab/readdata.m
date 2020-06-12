@@ -5,8 +5,7 @@ validateattributes(lxs, {'numeric'}, {'vector', 'numel', 3, 'positive'}, mfilena
 
 lsp = 7;
 
-filename = absolute_path(filename);
-assert(is_file(filename), [filename, 'is not found.'])
+assert(is_file(filename), '%s not found.', filename)
 %% READ DATA FROM AN OUTPUT FILE WRITTEN BY FORTRAN CODE
 
 fid=fopen(filename,'r');
