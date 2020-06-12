@@ -19,3 +19,5 @@ jobs:
 
     - run: octave --eval "test_matlab"
       working-directory: tests
+      env:
+        FC: gfortran-9
