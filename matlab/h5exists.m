@@ -20,7 +20,7 @@ if ~is_file(filename)
 end
 
 try
-  finf = h5info(filename, variable);
+  h5info(filename, variable);
   exists = true;
 catch excp % variable not exist
   if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
