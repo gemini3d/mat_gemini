@@ -36,4 +36,4 @@ runner('3d_glow', 'h5')
 runner('3d_glow', 'nc')
 % done
 toc
-disp('OK: gemini-matlab')
+disp('OK: gemini-matlab:test_project')

@@ -31,3 +31,5 @@ assert(max_mpi([48,40,1], 8) == 8, 'max_mpi fail 8 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,36], 28) == 18, 'max_mpi fail 28 cpu')
+
+disp('OK: gemini-matlab:test_unit')
