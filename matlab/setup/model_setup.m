@@ -23,6 +23,7 @@ if ~isfield(p, 'outdir')
   p.outdir = absolute_path(fileparts(p.indat_size));
 end
 makedir(p.outdir)
+fprintf('copying config.nml to %s\n', p.outdir);
 copy_file(p.nml, p.outdir)
 
 %% is this equilibrium or interpolated simulation

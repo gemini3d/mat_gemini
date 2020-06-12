@@ -12,8 +12,7 @@ cd(fullfile(cwd,'..'))
 ref_dir = fullfile(cwd, 'reference');
 test_dir = fullfile(ref_dir, ['test', name]);
 %% check if capaable of requested file format
-cfg_fn = check_file_format(file_format);
-if isempty(cfg_fn)
+if ~check_file_format(file_format)
   fprintf(2, 'SKIP: %s due to missing %s library\n', name, file_format);
   return
 end
@@ -21,9 +20,9 @@ end
 download_and_extract(name, ref_dir)
 %% setup new test data
 try
-  p = model_setup(fullfile(test_dir, 'inputs', cfg_fn));
-
-  assert(is_file(p.indat_size), '%s simsize missing', name)
+  p = read_nml(test_dir);
+  p.file_format = file_format;
+  p = model_setup(p);
 
   if isfield(p, 'E0_dir')
     assert(is_file(fullfile(p.E0_dir, ['20130220_18000.000000.', ext])), '%s Efield file missing', name)
@@ -43,19 +42,19 @@ end
 end  % function
 
 
-function filename = check_file_format(file_format)
+function ok = check_file_format(file_format)
 % Octave doesn't currently have HDF5, but can do NetCDF4 with optional
 % toolbox.
 % Matlab has HDF5 and NetCDF4
 %
 narginchk(1,1)
 
-if strcmp(file_format, 'nc') &&  exist('nccreate', 'file') == 2
-  filename = 'config_nc4.nml';
-elseif strcmp(file_format, 'h5') && exist('h5create', 'file') == 2
-  filename = 'config.nml';
+if strcmp(file_format, 'nc')
+  ok = logical(exist('nccreate', 'file'));
+elseif strcmp(file_format, 'h5')
+  ok = logical(exist('h5create', 'file') == 2);
 else
-  filename = [];
+  ok = false;
 end
 
 end % function

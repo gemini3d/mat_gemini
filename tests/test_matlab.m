@@ -9,18 +9,13 @@ try %#ok<TRYNC>
   pkg('load', 'netcdf')
 end
 %% setup
-if exist('checkcode', 'file')
+if exist('checkcode', 'file') && ~exist('nolint', 'var')
   checkcode_recursive(fullfile(cwd, '..'))
 else
   fprintf(2, 'SKIP: checkcode\n');
 end
 
 tic
-%% config.nml unit test
-p = read_config(fullfile(cwd, 'future/test2dew_fang', 'config.nml'));
-assert(p.xdist == 200000)
-q = read_config(fullfile(cwd, 'future/test2dew_fang'));
-assert(isequaln(p, q), 'file or folder should give same result')
 %% dateinc unit test
 [ymd, utsec] = dateinc(0.5, [2012,3,27], 1500);
 assert(all(ymd == [2012, 3, 27]))
@@ -35,8 +30,10 @@ assert(max_mpi([48,40,1], 8) == 8, 'max_mpi fail 8 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,36], 28) == 18, 'max_mpi fail 28 cpu')
-%% test2dew_eq_hdf5
+%% test2dew_eq_h5
 runner('2d_eq', 'h5')
+%% test2dew_eq_nc
+runner('2d_eq', 'nc')
 %% test2dew_fang_h5
 runner('2d_fang', 'h5')
 %% test2dew_glow_h5

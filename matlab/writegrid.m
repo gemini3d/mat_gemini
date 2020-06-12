@@ -1,11 +1,14 @@
-function writegrid(p, xg)
+function writegrid(p, xg, outdir)
 %% write grid to raw binary files
 % includes STUFF NOT NEEDED BY FORTRAN CODE BUT POSSIBLY USEFUL FOR PLOTTING
 
-narginchk(2, 2)
+narginchk(2, 3)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
+if nargin < 3
+  outdir = p.outdir;
+end
 %% sanity check grid
 ok = check_grid(xg);
 if ~ok
@@ -14,14 +17,16 @@ end
 
 %% output directory for the simulation grids may be different
 % e.g. "inputs" than the base simdir
-makedir(p.outdir)
+makedir(outdir)
 
 xg.git = git_revision();
 
+log_meta_nml(outdir, xg.git)
+
 switch p.file_format
-  case {'h5','hdf5'}, write_hdf5(p.outdir, xg)
-  case {'nc', 'nc4'}, write_nc4(p.outdir, xg)
-  case {'dat','raw'}, write_raw(p.outdir, xg, p.realbits)
+  case {'h5','hdf5'}, write_hdf5(outdir, xg)
+  case {'nc', 'nc4'}, write_nc4(outdir, xg)
+  case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
@@ -107,8 +112,6 @@ h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
 h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 
 %% metadata
-
-log_meta_nml(fileparts(fn), xg.git)
 
 if ~verLessThan('matlab', '9.8')
   try
