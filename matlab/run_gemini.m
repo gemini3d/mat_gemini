@@ -38,7 +38,7 @@ else
   end
 end
 %% assemble run command
-np = get_mpi_count(cfg.indat_size);
+np = get_mpi_count(fullfile(outdir, cfg.indat_size));
 prepend = octave_mingw_path();
 cmd = sprintf('%s -n %d %s %s %s', gemini_params.mpiexec, np, gemini_exe, cfg.nml, outdir);
 disp(cmd)

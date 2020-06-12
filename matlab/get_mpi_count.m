@@ -28,6 +28,8 @@ elseif is_file(sizefn)
   else
     error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
   end
+else
+  error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
 end
 
 N = max_mpi(dsize, max_cpu);
