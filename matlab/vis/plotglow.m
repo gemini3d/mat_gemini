@@ -48,8 +48,9 @@ for i = 1:length(file_list)
     hf = plot_emissions(x2, wavelengths, squeeze(bFrame), time_str, hf, visible);
   end
 
-  save_glowframe(params.flagoutput, filename, saveplot_fmt, hf)
-
+  if params.flagoutput ~= 3
+    save_glowframe(filename, saveplot_fmt, hf)
+  end
   % we use dtout instead of dtglow because we're only plotting times the
   % full simulation outputs too.
   [ymd, UTsec] = dateinc(params.dtout, ymd, UTsec);
