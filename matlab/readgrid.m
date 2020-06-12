@@ -31,9 +31,6 @@ if ~is_file(fn)
   error('readgrid:read_hdf5:file_not_found', '%s not found', fn)
 end
 
-xgf.filename = fn;
-xgf.lx = simsize(path);
-
 if isoctave
   xgf = load(fn);
 else
@@ -42,13 +39,17 @@ else
   end
 end
 
+% do this last to avoid overwriting e.g. Octave
+xgf.filename = fn;
+xgf.lx = simsize(path);
+
 
 end  % function read_hdf5
 
 
 function xgf = read_nc4(path)
 
-try
+try %#ok<TRYNC>
   pkg load netcdf
 end
 
@@ -57,12 +58,12 @@ if ~is_file(fn)
   error('readgrid:read_nc4:file_not_found', '%s not found', fn)
 end
 
-xgf.filename = fn;
-xgf.lx = simsize(path);
-
 for v = ncvariables(fn)
   xgf.(v{:}) = ncread(fn, v{:});
 end
+
+xgf.filename = fn;
+xgf.lx = simsize(path);
 
 end  % function read_nc4
 
