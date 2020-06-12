@@ -12,8 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - run: |
         sudo apt -yq update
-        sudo apt install -yq --no-install-recommends octave
+        sudo apt install -yq --no-install-recommends octave octave-netcdf
+
     - run: octave --eval "test_matlab"
       working-directory: tests
