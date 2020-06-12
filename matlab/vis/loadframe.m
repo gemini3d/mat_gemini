@@ -53,6 +53,7 @@ end
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
 dat_shape = size(dat.ne);
+dat_shape(3) = size(dat.ne, 3);  % in case of 2D dat.ne, this is how to use Matlab implicit 3d with size.
 %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 % we check each dimension because of possibility of 2D dimension swapping
 % x1

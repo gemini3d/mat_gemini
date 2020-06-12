@@ -13,7 +13,7 @@ ref_dir = fullfile(cwd, 'data');
 test_dir = fullfile(ref_dir, ['test', name]);
 %% check if capaable of requested file format
 if ~check_file_format(file_format)
-  fprintf(2, 'SKIP: %s due to missing %s library\n', name, file_format);
+  fprintf(2, 'SKIP: %s % due to missing library\n', name, file_format);
   return
 end
 %% get files if needed
@@ -28,7 +28,7 @@ try
 catch e
   switch e.identifier
     case 'get_frame_filename:file_not_found'
-      fprintf(2, 'SKIP: %s due to no data file\n', name)
+      fprintf(2, 'SKIP: %s %s due to no data file\n', name, file_format)
       return
     otherwise, rethrow(e)
   end
