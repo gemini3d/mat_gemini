@@ -21,7 +21,7 @@ download_and_extract(name, ref_dir)
 %% setup new test data
 p = read_nml(test_dir);
 p.file_format = file_format;
-p.outdir = fullfile(tempdir, name);
+p.outdir = fullfile(tempdir, ['test',name]);
 
 try
   p = model_setup(p);

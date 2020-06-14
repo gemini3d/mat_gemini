@@ -12,7 +12,7 @@ assert(is_folder(folder), '%s is not a folder', folder)
 flist = dir([folder, '/**/*.m']);
 N = length(flist);
 
-fprintf('checking %s Matlab files under ', folder)
+fprintf('checking %d Matlab files under %s', N, folder)
 
 h = waitbar(0);
 
