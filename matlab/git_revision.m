@@ -36,7 +36,7 @@ if ret ~= 0
 end
 git.branch = strtrim(msg);
 
-[~,msg] = system('git remote -v');
+[ret,msg] = system(['git -C ', cwd, ' remote -v']);
 if ret ~= 0
   warning('Could not determine Git remote')
   return
