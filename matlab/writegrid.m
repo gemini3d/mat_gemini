@@ -8,6 +8,7 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
 %% sanity check grid
 ok = check_grid(xg);
+
 if ~ok
   error('writegrid:value_error', 'problematic grid values')
 end
@@ -166,6 +167,7 @@ dimx3i = {'dimx3i', lx3+1};
 dimx1d = {'dimx1d', lx1+Ng-1};
 dimx2d = {'dimx2d', lx2+Ng-1};
 dimx3d = {'dimx3d', lx3+Ng-1};
+
 dimx1ghost = {'dimx1ghost', lx1 + Ng};
 dimx2ghost = {'dimx2ghost', lx2 + Ng};
 dimx3ghost = {'dimx3ghost', lx3 + Ng};

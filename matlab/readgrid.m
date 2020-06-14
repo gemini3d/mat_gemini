@@ -10,7 +10,7 @@ validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 
 [path, suffix] = get_simsize_path(path);
 
 switch suffix
-  case {'.h5', '.hdf5'}, xg = read_hdf5(path);
+  case '.h5', xg = read_hdf5(path);
   case '.nc', xg = read_nc4(path);
   case '.dat', xg = read_raw(path, realbits);
   otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
