@@ -31,7 +31,10 @@ if ispc, exe = [exe, '.exe']; end
 if ~is_file(exe)
   cmake(src_dir, build_dir)
 end
-assert(is_file(exe), 'MSIS setup executable not found: %s', exe)
+
+if ~is_file(exe),
+  error('msis_matlab3d:file_not_found', 'MSIS setup executable not found: %s', exe)
+end
 %% SPECIFY SIZES ETC.
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 alt=xg.alt(:)/1e3;
@@ -69,7 +72,8 @@ fclose(fid);
 fout = fullfile(tempdir, 'msis_setup_output.dat');
 cmd = [exe,' ',fin,' ',fout,' ',int2str(lz)];
 disp(cmd)
-[status, msg] = system(cmd);   %output written to file
+prepend = octave_mingw_path();
+[status, msg] = system([prepend, ' ', cmd]);   %output written to file
 if status~=0, error('msis_matlab3D:runtime_error', 'problem running MSIS %s', msg), end
 
 fid=fopen(fout,'r');

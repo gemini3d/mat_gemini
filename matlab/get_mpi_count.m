@@ -15,8 +15,11 @@ narginchk(1,2)
 if nargin < 2, max_cpu = []; end
 
 %% config.nml file or directory or simsize.h5?
+
 if is_folder(sizefn)
   dsize = simsize(sizefn);
+elseif is_folder(fileparts(sizefn))
+  dsize = simsize(fileparts(sizefn));
 elseif is_file(sizefn)
   [~,~,ext] = fileparts(sizefn);
   if any(strcmp(ext, {'.h5', '.nc', '.dat'}))
