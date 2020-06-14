@@ -36,5 +36,14 @@ run_gemini('/path/to/config.nml', '/path/to/output')
 
 ### GNU Octave
 
-GNU Octave currently can do NetCDF4, but not HDF5.
+Currently, bugs and feature limitations in Octave prevent the full use of Octave with Gemini.
+
+#### HDF5: feature missing from Octave
+
+GNU Octave currently can not do HDF5.
 Octave's `save('-hdf5','out.h5',...)` saves the variables in a fixed layout that's not usable for Gemini.
+
+#### NetCDF4: buggy file writing
+
+Unfortunately, there is also a bug in Octave NetCDF interface that causes only the first value to be written to a vector (1D) variable, leaving the other values at fill value.
+This happens on Windows and Linux.
