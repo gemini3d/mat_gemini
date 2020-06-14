@@ -48,11 +48,14 @@ cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, outdir);
 disp(cmd)
 cmd = [prepend, ' ', cmd];
 %% dry run
-[ret, msg] = system([cmd, ' -dryrun']);
+ret = system([cmd, ' -dryrun']);
 if ret~=0
-  error('run_gemini:runtime_error', 'Gemini dryrun failed: %', msg)
+  error('run_gemini:runtime_error', 'Gemini dryrun failed')
 end
 %% run simulation
 ret = system(cmd);
-assert(ret==0, 'Gemini run failed')
+if ret~=0
+  error('run_gemini:runtime_error', 'Gemini run failed')
+end
+
 end % function
