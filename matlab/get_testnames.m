@@ -3,19 +3,17 @@ narginchk(1,2)
 
 if nargin < 2, only = []; end
 
-if isempty(only)
-  found = dir(topdir);
-else
-  found = dir(fullfile(topdir, ['*', only, '*']));
-end
-
 names = {};
-j = 0;
-for i = 1:size(found)
-  if found(i).isdir && length(found(i).name) > 2
-    j = j+1;
-    [~, name] = fileparts(found(i).name);
+j = 1;
+dirs = dir(topdir);
+for i = 1:length(dirs)
+  if dirs(i).isdir && length(dirs(i).name) > 2
+    [~, name] = fileparts(dirs(i).name);
+    if ~isempty(only) && isempty(strfind(name, only))
+      continue
+    end
     names{j} = name; %#ok<AGROW>
+    j = j+1;
   end
 end
 
