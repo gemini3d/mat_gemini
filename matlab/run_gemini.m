@@ -23,6 +23,10 @@ assert(ret == 0, 'mpiexec not found')
 cfg = read_config(cfgfile);
 cfg.outdir = outdir;
 
+if isfield(gemini_params, 'file_format') && ~isempty(gemini_params.file_format)
+  cfg.file_format = gemini_params.file_format;
+end
+
 if gemini_params.overwrite
   % note, if an old, incompatible shape exists this will fail
   % we didn't want to automatically recursively delete directories,
