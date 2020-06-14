@@ -1,4 +1,4 @@
-function p = model_setup(p, outdir)
+function cfg = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 
 narginchk(1, 2)
@@ -10,46 +10,37 @@ if ~exist('is_file', 'file')
   run(fullfile(cwd, '../../setup.m'))
 end
 %% parse input
-if isstruct(p)
+if isstruct(cfg)
   % pass
-elseif ischar(p)
+elseif ischar(cfg)
   % path to config.nml
-  p = read_nml(p);
+  cfg = read_nml(cfg);
 else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
 if isempty(outdir)
-  if ~isfield(p, 'outdir') || isempty(p.outdir)
+  if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
     error('model_setup:file_not_found', 'please specify outdir or p.outdir')
   end
 else
   % override with outdir regardless
-  p.outdir = outdir;
+  cfg.outdir = outdir;
 end
 
-makedir(p.outdir)
-fprintf('copying config.nml to %s\n', p.outdir);
-copy_file(p.nml, p.outdir)
-%% allow output to new directory
-if isfield(p, 'prec_dir') && ~isempty(p.prec_dir)
-  if ~is_folder(p.prec_dir)
-    % make absolute
-    p.prec_dir = fullfile(p.outdir, path_tail(p.prec_dir));
-  end
-end
-if isfield(p, 'E0_dir') && ~isempty(p.E0_dir)
-  if ~is_folder(p.E0_dir)
-    % make absolute
-    p.E0_dir = fullfile(p.outdir, path_tail(p.E0_dir));
-  end
-end
+cfg = make_valid_paths(cfg);
+
+makedir(cfg.input_dir)
+fprintf('copying config.nml to %s\n', cfg.input_dir);
+copy_file(cfg.nml, cfg.input_dir)
+
+
 %% is this equilibrium or interpolated simulation
-if isfield(p, 'eqdir')
-  model_setup_interp(p)
+if isfield(cfg, 'eqdir') && ~isempty(cfg.eqdir)
+  model_setup_interp(cfg)
 else
-  model_setup_equilibrium(p)
+  model_setup_equilibrium(cfg)
 end
 
-if ~nargout, clear('p'), end
+if ~nargout, clear('cfg'), end
 end % function

@@ -1,14 +1,11 @@
-function writegrid(p, xg, outdir)
+function writegrid(p, xg)
 %% write grid to raw binary files
 % includes STUFF NOT NEEDED BY FORTRAN CODE BUT POSSIBLY USEFUL FOR PLOTTING
 
-narginchk(2, 3)
+narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
-if nargin < 3
-  outdir = p.outdir;
-end
 %% sanity check grid
 ok = check_grid(xg);
 if ~ok
@@ -17,27 +14,27 @@ end
 
 %% output directory for the simulation grids may be different
 % e.g. "inputs" than the base simdir
-makedir(outdir)
-
 xg.git = git_revision();
 
-log_meta_nml(outdir, xg.git)
+log_meta_nml(p.outdir, xg.git)
 
 switch p.file_format
-  case {'h5','hdf5'}, write_hdf5(outdir, xg)
-  case {'nc', 'nc4'}, write_nc4(outdir, xg)
-  case {'dat','raw'}, write_raw(outdir, xg, p.realbits)
+  case 'h5', write_hdf5(p, xg)
+  case 'nc', write_nc4(p, xg)
+  case 'dat', write_raw(p, xg, p.realbits)
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
 end % function
 
 
-function write_hdf5(dir_out, xg)
+function write_hdf5(p, xg)
 
-fn = fullfile(dir_out, 'simsize.h5');
+%% size
+fn = with_suffix(p.indat_size, '.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
+
 h5save(fn, '/lx1', int32(xg.lx(1)))
 h5save(fn, '/lx2', int32(xg.lx(2)))
 h5save(fn, '/lx3', int32(xg.lx(3)))
@@ -46,7 +43,8 @@ lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
-fn = fullfile(dir_out, 'simgrid.h5');
+%% grid
+fn = with_suffix(p.indat_grid, '.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -130,13 +128,14 @@ h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 end % function
 
 
-function write_nc4(dir_out, xg)
+function write_nc4(p, xg)
 
 try %#ok<TRYNC>
   pkg load netcdf
 end
 
-fn = fullfile(dir_out, 'simsize.nc');
+%% size
+fn = with_suffix(p.indat_size, '.nc');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -148,7 +147,8 @@ lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
-fn = fullfile(dir_out, 'simgrid.nc');
+%% grid
+fn = with_suffix(p.indat_grid, '.nc');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -235,13 +235,19 @@ function write_raw(outdir, xg, realbits)
 
 freal = ['float', int2str(realbits)];
 
-filename = fullfile(outdir, 'simsize.dat');
-disp(['write ',filename])
-fid = fopen(filename, 'w');
+%% size
+fn = with_suffix(p.indat_size, '.dat');
+disp(['write ', fn])
+
+fid = fopen(fn, 'w');
 fwrite(fid, xg.lx, 'integer*4');
 fclose(fid);
 
-fid = fopen(fullfile(outdir, 'simgrid.dat'), 'w');
+%% grid
+fn = with_suffix(p.indat_grid, '.h5');
+disp(['write ', fn])
+
+fid = fopen(fn, 'w');
 
 fwrite(fid,xg.x1, freal);    %coordinate values
 fwrite(fid,xg.x1i, freal);

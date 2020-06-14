@@ -8,7 +8,7 @@ validateattributes(UTsec, {'numeric'}, {'vector'}, mfilename, 'UTC second', 3)
 if nargin < 8 || isempty(realbits), realbits = 64; end
 
 if nargin < 7 || isempty(config_file)
-  config_file = fullfile(direc, 'inputs');
+  config_file = direc;
 end
 
 if nargin < 5 || isempty(flagoutput) || isempty(mloc)

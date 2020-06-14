@@ -9,9 +9,6 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 %% Paths
 % this script is called from numerous places, so ensure necessary path
 addpath(fullfile(fileparts(mfilename('fullpath')), '../vis'))
-%% copy config file
-makedir(p.outdir)
-copy_file(p.nml, p.outdir)
 %% READ Equilibrium SIMULATION INFO
 if ~is_folder(p.eqdir)
   error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?', p.eqdir)
@@ -43,7 +40,7 @@ check_temperature(Tsi)
 
 %% write the interpolated grid and data
 writegrid(p, xg)
-writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.outdir, p.file_format);
+writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.indat_file, p.file_format);
 
 end % function eq2dist
 

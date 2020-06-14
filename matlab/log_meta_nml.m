@@ -13,8 +13,9 @@ else
 end
 
 fid = fopen(metafn, 'w');
-fprintf(fid, '"%s"\n', '&setup_meta');
+fprintf(fid, '%s\n', '&setup_meta');
 
+% variable string values get quoted per NML standard
 fprintf(fid, 'matlab_version = "%s"\n', version());
 
 fprintf(fid, 'git_version = "%s"\n', meta.git_version);

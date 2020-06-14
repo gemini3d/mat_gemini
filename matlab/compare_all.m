@@ -142,15 +142,11 @@ narginchk(3,3)
 compare_grid(outdir, refdir, tol)
 
 %% check initial condition data
-ref_params = read_config(refdir);
-ref_indir = fullfile(refdir, 'inputs');
-[~, ref_name, ref_ext] = fileparts(ref_params.indat_file);
-ref = loadframe3Dcurvnoelec(fullfile(ref_indir, [ref_name, ref_ext]));
+ref_params = make_valid_paths(read_config(refdir), refdir);
+ref = loadframe3Dcurvnoelec(ref_params.indat_file);
 
-new_params = read_config(outdir);
-new_indir = fullfile(outdir, 'inputs');
-[~, new_name, new_ext] = fileparts(ref_params.indat_file);
-new = loadframe3Dcurvnoelec(fullfile(new_indir, [new_name, new_ext]));
+new_params = make_valid_paths(read_config(outdir), outdir);
+new = loadframe3Dcurvnoelec(new_params.indat_file);
 
 errs = 0;
 
@@ -161,15 +157,13 @@ errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true)
 UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
 %% precipitation
 if isfield(new_params, 'prec_dir')
-  prec_dir = fullfile(outdir, 'inputs', path_tail(new_params.prec_dir));
-  ref_prec_dir = ref_params.prec_dir;
-  errs = errs + compare_precip(new_params.ymd, UTsec, prec_dir, ref_prec_dir, tol);
+  errs = errs + compare_precip(new_params.ymd, UTsec, ...
+    new_params.prec_dir, ref_params.prec_dir, tol);
 end
 %% Efield
 if isfield(new_params, 'E0_dir')
-  E0_dir = fullfile(outdir, 'inputs', path_tail(new_params.E0_dir));
-  ref_E0_dir = ref_params.E0_dir;
-  errs = errs + compare_efield(new_params.ymd, UTsec, E0_dir, ref_E0_dir, tol);
+  errs = errs + compare_efield(new_params.ymd, UTsec, ...
+    new_params.E0_dir, ref_params.E0_dir, tol);
 end
 %% final
 

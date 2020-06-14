@@ -1,4 +1,4 @@
-function writedata(ymd, UTsec,ns,vsx1,Ts, outdir, file_format, realbits)
+function writedata(ymd, UTsec,ns,vsx1,Ts, fn, file_format, realbits)
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE
 % DO NOT HERE OUTPUT ANY OF THE ELECTRODYNAMIC
@@ -14,25 +14,25 @@ validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'se
 validateattributes(ns, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'density', 3)
 validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 4)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 5)
-validateattributes(outdir, {'char'}, {'vector'}, mfilename, 'output directory',6)
+validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',6)
 validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',7)
 if nargin==7, realbits=64; end
 validateattributes(realbits, {'numeric'}, {'scalar','integer'},mfilename, '32 or 64',8)
 
-makedir(outdir)
-
 switch file_format
-  case {'h5','hdf5'}, write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
-  case {'dat','raw'}, write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
-  case {'nc','nc4'}, write_nc4(outdir, ymd, UTsec, ns, vsx1, Ts)
+  case 'h5', write_hdf5(fn, ymd, UTsec, ns, vsx1, Ts)
+  case 'nc', write_nc4(fn, ymd, UTsec, ns, vsx1, Ts)
+  case 'dat', write_raw(fn, ymd, UTsec, ns, vsx1, Ts, realbits)
   otherwise, error('writedata:value_error', 'unknown file_format %s', file_format)
 end
 
 end % function
 
 
-function write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts)
-fn = fullfile(outdir,'initial_conditions.h5');
+function write_hdf5(fn, ymd, UTsec, ns, vsx1, Ts)
+
+fn = with_suffix(fn, '.h5');
+
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -48,13 +48,14 @@ h5save(fn, '/Ts', Ts, [], freal)
 end % function
 
 
-function write_nc4(outdir, ymd, UTsec, ns, vsx1, Ts)
+function write_nc4(fn, ymd, UTsec, ns, vsx1, Ts)
 
-try
+try %#ok<TRYNC>
   pkg load netcdf
 end
 
-fn = fullfile(outdir, 'initial_conditions.nc');
+fn = with_suffix(fn, '.nc');
+
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
@@ -72,9 +73,10 @@ end % function
 
 
 
-function write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
+function write_raw(fn, ymd, UTsec, ns, vsx1, Ts, realbits)
 
-fn = fullfile(outdir,'initial_conditions.dat');
+fn = with_suffix(fn, '.dat');
+
 disp(['write ',fn])
 fid=fopen(fn, 'w');
 
@@ -88,4 +90,4 @@ fwrite(fid,Ts, freal);
 
 fclose(fid);
 
-end
+end % function

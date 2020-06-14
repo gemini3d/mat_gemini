@@ -5,7 +5,6 @@ if nargin<2, saveplot_fmt={'png'}; end  %e.g. {'png'} or {'png', 'eps'}
 if nargin<3, visible = 'on'; end
 
 assert(is_folder(direc), [direc, ' is not a directory.'])
-config_dir = fullfile(direc, 'inputs');
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -13,11 +12,10 @@ wavelengths = {'3371', '4278', '5200', '5577', '6300', '7320', '10400', ...
   '3466', '7774', '8446', '3726', 'LBH', '1356', '1493', '1304'};
 
 %READ IN SIMULATION INFO
-params = read_config(config_dir);
-%glow_params = read_namelist([config_dir, '/config.nml'], 'glow');
+params = read_config(direc);
 
 %READ IN THE GRID
-xg = readgrid(config_dir);
+xg = readgrid(direc);
 
 %% GET THE SYSTEM SIZE
 lwave=length(wavelengths);

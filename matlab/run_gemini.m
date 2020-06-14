@@ -21,7 +21,7 @@ gemini_exe = get_gemini_exe(gemini_exe);
 assert(ret == 0, 'mpiexec not found')
 %% check if model needs to be setup
 cfg = read_config(cfgfile);
-cfg.outdir = fullfile(outdir, 'inputs');
+cfg.outdir = outdir;
 
 if gemini_params.overwrite
   % note, if an old, incompatible shape exists this will fail

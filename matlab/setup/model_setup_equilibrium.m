@@ -13,6 +13,6 @@ writegrid(p, xg);
 
 [ns,Ts,vsx1] = eqICs3D(p, xg);
 % Note: should be rewritten to include the neutral module form the fortran code
-writedata(p.ymd, p.UTsec0, ns, vsx1, Ts, p.outdir, p.file_format);
+writedata(p.ymd, p.UTsec0, ns, vsx1, Ts, p.indat_file, p.file_format);
 
 end % function
