@@ -17,6 +17,8 @@ pabs = absolute_path('2foo');
 pabs2 = absolute_path('4foo');
 assert(~strcmp(pabs(1), '2'), 'absolute_path')
 assert(strcmp(pabs(1:2), pabs2(1:2)), 'absolute_path 2 files')
+%% with_suffix
+assert(strcmp(with_suffix('foo.h5', '.nc'), 'foo.nc'), 'with_suffix switch')
 %% dateinc
 [ymd, utsec] = dateinc(0.5, [2012,3,27], 1500);
 assert(all(ymd == [2012, 3, 27]))
@@ -31,5 +33,3 @@ assert(max_mpi([48,40,1], 8) == 8, 'max_mpi fail 8 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,40], 28) == 20, 'max_mpi fail 28 cpu')
 assert(max_mpi([48,1,36], 28) == 18, 'max_mpi fail 28 cpu')
-
-disp('OK: gemini-matlab:test_unit')

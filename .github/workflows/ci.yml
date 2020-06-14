@@ -16,9 +16,9 @@ jobs:
 
     - run: |
         sudo apt -yq update
-        sudo apt install -yq --no-install-recommends octave octave-netcdf
+        sudo apt install -yq --no-install-recommends octave # octave-netcdf
 
-    - run: octave --eval "test_matlab"
+    - run: octave --eval "test_unit"
       working-directory: tests
       env:
         FC: gfortran-9
