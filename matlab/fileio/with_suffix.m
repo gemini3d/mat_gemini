@@ -5,7 +5,7 @@ function filename = with_suffix(filename, suffix)
 
 [direc, name, ext] = fileparts(filename);
 if ~strcmp(ext, suffix)
-  filename = [direc, name, suffix];
+  filename = fullfile(direc, [name, suffix]);
 end
 
 end % funciton
