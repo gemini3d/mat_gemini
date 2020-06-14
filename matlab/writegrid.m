@@ -33,8 +33,13 @@ switch p.file_format
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
 
-if ~isequal(xg, xg_check)
-  error('writegrid:value_error', 'failed to correctly write / read %s', p.indat_grid)
+rtol = 1e-7;  % allow for single precision
+names = {'x1', 'x1i', 'dx1b', 'dx1h', 'x2', 'x2i', 'dx2b', 'dx2h', 'x3', 'x3i', 'dx3b', 'dx3h', ...
+  'h1','h2', 'h3','h1x1i', 'h2x1i', 'h3x1i', 'h1x2i', 'h2x2i', 'h3x2i', 'h1x3i', 'h2x3i', 'h3x3i', ...
+  'gx1', 'gx2', 'gx3', 'Bmag', 'I', 'nullpts', 'e1', 'e2', 'e3', 'er', 'etheta', 'ephi',...
+  'r','theta','phi', 'x','y','z'};
+for i = 1:length(names)
+  assert_allclose(xg.(names{i}), xg_check.(names{i}), rtol)
 end
 
 if ~ok
