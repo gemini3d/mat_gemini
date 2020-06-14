@@ -42,7 +42,9 @@ if ret ~= 0
   return
 end
 mat = regexp(msg,'^origin\s+(.*)\s+\(fetch\)', 'tokens');
-git.remote = mat{:};
+if ~isempty(mat)
+  git.remote = mat{1}{1};
+end
 
 [ret, msg] = system(['git -C ', cwd, ' rev-parse --short HEAD']);
 if ret ~= 0
