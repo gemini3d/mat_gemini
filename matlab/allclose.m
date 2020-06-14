@@ -34,6 +34,11 @@ end
 actual = actual(:);
 desired = desired(:);
 
+if isinteger(desired)
+  close_enough = isequal(actual, desired);
+  return
+end
+
 measdiff = abs(actual-desired);
 tol = atol + rtol * abs(desired);
 

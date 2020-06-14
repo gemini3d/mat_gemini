@@ -60,6 +60,9 @@ end
 actual = actual(:);
 desired = desired(:);
 
+if isinteger(desired)
+  actual = cast(actual, 'like', desired);
+end
 measdiff = abs(actual-desired);
 tol = atol + rtol * abs(desired);
 result = measdiff <= tol;
