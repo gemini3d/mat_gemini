@@ -19,11 +19,26 @@ xg.git = git_revision();
 
 log_meta_nml(p.outdir, xg.git)
 
+%% because grid is so important, and to catch bugs in file I/O early, let's verify the file
 switch p.file_format
-  case 'h5', write_hdf5(p, xg)
-  case 'nc', write_nc4(p, xg)
-  case 'dat', write_raw(p, xg, p.realbits)
+  case 'h5'
+    write_hdf5(p, xg)
+    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.h5'));
+  case 'nc'
+    write_nc4(p, xg)
+    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.nc'));
+  case 'dat'
+    write_raw(p, xg, p.realbits)
+    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.dat'));
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
+end
+
+if ~isequal(xg, xg_check)
+  error('writegrid:value_error', 'failed to correctly write / read %s', p.indat_grid)
+end
+
+if ~ok
+  error('writegrid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
 end % function
