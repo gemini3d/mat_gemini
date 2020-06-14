@@ -40,12 +40,14 @@ end
 %% assemble run command
 np = get_mpi_count(fullfile(outdir, cfg.indat_size));
 prepend = octave_mingw_path();
-cmd = sprintf('%s -n %d %s %s %s', gemini_params.mpiexec, np, gemini_exe, cfg.nml, outdir);
+cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, outdir);
 disp(cmd)
 cmd = [prepend, ' ', cmd];
 %% dry run
 [ret, msg] = system([cmd, ' -dryrun']);
-assert(ret==0, ['Gemini dryrun failed: ', msg])
+if ret~=0
+  error('run_gemini:runtime_error', 'Gemini dryrun failed: %', msg)
+end
 %% run simulation
 ret = system(cmd);
 assert(ret==0, 'Gemini run failed')
