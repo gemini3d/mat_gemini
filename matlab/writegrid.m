@@ -15,11 +15,8 @@ end
 
 %% output directory for the simulation grids may be different
 % e.g. "inputs" than the base simdir
-xg.git = git_revision();
+% because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
-log_meta_nml(p.outdir, xg.git)
-
-%% because grid is so important, and to catch bugs in file I/O early, let's verify the file
 switch p.file_format
   case 'h5'
     write_hdf5(p, xg)
@@ -45,6 +42,8 @@ end
 if ~ok
   error('writegrid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
+
+log_meta_nml(git_revision(), fullfile(p.outdir, 'setup_meta.nml'))
 
 end % function
 

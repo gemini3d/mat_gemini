@@ -41,6 +41,9 @@ else
     end
   end
 end
+
+log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'gemini_meta.nml'))
+
 %% assemble run command
 np = get_mpi_count(fullfile(outdir, cfg.indat_size));
 prepend = octave_mingw_path();

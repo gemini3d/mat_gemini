@@ -1,18 +1,14 @@
-function log_meta_nml(direc, meta)
+function log_meta_nml(meta, filename)
 
 narginchk(2,2)
-validateattributes(meta, {'struct'}, {'scalar'},2)
+validateattributes(meta, {'struct'}, {'scalar'},1)
+validateattributes(filename, {'char'}, {'vector'},2)
 
-if is_folder(direc)
-  metafn = fullfile(direc, 'setup_meta.nml');
-elseif is_file(direc)
-  direc = fileparts(direc);
-  metafn = fullfile(direc, 'setup_meta.nml');
-else
-  error('please provide a directory or filename to log metadata to')
+fid = fopen(filename, 'w');
+if fid < 1
+  error('log_meta_nml:os_error', 'could not create file %s', filename)
 end
 
-fid = fopen(metafn, 'w');
 fprintf(fid, '%s\n', '&setup_meta');
 
 % variable string values get quoted per NML standard
