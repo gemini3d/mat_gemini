@@ -14,7 +14,7 @@ assert(is_folder(cwd), '%s is not a folder', cwd)
 
 % empty init in case can't read Git info
 % this avoids a lot of needless "if isfield" statements in consumers
-git = struct('git_version', '', 'branch', '', 'commit', '', 'porcelain', false);
+git = struct('git_version', '', 'remote', '', 'branch', '', 'commit', '', 'porcelain', false);
 
 [ret, msg] = system(['git -C ', cwd, ' --version']);
 if ret ~= 0
@@ -35,6 +35,14 @@ if ret ~= 0
   return
 end
 git.branch = strtrim(msg);
+
+[~,msg] = system('git remote -v');
+if ret ~= 0
+  warning('Could not determine Git remote')
+  return
+end
+mat = regexp(msg,'^origin\s+(.*)\s+\(fetch\)', 'tokens');
+git.remote = mat{:};
 
 [ret, msg] = system(['git -C ', cwd, ' rev-parse --short HEAD']);
 if ret ~= 0
