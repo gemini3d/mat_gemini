@@ -16,6 +16,12 @@ To add paths to all the gemini-matlab functions, from the "gemini-matlab/" direc
 setup
 ```
 
+To run the self-tests, helping ensure you'll be able to correctly generate simulation inputs, from Matlab in the gemini-matlab directory:
+
+```matlab
+runtests('tests')
+```
+
 ### Plot all simulation outputs
 
 ```matlab
