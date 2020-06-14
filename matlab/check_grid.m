@@ -5,11 +5,14 @@ narginchk(1,1)
 validateattributes(xg, {'struct'}, {'scalar'}, 1)
 
 tol_inc = 0.1;
+tol_inc_big = 1e6;
+tol_big = 1e9;
 
 ok = true;
-%% check for monotonic increasing
+%% check for monotonic increasing and reasonable dimension size
 for k = {'x1', 'x1i', 'dx1h', 'x2', 'x2i', 'x3', 'x3i'}
-  ok = ok && is_monotonic_increasing(xg.(k{:}), tol_inc, k{:});
+  ok = ok && is_monotonic_increasing(xg.(k{:}), tol_inc, tol_inc_big, k{:});
+  ok = ok && not_too_big(xg.(k{:}), tol_big, k{:});
 end
 
 %% geo lat/lon
@@ -27,17 +30,36 @@ end
 end % function
 
 
-function ok = is_monotonic_increasing(A, tol, name)
+function ok = is_monotonic_increasing(A, tol, big, name)
 
-narginchk(3,3)
-validateattributes(A, {'numeric'}, {'vector'}, 1)
-validateattributes(tol, {'numeric'}, {'scalar'}, 2)
-validateattributes(name, {'char'}, {'vector'}, 3)
+narginchk(4,4)
 
-ok = all(diff(A) > tol);
+dA = diff(A);
+
+ok = all(dA > tol);
 
 if ~ok
   warning('check_grid:is_monotonic_increasing', [name, ' not sufficiently monotonic increasing'])
+end
+
+ok_big = all(abs(dA) < big);
+if ~ok_big
+  warning('check_grid:is_monotonic_increasing', [name, ' has unreasonably large differences'])
+end
+
+ok = ok && ok_big;
+
+end % function
+
+
+function ok = not_too_big(A, tol, name)
+
+narginchk(3,3)
+
+ok = all(abs(A) < tol);
+
+if ~ok
+  warning('check_grid:not_too_big', [name, ' is too large to be reasonable.'])
 end
 
 end % function

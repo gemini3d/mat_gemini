@@ -178,10 +178,10 @@ function compare_grid(outdir, refdir, tol)
 narginchk(3,3)
 
 [ref, ok] = readgrid(refdir);
-assert(ok, ['reference grid bad values', refdir])
+assert(ok, 'reference grid %s has bad values', refdir)
 
 [new, ok] = readgrid(outdir);
-assert(ok, ['grid has bad values', outdir])
+assert(ok, 'grid %s has bad values', outdir)
 
 errs = 0;
 for k = h5variables(ref.filename)
