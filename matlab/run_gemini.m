@@ -42,7 +42,7 @@ else
   end
 end
 
-log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'gemini_meta.nml'))
+log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
 
 %% assemble run command
 np = get_mpi_count(fullfile(outdir, cfg.indat_size));

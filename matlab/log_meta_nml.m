@@ -1,15 +1,16 @@
-function log_meta_nml(meta, filename)
+function log_meta_nml(meta, filename, namelist)
 
-narginchk(2,2)
+narginchk(3,3)
 validateattributes(meta, {'struct'}, {'scalar'},1)
 validateattributes(filename, {'char'}, {'vector'},2)
+validateattributes(namelist, {'char'}, {'vector'}, 3)
 
-fid = fopen(filename, 'w');
+fid = fopen(filename, 'a');
 if fid < 1
   error('log_meta_nml:os_error', 'could not create file %s', filename)
 end
 
-fprintf(fid, '%s\n', '&setup_meta');
+fprintf(fid, '&%s\n', namelist);
 
 % variable string values get quoted per NML standard
 fprintf(fid, 'matlab_version = "%s"\n', version());

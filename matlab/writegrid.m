@@ -43,7 +43,7 @@ if ~ok
   error('writegrid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
-log_meta_nml(git_revision(), fullfile(p.outdir, 'setup_meta.nml'))
+log_meta_nml(git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
 
 end % function
 
