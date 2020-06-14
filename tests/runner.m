@@ -36,7 +36,7 @@ end
 
 %% check generated files
 
-compare_all(fullfile(p.outdir, '..'), test_dir, 'in')
+compare_all(p.outdir, test_dir, 'in')
 
 end  % function
 

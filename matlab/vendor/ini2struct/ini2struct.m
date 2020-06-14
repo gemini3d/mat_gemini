@@ -10,6 +10,10 @@ function Struct = ini2struct(FileName)
 narginchk(1,1)
 
 f = fopen(FileName,'r');                    % open file
+if f < 1
+  error('ini2struct:os_error', 'could not open %s', FileName)
+end
+
 while ~feof(f)                              % and read until it ends
   s = strtrim(fgetl(f));                  % remove leading/trailing spaces
   if isempty(s) || s(1)==';' || s(1)=='#' % skip empty & comments lines

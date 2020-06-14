@@ -13,7 +13,7 @@ makedir(data_dir)
 
 cwd = fileparts(mfilename('fullpath'));
 
-urls = ini2struct(fullfile(cwd, '../tests/url.ini'));
+urls = ini2struct(fullfile(cwd, '../../tests/url.ini'));
 
 zipfile = fullfile(data_dir, ['test', test_name, '.zip']);
 
