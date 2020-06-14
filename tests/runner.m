@@ -23,6 +23,15 @@ p = read_nml(test_dir);
 p.file_format = file_format;
 p.outdir = fullfile(tempdir, ['test',name]);
 
+% patch eqdir to use reference data
+if isfield(p, 'eqdir')
+  eqdir = fullfile(fileparts(test_dir), path_tail(p.eqdir));
+  if is_folder(eqdir)
+    fprintf('Note: using %s for equilibrium data \n', eqdir)
+    p.eqdir = eqdir;
+  end
+end
+
 try
   p = model_setup(p);
 catch e
