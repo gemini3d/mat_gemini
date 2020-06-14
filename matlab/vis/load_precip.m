@@ -5,10 +5,10 @@ function dat = load_precip(filename)
 assert(isfile(filename), ['precip file not found ', filename])
 
 switch ext
-  case {'.h5'}, dat = load_h5(filename);
-  case {'.nc'}, dat = load_nc(filename);
-  case {'.dat'}, dat = load_raw(filename);
-  otherwise, error('load_precip:value_error', 'could not determine file type %', filename)
+  case '.h5', dat = load_h5(filename);
+  case '.nc', dat = load_nc(filename);
+  case '.dat', dat = load_raw(filename);
+  otherwise, error('load_precip:value_error', 'could not determine file type %s', filename)
 end
 
 end % function

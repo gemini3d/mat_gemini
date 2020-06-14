@@ -15,9 +15,13 @@ if ~is_folder(p.eqdir)
 end
 
 peq = read_config(p.eqdir);
+%% read equilibrium grid
 [xgin, ok] = readgrid(p.eqdir);
 
-assert(ok, ['problem with input grid ', p.eqdir])
+if ~ok
+  error('eq2dist:value_error', 'problem with equilibrium input grid %s', p.eqdir)
+end
+
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 [ymd_end,UTsec_end] = dateinc(peq.tdur,peq.ymd,peq.UTsec0);
