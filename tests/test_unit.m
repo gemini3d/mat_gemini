@@ -1,5 +1,8 @@
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../setup.m'))
+%% md5sum
+hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'url.ini'));
+assert(strcmp(hash, 'fea0dd2633c3f59a1d77bbaffaa2a074'), 'md5sum %s', hash)
 %% is_file
 assert(is_file(fullfile(cwd, '../setup.m')), 'is_file true')
 assert(~is_file('~'), 'is_file false')

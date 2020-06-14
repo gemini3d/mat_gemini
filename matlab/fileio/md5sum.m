@@ -30,4 +30,6 @@ if ~isempty(hash)
   assert(length(hash)==32, 'md5 hash is 32 characters')
 end
 
+hash = lower(hash);
+
 end % function
