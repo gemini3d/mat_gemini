@@ -99,8 +99,17 @@ endif()
 
 if(Interpreter IN_LIST Octave_FIND_COMPONENTS)
 
+  if(WIN32)
+    if(IS_DIRECTORY "C:/Octave")
+      file(GLOB_RECURSE _octbin "c:/Octave/Octave-*/mingw64/bin/octave.bat")
+      get_filename_component(_octpath ${_octbin} DIRECTORY)
+    endif()
+  endif()
+
   find_program(Octave_EXECUTABLE
-               NAMES octave)
+               NAMES octave octave.bat
+               HINTS ${Octave_BINARY_DIR} ${_octpath}
+               PATHS ENV OCTAVE_EXECUTABLE)
 
   list(APPEND Octave_REQUIRED_VARS ${Octave_EXECUTABLE})
 

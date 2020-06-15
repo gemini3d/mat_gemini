@@ -28,30 +28,12 @@ add_subdirectory(${gemini_root}/src/vendor/msis00 ${PROJECT_BINARY_DIR}/msis)
 # ----
 # unfortunately, GNU Octave 5.2.0 with Octave-NetCDF still has bugs serious enough to prevent use
 # We look forward to reenabling Octave with Gemini.
-
 find_package(Matlab COMPONENTS MAIN_PROGRAM)
-if(NOT Matlab_FOUND)
-  message(STATUS "Matlab tests not available from CMake.")
-  return()
+if(Matlab_FOUND)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/matlab.cmake)
 endif()
 
-# other sources of info that aren't as easy to use
-# * appdata\version.xml
-# * appdata\prodcontents.json
-# I have observed over the years that this directory name is universally used.
-string(REGEX MATCH "R([0-9][0-9][0-9][0-9][a-z])" Matlab_RELEASE ${Matlab_ROOT_DIR})
-matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
-
-if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.6)
-  message(STATUS "Matlab >= R2019a required for -batch mode")
-  return()
+find_package(Octave COMPONENTS Interpreter)
+if(Octave_FOUND)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/octave.cmake)
 endif()
-
-add_test(NAME Lint COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_lint'); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_test(NAME Unit COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_unit'); assert(~any(cell2mat({r.Failed})), 'fail')"
-WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_test(NAME Project COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project'); assert(~any(cell2mat({r.Failed})), 'fail')"
-WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
