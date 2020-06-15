@@ -9,6 +9,7 @@ path = expanduser(path);
 if isoctave
   isrel = is_absolute_filename(path);
 else
+  % can't use -nojvm
   isrel = java.io.File(path).isAbsolute();
 end
 

@@ -3,7 +3,7 @@ run(fullfile(cwd, '../setup.m'))
 %% md5sum
 if ~isoctave
   hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'url.ini'));
-  assert(strcmp(hash, 'fea0dd2633c3f59a1d77bbaffaa2a074'), 'md5sum %s', hash)
+  assert(strcmp(hash, '8ace28a6581a3c00499b626a05318f51'), 'md5sum %s', hash)
 end
 %% is_file
 assert(is_file(fullfile(cwd, '../setup.m')), 'is_file true')
