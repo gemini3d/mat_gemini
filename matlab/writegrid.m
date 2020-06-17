@@ -110,7 +110,8 @@ h5save(fn, '/glat', xg.glat, [lx1, lx2, lx3], freal)
 h5save(fn, '/glon', xg.glon, [lx1, lx2, lx3], freal)
 
 h5save(fn, '/Bmag', xg.Bmag, [lx1, lx2, lx3], freal)
-h5save(fn, '/I', xg.I, [lx2, lx3], freal)
+Itmp=squeeze(xg.I);      % MZ - patch for singleton dimensions
+h5save(fn, '/I', Itmp, [lx2, lx3], freal)     % MZ - patch 
 h5save(fn, '/nullpts', xg.nullpts, [lx1, lx2, lx3], freal)
 
 h5save(fn, '/e1', xg.e1, [lx1, lx2, lx3, 3], freal)

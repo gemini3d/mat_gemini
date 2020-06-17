@@ -16,11 +16,11 @@ else
 
   [varnames, grpnames] = h5variables(filename);
 
-  if any(strcmp('time', grpnames))
+%  if any(strcmp('time', grpnames))
     i = '/time';
-  else
-    i = '';
-  end
+%  else
+%    i = '';
+%  end
 
   dat.simdate(1:3) = double(h5read(filename, [i, '/ymd']));
 
