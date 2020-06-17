@@ -11,8 +11,9 @@ tol_big = 1e9;
 ok = true;
 %% check for monotonic increasing and reasonable dimension size
 for k = {'x1', 'x1i', 'x2', 'x2i', 'x3', 'x3i'}
-  ok = ok && is_monotonic_increasing(xg.(k{:}), tol_inc, tol_inc_big, k{:});
-  ok = ok && not_too_big(xg.(k{:}), tol_big, k{:});
+  p = squeeze(xg.(k{:}));
+  ok = ok && is_monotonic_increasing(p, tol_inc, tol_inc_big, k{:});
+  ok = ok && not_too_big(p, tol_big, k{:});
 end
 
 %% geo lat/lon

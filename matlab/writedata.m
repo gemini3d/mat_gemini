@@ -36,14 +36,14 @@ fn = with_suffix(fn, '.h5');
 disp(['write ',fn])
 if is_file(fn), delete(fn), end
 
-h5save(fn, '/ymd', int32(ymd))
+h5save(fn, '/time/ymd', int32(ymd))
 
 freal = 'float32';
 
-h5save(fn, '/UTsec', UTsec, [], freal)
-h5save(fn, '/ns', ns, [], freal)
-h5save(fn, '/vsx1', vsx1, [], freal)
-h5save(fn, '/Ts', Ts, [], freal)
+h5save(fn, '/time/UTsec', UTsec, [], freal)
+h5save(fn, '/nsall', ns, [], freal)
+h5save(fn, '/vs1all', vsx1, [], freal)
+h5save(fn, '/Tsall', Ts, [], freal)
 
 end % function
 
