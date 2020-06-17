@@ -9,17 +9,26 @@ if isoctave
   dat.ns = D.nsall;
   dat.vs1 = D.vs1all;
   dat.Ts = D.Tsall;
-  return
+	return
 end
 
 [varnames, grpnames] = h5variables(filename);
 
+<<<<<<< HEAD
 if any(strcmp('ymd', varnames))
   if any(strcmp('time', grpnames))
     i = '/time';
   else
     i = '';
   end
+=======
+%  if any(strcmp('time', grpnames))
+    i = '/time';
+%  else
+%    i = '';
+%  end
+
+>>>>>>> 68b6c9e... patched some stuff to work with dipole grids
   dat.simdate(1:3) = double(h5read(filename, [i, '/ymd']));
 
   try

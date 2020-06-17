@@ -4,7 +4,8 @@ function ok = check_grid(xg)
 narginchk(1,1)
 validateattributes(xg, {'struct'}, {'scalar'}, 1)
 
-tol_inc = 1e-6;  % MZ - patched to function with dipole grids
+<<<<<<< HEAD
+tol_inc = 1e-6;
 tol_inc_big = 1e6;
 tol_big = 1e9;
 
@@ -14,6 +15,16 @@ for k = {'x1', 'x1i', 'x2', 'x2i', 'x3', 'x3i'}
   p = squeeze(xg.(k{:}));
   ok = ok && is_monotonic_increasing(p, tol_inc, tol_inc_big, k{:});
   ok = ok && not_too_big(p, tol_big, k{:});
+=======
+%tol_inc = 0.1;
+tol_inc=1e-6;     %MZ - patched to function with dipole grids
+
+ok = true;
+%% check for monotonic increasing
+for k = {'x1', 'x1i', 'x2', 'x2i', 'x3', 'x3i'}     %MZ - patched, none of the differentials should be checked
+  param=squeeze(xg.(k{:}));
+  ok = ok && is_monotonic_increasing(param, tol_inc, k{:});
+>>>>>>> 68b6c9e... patched some stuff to work with dipole grids
 end
 
 %% geo lat/lon
