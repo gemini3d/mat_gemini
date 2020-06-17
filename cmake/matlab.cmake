@@ -1,7 +1,12 @@
+find_package(Matlab COMPONENTS MAIN_PROGRAM)
+if(NOT Matlab_FOUND)
+  return()
+endif()
+
 # other sources of info that aren't as easy to use
 # * appdata\version.xml
 # * appdata\prodcontents.json
-# I have observed over the years that this directory name is universally used.
+# I have observed over the years that this directory name scheme is universally used.
 string(REGEX MATCH "R([0-9][0-9][0-9][0-9][a-z])" Matlab_RELEASE ${Matlab_ROOT_DIR})
 matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
 
