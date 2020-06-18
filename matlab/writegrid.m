@@ -80,10 +80,14 @@ h5save(fn, '/x2i', xg.x2i, [], freal)
 h5save(fn, '/dx2b', xg.dx2b, [], freal)
 h5save(fn, '/dx2h', xg.dx2h, [], freal)
 
-h5save(fn, '/x3', xg.x3, [], freal)
-h5save(fn, '/x3i', xg.x3i, [], freal)
-h5save(fn, '/dx3b', xg.dx3b, [], freal)
-h5save(fn, '/dx3h', xg.dx3h, [], freal)
+x3tmp=squeeze(xg.x3);       %MZ - patch for dipole grids
+h5save(fn, '/x3', x3tmp, [], freal)
+x3itmp=squeeze(xg.x3i);
+h5save(fn, '/x3i', x3itmp, [], freal)
+dx3btmp=squeeze(xg.dx3b);
+h5save(fn, '/dx3b', dx3btmp, [], freal)
+dx3htmp=squeeze(xg.dx3h);
+h5save(fn, '/dx3h', dx3htmp, [], freal)
 
 h5save(fn, '/h1', xg.h1, [lx1+4, lx2+4, lx3+4], freal)
 h5save(fn, '/h2', xg.h2, [lx1+4, lx2+4, lx3+4], freal)
