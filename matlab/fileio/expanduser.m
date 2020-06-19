@@ -22,6 +22,11 @@ function expanded = expanduser(p)
 
 narginchk(1,1)
 
+if isempty(p)
+  expanded = '';
+  return
+end
+
 validateattributes(p, {'char'}, {'vector'})
 %% GNU Octave
 if isoctave
