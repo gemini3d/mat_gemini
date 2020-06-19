@@ -71,7 +71,7 @@ end  % function read_nc4
 function xgf = read_raw(path, realbits)
 
 filename = fullfile(path, 'simgrid.dat');
-if ~is_file(fileanme)
+if ~is_file(filename)
   error('readgrid:read_raw:file_not_found', '%s not found', filename)
 end
 
