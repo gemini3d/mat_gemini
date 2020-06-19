@@ -11,13 +11,22 @@ if nargin < 7 || isempty(config_file)
   config_file = direc;
 end
 
-if nargin < 5 || isempty(flagoutput) || isempty(mloc)
-  p = read_config(config_file);
+if nargin < 4 || isempty(flagoutput)
+  try
+    p = read_config(config_file);
+  catch excp
+    if strcmp(excp.identifier, 'get_configfile:file_not_found')
+      error('please specify flagoutput if not specifying config_file')
+    end
+    rethrow(excp)
+  end
   flagoutput = p.flagoutput;
-  mloc = p.mloc;
 end
-validateattributes(flagoutput,{'numeric'},{'scalar'},mfilename,'output flag',4)
+validateattributes(flagoutput,{'numeric'},{'scalar', 'integer'},mfilename,'output flag',4)
 
+if nargin < 5
+  mloc = [];
+end
 if ~isempty(mloc)
   validateattributes(mloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'magnetic coordinates', 5)
 end
