@@ -13,7 +13,7 @@ if nargin < 4 || isempty(sizeA)
 end
 
 if nargin >= 5 && ~isempty(dtype)
-  [A, sizeA] = coerce_ds(A, sizeA, dtype);
+  A = coerce_ds(A, dtype);
 end
 if ischar(A)
   A = string(A);
@@ -35,35 +35,6 @@ else
 %   end
   new_file(filename, varname, A, sizeA)
 end % if
-
-end % function
-
-
-function [A, sizeA] = coerce_ds(A, sizeA, dtype)
-
-switch dtype
-  case {'float64', 'double'}
-    if ~isa(A, 'double')
-      A = double(A);
-    end
-  case {'float32', 'single'}
-    if ~isa(A, 'single')
-      A = single(A);
-    end
-  case {'int32'}
-     if ~isa(A, 'int32')
-       A = int32(A);
-     end
-  case {'int64'}
-     if ~isa(A, 'int64')
-       A = int64(A);
-     end
-  case {'char', 'string'}
-    if ~isstring(A)
-      A = string(A);
-    end
-  otherwise, error('h5save:type_error', 'unknown data type %s', dtype)
-end
 
 end % function
 
@@ -96,7 +67,7 @@ function new_file(filename, varname, A, sizeA)
 if ~ismatrix(A)
   % enable Gzip compression--remember Matlab's dim order is flipped from
   % C / Python
-  switch ndims(A)
+  switch length(sizeA)
     case 4, chunksize = [sizeA(1), sizeA(2), 1, sizeA(4)];
     case 3, chunksize = [sizeA(1), sizeA(2), 1];
     otherwise, error('h5save:fixme', '%s is bigger than 4 dims', varname)
