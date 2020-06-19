@@ -1,11 +1,9 @@
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_highres_var/';
 %simname='test3d_fang_mag/';
-%simname='mooreOK3D_hemis_medres/'
+simname='mooreOK3D_hemis_medres/'
 %simname='iowa3D_hemis_medres2/'
 %simname='iowa3D_hemis_medres2_control/'
-%basedir='~/SDHCcard/'
-basedir='tohoku20113D_lowres/'
 basedir='~/simulations/'
 direc=[basedir,simname];
 makedir([direc, '/Brplots'])
@@ -22,7 +20,7 @@ lt=numel(times);
 
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
-basemagdir=[direc,'/magfields/'];
+basemagdir=[direc,'/magfields.ground.20deg.highres/'];
 fid=fopen([basemagdir,'/input/magfieldpoints.dat'],'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
 lpoints=fread(fid,1,'integer*4');
 r=fread(fid,lpoints,'real*8');
@@ -36,8 +34,8 @@ fclose(fid);
 %lphi=10;
 %ltheta=192;
 %lphi=192;
-ltheta=20;
-lphi=20;
+ltheta=40;
+lphi=40;
 %ltheta=1600;
 %lphi=1;
 r=reshape(r(:),[ltheta,lphi]);
@@ -66,14 +64,14 @@ Brt=zeros(1,ltheta,lphi,lt);
 Bthetat=zeros(1,ltheta,lphi,lt);
 Bphit=zeros(1,ltheta,lphi,lt);
 
-[ymd,UTsec]=dateinc(dtout,ymd,UTsec);
-for it=2:lt-1
-%  if (it==1)
-%    UTsec=UTsec+0.000001;
-%  end
-%  if (it==2)
-%    UTsec=UTsec-0.000001;
-%  end
+%file[ymd,UTsec]=dateinc(dtout,ymd,UTsec);
+for it=1:lt-1
+  if (it==1)
+    UTsec=UTsec+0.000001;
+  end
+  if (it==2)
+    UTsec=UTsec-0.000001;
+  end
   filename=datelab(ymd,UTsec);
   fid=fopen([basemagdir,filename,'.dat'],'r');
 
@@ -162,7 +160,9 @@ for it=1:lt-1
     mlonlim=[min(mlonp),max(mlonp)];
     [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
     pcolorm(MLAT,MLON,param);
-    colormap(parula(256));
+    cmap=lbmap(256,'redblue');
+    cmap=flipud(cmap);
+    colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -184,7 +184,9 @@ for it=1:lt-1
     axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
     param=squeeze(Bthetatp(:,:,:,it))*1e9;
     pcolorm(MLAT,MLON,param);
-    colormap(parula(256));
+    cmap=lbmap(256,'redblue');
+    cmap=flipud(cmap);
+    colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -207,7 +209,9 @@ for it=1:lt-1
     param=squeeze(Bphitp(:,:,:,it))*1e9;
     %imagesc(mlon,mlat,param);
     pcolorm(MLAT,MLON,param);
-    colormap(parula(256));
+    cmap=lbmap(256,'redblue');
+    cmap=flipud(cmap);
+    colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))

@@ -29,24 +29,38 @@ function grid_examples()
 % neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
-%% Iowa grid for AGU 2019
-dtheta=12;
-dphi=20;
-lp=100;
-lq=200;
-lphi=40;
+% %% Iowa grid for AGU 2019
+% dtheta=12;
+% dphi=20;
+% lp=100;
+% lq=200;
+% lphi=40;
+% altmin=80e3;
+% glat=28.52;   %38.9609;
+% glon=360-73.09;
+% gridflag=1;
+% flagsource=1;
+% iscurv=true;
+
+
+%% Equatorial grid
+dtheta=3.5;
+dphi=2.5;
+lp=192;
+lq=256;
+lphi=192;
 altmin=80e3;
-glat=28.52;   %38.9609;
-glon=360-73.09;
+glat=8.35;
+glon=360-76.9;     %Jicamarca
 gridflag=1;
-flagsource=1;
+flagsource=0;
 iscurv=true;
 
 
 %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
-neuinfo.sourcelat=28.52;
-neuinfo.sourcelong=360-73.09;
-neuinfo.neugridtype=3;    %1 = Cartesian neutral grid (2D), 2 - axisymmetric (2D), 3 - 3D Cartesian
+neuinfo.sourcelat=[];
+neuinfo.sourcelong=[];
+neuinfo.neugridtype=[];    %1 = Cartesian neutral grid (2D), 2 - axisymmetric (2D), 3 - 3D Cartesian
 neuinfo.zmin=0;
 neuinfo.zmax=600;
 neuinfo.xmin=-750;
@@ -54,6 +68,19 @@ neuinfo.xmax=750;
 neuinfo.ymin=-750;
 neuinfo.ymax=750;
 neuinfo.rhomax=[];        %meaningless in 3D situations
+
+% 
+% %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
+% neuinfo.sourcelat=28.52;
+% neuinfo.sourcelong=360-73.09;
+% neuinfo.neugridtype=3;    %1 = Cartesian neutral grid (2D), 2 - axisymmetric (2D), 3 - 3D Cartesian
+% neuinfo.zmin=0;
+% neuinfo.zmax=600;
+% neuinfo.xmin=-750;
+% neuinfo.xmax=750;
+% neuinfo.ymin=-750;
+% neuinfo.ymax=750;
+% neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
 %% FOR USERS INFO CONVERT SOURCE LOCATION TO GEOMAG

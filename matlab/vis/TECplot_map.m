@@ -1,14 +1,14 @@
 %SIMULATIONS LOCAITONS
 %simname='iowa3D_hemis_medres2/';
 simname='mooreOK3D_hemis_medres/';
-basedir='~/SDHCcard/'
+basedir='~/simulations/'
 direc=[basedir,simname];
 makedir([direc, '/TECplots']);    %store output plots with the simulation data
 makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED MAGNETIC FIELD DATA
-load([direc,'/vTEC.mat']);
+load([direc,'/vTEC.10deg.mat']);
 lt=numel(t);
 mlon=mlong;
 
@@ -56,7 +56,9 @@ for it=1:lt
     pcolorm(MLAT,MLON,param);
 %    colormap(parula(256));
 %    colormap(bwr());
-    colormap(lbmap(256,'redblue'));
+    cmap=lbmap(256,'redblue');
+    cmap=flipud(cmap);
+    colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
 %    caxis([-3,3]);
