@@ -16,7 +16,7 @@ jobs:
 
     - run: |
         sudo apt -yq update
-        sudo apt install -yq --no-install-recommends octave # octave-netcdf
+        sudo apt install -yq --no-install-recommends octave octave-netcdf
 
     - run: cmake -B build
       env:
