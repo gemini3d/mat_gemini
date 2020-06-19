@@ -45,3 +45,6 @@ h5save(basic, '/float32', A0, [], 'float32')
 assert(isa(h5read(basic, '/int32'), 'int32'), 'int32')
 assert(isa(h5read(basic, '/int64'), 'int64'), 'int64')
 assert(isa(h5read(basic, '/float32'), 'single'), 'float32')
+%% test_rewrite
+h5save(basic, '/A2', 3*magic(4))
+assert(isequal(h5read(basic, '/A2'), 3*magic(4)), 'rewrite 2D fail')

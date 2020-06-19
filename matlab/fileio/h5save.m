@@ -20,16 +20,21 @@ if ischar(A)
   sizeA = size(A);
 end
 
-try
+vars = {};
+if is_file(filename)
+  vars = h5variables(filename);
+end
+
+if any(strcmp(vars, varname(2:end)))
   % existing variable
   exist_file(filename, varname, A, sizeA)
-catch excp % new variable
-  if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:hdf5io:resourceNotFound', 'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
-    rethrow(excp)
-  end
-
+else
+  % new variable
+%   if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:hdf5io:resourceNotFound', 'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
+%     rethrow(excp)
+%   end
   new_file(filename, varname, A, sizeA)
-end % try
+end % if
 
 end % function
 
@@ -67,8 +72,8 @@ function exist_file(filename, varname, A, sizeA)
 
 diskshape = h5size(filename, varname);
 if length(diskshape) >= 2
-   % start is always a row vector, regardless of shape of array
-    start = ones(1,ndims(A));
+  % start is always a row vector, regardless of shape of array
+  start = ones(1,ndims(A));
 elseif ~isempty(diskshape)
   start = 1;
 end
@@ -80,7 +85,7 @@ elseif all(diskshape == sizeA)
 elseif all(diskshape == fliplr(sizeA))
   h5write(filename, varname, A.', start, fliplr(sizeA))
 else
-  error('h5save:value_error', 'shape of %s does not match existing HDF5 shape %d %d %d %d  %d %d %d %d',varname, sizeA, diskshape)
+  error('h5save:value_error', ['shape of ',varname,': ', int2str(sizeA), ' does not match existing HDF5 shape ', int2str(diskshape)])
 end
 
 end % function
