@@ -5,6 +5,10 @@ addpath(cwd) % since we have to cd() in runner()
 
 run(fullfile(cwd, '../setup.m'))
 
+if isoctave
+  pkg('load','netcdf')
+end
+
 tic
 %% test2dew_eq_h5
 runner('2d_eq', 'h5')

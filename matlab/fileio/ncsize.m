@@ -12,4 +12,9 @@ validateattributes(varname, {'char'}, {'vector'}, 2)
 vinf = ncinfo(filename, varname);
 fsize = vinf.Size;
 
+% Octave compatibility
+if isempty(fsize)
+  fsize = 1;
+end
+
 end

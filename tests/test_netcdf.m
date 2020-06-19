@@ -10,6 +10,9 @@ A4(:,:,:,5) = A3;
 basic = fullfile(tempdir, 'basic.nc');
 if is_file(basic), delete(basic), end
 
+if isoctave
+  pkg('load','netcdf')
+end
 %% test_write_basic
 ncsave(basic, 'A0', A0)
 ncsave(basic, 'A1', A1)
