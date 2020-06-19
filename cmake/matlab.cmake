@@ -24,5 +24,8 @@ WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_test(NAME matlab:hdf5 COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_hdf5'); assert(~any(cell2mat({r.Failed})), 'fail')"
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
+add_test(NAME matlab:netcdf COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_netcdf'); assert(~any(cell2mat({r.Failed})), 'fail')"
+WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_test(NAME matlab:project COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project'); assert(~any(cell2mat({r.Failed})), 'fail')"
 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

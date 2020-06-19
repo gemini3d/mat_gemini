@@ -1,30 +1,21 @@
-function exists = h5exists(filename, variable)
-% check if variable exists in HDF5 filename
+function exists = h5exists(filename, varname)
+% check if variable exists in HDF5 file
 %
 % filename: HDF5 filename
-% variable: name of variable inside HDF5 file
+% varname: name of variable inside HDF5 file
 %
 % exists: boolean
 
 narginchk(2,2)
-validateattributes(variable, {'char'}, {'vector'}, 2)
-
-exists = false;
+validateattributes(varname, {'char'}, {'vector'}, 2)
 
 filename = expanduser(filename);
 
-if ~is_file(filename)
-  warning([filename, ' does not exist'])
-  return
+vars = {};
+if is_file(filename)
+  vars = h5variables(filename);
 end
 
-try
-  h5info(filename, variable);
-  exists = true;
-catch excp % variable not exist
-  if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
-    rethrow(excp)
-  end
-end % try
+exists = any(strcmp(vars, varname(2:end)));
 
 end % function

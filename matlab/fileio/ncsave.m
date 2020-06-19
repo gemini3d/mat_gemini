@@ -1,31 +1,33 @@
-function ncsave(filename, varname, A, dims, dtype)
+function ncsave(filename, varname, A, ncdims, dtype)
 
 narginchk(3, 5)
 
-if nargin >= 4 && ~isempty(dims)
-  for i = 2:2:length(dims)
-    sizeA(i/2) = dims{i};
+if nargin >= 4 && ~isempty(ncdims)
+  for i = 2:2:length(ncdims)
+    sizeA(i/2) = ncdims{i};
   end
 else
-  if isvector(A)
+  if isscalar(A)
+    sizeA = 1;
+    ncdims = [];
+  elseif isvector(A)
     sizeA = length(A);
+    ncdims = {'x', sizeA};
+  elseif ismatrix(A)
+    sizeA = size(A);
+    ncdims = {'x', sizeA(1), 'y', sizeA(2)};
   else
     sizeA = size(A);
-  end
+    switch length(sizeA)
+      case 3, ncdims = {'x', sizeA(1), 'y', sizeA(2), 'z', sizeA(3)};
+      case 4, ncdims = {'x', sizeA(1), 'y', sizeA(2), 'z', sizeA(3), 'w', sizeA(4)};
+      otherwise, error('ncsave currently does scalar through 4D')
+    end
+  end % if
 end
 % coerce if needed
 if nargin >= 5 && ~isempty(dtype)
-  switch dtype
-    case {'float64', 'double'}
-      if ~isa(A, 'double')
-        A = double(A);
-      end
-    case {'float32', 'single'}
-      if ~isa(A, 'single')
-        A = single(A);
-      end
-    otherwise, error('ncsave:type_error', 'unknown data type %s', dtype)
-  end
+  A = coerce_ds(A, dtype);
 end
 
 vars = {};
@@ -34,17 +36,7 @@ if is_file(filename)
 end
 
 if any(strcmp(vars, varname))
-  % existing variable
-  % disp(['try ', varname])
-  diskshape = ncinfo(filename, varname).Size;
-
-  if all(diskshape == sizeA)
-    ncwrite(filename, varname, A)
-  elseif all(diskshape == fliplr(sizeA))
-    ncwrite(filename, varname, A.')
-  else
-    error('ncsave:value_error', 'shape of %s does not match existing HDF5 shape %d %d %d %d  %d %d %d %d',varname, sizeA, diskshape)
-  end
+  exist_file(filename, varname, A, sizeA)
 % catch excp
 %   if any(strcmp(excp.identifier, {'MATLAB:imagesci:netcdf:unableToOpenFileforRead', 'MATLAB:imagesci:netcdf:unknownLocation'}))
 %     % pass Matlab
@@ -55,29 +47,54 @@ if any(strcmp(vars, varname))
 %     rethrow(excp)
 %   end
 else
-  % disp(['create ', varname])
-  % new variable
-  if isscalar(A)
-    nccreate(filename, varname, 'Datatype', class(A))
-  elseif isvector(A) || ismatrix(A)
-    nccreate(filename, varname, 'Dimensions', dims, 'Datatype', class(A))
-  else
-    % enable Gzip compression--remember Matlab's dim order is flipped from
-    % C / Python
-    switch length(sizeA)
-      case 4, chunksize = [sizeA(1), sizeA(2), 1, sizeA(4)];
-      case 3, chunksize = [sizeA(1), sizeA(2), 1];
-      otherwise, error('ncsave:fixme', '%s is bigger than 4 dims', varname)
-    end
-    % "Datatype" to be Octave case-sensitive keyword compatible
-    nccreate(filename, varname, 'Dimensions', dims, ...
-      'Datatype', class(A), ...
-      'DeflateLevel', 1, 'Shuffle', true, 'ChunkSize', chunksize)
-  end
-  ncwrite(filename, varname, A)
+  new_file(filename, varname, A, sizeA, ncdims)
 end
 
+end % function
+
+
+
+
+function exist_file(filename, varname, A, sizeA)
+narginchk(4,4)
+
+diskshape = ncsize(filename, varname);
+
+if all(diskshape == sizeA)
+  ncwrite(filename, varname, A)
+elseif all(diskshape == fliplr(sizeA))
+  ncwrite(filename, varname, A.')
+else
+  error('ncsave:value_error', ['shape of ',varname,': ', int2str(sizeA), ' does not match existing NetCDF4 shape ', int2str(diskshape)])
 end
+
+end % function
+
+
+function new_file(filename, varname, A, sizeA, ncdims)
+narginchk(5,5)
+
+if isscalar(A)
+  nccreate(filename, varname, 'Datatype', class(A), 'Format', 'netcdf4')
+elseif isvector(A) || ismatrix(A)
+  nccreate(filename, varname, 'Dimensions', ncdims, 'Datatype', class(A), 'Format', 'netcdf4')
+else
+  % enable Gzip compression--remember Matlab's dim order is flipped from
+  % C / Python
+  switch length(sizeA)
+    case 4, chunksize = [sizeA(1), sizeA(2), 1, sizeA(4)];
+    case 3, chunksize = [sizeA(1), sizeA(2), 1];
+    otherwise, error('ncsave:fixme', '%s is bigger than 4 dims', varname)
+  end
+  % "Datatype" to be Octave case-sensitive keyword compatible
+  nccreate(filename, varname, 'Dimensions', ncdims, ...
+    'Datatype', class(A), ...
+    'DeflateLevel', 1, 'Shuffle', true, 'ChunkSize', chunksize, 'Format', 'netcdf4')
+end
+
+ncwrite(filename, varname, A)
+
+end % function
 
 % Copyright 2020 Michael Hirsch, Ph.D.
 

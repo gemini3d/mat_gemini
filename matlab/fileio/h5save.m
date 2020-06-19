@@ -3,9 +3,7 @@ function h5save(filename, varname, A, sizeA, dtype)
 narginchk(3, 5)
 
 if nargin < 4 || isempty(sizeA)
-  if isscalar(A)
-    sizeA = 1;
-  elseif isvector(A)
+  if isvector(A)
     sizeA = length(A);
   else
     sizeA = size(A);
@@ -20,19 +18,11 @@ if ischar(A)
   sizeA = size(A);
 end
 
-vars = {};
-if is_file(filename)
-  vars = h5variables(filename);
-end
 
-if any(strcmp(vars, varname(2:end)))
-  % existing variable
+
+if h5exists(filename, varname)
   exist_file(filename, varname, A, sizeA)
 else
-  % new variable
-%   if ~any(strcmp(excp.identifier, {'MATLAB:imagesci:hdf5io:resourceNotFound', 'MATLAB:imagesci:h5info:fileOpenErr', 'MATLAB:imagesci:h5info:unableToFind'}))
-%     rethrow(excp)
-%   end
   new_file(filename, varname, A, sizeA)
 end % if
 
