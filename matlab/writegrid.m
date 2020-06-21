@@ -150,8 +150,8 @@ end % function
 
 function write_nc4(p, xg)
 
-try %#ok<TRYNC>
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 %% size

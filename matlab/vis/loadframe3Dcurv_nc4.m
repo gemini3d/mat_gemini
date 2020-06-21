@@ -5,8 +5,8 @@ narginchk(1,1)
 assert(is_file(fn), [fn,' is not a file.'])
 dat.filename = fn;
 
-try
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 dat.ns = ncread(fn, 'nsall');

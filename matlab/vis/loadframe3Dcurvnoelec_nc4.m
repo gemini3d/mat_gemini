@@ -5,8 +5,8 @@ narginchk(1,1)
 assert(is_file(filename), [filename,' does not exist '])
 dat.filename = filename;
 
-try
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 dat.simdate(1:3) = double(ncread(filename, 'ymd'));

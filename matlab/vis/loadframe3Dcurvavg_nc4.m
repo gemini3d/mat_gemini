@@ -7,8 +7,8 @@ dat.filename = filename;
 
 % simdate=zeros(1,6);    %datevec-style array
 
-try
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 %dat.simdate(1:3) = ncread(filename, 'ymd');

@@ -50,8 +50,8 @@ end % function
 
 function write_nc4(fn, ymd, UTsec, ns, vsx1, Ts)
 
-try %#ok<TRYNC>
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 fn = with_suffix(fn, '.nc');

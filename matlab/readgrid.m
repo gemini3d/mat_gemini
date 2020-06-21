@@ -49,8 +49,8 @@ end  % function read_hdf5
 
 function xgf = read_nc4(path)
 
-try %#ok<TRYNC>
-  pkg load netcdf
+if isoctave
+  pkg('load','netcdf')
 end
 
 fn = fullfile(path, 'simgrid.nc');
