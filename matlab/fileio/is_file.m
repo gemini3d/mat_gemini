@@ -9,10 +9,14 @@ narginchk(1,1)
 
 path = expanduser(path);
 
-if exist('isfile', 'builtin') == 5 || exist('isfile', 'file') == 2
+try
   ret = isfile(path);
-else
-  ret = exist(path, 'file') == 2;
+catch excp
+  if any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
+    ret = exist(path, 'file') == 2;
+  else
+    rethrow(excp)
+  end
 end
 
 end % function
