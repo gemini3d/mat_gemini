@@ -4,7 +4,7 @@ simname='mooreOK3D_hemis_medres/';
 basedir='~/simulations/'
 direc=[basedir,simname];
 makedir([direc, '/TECplots']);    %store output plots with the simulation data
-makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
+%makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED MAGNETIC FIELD DATA
