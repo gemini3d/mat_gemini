@@ -1,4 +1,4 @@
-function run_gemini(cfgfile, outdir, gemini_exe, gemini_params)
+function gemini_run(cfgfile, outdir, gemini_exe, gemini_params)
 % consider the full-featured gemini/job.py
 narginchk(2, 4)
 
@@ -53,12 +53,12 @@ cmd = [prepend, ' ', cmd];
 %% dry run
 ret = system([cmd, ' -dryrun']);
 if ret~=0
-  error('run_gemini:runtime_error', 'Gemini dryrun failed')
+  error('gemini_run:runtime_error', 'Gemini dryrun failed')
 end
 %% run simulation
 ret = system(cmd);
 if ret~=0
-  error('run_gemini:runtime_error', 'Gemini run failed')
+  error('gemini_run:runtime_error', 'Gemini run failed')
 end
 
 end % function

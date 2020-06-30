@@ -1,6 +1,6 @@
 # Gemini Matlab scripts
 
-![ci](https://github.com/gemini3d/gemini-matlab/workflows/ci/badge.svg)
+![ci](https://github.com/gemini3d/mat_gemini/workflows/ci/badge.svg)
 
 These scripts form the basic core needed to work with Gemini to:
 
@@ -10,13 +10,13 @@ These scripts form the basic core needed to work with Gemini to:
 
 ## Usage
 
-To add paths to all the gemini-matlab functions, from the "gemini-matlab/" directory in Matlab:
+To add paths to all the mat_gemini functions, from the "mat_gemini/" directory in Matlab:
 
 ```matlab
 setup
 ```
 
-To run the self-tests, helping ensure you'll be able to correctly generate simulation inputs, from Matlab in the gemini-matlab directory:
+To run the self-tests, helping ensure you'll be able to correctly generate simulation inputs, from Matlab in the mat_gemini/ directory:
 
 ```matlab
 runtests('tests')
@@ -35,7 +35,7 @@ Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just di
 To run a Gemini simulation based on a directory's config.nml, from Matlab or GNU Octave:
 
 ```matlab
-run_gemini('/path/to/config.nml', '/path/to/output')
+gemini_run('/path/to/config.nml', '/path/to/output')
 ```
 
 ## Notes

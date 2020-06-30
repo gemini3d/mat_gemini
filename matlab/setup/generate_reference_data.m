@@ -19,7 +19,7 @@ names = get_testnames(topdir, only);
 gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format);
 
 for i = 1:length(names)
-  run_gemini(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
+  gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
 end
 
 end % function
