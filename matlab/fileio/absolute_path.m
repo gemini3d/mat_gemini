@@ -20,7 +20,7 @@ path = expanduser(path);
 if isoctave
   abspath = make_absolute_filename(path);
 else
-  if ~is_absolute_path(path);
+  if ~is_absolute_path(path)
     % otherwise the default is Documents/Matlab
     % which is probably not wanted.
     path = fullfile(pwd, path);

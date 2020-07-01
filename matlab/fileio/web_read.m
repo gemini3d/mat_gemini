@@ -1,9 +1,12 @@
 function S = web_read(varargin)
 % GNU Octave compatible
 
-if any(exist('webread', 'file') == [2,6]) || exist('webread', 'builtin') == 5
+try
   S = webread(varargin{:});
-else
+catch excp
+  if ~any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
+    rethrow(excp)
+  end
   S = urlread(varargin{:}); %#ok<URLRD>
 end
 

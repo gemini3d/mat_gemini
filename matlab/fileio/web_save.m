@@ -2,9 +2,12 @@ function fullpath = web_save(filename, url)
 % for Octave compatibility
 narginchk(2,2)
 
-if any(exist('websave', 'file') == [2,6]) || exist('websave', 'builtin') == 5
+try
   fullpath = websave(filename, url);
-else
+catch excp
+  if ~any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
+    rethrow(excp)
+  end
   fullpath = urlwrite(url, filename); %#ok<URLWR>
 end
 

@@ -1,4 +1,6 @@
 % test our custom high-level NetCDF4 interface
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, '../setup.m'))
 
 A0 = 42.;
 A1 = [42., 43.];

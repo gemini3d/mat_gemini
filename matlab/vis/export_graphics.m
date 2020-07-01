@@ -2,9 +2,13 @@ function export_graphics(varargin)
 % Matlab >= R2020a uses factory exportgraphics()
 % otherwise, uses next best factory print() function
 
-if any(exist('exportgraphics', 'file') == [2,6]) || exist('exportgraphics', 'builtin') == 5
+try
   exportgraphics(varargin{:})
   return
+catch excp
+  if ~any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
+    rethrow(excp)
+  end
 end
 
 %% Matlab < R2020a

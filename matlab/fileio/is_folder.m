@@ -12,11 +12,10 @@ path = expanduser(path);
 try
   ret = isfolder(path);
 catch excp
-  if any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
-    ret = exist(path, 'dir') == 7;
-  else
+  if ~any(strcmp(excp.identifier, {'MATLAB:UndefinedFunction', 'Octave:undefined-function'}))
     rethrow(excp)
   end
+  ret = exist(path, 'dir') == 7;
 end
 
 end % function
