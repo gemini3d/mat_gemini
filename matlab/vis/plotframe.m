@@ -146,8 +146,12 @@ if p.flagoutput ~= 3
   clf(h.f8)
   plotfun(ymd,UTsec,xg, dat.J3,'J_3 (A/m^2)',J3lim,[dat.mlatsrc,dat.mlonsrc],h.f8, Jcmap);
   clf(h.f9)
-%  plotfun(ymd,UTsec,xg, dat.Phitop,'topside potential \Phi_{top} (V)', ...
-%    Phitop_lim, [dat.mlatsrc, dat.mlonsrc], h.f9, Phi_cmap)
+  try
+  plotfun(ymd,UTsec,xg, dat.Phitop,'topside potential \Phi_{top} (V)', ...
+    Phitop_lim, [dat.mlatsrc, dat.mlonsrc], h.f9, Phi_cmap)
+  catch excp
+    warning(excp)
+  end
 end
 
 else    %short 2D simulation - put the entire time series in a single plot

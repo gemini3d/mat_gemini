@@ -199,27 +199,33 @@ maxzp=max(zp(:));
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
 FS=8;
 
-%MAKE THE PLOT!
-ha=subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
-h=imagesc(ha,xp,zp,parmp);
+
+if verLessThan('matlab', '9.7')
+  ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+else
+  t = tiledlayout(hf, 1, 3);
+  ax1 = nexttile(t, 'nextplot', 'add');
+  ax2 = nexttile(t, 'nextplot', 'add');
+  ax3 = nexttile(t, 'nextplot', 'add');
+end
+h=imagesc(ax1,xp,zp,parmp);
 if (flagsource)
-  plot(ha,[minxp,maxxp],[altref,altref],'--','LineWidth',1,'Color',[0.25 0.25 0.25]);
-  plot(ha,[sourcemlat,sourcemlat],[minzp,maxzp],'k--','LineWidth',1);
-  plot(ha,sourcemlat,0,'r^','MarkerSize',6,'LineWidth',2);
+  plot(ax1,[minxp,maxxp],[altref,altref],'--','LineWidth',1,'Color',[0.25 0.25 0.25]);
+  plot(ax1,[sourcemlat,sourcemlat],[minzp,maxzp],'k--','LineWidth',1);
+  plot(ax1,sourcemlat,0,'r^','MarkerSize',6,'LineWidth',2);
 end
 set(h,'alphadata',~isnan(parmp));
 
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims);
-c=colorbar(ha);
+colormap(ax1,cmap)
+caxis(ax1,caxlims);
+c=colorbar(ax1);
 xlabel(c,parmlbl);
-xlabel(ha,'magnetic latitude (deg.)');
-ylabel(ha,'altitude (km)');
+xlabel(ax1,'magnetic latitude (deg.)');
+ylabel(ax1,'altitude (km)');
 
-
-
-%CONSTRUCT A STRING FOR THE TIME AND DATE
+%% CONSTRUCT A STRING FOR THE TIME AND DATE
 t=UTsec/3600;     %decimal hours
 UThrs=floor(t);
 UTmin=floor((t-UThrs)*60);
@@ -237,56 +243,48 @@ end
 timestr=[UThrsstr,':',UTminstr,':',UTsecstr];
 strval=sprintf('%s \n %s',[num2str(ymd(1)),'/',num2str(ymd(2)),'/',num2str(ymd(3))], ...
     [timestr,' UT']);
-title(ha,strval,'Color','black');
+title(ax1,strval,'Color','black');
 
-
-
-ha=subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
+%% middle
 %h=imagesc(xp,yp,parmp2(:,:,2));
-h=imagesc(ha,yp,xp,parmp2(:,:,2)');    %so latitude is the vertical axis
+h=imagesc(ax2,yp,xp,parmp2(:,:,2)');    %so latitude is the vertical axis
 if (flagsource)
   %plot([minxp,maxxp],[sourcemlon,sourcemlon],'w--','LineWidth',2);
   %plot(sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
 %  plot([sourcemlon,sourcemlon],[minxp,maxxp],'w--','LineWidth',1);
-  plot(ha,sourcemlon,sourcemlat,'r^','MarkerSize',6,'LineWidth',2);
+  plot(ax2,sourcemlon,sourcemlat,'r^','MarkerSize',6,'LineWidth',2);
 end
 %set(h,'alphadata',~isnan(parmp2(:,:,2)));
 set(h,'alphadata',~isnan(parmp2(:,:,2)'));
 
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims);
-c=colorbar(ha);
+colormap(ax2,cmap)
+caxis(ax2,caxlims);
+c=colorbar(ax2);
 xlabel(c,parmlbl);
 %xlabel('magnetic latitude (deg.)');
 %ylabel('magnetic longitude (deg.)');
-xlabel(ha,'magnetic long. (deg.)');
-ylabel(ha,'magnetic lat. (deg.)');
+xlabel(ax2,'magnetic long. (deg.)');
+ylabel(ax2,'magnetic lat. (deg.)');
 
-
-ha=subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
-h=imagesc(ha,yp,zp3,squeeze(parmp3(:,2,:))');    %so latitude is the vertical axis
+%% right
+h=imagesc(ax3,yp,zp3,squeeze(parmp3(:,2,:))');    %so latitude is the vertical axis
 if (flagsource)
 %  plot([sourcemlon,sourcemlon],[minzp3,maxzp3],'k--','LineWidth',1);
-  plot(ha,sourcemlon,0,'r^','MarkerSize',6,'LineWidth',2);
+  plot(ax3,sourcemlon,0,'r^','MarkerSize',6,'LineWidth',2);
 end
 %set(h,'alphadata',~isnan(squeeze(parmp3(:,2,:))'));
 
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims);
-c=colorbar(ha);
+colormap(ax3,cmap)
+caxis(ax3,caxlims);
+c=colorbar(ax3);
 xlabel(c,parmlbl);
-xlabel(ha,'magnetic long. (deg.)');
-ylabel(ha,'altitude (km)');
+xlabel(ax3,'magnetic long. (deg.)');
+ylabel(ax3,'altitude (km)');
 
-
-%CONSTRUCT A STRING FOR THE TIME AND DATE
-%ha=subplot(1,3,1);
-
-%ttxt = time2str(ymd, UTsec);
-%title(ha, ttxt)
-%%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
-%%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
-
+if verLessThan('matlab', '9.7')
+  for a = [ax1, ax2, ax3]
+    tight_axis(a)
+  end
 end
+
+end % function
