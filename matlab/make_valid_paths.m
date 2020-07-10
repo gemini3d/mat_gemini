@@ -28,6 +28,9 @@ end % function
 
 function folder = make_valid_folder(folder, top)
 
+folder = expanduser(folder);
+% in case absolute path was specified
+
 if ~is_folder(folder)
   folder = fullfile(top, folder);
 end
@@ -36,6 +39,9 @@ end % function
 
 
 function filename = make_valid_filename(filename, top)
+
+filename = expanduser(filename);
+% in case absolute path was specified
 
 if ~is_folder(fileparts(filename))
   filename = fullfile(top, filename);

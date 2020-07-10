@@ -5,6 +5,8 @@ function [path, ext] = get_simsize_path(path)
 
 narginchk(1,1)
 
+path = expanduser(path);
+
 if is_file(path)
   [path, stem, ext] = fileparts(path);
   if strcmp(stem, 'simsize') && ~isempty(ext)
