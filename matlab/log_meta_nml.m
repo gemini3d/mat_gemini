@@ -5,6 +5,8 @@ validateattributes(meta, {'struct'}, {'scalar'},1)
 validateattributes(filename, {'char'}, {'vector'},2)
 validateattributes(namelist, {'char'}, {'vector'}, 3)
 
+filename = expanduser(filename);
+
 fid = fopen(filename, 'a');
 if fid < 1
   error('log_meta_nml:os_error', 'could not create file %s', filename)

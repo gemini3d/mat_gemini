@@ -2,6 +2,8 @@ function ncsave(filename, varname, A, ncdims, dtype)
 
 narginchk(3, 5)
 
+filename = expanduser(filename);
+
 if nargin >= 4 && ~isempty(ncdims)
   for i = 2:2:length(ncdims)
     sizeA(i/2) = ncdims{i};

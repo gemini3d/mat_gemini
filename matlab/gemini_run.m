@@ -48,9 +48,9 @@ end
 log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
 
 %% assemble run command
-np = get_mpi_count(fullfile(outdir, cfg.indat_size));
+np = get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = octave_mingw_path();
-cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, outdir);
+cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, cfg.outdir);
 disp(cmd)
 cmd = [prepend, ' ', cmd];
 %% dry run
