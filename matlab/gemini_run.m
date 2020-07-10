@@ -1,5 +1,8 @@
 function gemini_run(cfgfile, outdir, gemini_exe, gemini_params)
-% consider the full-featured gemini/job.py
+%% setup and run Gemini simulation
+% gemini_run('/path/to/config.nml', 'output_dir')
+%
+
 narginchk(2, 4)
 
 %% defaults
@@ -21,7 +24,7 @@ gemini_exe = get_gemini_exe(gemini_exe);
 assert(ret == 0, 'mpiexec not found')
 %% check if model needs to be setup
 cfg = read_config(cfgfile);
-cfg.outdir = outdir;
+cfg.outdir = expanduser(outdir);
 
 if isfield(gemini_params, 'file_format') && ~isempty(gemini_params.file_format)
   cfg.file_format = gemini_params.file_format;

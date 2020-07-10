@@ -3,6 +3,8 @@ function filename = get_configfile(path)
 
 narginchk(1,1)
 
+path = expanduser(path);
+
 if is_file(path)
   filename = path;
 elseif is_folder(path)

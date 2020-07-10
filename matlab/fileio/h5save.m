@@ -2,6 +2,9 @@ function h5save(filename, varname, A, sizeA, dtype)
 
 narginchk(3, 5)
 
+% Matlab can't cope with tilde in many cases, especially on Windows
+filename = expanduser(filename);
+
 if nargin < 4 || isempty(sizeA)
   if isvector(A)
     sizeA = length(A);

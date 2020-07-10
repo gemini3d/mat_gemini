@@ -6,6 +6,8 @@ validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2
 
 params = struct();
 
+filename = expanduser(filename);
+
 fid = fopen(filename);
 while ~feof(fid)
   line = fgetl(fid);
