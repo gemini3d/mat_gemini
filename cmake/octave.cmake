@@ -20,6 +20,6 @@ add_test(NAME octave:netcdf
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # bug in Octave-netcdf writing that needs to be fixed
-# add_test(NAME octave:project
-#   COMMAND ${Octave_EXECUTABLE} --eval "setup; test_project"
+# add_test(NAME octave:project_netcdf
+#   COMMAND ${Octave_EXECUTABLE} --eval "setup; test_project_netcdf"
 #   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
