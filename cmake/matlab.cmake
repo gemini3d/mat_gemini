@@ -20,21 +20,21 @@ add_test(NAME matlab:lint
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME matlab:unit
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_unit'); assert(~any(cell2mat({r.Failed})), 'fail')"
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_unit', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME matlab:hdf5
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_hdf5'); assert(~any(cell2mat({r.Failed})), 'fail')"
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_hdf5', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME matlab:netcdf
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_netcdf'); assert(~any(cell2mat({r.Failed})), 'fail')"
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_netcdf', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME matlab:project_hdf5
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_hdf5'); assert(~any(cell2mat({r.Failed})), 'fail')"
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_hdf5', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME matlab:project_netcdf
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_netcdf'); assert(~any(cell2mat({r.Failed})), 'fail')"
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_netcdf', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

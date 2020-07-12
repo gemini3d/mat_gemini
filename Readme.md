@@ -16,11 +16,15 @@ To add paths to all the mat_gemini functions, from the "mat_gemini/" directory i
 setup
 ```
 
-To run the self-tests, helping ensure you'll be able to correctly generate simulation inputs, from Matlab in the mat_gemini/ directory:
+### Self-tests
+
+To run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-runtests('tests')
+runtests('tests', 'UseParallel',true)
 ```
+
+If you have the Parallel Computing Toolbox, the tests will run in parallel.
 
 ### Plot all simulation outputs
 
@@ -46,7 +50,7 @@ Currently, bugs and feature limitations in Octave prevent the full use of Octave
 
 #### HDF5: feature missing from Octave
 
-GNU Octave currently can not do HDF5.
+GNU Octave currently cannot use HDF5.
 Octave's `save('-hdf5','out.h5',...)` saves the variables in a fixed layout that's not usable for Gemini.
 
 #### NetCDF4: buggy file writing

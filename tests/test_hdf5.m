@@ -9,44 +9,43 @@ A3 = A2(:,1:3,1);
 A3(:,:,2) = 2*A3;
 A4(:,:,:,5) = A3;
 
-basic = fullfile(tempdir, 'basic.h5');
-if is_file(basic), delete(basic), end
-
 %% test_write_basic
-h5save(basic, '/A0', A0)
-h5save(basic, '/A1', A1)
-h5save(basic, '/A2', A2)
-h5save(basic, '/A3', A3)
-h5save(basic, '/A4', A4)
-%% test_get_variables
-vars = h5variables(basic);
+f1 = fullfile(tempdir, '1.h5');
+h5save(f1, '/A0', A0)
+h5save(f1, '/A1', A1)
+h5save(f1, '/A2', A2)
+h5save(f1, '/A3', A3)
+h5save(f1, '/A4', A4)
+
+vars = h5variables(f1);
 assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
-%% test_exists
-assert(h5exists(basic, '/A3'), 'A3 exists')
-assert(~h5exists(basic, '/oops'), 'oops not exist')
-%% test_size
-s = h5size(basic, '/A0');
+
+assert(h5exists(f1, '/A3'), 'A3 exists')
+assert(~h5exists(f1, '/oops'), 'oops not exist')
+
+s = h5size(f1, '/A0');
 assert(isscalar(s) && s==1, 'A0 shape')
 
-s = h5size(basic, '/A1');
+s = h5size(f1, '/A1');
 assert(isscalar(s) && s==2, 'A1 shape')
 
-s = h5size(basic, '/A2');
+s = h5size(f1, '/A2');
 assert(isvector(s) && isequal(s, [4,4]), 'A2 shape')
 
-s = h5size(basic, '/A3');
+s = h5size(f1, '/A3');
 assert(isvector(s) && isequal(s, [4,3,2]), 'A3 shape')
 
-s = h5size(basic, '/A4');
+s = h5size(f1, '/A4');
 assert(isvector(s) && isequal(s, [4,3,2,5]), 'A4 shape')
-%% test_coerce
-h5save(basic, '/int32', A0, [], 'int32')
-h5save(basic, '/int64', A0, [], 'int64')
-h5save(basic, '/float32', A0, [], 'float32')
 
-assert(isa(h5read(basic, '/int32'), 'int32'), 'int32')
-assert(isa(h5read(basic, '/int64'), 'int64'), 'int64')
-assert(isa(h5read(basic, '/float32'), 'single'), 'float32')
-%% test_rewrite
-h5save(basic, '/A2', 3*magic(4))
-assert(isequal(h5read(basic, '/A2'), 3*magic(4)), 'rewrite 2D fail')
+h5save(f1, '/A2', 3*magic(4))
+assert(isequal(h5read(f1, '/A2'), 3*magic(4)), 'rewrite 2D fail')
+%% test_coerce
+f2 = fullfile(tempdir, '2.h5');
+h5save(f2, '/int32', A0, [], 'int32')
+h5save(f2, '/int64', A0, [], 'int64')
+h5save(f2, '/float32', A0, [], 'float32')
+
+assert(isa(h5read(f2, '/int32'), 'int32'), 'int32')
+assert(isa(h5read(f2, '/int64'), 'int64'), 'int64')
+assert(isa(h5read(f2, '/float32'), 'single'), 'float32')
