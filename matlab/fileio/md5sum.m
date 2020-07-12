@@ -11,7 +11,7 @@ else
     return
   end
   p = pyenv();
-  if isempty(p.Version) % Python not configured
+  if isempty(char(p.Version)) % Python not configured
     return
   end
   h = py.hashlib.md5();
