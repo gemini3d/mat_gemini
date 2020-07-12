@@ -80,14 +80,11 @@ h5save(fn, '/x2i', xg.x2i, [], freal)
 h5save(fn, '/dx2b', xg.dx2b, [], freal)
 h5save(fn, '/dx2h', xg.dx2h, [], freal)
 
-x3tmp=squeeze(xg.x3);       %MZ - patch for dipole grids
-h5save(fn, '/x3', x3tmp, [], freal)
-x3itmp=squeeze(xg.x3i);
-h5save(fn, '/x3i', x3itmp, [], freal)
-dx3btmp=squeeze(xg.dx3b);
-h5save(fn, '/dx3b', dx3btmp, [], freal)
-dx3htmp=squeeze(xg.dx3h);
-h5save(fn, '/dx3h', dx3htmp, [], freal)
+%MZ - squeeze() for dipole grids
+h5save(fn, '/x3', squeeze(xg.x3), [], freal)
+h5save(fn, '/x3i', squeeze(xg.x3i), [], freal)
+h5save(fn, '/dx3b', squeeze(xg.dx3b), [], freal)
+h5save(fn, '/dx3h', squeeze(xg.dx3h), [], freal)
 
 h5save(fn, '/h1', xg.h1, [lx1+4, lx2+4, lx3+4], freal)
 h5save(fn, '/h2', xg.h2, [lx1+4, lx2+4, lx3+4], freal)
@@ -114,8 +111,8 @@ h5save(fn, '/glat', xg.glat, [lx1, lx2, lx3], freal)
 h5save(fn, '/glon', xg.glon, [lx1, lx2, lx3], freal)
 
 h5save(fn, '/Bmag', xg.Bmag, [lx1, lx2, lx3], freal)
-Itmp=squeeze(xg.I);      % MZ - patch for singleton dimensions
-h5save(fn, '/I', Itmp, [lx2, lx3], freal)     % MZ - patch 
+% MZ - squeeze() for singleton dimensions
+h5save(fn, '/I', squeeze(xg.I), [lx2, lx3], freal)
 h5save(fn, '/nullpts', xg.nullpts, [lx1, lx2, lx3], freal)
 
 h5save(fn, '/e1', xg.e1, [lx1, lx2, lx3, 3], freal)
