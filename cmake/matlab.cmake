@@ -15,26 +15,23 @@ if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.6)
   return()
 endif()
 
-add_test(NAME matlab:lint
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_lint'); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+include(ProcessorCount)
+ProcessorCount(Ncpu)
 
-add_test(NAME matlab:unit
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_unit', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+function(matlab_test test_name test_cell parallel)
+# with short tests, useparallel makes take longer due to long parallel pool startup time
 
-add_test(NAME matlab:hdf5
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_hdf5', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(NAME matlab:${test_name}
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests(${test_cell}, 'UseParallel', ${parallel}); assert(~any(cell2mat({r.Failed})), '${test_name} fail')"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set_tests_properties(matlab:${test_name} PROPERTIES
+  PROCESSORS ${Ncpu}
+  TIMEOUT 600)
 
-add_test(NAME matlab:netcdf
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_netcdf', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endfunction(matlab_test)
 
-add_test(NAME matlab:project_hdf5
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_hdf5', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+matlab_test(lint "{'test_lint'}", 0)
 
-add_test(NAME matlab:project_netcdf
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "setup; r=runtests('test_project_netcdf', 'UseParallel',true); assert(~any(cell2mat({r.Failed})), 'fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+matlab_test(unit "{'test_unit', 'test_hdf5', 'test_netcdf'}", 0)
+
+matlab_test(project "{'test_project_hdf5', 'test_project_netcdf'}", 1)
