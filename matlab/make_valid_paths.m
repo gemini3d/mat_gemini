@@ -2,7 +2,9 @@ function cfg = make_valid_paths(cfg, top)
 %% resolve all paths in the config struct
 narginchk(1,2)
 
-cfg.outdir = expanduser(cfg.outdir);
+if isfield(cfg, 'outdir')
+  cfg.outdir = expanduser(cfg.outdir);
+end
 
 if nargin < 2
   top = cfg.outdir;

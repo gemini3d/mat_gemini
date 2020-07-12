@@ -27,10 +27,10 @@ end %if
 % FIXME:  may want validate potential input
 
 switch file_format
-  case 'h5', write_hdf5(outdir, ymd, UTsec, ns, vsx1, Ts, Phitop)
+  case 'h5', write_hdf5(fn, ymd, UTsec, ns, vsx1, Ts, Phitop)
   % Note that the raw file input does not accept potential input!!!
-  case 'dat', write_raw(outdir, ymd, UTsec, ns, vsx1, Ts, realbits)
-  case 'nc', write_nc4(outdir, ymd, UTsec, ns, vsx1, Ts, Phitop)
+  case 'dat', write_raw(fn, ymd, UTsec, ns, vsx1, Ts, realbits)
+  case 'nc', write_nc4(fn, ymd, UTsec, ns, vsx1, Ts, Phitop)
   otherwise, error('writedata:value_error', 'unknown file_format %s', file_format)
 end
 

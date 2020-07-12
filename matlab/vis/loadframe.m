@@ -98,13 +98,16 @@ if dat_shape(2) ~= xg.lx(2)
   end
 end
 % x3
-if dat_shape(3) ~= xg.lx(3)
-  if dat_shape(3) == 1 || xg.lx(3) == 1
-    if dat_shape(3) ~= xg.lx(2) % check for swap
+if xg.lx(3) > 1
+  % squeeze() added by Matt Z. inside MatGemini can remove x3
+  if dat_shape(3) ~= xg.lx(3)
+    if dat_shape(3) == 1 || xg.lx(3) == 1
+      if dat_shape(3) ~= xg.lx(2) % check for swap
+        error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
+      end
+    else
       error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
     end
-  else
-    error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
   end
 end
 
