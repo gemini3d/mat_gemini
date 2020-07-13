@@ -15,6 +15,9 @@ assert(is_folder(topdir), '%s is not a folder', topdir)
 
 %% run each simulation
 names = get_testnames(topdir, only);
+if isempty(names)
+  error(['No inputs under ',topdir,' with ', only])
+end
 
 gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format);
 
