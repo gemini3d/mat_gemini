@@ -1,4 +1,4 @@
-% test basic functions
+% test project generation
 
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd) % since we have to cd() in runner()

@@ -52,11 +52,12 @@ h5save(fn, '/mlat', E.mlat, [], freal)
 
 disp(['write to ', dir_out])
 Nt = size(E.expdate, 1);
-for i = 1:Nt
-  UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
+parfor i = 1:Nt
+  UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6); %#ok<PFBNS>
   ymd = E.expdate(i, 1:3);
 
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.h5']);
+  if is_file(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
@@ -92,11 +93,12 @@ ncsave(fn, 'mlat', E.mlat, dlat, freal)
 
 disp(['write to ', dir_out])
 Nt = size(E.expdate, 1);
-for i = 1:Nt
-  UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
+parfor i = 1:Nt
+  UTsec = E.expdate(i, 4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6); %#ok<PFBNS>
   ymd = E.expdate(i, 1:3);
 
   fn = fullfile(dir_out, [datelab(ymd,UTsec), '.nc']);
+  if is_file(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
