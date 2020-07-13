@@ -49,7 +49,7 @@ log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'setup_me
 
 %% assemble run command
 np = get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
-prepend = octave_mingw_path();
+prepend = modify_path();
 cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, cfg.outdir);
 disp(cmd)
 cmd = [prepend, ' ', cmd];

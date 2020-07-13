@@ -72,7 +72,7 @@ fclose(fid);
 fout = fullfile(tempdir, 'msis_setup_output.dat');
 cmd = [exe,' ',fin,' ',fout,' ',int2str(lz)];
 disp(cmd)
-prepend = octave_mingw_path();
+prepend = modify_path();
 [status, msg] = system([prepend, ' ', cmd]);   %output written to file
 if status~=0, error('msis_matlab3D:runtime_error', 'problem running MSIS %s', msg), end
 

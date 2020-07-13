@@ -10,7 +10,7 @@ if ~is_file(exe)
   error('get_gemini_exe:file_not_found', 'Gemini.bin executable not found in %s', fileparts(exe))
 end
 %% sanity check gemini.bin executable
-prepend = octave_mingw_path();
+prepend = modify_path();
 [ret, msg] = system([prepend, ' ', exe]);
 assert(ret==0, 'problem with %s: %s', exe, msg)
 
