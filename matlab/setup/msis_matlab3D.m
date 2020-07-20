@@ -29,7 +29,7 @@ if ispc, exe = [exe, '.exe']; end
 
 %% build exe if not present
 if ~is_file(exe)
-  cmake(src_dir, build_dir)
+  cmake(src_dir)
 end
 
 if ~is_file(exe),
