@@ -75,10 +75,10 @@ dimspec = {'x1', size(ns, 1), 'x2', size(ns, 2), 'x3', size(ns,3), 'species', 7}
 dimspec2 = {'x2', size(ns, 2), 'x3', size(ns,3)};
 
 ncsave(fn, 'UTsec', UTsec)
-ncsave(fn, 'ns', ns, dimspec, freal)
-ncsave(fn, 'vsx1', vsx1, dimspec, freal)
-ncsave(fn, 'Ts', Ts, dimspec, freal)
-ncsave(fn, 'Phi', Phitop, dimspec2, freal)
+ncsave(fn, 'nsall', ns, dimspec, freal)
+ncsave(fn, 'vs1all', vsx1, dimspec, freal)
+ncsave(fn, 'Tsall', Ts, dimspec, freal)
+ncsave(fn, 'Phiall', Phitop, dimspec2, freal)
 
 end % function
 
