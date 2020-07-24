@@ -30,8 +30,8 @@ set_tests_properties(matlab:${test_name} PROPERTIES
 
 endfunction(matlab_test)
 
-matlab_test(lint "{'test_lint'}", 0)
+matlab_test(lint "{'test_lint'}" 0)
 
-matlab_test(unit "{'test_unit', 'test_hdf5', 'test_netcdf'}", 0)
+matlab_test(unit "{'test_unit', 'test_hdf5', 'test_netcdf'}" 0)
 
-matlab_test(project "{'test_project_hdf5', 'test_project_netcdf'}", 1)
+matlab_test(project "{'test_project_hdf5', 'test_project_netcdf'}" 1)
