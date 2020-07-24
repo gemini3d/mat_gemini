@@ -150,9 +150,9 @@ new = loadframe3Dcurvnoelec(new_params.indat_file);
 
 errs = 0;
 
-errs = errs + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atol, 'Ns', true);
-errs = errs + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atol, 'Ts', true);
-errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atol, 'vs', true);
+errs = errs + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atolN/100, 'Ns', true);
+errs = errs + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atolT/100, 'Ts', true);
+errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atolV/100, 'vs', true);
 
 UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
 %% precipitation
@@ -194,7 +194,7 @@ for k = h5variables(ref.filename)
   a = new.(k{:});
 
   if any(size(a) ~= size(b))
-    error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+    error("compare_all:value_error", [k{:}, ': ref shape ', int2str(size(b)), ' != data shape ', int2str(size(a))])
   end
 
   if ~allclose(a, b, tol.rtol, tol.atol)

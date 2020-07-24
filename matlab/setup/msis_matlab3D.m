@@ -61,6 +61,7 @@ iyd = yearshort*1000+doy;
 alt(alt <= 0) = 1;
 %% CREATE INPUT FILE FOR FORTRAN PROGRAM
 fin = tempname;
+% need a unique input temporary filename for parallel runs
 
 fid=fopen(fin,'w');
 fwrite(fid,iyd,'integer*4');
@@ -80,7 +81,7 @@ disp(cmd)
 prepend = modify_path();
 [status, msg] = system([prepend, ' ', cmd]);   %output written to file
 assert(status==0, 'problem running MSIS %s', msg)
-
+delete(fin);
 %% binary output
 % fid=fopen(fout,'r');
 % msis_dat=fread(fid,lz*11,'real*4=>real*8');
