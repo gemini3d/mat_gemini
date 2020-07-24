@@ -32,9 +32,8 @@ if ~is_file(exe)
   cmake(src_dir)
 end
 
-if ~is_file(exe),
-  error('msis_matlab3d:file_not_found', 'MSIS setup executable not found: %s', exe)
-end
+assert (is_file(exe), 'MSIS setup executable not found: %s', exe)
+
 %% SPECIFY SIZES ETC.
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 alt=xg.alt(:)/1e3;
@@ -42,20 +41,27 @@ glat=xg.glat(:);
 glon=xg.glon(:);
 lz=lx1*lx2*lx3;
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
-f107a = p.activ(1);
-f107 = p.activ(2);
-ap = p.activ(3);
-ap3 = p.activ(3);
+if isfield(p, 'activ')
+  f107a = p.activ(1);
+  f107 = p.activ(2);
+  ap = p.activ(3);
+  ap3 = p.activ(3);
+else
+  f107a = p.f107a;
+  f107 = p.f107;
+  ap = p.Ap;
+  ap3 = p.Ap;
+end
 doy = day_of_year(p.ymd);
 
 disp(['MSIS00 using DOY:  ',int2str(doy)])
 yearshort = mod(p.ymd(1),100);
 iyd = yearshort*1000+doy;
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
-alt(alt(:)<=0)=1;
-%% FIND A UNIQUE IDENTIFIER FOR THE INPUT FILE
-fin = fullfile(tempdir, 'msis_setup_input.dat');
-%% CREATE AND INPUT FILE FOR FORTRAN PROGRAM
+alt(alt <= 0) = 1;
+%% CREATE INPUT FILE FOR FORTRAN PROGRAM
+fin = tempname;
+
 fid=fopen(fin,'w');
 fwrite(fid,iyd,'integer*4');
 fwrite(fid,p.UTsec0,'integer*4');
@@ -69,30 +75,30 @@ fwrite(fid,glon,'real*4');
 fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
-fout = fullfile(tempdir, 'msis_setup_output.dat');
-cmd = [exe,' ',fin,' ',fout,' ',int2str(lz)];
+cmd = sprintf('%s %s - %d',exe, fin, lz);
 disp(cmd)
 prepend = modify_path();
 [status, msg] = system([prepend, ' ', cmd]);   %output written to file
-if status~=0, error('msis_matlab3D:runtime_error', 'problem running MSIS %s', msg), end
+assert(status==0, 'problem running MSIS %s', msg)
 
-fid=fopen(fout,'r');
-msisdat=fread(fid,lz*11,'real*4=>real*8');
-msisdat=reshape(msisdat,[11 lz]);
-msisdat=msisdat';
-fclose(fid);
+%% binary output
+% fid=fopen(fout,'r');
+% msis_dat=fread(fid,lz*11,'real*4=>real*8');
+% msis_dat=reshape(msis_dat,[11 lz]);
+% msis_dat=msis_dat';
+% fclose(fid);
+% delete(fout);
+%% stdout
+msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
+assert(all(size(msis_dat) == [lz, 11]), 'msis_setup did not return expected shape')
 %% ORGANIZE
-nO=reshape(msisdat(:,3),lx1,lx2,lx3);
-nN2=reshape(msisdat(:,4),lx1,lx2,lx3);
-nO2=reshape(msisdat(:,5),lx1,lx2,lx3);
-Tn=reshape(msisdat(:,11),lx1,lx2,lx3);
-nN=reshape(msisdat(:,9),lx1,lx2,lx3);
+nO=reshape(msis_dat(:,3), xg.lx);
+nN2=reshape(msis_dat(:,4), xg.lx);
+nO2=reshape(msis_dat(:,5), xg.lx);
+Tn=reshape(msis_dat(:,11), xg.lx);
+nN=reshape(msis_dat(:,9), xg.lx);
 nNO=4e-1*exp(-3700./Tn).*nO2+5e-7*nO;       %Mitra, 1968
-nH=reshape(msisdat(:,8),lx1,lx2,lx3);
+nH=reshape(msis_dat(:,8), xg.lx);
 natm=cat(4,nO,nN2,nO2,Tn,nN,nNO,nH);
 
-delete(fin);
-delete(fout);
-
-if nargout==0, clear('natm'), end
-end
+end % function
