@@ -1,6 +1,8 @@
 function prepend = modify_path()
 % for Octave on Windows, it's necessary to prepend MinGW path
 % when running MinGW-compile exectuables
+% Also, Matlab with Parallel Toolbox MPIEXEC conflicts with system MPIEXEC,
+% so excise from Path
 %
 % a command is then run like
 %

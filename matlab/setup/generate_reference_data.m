@@ -1,6 +1,15 @@
 function generate_reference_data(topdir, outdir, only, gemini_exe, file_format)
 % generate (run) all simulations under topdir
 % good to regenerate Zenodo reference data
+%
+% Parameters
+% ----------
+%
+% topdir: top directory over subdirectories of config.nml
+% outdir: top directory to write simulation outputs into from Gemini3D
+% only: cell array of simulation names to run
+% gemini_exe: full path to Gemini.bin executable
+% file_format: 'h5' or 'nc' (defaults to HDF5)
 
 narginchk(2, 5)
 
