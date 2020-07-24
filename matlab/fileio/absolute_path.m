@@ -26,7 +26,11 @@ else
     path = fullfile(pwd, path);
   end
   try
-    abspath = char(java.io.File(path).getCanonicalPath());
+    if usejava('jvm')
+      abspath = char(java.io.File(path).getCanonicalPath());
+    else
+      abspath = path;
+    end
   catch
     % fprintf(2, 'could not make absolute path from %s\n', path)
     abspath = path;
