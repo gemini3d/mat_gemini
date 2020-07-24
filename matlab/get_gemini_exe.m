@@ -22,7 +22,7 @@ narginchk(0,0)
 
 gemini_root = getenv('GEMINI_ROOT');
 assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
-assert(is_folder(gemini_root), 'Gemini3D directory not found')
+assert(is_folder(gemini_root), 'Gemini3D directory not found: %s', gemini_root)
 exe = fullfile(gemini_root, 'build/gemini.bin');
 if ispc
   exe = [exe, '.exe'];
