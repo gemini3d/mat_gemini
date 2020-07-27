@@ -5,7 +5,7 @@ narginchk(0,0)
 cwd = fileparts(mfilename('fullpath'));
 addpath(genpath(fullfile(cwd, 'matlab')), 'tests')
 
-gemini_root = absolute_path(fullfile(cwd, '../gemini/'));
+gemini_root = absolute_path(fullfile(cwd, '../gemini3d/'));
 if is_folder(gemini_root)
   setenv('GEMINI_ROOT', gemini_root)
 end
