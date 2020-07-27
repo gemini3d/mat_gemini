@@ -48,11 +48,18 @@ for i = 1:length(file_list)
   filename = [aurora_dir, '/', file_list(i).name];
   bFrame = loadglow_aurmap(filename, lx2, lx3, lwave);
 
-  if lx3 > 1  % 3D sim
+if lx2 > 1 && lx3 > 1
+    % 3D sim
     hf = plot_emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible);
-  else  % 2D sim
-    hf = plot_emissions(x2, wavelengths, squeeze(bFrame), time_str, hf, visible);
-  end
+elseif lx2 > 1
+     % 2D east-west
+    hf = plot_emissions(x2, wavelengths, bFrame, time_str, hf, visible);
+elseif lx3 > 1
+     % 2D north-south
+    hf = plot_emissions(x3, wavelengths, bFrame, time_str, hf, visible);
+else
+  error('impossible configuration')
+end
 
   if params.flagoutput ~= 3
     save_glowframe(filename, saveplot_fmt, hf)
@@ -66,10 +73,10 @@ end
 end % function
 
 
-function hf = plot_emissions(x2, wavelengths, bFrame, time_str, hf, visible)
+function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible)
 narginchk(4,6)
-validateattributes(x2, {'numeric'}, {'vector'}, 1)
-validateattributes(bFrame, {'numeric'}, {'ndims', 2}, 3)
+validateattributes(x, {'numeric'}, {'vector'}, 1)
+validateattributes(bFrame, {'numeric'}, {'nonnegative'}, 3)
 validateattributes(wavelengths, {'cell'}, {'vector'}, 2)
 if nargin < 6, visible = true; end
 
@@ -80,9 +87,13 @@ else
 end
 
 ax = axes('parent', hf);
-imagesc(1:length(wavelengths), x2/1e3,squeeze(bFrame))    % singleton dimension since 2D simulation
+imagesc(1:length(wavelengths), x / 1e3,squeeze(bFrame))    % singleton dimension since 2D simulation
 set(ax, 'xtick', 1:length(wavelengths), 'xticklabel', wavelengths)
-ylabel(ax, 'Eastward Distance (km)')
+if size(bFrame, 2) == 1
+  ylabel(ax, 'Northward Distance (km)')
+elseif size(bFrame, 3) == 1
+  ylabel(ax, 'Eastward Distance (km)')
+end
 xlabel(ax, 'emission wavelength (\AA)', 'interpreter', 'latex')
 title(ax, time_str)
 hc = colorbar('peer', ax);
