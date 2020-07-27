@@ -5,10 +5,8 @@ narginchk(1,1)
 names = [];
 groups = [];
 
-filename = expanduser(filename);
-
 % use temporary variable to be R2017b OK
-finf = h5info(filename);
+finf = h5info(expanduser(filename));
 ds = finf.Datasets;
 if isempty(ds)
   return

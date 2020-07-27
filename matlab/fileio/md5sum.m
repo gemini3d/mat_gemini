@@ -1,5 +1,8 @@
 function hash = md5sum(file)
 % compute MD5 hash of file
+narginchk(1,1)
+
+file = expanduser(file);
 
 assert(is_file(file), '%s not found', file)
 
