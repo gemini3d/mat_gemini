@@ -17,7 +17,7 @@ dpi = 150;
 % filename has the suffix, let's ditch the suffix.
 [~, stem] = fileparts(filename);
 
-plotdir = fullfile(direc, 'plots');
+plotdir = fullfile(expanduser(direc), 'plots');
 
 makedir(plotdir)
 
