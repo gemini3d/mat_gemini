@@ -1,10 +1,18 @@
 function plotglow(direc, saveplot_fmt, visible)
 % plots Gemini-Glow auroral emissions
 narginchk(1,3)
-if nargin<2, saveplot_fmt={'png'}; end  %e.g. {'png'} or {'png', 'eps'}
-if nargin<3, visible = 'on'; end
 
-assert(is_folder(direc), [direc, ' is not a directory.'])
+if nargin<3
+  if nargin < 2 || isempty(saveplot_fmt)
+    visible =true;
+  else
+    visible = false;
+  end
+end
+
+if nargin<2, saveplot_fmt={'png'}; end
+
+assert(is_folder(direc), 'not a directory: %s', direc)
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -60,10 +68,10 @@ end % function
 
 function hf = plot_emissions(x2, wavelengths, bFrame, time_str, hf, visible)
 narginchk(4,6)
-validateattributes(x2, {'numeric'}, {'vector'}, mfilename)
-validateattributes(bFrame, {'numeric'}, {'ndims', 2}, mfilename)
-validateattributes(wavelengths, {'cell'}, {'vector'}, mfilename)
-if nargin < 6, visible = 'on'; end
+validateattributes(x2, {'numeric'}, {'vector'}, 1)
+validateattributes(bFrame, {'numeric'}, {'ndims', 2}, 3)
+validateattributes(wavelengths, {'cell'}, {'vector'}, 2)
+if nargin < 6, visible = true; end
 
 if nargin < 5 || isempty(hf)
   hf = make_glowfig(visible);
@@ -89,7 +97,7 @@ validateattributes(x3, {'numeric'}, {'vector'}, mfilename)
 validateattributes(bFrame, {'numeric'}, {'ndims', 3}, mfilename)
 validateattributes(time_str, {'cell'}, {'vector'}, mfilename)
 validateattributes(wavelengths, {'cell'}, {'vector'}, mfilename)
-if nargin < 7, visible = 'on'; end
+if nargin < 7, visible = true; end
 
 if nargin < 5 || isempty(hf)
   hf = make_glowfig(visible);
@@ -121,12 +129,11 @@ end % function
 
 function hf = make_glowfig(visible)
 narginchk(0,1)
-if nargin < 1, visible = 'on'; end
-validateattributes(visible, {'char'}, {'vector'})
+if nargin < 1, visible = true; end
 
-hf = figure('toolbar', 'none');
+hf = figure('toolbar', 'none', 'name', 'aurora', 'unit', 'pixels',  'VIsible', visible);
 pos = get(hf, 'position');
-set(hf, 'name', 'aurora', 'unit', 'pixels', 'position', [pos(1), pos(2), 800, 500], 'visible', visible)
+set(hf, 'position', [pos(1), pos(2), 800, 500])
 
 end
 %ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libxvid -r 30 -q:v 0 isinglass_geminiglow_4278.avi
