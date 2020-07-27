@@ -3,7 +3,7 @@ project(MSIS LANGUAGES Fortran)
 enable_testing()
 
 set(gemini_url "https://github.com/gemini3d/gemini3d.git")
-set(gemini_tag "v0.6.1")
+set(gemini_tag "master")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/git.cmake)
