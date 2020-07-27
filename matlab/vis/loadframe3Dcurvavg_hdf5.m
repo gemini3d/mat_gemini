@@ -2,7 +2,6 @@ function dat = loadframe3Dcurvavg_hdf5(filename)
 
 narginchk(1,1)
 %% SIMULATIONS RESULTS
-assert(is_file(filename), [filename,' does not exist '])
 dat.filename = filename;
 
 % simdate=zeros(1,6);    %datevec-style array

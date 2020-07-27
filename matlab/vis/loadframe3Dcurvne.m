@@ -4,7 +4,7 @@ narginchk(1,1)
 
 [~,~,ext] = fileparts(filename);
 
-assert(is_file(filename), [filename,' is not a file.'])
+assert(is_file(filename), 'not a file: %s', filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);

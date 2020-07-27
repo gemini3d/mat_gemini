@@ -5,7 +5,6 @@ narginchk(1,1)
 lsp=7;
 lxs = simsize(filename);
 %% SIMULATION RESULTS
-assert(is_file(filename), [filename,' is not a file.'])
 dat.filename = filename;
 
 fid = fopen(filename, 'r');

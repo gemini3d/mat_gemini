@@ -2,7 +2,6 @@ function dat = loadframe3Dcurvnoelec_nc4(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
 narginchk(1,1)
 %% SIMULATIONS RESULTS
-assert(is_file(filename), [filename,' does not exist '])
 dat.filename = filename;
 
 if isoctave

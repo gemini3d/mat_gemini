@@ -2,7 +2,6 @@ function dat = loadframe3Dcurv_nc4(fn)
 
 narginchk(1,1)
 %% SIMULATION RESULTS
-assert(is_file(fn), [fn,' is not a file.'])
 dat.filename = fn;
 
 if isoctave

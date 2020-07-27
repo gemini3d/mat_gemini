@@ -2,6 +2,7 @@ function dat = loadframe3Dcurvavg(filename)
 
 narginchk(1,1)
 [~,~,ext] = fileparts(filename);
+assert(is_file(filename), 'not a file: %s', filename)
 
 switch ext
   case '.h5', dat = loadframe3Dcurvavg_hdf5(filename);
