@@ -20,8 +20,14 @@ end
 %% get gemini.bin executable
 gemini_exe = get_gemini_exe(gemini_exe);
 %% ensure mpiexec is available
-[ret, ~] = system('mpiexec -help');
+[ret, msg] = system('mpiexec -help');
 assert(ret == 0, 'mpiexec not found')
+if ispc
+% check that MPIexec matches gemini.bin.exe
+[~, vendor] = system([gemini_exe, ' -compiler']);
+if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
+  error('gemini_run:runtime_error', 'MinGW is not compatible with Intel MPI')
+end
 %% check if model needs to be setup
 cfg = read_config(cfgfile);
 cfg.outdir = expanduser(outdir);
@@ -53,6 +59,12 @@ prepend = modify_path();
 cmd = sprintf('%s -n %d %s %s', gemini_params.mpiexec, np, gemini_exe, cfg.outdir);
 disp(cmd)
 cmd = [prepend, ' ', cmd];
+%%% dry run
+% py_cmd = py.list(split(cmd)');
+% py_dryrun = py_cmd;
+% py_dryrun.append('-dryrun')
+% py.subprocess.check_call(py_dryrun)
+
 %% dry run
 ret = system([cmd, ' -dryrun']);
 if ret~=0
