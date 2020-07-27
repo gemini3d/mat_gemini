@@ -4,6 +4,9 @@ narginchk(3,3)
 validateattributes(ymd, {'numeric'}, {'numel',3,'positive'},2)
 validateattributes(UTsec, {'numeric'}, {'scalar','nonnegative'},3)
 
+direc = expanduser(direc);
+% so that we return a usable path
+
 stem0 = datelab(ymd, UTsec);
 
 suffix = {'.h5', '.nc', '.dat'};
