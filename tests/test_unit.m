@@ -1,7 +1,7 @@
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../setup.m'))
 %% md5sum
-hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'url.ini'));
+hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'gemini3d_url.ini'));
 if ~isempty(hash)
   assert(strcmp(hash, '8ace28a6581a3c00499b626a05318f51'), 'md5sum %s', hash)
 end

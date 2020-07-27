@@ -11,10 +11,10 @@ validateattributes(data_dir, {'char'}, {'vector'}, mfilename, 'data directory',2
 if nargin < 3
   matlab_root = getenv('GEMINI_MATLAB');
   if is_folder(matlab_root)
-    url_ini = fullfile(matlab_root, '../tests/url.ini');
+    url_ini = fullfile(matlab_root, '../tests/gemini3d_url.ini');
   else
     cwd = fileparts(mfilename('fullpath'));
-    url_ini = fullfile(cwd, '../../tests/url.ini');
+    url_ini = fullfile(cwd, '../../tests/gemini3d_url.ini');
   end
 end
 
