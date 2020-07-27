@@ -20,12 +20,12 @@ end
 
 if nargin<5
   if isempty(saveplot_fmt)
-    visible = 'on';
+    visible = true;
   else
-    visible = 'off';
+    visible = false;
   end
 end
-validateattributes(visible, {'char'}, {'vector'}, mfilename, 'plot visibility: on/off', 5)
+validateattributes(visible, {'logical'}, {'scalar'}, mfilename, 'plot visibility', 5)
 
 lxs = simsize(direc);
 disp(['sim grid dimensions: ',num2str(lxs)])
