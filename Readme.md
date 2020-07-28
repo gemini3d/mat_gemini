@@ -1,6 +1,9 @@
 # Gemini Matlab scripts
 
 ![ci](https://github.com/gemini3d/mat_gemini/workflows/ci/badge.svg)
+[![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
+[![View MatGemini on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/78676-matgemini)
+
 
 These scripts form the basic core needed to work with Gemini to:
 
