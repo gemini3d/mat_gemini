@@ -3,49 +3,67 @@ cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../setup.m'))
 
 A0 = 42.;
-A1 = [42., 43.];
+A1 = [42.; 43.];
 A2 = magic(4);
 A3 = A2(:,1:3,1);
 A3(:,:,2) = 2*A3;
 A4(:,:,:,5) = A3;
 
+basic = [tempname, '.h5'];
+%% test_auto_chunk_size
+assert(isequal(auto_chunk_size([1500,2500,1000,500,100]), [12,20,8,8,2]), '5D chunk fail')
+assert(isequal(auto_chunk_size([15,250,100]), [2,32,25]), '3D chunk fail')
+assert(isequal(auto_chunk_size([15,250]), [15,250]), '2D small chunk fail')
 %% test_write_basic
-f1 = fullfile(tempdir, '1.h5');
-h5save(f1, '/A0', A0)
-h5save(f1, '/A1', A1)
-h5save(f1, '/A2', A2)
-h5save(f1, '/A3', A3)
-h5save(f1, '/A4', A4)
-
-vars = h5variables(f1);
+h5save(basic, '/A0', A0)
+h5save(basic, '/A1', A1)
+h5save(basic, '/A2', A2)
+h5save(basic, '/A3', A3)
+h5save(basic, '/A4', A4)
+%% test_get_variables
+vars = h5variables(basic);
 assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
-
-assert(h5exists(f1, '/A3'), 'A3 exists')
-assert(~h5exists(f1, '/oops'), 'oops not exist')
-
-s = h5size(f1, '/A0');
+%% test_exists
+assert(h5exists(basic, '/A3'), 'A3 exists')
+assert(~h5exists(basic, '/oops'), 'oops not exist')
+%% test_size
+s = h5size(basic, '/A0');
 assert(isscalar(s) && s==1, 'A0 shape')
 
-s = h5size(f1, '/A1');
+s = h5size(basic, '/A1');
 assert(isscalar(s) && s==2, 'A1 shape')
 
-s = h5size(f1, '/A2');
+s = h5size(basic, '/A2');
 assert(isvector(s) && isequal(s, [4,4]), 'A2 shape')
 
-s = h5size(f1, '/A3');
+s = h5size(basic, '/A3');
 assert(isvector(s) && isequal(s, [4,3,2]), 'A3 shape')
 
-s = h5size(f1, '/A4');
+s = h5size(basic, '/A4');
 assert(isvector(s) && isequal(s, [4,3,2,5]), 'A4 shape')
+%% test_read
+s = h5read(basic, '/A0');
+assert(isscalar(s) && s==42, 'A0 read')
 
-h5save(f1, '/A2', 3*magic(4))
-assert(isequal(h5read(f1, '/A2'), 3*magic(4)), 'rewrite 2D fail')
+s = h5read(basic, '/A1');
+assert(isvector(s) && isequal(s, A1), 'A1 read')
+
+s = h5read(basic, '/A2');
+assert(ismatrix(s) && isequal(s, A2), 'A2 read')
+
+s = h5read(basic, '/A3');
+assert(ndims(s)==3 && isequal(s, A3), 'A3 read')
+
+s = h5read(basic, '/A4');
+assert(ndims(s)==4 && isequal(s, A4), 'A4 read')
 %% test_coerce
-f2 = fullfile(tempdir, '2.h5');
-h5save(f2, '/int32', A0, [], 'int32')
-h5save(f2, '/int64', A0, [], 'int64')
-h5save(f2, '/float32', A0, [], 'float32')
+h5save(basic, '/int32', A0, [], 'int32')
+h5save(basic, '/int64', A0, [], 'int64')
+h5save(basic, '/float32', A0, [], 'float32')
 
-assert(isa(h5read(f2, '/int32'), 'int32'), 'int32')
-assert(isa(h5read(f2, '/int64'), 'int64'), 'int64')
-assert(isa(h5read(f2, '/float32'), 'single'), 'float32')
+assert(isa(h5read(basic, '/int32'), 'int32'), 'int32')
+assert(isa(h5read(basic, '/int64'), 'int64'), 'int64')
+assert(isa(h5read(basic, '/float32'), 'single'), 'float32')
+%% test_rewrite
+h5save(basic, '/A2', 3*magic(4))
+assert(isequal(h5read(basic, '/A2'), 3*magic(4)), 'rewrite 2D fail')
