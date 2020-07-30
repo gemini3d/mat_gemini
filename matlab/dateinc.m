@@ -2,7 +2,7 @@ function [ymdnew,UTsecnew]=dateinc(dt,ymd,UTsec)
 
 narginchk(3,3)
 validateattributes(dt, {'numeric'}, {'scalar', 'positive'}, mfilename, 'time step', 1)
-validateattributes(ymd, {'numeric'}, {'vector', 'positive', 'numel', 3}, mfilename, 'year month day', 2)
+validateattributes(ymd, {'numeric'}, {'integer', 'positive', 'numel', 3}, mfilename, 'year month day', 2)
 validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'UTC second', 3)
 
 if exist('datetime', 'file')  % Matlab >= R2014b

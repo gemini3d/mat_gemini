@@ -1,4 +1,4 @@
-function [z,x,y]=geog2UEN(alt,glon,glat,thetactr,phictr)
+function [z,x,y] = geog2UEN(alt,glon,glat,thetactr,phictr)
 
 %This function converts a set of glon,glat into magnetic up, north, east
 %coordinates.  thetactr and phictr are the magnetic coordinates of the center of hte region of interest.

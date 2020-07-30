@@ -1,7 +1,7 @@
 function strlab = datelab(ymd, UTsec)
 % convert gemini time format to string
 narginchk(2,2)
-validateattributes(ymd, {'numeric'}, {'vector', 'positive', 'numel', 3}, mfilename, 'year month day', 1)
+validateattributes(ymd, {'numeric'}, {'integer', 'positive', 'numel', 3}, mfilename, 'year month day', 1)
 validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'UTC second', 2)
 
 %% SECONDS
