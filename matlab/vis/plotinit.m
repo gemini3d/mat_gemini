@@ -12,7 +12,7 @@ validateattributes(visible, {'logical'}, {'scalar'}, mfilename, 'figure visibili
 pos2d = [0.1 0.1 0.3 0.3];
 pos3d = [0.1 0.1 0.8 0.3];
 
-if any(xg.lx(2:3)==1)  %2D simulation
+if any(xg.lx(2:3)==1)           %2D simulation
   figpos = pos2d;
 else                            %3D simulation
   figpos = pos3d;

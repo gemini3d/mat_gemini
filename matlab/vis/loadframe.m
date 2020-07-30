@@ -59,6 +59,7 @@ if strcmp(ext,'.h5')
     switch flagoutput
       case 1, dat = loadframe3Dcurv(filename);
       case 2, dat = loadframe3Dcurvavg(filename);
+      case 3, dat = loadframe3Dcurvne(filename);
       otherwise, error('Problem with file input selection related to milestone detection.')
     end %switch
   end
