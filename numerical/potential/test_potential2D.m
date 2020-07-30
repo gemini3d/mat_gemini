@@ -1,12 +1,12 @@
-function test_potential2D(filename)
+function test_potential2D(fn)
+% test_potential2D('../../..\gemini3d\build\src\numerical\potential\test_potential2d.h5')
+
 narginchk(1,1)
 
-addpath([fileparts(mfilename('fullpath')), '/../../../matlab'])
-
-exist_or_skip(filename, 'file')
+exist_or_skip(fn, 'file')
 
 if isoctave
-h = load(filename);
+h = load(fn);
 
 x2 = h.x2;
 x3 = h.x3;
@@ -14,11 +14,11 @@ Phi = h.Phi;
 Phi2 = h.Phi2squeeze;
 Phitrue = h.Phitrue;
 else
-x2 = h5read('/x2');
-x3 = h5read('/x3');
-Phi = h5read('/Phi');
-Phi2 = h5read('/Phi2squeeze');
-Phitrue = h5read('/Phitrue');
+x2 = h5read(fn, '/x2');
+x3 = h5read(fn, '/x3');
+Phi = h5read(fn, '/Phi');
+Phi2 = h5read(fn, '/Phi2squeeze');
+Phitrue = h5read(fn, '/Phitrue');
 end
 
 
@@ -29,31 +29,32 @@ if ~isinteractive
 end
 
 %% Plot data
-figure(1);
+fg = figure();
+ht = tiledlayout(fg, 1, 3);
 
-subplot(1,3,1)
-imagesc(x2,x3,Phi);
-colorbar;
-axis xy;
-xlabel('distance (m)')
-ylabel('distance (m)')
-title('2D potential (polarization)')
+ax1 = nexttile(ht);
+imagesc(x2,x3,Phi, 'parent', ax1)
+colorbar('peer', ax1)
+axis(ax1, 'xy')
+xlabel(ax1, 'distance (m)')
+ylabel(ax1, 'distance (m)')
+title(ax1, '2D potential (polarization)')
 
-subplot(1,3,2)
-imagesc(x2,x3,Phi2);
-colorbar;
-axis xy;
-xlabel('distance (m)')
-ylabel('distance (m)')
-title('2D potential (static)')
+ax2 = nexttile(ht);
+imagesc(x2,x3,Phi2, 'parent', ax2)
+colorbar('peer', ax2)
+axis(ax2, 'xy')
+xlabel(ax2, 'distance (m)')
+ylabel(ax2, 'distance (m)')
+title(ax2, '2D potential (static)')
 
-subplot(1,3,3)
-imagesc(x2,x3,Phitrue);
-colorbar;
-axis xy;
-xlabel('distance (m)')
-ylabel('distance (m)')
-title('2D potential (analytical)')
+ax3 = nexttile(ht);
+imagesc(x2,x3,Phitrue, 'parent', ax3)
+colorbar('peer', ax3)
+axis(ax3, 'xy')
+xlabel(ax3, 'distance (m)')
+ylabel(ax3, 'distance (m)')
+title(ax3, '2D potential (analytical)')
 
 end
 

@@ -1,24 +1,22 @@
-function testinterp(filename)
+function testinterp(fn)
 
 narginchk(1,1)
 
-addpath([fileparts(mfilename('fullpath')), '/../../../matlab'])
-
-exist_or_skip(filename, 'file')
+exist_or_skip(fn, 'file')
 
 if isoctave
-  h = load(filename);
+  h = load(fn);
   lx1 = h.lx1;
   lx2 = h.lx2;
   x1 = h.x1;
   x2 = h.x2;
   f = h.f;
 else
-  lx1 = h5read(filename, '/lx1');
-  lx2 = h5read(filename, '/lx2');
-  x1 = h5read(filename, '/x1');
-  x2 = h5read(filename, '/x2');
-  f = h5read(filename, '/f');
+  lx1 = h5read(fn, '/lx1');
+  lx2 = h5read(fn, '/lx2');
+  x1 = h5read(fn, '/x1');
+  x2 = h5read(fn, '/x2');
+  f = h5read(fn, '/f');
 end
 
 assert(lx1==500, 'x1 size')
@@ -29,21 +27,22 @@ if ~isinteractive
   return
 end
 %% PLOT
-figure
+hf = figure;
+ax = axes('parent', hf);
 
 if (lx2==1)
-  plot(x1,f);
-  xlabel('x_1')
-  ylabel('f')
-  title('1-D interp')
+  plot(ax, x1,f);
+  xlabel(ax, 'x_1')
+  ylabel(ax, 'f')
+  title(ax, '1-D interp')
 else
-  imagesc(x2,x1,f);
-  axis xy;
-  xlabel('x_2')
-  ylabel('x_1')
-  c=colorbar;
+  imagesc(x2,x1,f, 'parent', ax);
+  axis(ax, 'xy')
+  xlabel(ax, 'x_2')
+  ylabel(ax, 'x_1')
+  c=colorbar('peer', ax);
   ylabel(c,'f')
-  title('2-D interp')
+  title(ax, '2-D interp')
 end
 %print -dpng -r300 ~/testinterp.png;
 

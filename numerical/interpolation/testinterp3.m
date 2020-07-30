@@ -1,13 +1,12 @@
-function [x1,x2,x3,f] = testinterp3(filename)
+function [x1,x2,x3,f] = testinterp3(fn)
+%  testinterp3('../../../gemini3d/build/src/numerical/interpolation/output3d.h5')
 
 narginchk(1,1)
 
-addpath([fileparts(mfilename('fullpath')), '/../../../matlab'])
-
-exist_or_skip(filename, 'file')
+exist_or_skip(fn, 'file')
 
 if isoctave
-  h = load(filename);
+  h = load(fn);
   lx1 = h.lx1;
   lx2 = h.lx2;
   lx3 = h.lx3;
@@ -16,13 +15,13 @@ if isoctave
   x3 = h.x3;
   f = h.f;
 else
-  lx1 = h5read(filename, '/lx1');
-  lx2 = h5read(filename, '/lx2');
-  lx3 = h5read(filename, '/lx3');
-  x1 = h5read(filename, '/x1');
-  x2 = h5read(filename, '/x2');
-  x3 = h5read(filename, '/x3');
-  f = h5read(filename, '/f');
+  lx1 = h5read(fn, '/lx1');
+  lx2 = h5read(fn, '/lx2');
+  lx3 = h5read(fn, '/lx3');
+  x1 = h5read(fn, '/x1');
+  x2 = h5read(fn, '/x2');
+  x3 = h5read(fn, '/x3');
+  f = h5read(fn, '/f');
 end
 
 assert(lx1==256, int2str(size(lx1)))
@@ -36,37 +35,39 @@ if ~isinteractive
 end
 
 %% PLOT
-figure
-
-subplot(1,3,1)
-imagesc(x2,x1,f(:,:,end/2));
-axis xy;
-xlabel('x_2')
-ylabel('x_1')
-c=colorbar;
+fg = figure();
+ht = tiledlayout(fg, 1, 3);
+ax1 = nexttile(ht);
+imagesc(x2,x1,f(:,:,end/2), 'parent', ax1)
+axis(ax1, 'xy')
+xlabel(ax1, 'x_2')
+ylabel(ax1, 'x_1')
+c=colorbar('peer', ax1);
 ylabel(c,'f')
-title('3D interp x_1-x_2')
+title(ax1, '3D interp x_1-x_2')
 
-subplot(1,3,2)
-imagesc(x3,x1,squeeze(f(:,end/2-10,:)));
-axis xy;
-xlabel('x_3')
-ylabel('x_1')
-c=colorbar;
+ax2 = nexttile(ht);
+imagesc(x3,x1,squeeze(f(:,end/2-10,:)), 'parent', ax2)
+axis(ax2, 'xy')
+xlabel(ax2, 'x_3')
+ylabel(ax2, 'x_1')
+c=colorbar('peer', ax2);
 ylabel(c,'f')
-title('3D interp x_1-x_3')
+title(ax2, '3D interp x_1-x_3')
 
-subplot(1,3,3)
-imagesc(x2,x3,squeeze(f(end/2-10,:,:)));
-axis xy;
-xlabel('x_2')
-ylabel('x_3')
-c=colorbar;
+ax3 = nexttile(ht);
+imagesc(x2,x3,squeeze(f(end/2-10,:,:)), 'parent', ax3)
+axis(ax3, 'xy')
+xlabel(ax3, 'x_2')
+ylabel(ax3, 'x_3')
+c=colorbar('peer', ax3);
 ylabel(c,'f')
-title('3D interp x_2-x_3')
+title(ax3, '3D interp x_2-x_3')
+
+if nargout==0, clear, end
 end % function
 
-% fid=fopen(filename,'r');
+% fid=fopen(fn,'r');
 
 % %% LOAD DATA
 % lx1=fread(fid,1,'integer*4');

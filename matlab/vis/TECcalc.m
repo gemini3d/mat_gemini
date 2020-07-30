@@ -234,9 +234,9 @@ for it=1:length(times)
 
     %PLOT THE TOTAL ELECTRON CONTENT EACH TIME FRAME IF WE HAAVE DONE A 3D SIMULATION, OTHERWISE WAIT UNTIL THE END OR A SINGLE PLOT
     if (~flag2D)
-      disp('Printing TEC plot for current time frame...');
-      direc=[basedir,simname]
-      filename=datelab(ymd,UTsec)
+      disp('Printing TEC plot for current time frame...')
+      direc = [basedir, simname];
+      filename = datelab(ymd,UTsec);
       FS=18;
       imagesc(mlong,mlat,dvTEC(:,:,it));
       colormap(parula(256));
