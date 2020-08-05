@@ -1,6 +1,6 @@
 function prepend = modify_path()
 % for Octave on Windows, it's necessary to prepend MinGW path
-% when running MinGW-compile exectuables
+% when running MinGW-compiled executables
 % Also, Matlab with Parallel Toolbox MPIEXEC conflicts with system MPIEXEC,
 % so excise from Path
 %
@@ -9,13 +9,16 @@ function prepend = modify_path()
 % system([prepend, ' ', 'foo.exe'])
 
 prepend = '';
-if isoctave && ispc && ~isempty(getenv('MINGWROOT'))
+
+if ~ispc, return, end
+
+if isoctave && ~isempty(getenv('MINGWROOT'))
 
   syspath = [getenv('MINGWROOT'), pathsep, getenv('PATH')];
   % setenv('PATH', syspath)  % does not help
   prepend = ['set PATH=', syspath, ' && '];
 
-elseif ~isoctave && ispc
+else
 
   addons = matlab.addons.installedAddons();
   if ~any(contains(addons.Name, 'Parallel Computing Toolbox'))
