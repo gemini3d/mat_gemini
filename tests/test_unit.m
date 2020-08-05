@@ -3,7 +3,7 @@ run(fullfile(cwd, '../setup.m'))
 %% md5sum
 hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'gemini3d_url.ini'));
 if ~isempty(hash)
-  assert(strcmp(hash, '8ace28a6581a3c00499b626a05318f51'), 'md5sum %s', hash)
+  assert(strcmp(hash, 'b5f96c19e312374a5f9839410d681514'), 'md5sum %s', hash)
 end
 %% is_file
 assert(is_file(fullfile(cwd, '../setup.m')), 'is_file true')
