@@ -14,7 +14,7 @@ basic = [tempname, '.nc'];
 if isoctave
   pkg('load','netcdf')
 end
-%% test_write_basic
+% create test data first, so that parallel tests works
 ncsave(basic, 'A0', A0)
 ncsave(basic, 'A1', A1)
 ncsave(basic, 'A2', A2, {'x2', size(A2,1), 'y2', size(A2,2)})

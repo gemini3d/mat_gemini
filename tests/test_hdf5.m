@@ -10,16 +10,16 @@ A3(:,:,2) = 2*A3;
 A4(:,:,:,5) = A3;
 
 basic = [tempname, '.h5'];
-%% test_auto_chunk_size
-assert(isequal(auto_chunk_size([1500,2500,1000,500,100]), [12,20,8,8,2]), '5D chunk fail')
-assert(isequal(auto_chunk_size([15,250,100]), [2,32,25]), '3D chunk fail')
-assert(isequal(auto_chunk_size([15,250]), [15,250]), '2D small chunk fail')
-%% test_write_basic
+% create test data first, so that parallel tests works
 h5save(basic, '/A0', A0)
 h5save(basic, '/A1', A1)
 h5save(basic, '/A2', A2)
 h5save(basic, '/A3', A3)
 h5save(basic, '/A4', A4)
+%% test_auto_chunk_size
+assert(isequal(auto_chunk_size([1500,2500,1000,500,100]), [12,20,8,8,2]), '5D chunk fail')
+assert(isequal(auto_chunk_size([15,250,100]), [2,32,25]), '3D chunk fail')
+assert(isequal(auto_chunk_size([15,250]), [15,250]), '2D small chunk fail')
 %% test_get_variables
 vars = h5variables(basic);
 assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
