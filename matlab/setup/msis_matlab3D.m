@@ -77,7 +77,7 @@ fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
 cmd = sprintf('%s %s - %d',exe, fin, lz);
-disp(cmd)
+% disp(cmd)
 prepend = modify_path();
 [status, msg] = system([prepend, ' ', cmd]);   %output written to file
 assert(status==0, 'problem running MSIS %s', msg)

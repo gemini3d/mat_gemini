@@ -45,3 +45,5 @@ lx = [4, 2, 3];
 xg = struct('glat', glat, 'glon', glon, 'lx', lx, 'alt', alt);
 atmos = msis_matlab3D(cfg, xg);
 assert(all(size(atmos) == [lx(1), lx(2), lx(3), 7]), 'MSIS setup data output shape unexpected')
+
+disp('OK: unit tests')

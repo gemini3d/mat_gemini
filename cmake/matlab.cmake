@@ -1,4 +1,12 @@
-find_package(Matlab COMPONENTS MAIN_PROGRAM)
+# currently (August 2020) Matlab R2020b doesn't yet work due to Matlab bug.
+# So search from newest to oldest known working versions.
+
+foreach(v 9.8 9.7 9.6)
+  find_package(Matlab ${v} EXACT COMPONENTS MAIN_PROGRAM)
+  if(Matlab_FOUND)
+    break()
+  endif()
+endforeach()
 if(NOT Matlab_FOUND)
   return()
 endif()
@@ -7,6 +15,7 @@ endif()
 # * appdata\version.xml
 # * appdata\prodcontents.json
 # I have observed over the years that this directory name scheme is universally used.
+
 string(REGEX MATCH "R([0-9][0-9][0-9][0-9][a-z])" Matlab_RELEASE ${Matlab_ROOT_DIR})
 matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
 
