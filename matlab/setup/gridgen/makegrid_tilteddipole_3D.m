@@ -367,7 +367,10 @@ end
 % xg.inull=find(r<Re+30e3); %may give issues in conservative form???  NOPE not the problem
 % xg.nullpts=r<Re+30e3;
 xg.inull=find(r<Re+80e3);
-xg.nullpts=r<Re+80e3;
+%xg.nullpts=r<Re+80e3;
+xg.nullpts=zeros(lq,lp,lphi);
+xg.nullpts(xg.inull)=1;
+
 
 %NOW ADJUST SIZES SO THAT THEY MATCH WHAT FORTRAN CODE EXPECTS.  IF NOT
 %USING THIS TO GENERATE A GRID FOR THE FORTRAN CODE YOU MAY WANT TO GET RID
