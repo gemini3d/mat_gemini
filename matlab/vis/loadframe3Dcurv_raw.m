@@ -8,7 +8,8 @@ lxs = simsize(filename);
 dat.filename = filename;
 
 fid=fopen(filename,'r');
-simdt(fid);
+
+dat.time = get_time(fid);
 %% load densities
 dat.ns = read4D(fid, lsp, lxs);
 %% load Vparallel

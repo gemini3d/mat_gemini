@@ -71,6 +71,8 @@ else
     otherwise, dat = loadframe3Dcurvne(filename);
   end
 end
+
+dat.time = get_time(filename);
 %% SET MAGNETIC LATITUDE AND LONGITUDE OF THE SOURCE
 if ~isempty(mloc)
     dat.mlatsrc=mloc(1);

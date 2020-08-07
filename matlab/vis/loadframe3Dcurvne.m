@@ -50,7 +50,8 @@ function dat = read_raw(filename)
 lxs = simsize(fileparts(filename));
 %% SIMULATION RESULTS
 fid=fopen(filename,'r');
-simdt(fid);
+
+dat.time = get_time(fid);
 
 ns=fread(fid,prod(lxs),'real*8');
 ns=reshape(ns, lxs);

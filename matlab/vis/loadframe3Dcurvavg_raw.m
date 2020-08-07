@@ -7,11 +7,12 @@ lxs = simsize(filename);
 % (NOTE THAT THIS IS NOT THE ENTIRE THING - THAT NEEDS TO BE DONE WITH READGRID.M.  WE NEED THIS HERE TO DO MESHGRIDS
 %[x1, x2, x3] = simaxes(filename);
 %% SIMULATION RESULTS
-assert(is_file(filename), [filename,' is not a file.'])
+assert(is_file(filename), '%s is not a file.', filename)
 dat.filename = filename;
 
 fid = fopen(filename,'r');
-simdt(fid);
+
+dat.time = get_time(fid);
 %% Number densities
 dat.ne = read3D(fid, lxs);
 %% Parallel Velocities

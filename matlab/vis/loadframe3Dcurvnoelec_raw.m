@@ -8,7 +8,8 @@ lxs = simsize(filename);
 dat.filename = filename;
 
 fid = fopen(filename, 'r');
-dat.simdate = simdt(fid);
+
+dat.time = get_time(fid);
 
 dat.ns = read4D(fid, lsp, lxs);
 dat.vs1 = read4D(fid, lsp, lxs);
