@@ -1,4 +1,4 @@
-function writedata(ymd, UTsec,ns,vsx1,Ts, fn, file_format, realbits, Phitop)
+function writedata(ymd,UTsec,ns,vsx1,Ts,fn,file_format,realbits,Phitop)
 
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE
@@ -17,11 +17,13 @@ validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 4)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 5)
 validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',6)
 validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',7)
-if nargin<=7
+if nargin<8
+  warning('Defaulting to 64 bit real...')    
   realbits=64;
 end
 validateattributes(realbits, {'numeric'}, {'scalar','integer'},mfilename, '32 or 64',8)
-if nargin<=8
+if nargin<9
+    warning('Setting unspecified potential to zero...')
     Phitop=zeros(size(ns,2),size(ns,3));
 end %if
 % FIXME:  may want validate potential input
