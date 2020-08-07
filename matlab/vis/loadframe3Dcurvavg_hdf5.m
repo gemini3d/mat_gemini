@@ -4,12 +4,8 @@ narginchk(1,1)
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-% simdate=zeros(1,6);    %datevec-style array
-
 if isoctave
   D = load(filename);
-  %dat.simdate(1:3) = D.time.ymd;
-  %dat.simdate(4) = D.time.UThour;
   dat.ne = D.neall;
   dat.v1 = D.v1avgall;
   dat.Ti = D.Tavgall;
@@ -21,8 +17,6 @@ if isoctave
   dat.v3 = D.v3avgall;
   dat.Phitop = D.Phiall;
 else
-  %dat.simdate(1:3) = h5read(filename, '/time/ymd');
-  %dat.simdate(4) = h5read(filename, '/time/UThour');
   %% Number densities
   dat.ne = h5read(filename, '/neall');
   %% Parallel Velocities

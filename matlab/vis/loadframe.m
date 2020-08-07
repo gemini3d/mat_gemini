@@ -52,7 +52,7 @@ if strcmp(ext,'.h5')
   % regardless of what the output type is if variabl nsall exists we need
   % to do a full read; this is a bit messy because loadframe will check
   % again below if h5 is used...
-  if (h5exists(filename,'/nsall'))
+  if h5exists(filename,'/nsall')
    disp('Full or milestone input detected.')
    dat = loadframe3Dcurv(filename);
   else   %only two possibilities left

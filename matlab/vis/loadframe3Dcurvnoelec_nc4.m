@@ -8,14 +8,6 @@ if isoctave
   pkg('load','netcdf')
 end
 
-dat.simdate(1:3) = double(ncread(filename, 'ymd'));
-
-try
-  dat.simdate(4) = ncread(filename, 'UThour');
-catch
-  dat.simdate(4) = ncread(filename, 'UTsec') / 3600;
-end
-
 try
   dat.ns = ncread(filename, 'nsall');
 catch
