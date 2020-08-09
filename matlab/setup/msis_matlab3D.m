@@ -54,7 +54,7 @@ else
 end
 doy = day_of_year(p.ymd);
 
-disp(['MSIS00 using DOY:  ',int2str(doy)])
+%fprintf('MSIS00 DOY %s\n', doy)
 yearshort = mod(p.ymd(1),100);
 iyd = yearshort*1000+doy;
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
