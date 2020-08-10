@@ -1,4 +1,4 @@
-function xg = plotall(direc, saveplot_fmt, plotfun, xg, visible)
+function xg = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 % PLOTALL plot all Gemini parameters from a simulation output
 %
 % Parameters
@@ -25,14 +25,11 @@ if ~isempty(xg)
   validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
 end
 
-if nargin<5
-  if isempty(saveplot_fmt)
-    visible = true;
-  else
-    visible = false;
-  end
-end
-validateattributes(visible, {'logical'}, {'scalar'}, mfilename, 'plot visibility', 5)
+if nargin < 5, parallel = false; end
+validateattributes(parallel, {'numeric'}, {'scalar'}, mfilename, 'plot in parallel (lots of RAM for big simulations)', 5)
+
+
+visible = isempty(saveplot_fmt);
 
 lxs = simsize(direc);
 disp(['sim grid dimensions: ',num2str(lxs)])
@@ -54,15 +51,17 @@ Nt = length(params.times);
 h = plotinit(xg, visible);
 
 if ~visible
-  % plot and save as fast as possible.
-  pool = gcp('nocreate');
-  if isempty(pool)
-    pool = parpool('local');
-  end
-  % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
-  % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
-  for i = 1:Nt
-    plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
+  if parallel
+    % plot and save as fast as possible.
+    % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
+    % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
+    parfor i = 1:Nt
+      plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
+    end
+  else
+    for i = 1:Nt
+      plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
+    end
   end
 elseif isinteractive
   % displaying interactively, not saving
