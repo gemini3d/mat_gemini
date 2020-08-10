@@ -3,8 +3,8 @@ function xg = parplotall(direc, saveplot_fmt, plotfun, xg, visible)
 narginchk(1,5)
 
 validateattributes(direc, {'char'}, {'vector'}, mfilename, 'path to data', 1)
-direc = absolute_path(direc);
-assert(is_folder(direc), [direc, ' is not a directory'])
+
+assert(is_folder(direc), '%s is not a directory', direc)
 
 if nargin<2, saveplot_fmt={}; end  %e.g. {'png'} or {'png', 'eps'}
 
@@ -20,12 +20,12 @@ end
 
 if nargin<5
   if isempty(saveplot_fmt)
-    visible = 'on';
+    visible = true;
   else
-    visible = 'off';
+    visible = false;
   end
 end
-validateattributes(visible, {'char'}, {'vector'}, mfilename, 'plot visibility: on/off', 5)
+validateattributes(visible, {'logical'}, {'scalar'}, mfilename, 'plot visibility', 5)
 
 lxs = simsize(direc);
 disp(['sim grid dimensions: ',num2str(lxs)])
@@ -68,7 +68,7 @@ elseif isoctave || isinteractive
     plotframe(direc, ymd(i,:), UTsec(i), saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    disp(''), disp('** press any key to plot next time step, or Ctrl C to stop**')
+    fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
     pause
   end
 else

@@ -19,7 +19,7 @@ if nargin<6
   xg=[];         %code will attempt to reload the grid
 end
 
-if nargin<8, visible = 'on'; end
+if nargin<8, visible = true; end
 
 assert(is_folder(direc), '%s is not a directory.', direc)
 
