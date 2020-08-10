@@ -20,6 +20,10 @@ if is_file(path)
   else
     error('get_simsize_path:file_not_found', 'could not find %s/simsize%s', path, ext)
   end
+elseif is_folder(path)
+  %pass
+else
+  error('get_simsize_path:file_not_found', '%s is not a folder or file', path)
 end
 %% directory given
 suffixes = {'.h5', '.nc', '.dat'};

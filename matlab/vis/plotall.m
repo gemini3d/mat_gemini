@@ -1,10 +1,17 @@
 function xg = plotall(direc, saveplot_fmt, plotfun, xg, visible)
-
+% PLOTALL plot all Gemini parameters from a simulation output
+%
+% Parameters
+% ----------
+% direc: simulation top-level directory
+% saveplot_fmt: char or cell: plot saving formats e.g. png, eps, pdf
+% plotfun: name or function handle of plotting function to use (advanced users)
+% xg: simulation grid (advanced users) this avoids loading huge grids over and over
+% visible: logical true/false make plots visible or not (default off when saving to disk to save time)
+%
 narginchk(1,5)
 
 validateattributes(direc, {'char'}, {'vector'}, mfilename, 'path to data', 1)
-
-assert(is_folder(direc), '%s is not a directory', direc)
 
 if nargin<2, saveplot_fmt={}; end  %e.g. {'png'} or {'png', 'eps'}
 
