@@ -12,6 +12,9 @@ switch lower(ext)
   otherwise, error('read_config:value_error', 'config file type unknown: %s', filename)
 end
 
+t0 = datetime(p.ymd(1), p.ymd(2), p.ymd(3)) + seconds(p.UTsec0);
+p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
+
 %% deduce data file format from simsize format
 % needs to be here and in read_nml
 if ~isfield(p, 'file_format')

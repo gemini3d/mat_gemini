@@ -1,32 +1,31 @@
-function plot2D_curv(ymd,UTsec,xg,parm,parmlbl,caxlims, sourceloc, ha, cmap)
+function plot2D_curv(time,xg,parm,parmlbl,caxlims, sourceloc, ha, cmap)
 
-narginchk(4,9)
-validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 1)
-validateattributes(UTsec, {'numeric'}, {'scalar'}, mfilename, 'UTC second', 2)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',4)
-if nargin<5, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 5)
+narginchk(3,8)
+validateattributes(time, {'datetime'}, {'scalar'}, 1)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
+if nargin < 4, parmlbl=''; end
+validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
 
-if nargin<6
+if nargin < 5
   caxlims=[];
 else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 6)
+  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
 
-if nargin<7  || isempty(sourceloc) % leave || for validate
+if nargin < 6  || isempty(sourceloc) % leave || for validate
   sourceloc = [];
 else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
 
-if nargin<8 || isempty(ha)
+if nargin < 7 || isempty(ha)
   ha = get_axes();
 else
   ha = get_axes(ha);
 end
 
-if nargin<9 || isempty(cmap)
+if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
 
@@ -215,8 +214,7 @@ ylabel('magnetic longitude (deg.)')
 %CONSTRUCT A STRING FOR THE TIME AND DATE
 %subplot(121);
 
-ttxt = time2str(ymd, UTsec);
-title(ha, ttxt)
+title(ha, [datestr(time), ' UT'])
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
 

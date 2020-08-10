@@ -1,28 +1,27 @@
-function h=plot3D_curv_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf, cmap)
+function h=plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
 
-narginchk(4,9)
-validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 1)
-validateattributes(UTsec, {'numeric'}, {'scalar'}, mfilename, 'UTC second', 2)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',4)
-if nargin<5, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 5)
+narginchk(3,8)
+validateattributes(time, {'datetime'}, {'scalar'}, 1)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
+if nargin < 4, parmlbl=''; end
+validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
 
-if nargin<6
+if nargin < 5
   caxlims=[];
 else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 6)
+  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
 
-if nargin<7  || isempty(sourceloc) % leave || for validate
+if nargin < 6  || isempty(sourceloc) % leave || for validate
   sourceloc = [];
 else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
-if nargin<8 || isempty(hf)
+if nargin < 7 || isempty(hf)
   hf = figure();
 end
-if nargin<9 || isempty(cmap)
+if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
 
@@ -225,25 +224,7 @@ xlabel(c,parmlbl);
 xlabel(ax1,'magnetic latitude (deg.)');
 ylabel(ax1,'altitude (km)');
 
-%% CONSTRUCT A STRING FOR THE TIME AND DATE
-t=UTsec/3600;     %decimal hours
-UThrs=floor(t);
-UTmin=floor((t-UThrs)*60);
-UTsec=floor((t-UThrs-UTmin/60)*3600);
-UThrsstr=num2str(UThrs);
-UTminstr=num2str(UTmin);
-if (numel(UTminstr)==1)
-  UTminstr=['0',UTminstr];
-end
-UTsecstr=num2str(UTsec);
-if (numel(UTsecstr)==1)
-  UTsecstr=['0',UTsecstr];
-end
-
-timestr=[UThrsstr,':',UTminstr,':',UTsecstr];
-strval=sprintf('%s \n %s',[num2str(ymd(1)),'/',num2str(ymd(2)),'/',num2str(ymd(3))], ...
-    [timestr,' UT']);
-title(ax1,strval,'Color','black');
+title(ax1, [datestr(time), ' UT']);
 
 %% middle
 %h=imagesc(xp,yp,parmp2(:,:,2));

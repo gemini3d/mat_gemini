@@ -1,25 +1,20 @@
-function write_Efield_raw(dir_out, E, realbits)
+function write_Efield_raw(dir_out, E)
 narginchk(3,3)
 
-freal = ['float', int2str(realbits)];
+freal = 'float64';
 
-fid = fopen([dir_out, '/simsize.dat'], 'w');
+fid = fopen( fullfile(dir_out, 'simsize.dat'), 'w');
 fwrite(fid, E.llon, 'integer*4');
 fwrite(fid, E.llat, 'integer*4');
 fclose(fid);
 
-fid = fopen([dir_out, '/simgrid.dat'], 'w');
+fid = fopen(fullfile(dir_out, 'simgrid.dat'), 'w');
 fwrite(fid, E.mlon, freal);
 fwrite(fid, E.mlat, freal);
 fclose(fid);
 
-Nt = size(E.expdate, 1);
-for i = 1:Nt
-  UTsec = E.expdate(i,4)*3600 + E.expdate(i,5)*60 + E.expdate(i,6);
-  ymd = E.expdate(i,1:3);
-  filename = [dir_out, '/', datelab(ymd,UTsec), '.dat'];
-  disp(['write: ',filename])
-  fid = fopen(filename, 'w');
+for i = 1:length(E.times)
+  fid = fopen(fullfile(dir_out, [datelab(E.times(i)), '.dat']), 'w');
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
 %  fwrite(fid, p.flagdirich, 'int32');

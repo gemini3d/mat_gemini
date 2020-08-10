@@ -77,16 +77,15 @@ end
 
 disp(['sim grid dimensions: ',num2str(lxs)])
 
-UTsec = params.UTsec0:params.dtout:params.UTsec0 + params.tdur;
-ymd = params.ymd;
-Nt = length(UTsec);
+Nt = length(params.times);
 
 ok = 0;
 
 for i = 1:Nt
-  st = ['UTsec ', num2str(UTsec(i))];
-  out = loadframe(outdir,ymd,UTsec(i));
-  ref = loadframe(refdir,ymd,UTsec(i));
+  out = loadframe(get_frame_filename(outdir, params.times(i)));
+  ref = loadframe(get_frame_filename(refdir, params.times(i)));
+
+  st = datestr(params.times(i));
 
   ok = ok + ~assert_allclose(out.ne,ref.ne,tol.rtolN,tol.atolN,['Ne ',st], true);
 
@@ -154,16 +153,13 @@ errs = errs + ~assert_allclose(new.ns, ref.ns, tol.rtol, tol.atolN/100, 'Ns', tr
 errs = errs + ~assert_allclose(new.Ts, ref.Ts, tol.rtol, tol.atolT/100, 'Ts', true);
 errs = errs + ~assert_allclose(new.vs1, ref.vs1, tol.rtol, tol.atolV/100, 'vs', true);
 
-UTsec = new_params.UTsec0:new_params.dtout:new_params.UTsec0 + new_params.tdur;
 %% precipitation
 if isfield(new_params, 'prec_dir')
-  errs = errs + compare_precip(new_params.ymd, UTsec, ...
-    new_params.prec_dir, ref_params.prec_dir, tol);
+  errs = errs + compare_precip(new_params.times, new_params.prec_dir, ref_params.prec_dir, tol);
 end
 %% Efield
 if isfield(new_params, 'E0_dir')
-  errs = errs + compare_efield(new_params.ymd, UTsec, ...
-    new_params.E0_dir, ref_params.E0_dir, tol);
+  errs = errs + compare_efield(new_params.times, new_params.E0_dir, ref_params.E0_dir, tol);
 end
 %% final
 
@@ -211,15 +207,14 @@ end
 end % function
 
 
-function errs = compare_precip(ymd, UTsec, prec_dir, ref_prec_dir, tol)
+function errs = compare_precip(times, prec_dir, ref_prec_dir, tol)
 
 errs = 0;
 
 % often we reuse precipitation inputs without copying over files
-for i = 1:size(UTsec)
-  st = ['UTsec ', num2str(UTsec(i))];
-  ref = load_precip(get_frame_filename(ref_prec_dir, ymd, UTsec(i)));
-  new = load_precip(get_frame_filename(prec_dir, ymd, UTsec(i)));
+for i = 1:size(times)
+  ref = load_precip(get_frame_filename(ref_prec_dir, times(i)));
+  new = load_precip(get_frame_filename(prec_dir, times(i)));
 
   for k = {'E0', 'Q'}
     b = ref.(k{:});
@@ -231,7 +226,7 @@ for i = 1:size(UTsec)
 
     if ~allclose(a, b, tol.rtol, tol.atol)
       errs = errs + 1;
-      warning("mismatch: %s %s\n", k{:}, st)
+      warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
     end
   end
 end % for i
@@ -243,15 +238,14 @@ end
 end % function
 
 
-function errs = compare_efield(ymd, UTsec, E0_dir, ref_E0_dir, tol)
+function errs = compare_efield(times, E0_dir, ref_E0_dir, tol)
 
 errs = 0;
 
 % often we reuse Efield inputs without copying over files
-for i = 1:size(UTsec)
-  st = ['UTsec ', num2str(UTsec(i))];
-  ref = load_Efield(get_frame_filename(ref_E0_dir, ymd, UTsec(i)));
-  new = load_Efield(get_frame_filename(E0_dir, ymd, UTsec(i)));
+for i = 1:size(times)
+  ref = load_Efield(get_frame_filename(ref_E0_dir, times(i)));
+  new = load_Efield(get_frame_filename(E0_dir, times(i)));
 
 
   for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
@@ -264,7 +258,7 @@ for i = 1:size(UTsec)
 
     if ~allclose(a, b, tol.rtol, tol.atol)
       errs = errs + 1;
-      warning("mismatch: %s %s\n", k{:}, st)
+      warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
     end
   end
 end % for i

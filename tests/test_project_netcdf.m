@@ -9,7 +9,6 @@ if isoctave
   pkg('load','netcdf')
 end
 
-tic
 %% test2dew_eq_nc
 runner('2dew_eq', 'nc')
 %% test2dew_fang_nc
@@ -28,5 +27,3 @@ runner('3d_eq', 'nc')
 runner('3d_fang', 'nc')
 %% test3d_glow_nc
 runner('3d_glow', 'nc')
-
-toc

@@ -14,7 +14,7 @@ mlon=mlong;
 
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig([direc, '/inputs']);
+[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig(direc);
 
 
 %TABULATE THE SOURCE LOCATION

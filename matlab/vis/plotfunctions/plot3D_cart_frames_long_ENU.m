@@ -1,33 +1,30 @@
-function plot3D_cart_frames_long_ENU(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
+function plot3D_cart_frames_long_ENU(time,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
 
-narginchk(4,9)
-validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 1)
-validateattributes(UTsec, {'numeric'}, {'scalar'}, mfilename, 'UTC second', 2)
-plotparams.ymd = ymd; plotparams.utsec = UTsec;
+narginchk(3,8)
+validateattributes(time, {'datetime'}, {'scalar'},1)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
 
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',4)
-
-if nargin<5, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 5)
+if nargin<4, parmlbl=''; end
+validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
 plotparams.parmlbl = parmlbl;
 
-if nargin<6
+if nargin<5
   caxlims=[];
 else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 6)
+  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
 plotparams.caxlims = caxlims;
 
-if nargin<7 || isempty(sourceloc) % leave || for validate
+if nargin<6 || isempty(sourceloc) % leave || for validate
   sourceloc = [];
 else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
-if nargin<8 || isempty(hf)
+if nargin<7 || isempty(hf)
   hf = figure();
 end
-if nargin<9 || isempty(cmap)
+if nargin<8 || isempty(cmap)
   cmap = parula(256);
 end
 

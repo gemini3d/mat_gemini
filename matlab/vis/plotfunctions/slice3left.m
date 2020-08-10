@@ -17,7 +17,7 @@ axes_tidy(ax, P)
 xlabel(ax, 'eastward dist. (km)');
 ylabel(ax, 'altitude (km)');
 
-title(ax, time2str(P.ymd, P.utsec))
+title(ax, [datestr(P.time), ' UT'])
 
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');

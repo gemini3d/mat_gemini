@@ -52,11 +52,15 @@ else
   ap = p.Ap;
   ap3 = p.Ap;
 end
-doy = day_of_year(p.ymd);
+
+time = p.times(1);
+doy = day_of_year(time);
 
 %fprintf('MSIS00 DOY %s\n', doy)
-yearshort = mod(p.ymd(1),100);
+yearshort = mod(time.Year, 100);
 iyd = yearshort*1000+doy;
+day = datetime(time.Year, time.Month, time.Day);
+UTsec0 = seconds(time - day);
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
 %% CREATE INPUT FILE FOR FORTRAN PROGRAM
@@ -65,7 +69,7 @@ fin = tempname;
 
 fid=fopen(fin,'w');
 fwrite(fid,iyd,'integer*4');
-fwrite(fid,p.UTsec0,'integer*4');
+fwrite(fid, UTsec0,'integer*4');
 fwrite(fid,f107a,'real*4');
 fwrite(fid,f107,'real*4');
 fwrite(fid,ap,'real*4');

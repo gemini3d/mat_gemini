@@ -1,49 +1,43 @@
-function dat = loadframe(direc,ymd,UTsec,flagoutput,mloc,xg,config_file,realbits)
+function dat = loadframe(filename, flagoutput, mloc, xg, config_file, realbits)
 
 
 %% Error checking and setup
-narginchk(3,8)
-validateattributes(direc, {'char'}, {'vector'}, mfilename, 'data directory', 1)
-validateattributes(ymd, {'numeric'}, {'vector', 'numel', 3}, mfilename, 'year month day', 2)
-validateattributes(UTsec, {'numeric'}, {'vector'}, mfilename, 'UTC second', 3)
+narginchk(1,6)
+validateattributes(filename, {'char'}, {'vector'}, 1)
 
-if nargin < 8 || isempty(realbits), realbits = 64; end
+if nargin < 6 || isempty(realbits), realbits = 64; end
 
-if nargin < 7 || isempty(config_file)
-  config_file = direc;
-end
-
-if nargin < 4 || isempty(flagoutput)
-  try
+if nargin < 2 || isempty(flagoutput)
+  if nargin >= 5
     p = read_config(config_file);
-  catch excp
-    if strcmp(excp.identifier, 'get_configfile:file_not_found')
-      error('please specify flagoutput if not specifying config_file')
-    end
-    rethrow(excp)
+  elseif is_file(filename)
+    p = read_config(fileparts(filename));
+  elseif is_folder(filename)
+    p = read_config(filename);
+  else
+    error('loadframe:file_not_found', '%s is not a folder or file', filename)
   end
   flagoutput = p.flagoutput;
   mloc = p.mloc;
 end
-validateattributes(flagoutput,{'numeric'},{'scalar', 'integer'},mfilename,'output flag',4)
+validateattributes(flagoutput,{'numeric'},{'scalar', 'integer'},mfilename,'output flag',2)
 
-if nargin < 5
+if nargin < 3
   mloc = [];
 end
 if ~isempty(mloc)
-  validateattributes(mloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'magnetic coordinates', 5)
+  validateattributes(mloc, {'numeric'}, {'vector', 'numel', 2}, 3)
 end
 
-if nargin < 6 || isempty(xg)
-  [xg, ok] = readgrid(direc, realbits);
+if nargin < 4 || isempty(xg)
+  [xg, ok] = readgrid(fileparts(filename), realbits);
   if ~ok
     error('loadframe:value_error', 'grid did not have appropriate parameters')
   end
 end
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 6)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
 
 %% LOAD DIST. FILE
-filename = get_frame_filename(direc, ymd, UTsec);
 [~,~,ext] = fileparts(filename);
 % This is messy but it was difficult to have the milestone check before
 % deciding what type of file is being read...  May be a more elegant way to
@@ -52,7 +46,7 @@ if strcmp(ext,'.h5')
   % regardless of what the output type is if variabl nsall exists we need
   % to do a full read; this is a bit messy because loadframe will check
   % again below if h5 is used...
-  if h5exists(filename,'/nsall')
+  if h5exists(filename, '/nsall')
    disp('Full or milestone input detected.')
    dat = loadframe3Dcurv(filename);
   else   %only two possibilities left

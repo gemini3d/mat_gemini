@@ -1,17 +1,19 @@
-function plot3D_cart_frames_long(ymd,UTsec,xg,parm,parmlbl,caxlims,sourceloc,hf, cmap)
+function plot3D_cart_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
 
-narginchk(6,8)
+narginchk(3,8)
 
-if nargin>=7  && ~isempty(sourceloc)
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 7)
+validateattributes(time, {'datetime'}, {'scalar'},1)
+
+if nargin>=6  && ~isempty(sourceloc)
+  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
   sourcemlat=sourceloc(1); sourcemlon=sourceloc(2);
 end
 
-if nargin<8 || isempty(hf)
+if nargin<7 || isempty(hf)
   hf = figure();
 end
 
-if nargin<9 || isempty(cmap)
+if nargin<8 || isempty(cmap)
   cmap = parula(256);
 end
 
@@ -233,9 +235,7 @@ ylabel(ha,'altitude (km)')
 %% CONSTRUCT A STRING FOR THE TIME AND DATE
 ha = subplot(1,3,1);
 
-t = datenum(ymd(1), ymd(2), ymd(3), 0, 0, UTsec);
-ttxt = {datestr(t,1), [datestr(t,13),' UT']};
-title(ha, ttxt)
+title(ha, [datestr(time), ' UT'])
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
 %text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
 

@@ -40,12 +40,11 @@ end
 assert(~isempty(file_list), ['No auroral data found in ', aurora_dir])
 
 %% make plots
-ymd = params.ymd;
-UTsec = params.UTsec0;
-time_str = time2str(ymd, UTsec);
+time = params.times;
+time_str = [datestr(time), ' UT'];
 hf = [];
 for i = 1:length(file_list)
-  filename = [aurora_dir, '/', file_list(i).name];
+  filename = fullfile(aurora_dir, file_list(i).name);
   bFrame = loadglow_aurmap(filename, lx2, lx3, lwave);
 
 if lx2 > 1 && lx3 > 1
@@ -66,8 +65,8 @@ end
   end
   % we use dtout instead of dtglow because we're only plotting times the
   % full simulation outputs too.
-  [ymd, UTsec] = dateinc(params.dtout, ymd, UTsec);
-  time_str = time2str(ymd, UTsec);
+  time = time + seconds(params.dtout);
+  time_str = [datestr(time), ' UT'];
 end
 
 end % function

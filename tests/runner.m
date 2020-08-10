@@ -14,7 +14,7 @@ test_dir = fullfile(ref_dir, ['test', name]);
 %% get files if needed
 download_and_extract(name, ref_dir)
 %% setup new test data
-p = read_nml(test_dir);
+p = read_config(test_dir);
 p.file_format = file_format;
 p.outdir = fullfile(tempdir, ['test',name]);
 

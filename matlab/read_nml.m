@@ -9,6 +9,7 @@ filename = get_configfile(path);
 
 %% required namelists
 p = read_namelist(filename, 'base');
+
 p = merge_struct(p, read_namelist(filename, 'flags'));
 p = merge_struct(p, read_namelist(filename, 'files'));
 

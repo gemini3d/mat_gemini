@@ -48,38 +48,33 @@ end
 
 plotfun = grid2plotfun(plotfun, xg);
 
-%% TIMES OF INTEREST
-times=params.UTsec0:params.dtout:params.UTsec0+params.tdur;
-Nt=numel(times);
-
 %% MAIN FIGURE LOOP
-% NOTE: keep figure() calls in case plotfcn misses a graphics handle, and
-% for Octave...
-ymd(1,:) = params.ymd;
-UTsec(1) = params.UTsec0;
-for i = 2:Nt
-  [ymd(i,:), UTsec(i)] = dateinc(params.dtout, ymd(i-1,:), UTsec(i-1)); %#ok<AGROW>
-end
+Nt = length(params.times);
 
 h = plotinit(xg, visible);
 
-if ~isempty(saveplot_fmt)
+if ~visible
   % plot and save as fast as possible.
-  for i = 1:Nt
-    plotframe(direc, ymd(i,:), UTsec(i), saveplot_fmt, plotfun, xg, h)
+  pool = gcp('nocreate');
+  if isempty(pool)
+    pool = parpool('local');
   end
-elseif isoctave || isinteractive
-  % displaying interactively, not saving
-  % Note: CLI Octave can plot also
+  % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
+  % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
   for i = 1:Nt
-    plotframe(direc, ymd(i,:), UTsec(i), saveplot_fmt, plotfun, xg, h)
+    plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
+  end
+elseif isinteractive
+  % displaying interactively, not saving
+  for t = params.times
+    plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
     fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
     pause
   end
 else
-  error('plotall:runtime_error', 'No Matlab / Octave desktop so cannot plot. Was also not told to save')
+  error('plotall:runtime_error', 'No Matlab desktop so cannot plot. Was also not told to save')
 end % if saveplots
 
 if is_folder(fullfile(direc, 'aurmaps')) % glow sim

@@ -18,15 +18,10 @@ elseif xg.lx(3) == 1
   precip.llat=1;
 end
 
-%% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
+%% TIME VARIABLE (seconds FROM SIMULATION BEGINNING)
 % dtprec is set in config.nml
-time = 0:p.dtprec:p.tdur;
-Nt = numel(time);
-
-%% time
-UTsec = p.UTsec0 + time;     % seconds from beginning of hour
-UThrs = UTsec/3600;
-precip.expdate=cat(2,repmat(p.ymd(:)',[Nt,1]),UThrs(:),zeros(Nt,1),zeros(Nt,1));
+precip.times = p.times(1):seconds(p.dtprec):p.times(end);
+Nt = length(precip.times);
 
 %% CREATE PRECIPITATION INPUT DATA
 % Qit: energy flux [mW m^-2]
@@ -36,13 +31,13 @@ precip.E0it = zeros(precip.llon,precip.llat, Nt);
 
 % did user specify on/off time? if not, assume always on.
 if isfield(p, 'precip_startsec')
-  [~, i_on] = min(abs(time - p.precip_startsec));
+  i_on = round(p.precip_startsec / p.dtprec);
 else
   i_on = 1;
 end
 
 if isfield(p, 'precip_endsec')
-  [~, i_off] = min(abs(time - p.precip_endsec));
+  i_off = round(p.precip_endsec / p.dtprec);
 else
   i_off = Nt;
 end

@@ -24,10 +24,8 @@ end
 
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
-[ymd_end,UTsec_end] = dateinc(peq.tdur,peq.ymd,peq.UTsec0);
-
 %% LOAD THE last equilibrium frame
-dat = loadframe(p.eqdir, ymd_end, UTsec_end, peq.flagoutput, peq.mloc, xgin, p.eqdir);
+dat = loadframe(get_frame_filename(p.eqdir, peq.times(end)), peq.flagoutput, peq.mloc, xgin);
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)
@@ -44,7 +42,7 @@ check_temperature(Tsi)
 
 %% write the interpolated grid and data
 writegrid(p, xg)
-writedata(ymd_end, UTsec_end,nsi,vs1i,Tsi, p.indat_file, p.file_format);
+writedata(peq.times(end), nsi, vs1i, Tsi, p.indat_file, p.file_format);
 
 end % function eq2dist
 

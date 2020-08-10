@@ -1,13 +1,18 @@
-function filename = get_frame_filename(direc, ymd, UTsec)
+function filename = get_frame_filename(direc, time, UTsec)
 
-narginchk(3,3)
-validateattributes(ymd, {'numeric'}, {'numel',3,'positive'},2)
-validateattributes(UTsec, {'numeric'}, {'scalar','nonnegative'},3)
+narginchk(2,3)
 
+if nargin < 3
+  validateattributes(time, {'datetime'}, {'scalar'}, 2)
+  stem0 = datelab(time);
+else
+  % legacy -- take time as "ymd"
+  validateattributes(time, {'numeric'}, {'numel',3,'positive'}, 2)
+  validateattributes(UTsec, {'numeric'}, {'scalar','nonnegative'}, 3)
+  stem0 = datelab(time, UTsec);
+end
 direc = expanduser(direc);
 % so that we return a usable path
-
-stem0 = datelab(ymd, UTsec);
 
 suffix = {'.h5', '.nc', '.dat'};
 

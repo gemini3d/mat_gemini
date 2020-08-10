@@ -53,14 +53,8 @@ if isfield(p, 'Efield_fracwidth')
   end
 end
 %% TIME VARIABLE (SECONDS FROM SIMULATION BEGINNING)
-tmin = 0;
-time = tmin:p.dtE0:p.tdur;
-Nt = length(time);
-%% SET UP TIME VARIABLES
-UTsec = p.UTsec0 + time;     %time given in file is the seconds from beginning of hour
-UThrs = UTsec / 3600;
-E.expdate = cat(2, repmat(p.ymd(:)',[Nt, 1]), UThrs', zeros(Nt, 1), zeros(Nt, 1));
-% t = datenum(E.expdate);
+E.times = p.times(1):seconds(p.dtE0):p.times(end);
+Nt = length(E.times);
 %% CREATE DATA FOR BACKGROUND ELECTRIC FIELDS
 if isfield(p, 'Exit')
   E.Exit = p.Exit * ones(E.llon, E.llat, Nt);
