@@ -214,6 +214,7 @@ plotparams.maxxp=max(xp(:));
 %% NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
 plotparams.FS=9;
+plotparams.time = time;
 
 if ndims(parm) == 3
   slice3left(hf, xp, zp, parmp, plotparams)
