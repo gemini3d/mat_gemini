@@ -5,7 +5,7 @@ direc=[basedir,simname];
 
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig([direc,'/inputs']);
+[ymd0,UTsec0,tdur,dtout,flagoutput,mloc] = readconfig(direc);
 
 
 %ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)

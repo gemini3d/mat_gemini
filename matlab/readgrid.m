@@ -27,9 +27,6 @@ end % function
 function xgf = read_hdf5(path)
 
 fn = fullfile(path, 'simgrid.h5');
-if ~is_file(fn)
-  error('readgrid:read_hdf5:file_not_found', '%s not found', fn)
-end
 
 if isoctave
   xgf = load(fn);
@@ -54,9 +51,6 @@ if isoctave
 end
 
 fn = fullfile(path, 'simgrid.nc');
-if ~is_file(fn)
-  error('readgrid:read_nc4:file_not_found', '%s not found', fn)
-end
 
 for v = ncvariables(fn)
   xgf.(v{:}) = ncread(fn, v{:});

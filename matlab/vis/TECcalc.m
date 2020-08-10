@@ -11,7 +11,7 @@ makedir([direc, '/TECplots']);    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig([direc, '/inputs']);
+[ymd0,UTsec0,tdur,dtout,flagoutput,mloc] = readconfig(direc);
 
 
 %WE ALSO NEED TO LOAD THE GRID FILE (UNLESS IT ALREADY EXISTS IN THE WORKSPACE)

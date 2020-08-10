@@ -47,12 +47,12 @@ J3lim=[-10 10];
 %}
 
 %% READ IN THE SIMULATION INFORMATION (this is low cost so reread no matter what)
-p = read_config([direc, '/inputs']);
+p = read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(xg)
   disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
-  xg = readgrid([direc,'/inputs']);
+  xg = readgrid(fullfile(direc, 'inputs'));
 end
 
 if nargin<7 || isempty(h)
