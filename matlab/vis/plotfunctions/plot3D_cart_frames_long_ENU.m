@@ -1,6 +1,7 @@
 function plot3D_cart_frames_long_ENU(time,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
 
 narginchk(3,8)
+
 validateattributes(time, {'datetime'}, {'scalar'},1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
 validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
@@ -16,14 +17,16 @@ else
 end
 plotparams.caxlims = caxlims;
 
-if nargin<6 || isempty(sourceloc) % leave || for validate
+if nargin<6 || isempty(sourceloc)
   sourceloc = [];
 else
   validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
+
 if nargin<7 || isempty(hf)
   hf = figure();
 end
+
 if nargin<8 || isempty(cmap)
   cmap = parula(256);
 end
@@ -48,13 +51,12 @@ inds2=3:lx2+2;
 inds3=3:lx3+2;
 Re=6370e3;
 
-
-%JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
+%% JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 ix3=floor(lx3/2);
 plotparams.altref=300;
 
 
-%SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
+%% SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
 meantheta=mean(xg.theta(:));
 %meanphi=mean(xg.phi(:));
 y=-1*(xg.theta-meantheta);   %this is a mag colat. coordinate and is only used for defining grid in linspaces below, runs backward from north distance, hence the negative sign

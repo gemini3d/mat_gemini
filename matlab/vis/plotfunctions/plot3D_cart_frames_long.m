@@ -3,10 +3,22 @@ function plot3D_cart_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf
 narginchk(3,8)
 
 validateattributes(time, {'datetime'}, {'scalar'},1)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
 
-if nargin>=6  && ~isempty(sourceloc)
+if nargin<4, parmlbl=''; end
+validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
+
+if nargin<5
+  caxlims=[];
+else
+  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
+end
+
+if nargin<6 || isempty(sourceloc)
+  sourceloc = [];
+else
   validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
-  sourcemlat=sourceloc(1); sourcemlon=sourceloc(2);
 end
 
 if nargin<7 || isempty(hf)
@@ -17,6 +29,14 @@ if nargin<8 || isempty(cmap)
   cmap = parula(256);
 end
 
+%% SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
+if (~isempty(sourceloc))
+  sourcemlat=sourceloc(1);
+  sourcemlon=sourceloc(2);
+else
+  sourcemlat=[];
+  sourcemlon=[];
+end
 
 %% SIZE OF SIMULATION
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
@@ -98,7 +118,7 @@ zp=linspace(minz,maxz,lzp)';
 %parmp=reshape(parmp,lzp,lxp);    %slice expects the first dim. to be "y" ("z" in the 2D case)
 
 
-%CONVERT TO DISTANCE UP, EAST, NORTH
+%% CONVERT TO DISTANCE UP, EAST, NORTH
 x1plot=Z(:);   %upward distance
 x2plot=X(:)*Re*sin(meantheta);     %eastward distance
 
@@ -106,8 +126,7 @@ parmtmp=parm(:,:,ix3);
 parmp=interp2(xg.x2(inds2),xg.x1(inds1),parmtmp,x2plot,x1plot);
 parmp=reshape(parmp,[lzp,lxp]);    %slice expects the first dim. to be "y" ("z" in the 2D case)
 
-
-%LAT./LONG. SLICE COORDIANTES
+%% LAT./LONG. SLICE COORDINATES
 %zp2=[290,300,310];
 zp2=[altref-10,altref,altref+10];
 lzp2=numel(zp2);
@@ -121,7 +140,7 @@ lzp2=numel(zp2);
 %pplot2=rxp2/Re./sin(thetaxp2).^2;
 %phiplot2=phixp2;    %phi is same in spherical and dipole
 %
-%%NOW WE CAN DO A `PLAID' INTERPOLATION - THIS ONE IS FOR THE LAT/LON SLICE
+%% NOW WE CAN DO A `PLAID' INTERPOLATION - THIS ONE IS FOR THE LAT/LON SLICE
 %parmtmp=permute(parm,[3,2,1]);
 %x3interp=xg.x3(inds3);
 %x3interp=x3interp(:);     %interp doesn't like it unless this is a column vector
