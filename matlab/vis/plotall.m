@@ -7,7 +7,10 @@ function xg = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 % saveplot_fmt: char or cell: plot saving formats e.g. png, eps, pdf
 % plotfun: name or function handle of plotting function to use (advanced users)
 % xg: simulation grid (advanced users) this avoids loading huge grids over and over
-% visible: logical true/false make plots visible or not (default off when saving to disk to save time)
+% parallel: parallel plotting option:
+%   0: plot serially (not in parallel)
+%   1: auto-determine number of workers ~ number of CPU cores -- lots of RAM used but fast
+%   2..inf: request specific number of workers--useful if you get "out of memory" errors
 %
 narginchk(1,5)
 
@@ -25,9 +28,8 @@ if ~isempty(xg)
   validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
 end
 
-if nargin < 5, parallel = false; end
-validateattributes(parallel, {'numeric'}, {'scalar'}, mfilename, 'plot in parallel (lots of RAM for big simulations)', 5)
-
+if nargin < 5, parallel =0; end
+validateattributes(parallel, {'numeric'}, {'scalar'}, mfilename, 'Number of tasks to plot in parallel (lots of RAM for big simulations)', 5)
 
 visible = isempty(saveplot_fmt);
 
@@ -51,10 +53,18 @@ Nt = length(params.times);
 h = plotinit(xg, visible);
 
 if ~visible
-  if parallel
+  if parallel > 0
     % plot and save as fast as possible.
     % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
+    if parallel > 1
+      % specific number of workers requested
+      pool = gcp('nocreate');
+      if isempty(pool) || pool.NumWorkers ~= parallel
+        delete(pool)
+        parpool('local', parallel)
+      end
+    end
     parfor i = 1:Nt
       plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
     end
