@@ -1,9 +1,8 @@
 function axes_tidy(ax, P)
 narginchk(2,2)
 
-validateattributes(P, {'struct'}, {'scalar'}, mfilename)
+validateattributes(P, {'struct'}, {'scalar'}, 2)
 
-tight_axis(ax)
 colormap(ax, P.cmap)
 caxis(ax, P.caxlims);
 

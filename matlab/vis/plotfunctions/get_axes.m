@@ -7,11 +7,5 @@ narginchk(0,1)
 if nargin < 1
   ha = axes('parent', figure);
 else
-  if isoctave % Octave < 5.0
-    if isfigure(h)
-      ha = axes('parent', h);
-    end
-  else
-    ha = axes(h);  % this is fine for Octave >= 5.0 and Matlab
-  end
+  ha = axes(h);  % this is fine for Octave >= 5.0 and Matlab
 end

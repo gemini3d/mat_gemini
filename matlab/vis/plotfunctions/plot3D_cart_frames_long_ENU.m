@@ -6,28 +6,28 @@ validateattributes(time, {'datetime'}, {'scalar'},1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
 validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
 
-if nargin<4, parmlbl=''; end
+if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
 plotparams.parmlbl = parmlbl;
 
-if nargin<5
+if nargin < 5
   caxlims=[];
 else
   validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
 plotparams.caxlims = caxlims;
 
-if nargin<6 || isempty(sourceloc)
+if nargin < 6  || isempty(sourceloc)
   sourceloc = [];
 else
   validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
 
-if nargin<7 || isempty(hf)
+if nargin < 7 || isempty(hf)
   hf = figure();
 end
 
-if nargin<8 || isempty(cmap)
+if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
 
@@ -219,9 +219,19 @@ plotparams.FS=9;
 plotparams.time = time;
 
 if ndims(parm) == 3
-  slice3left(hf, xp, zp, parmp, plotparams)
-  slice3mid(hf, xp, yp, parmp2, plotparams)
-  slice3right(hf, yp, zp, parmp3, plotparams)
+  if verLessThan('matlab', '9.7')
+    ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+    ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+    ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  else
+    t = tiledlayout(hf, 1, 3);
+    ax1 = nexttile(t);
+    ax2 = nexttile(t);
+    ax3 = nexttile(t);
+  end
+  slice3left(ax1, xp, zp, parmp, plotparams)
+  slice3mid(ax2, xp, yp, parmp2, plotparams)
+  slice3right(ax3, yp, zp, parmp3, plotparams)
 else
   plot_phitop(xp, yp, parmp2, hf, plotparams)
 end

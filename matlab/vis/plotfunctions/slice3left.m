@@ -1,13 +1,12 @@
-function slice3left(hf, x, y, dat, P)
-
-ax = subplot(1,3,1, 'parent', hf, 'nextplot','add','FontSize', P.FS);
+function slice3left(ax, x, y, dat, P)
+narginchk(5,5)
 %% image
-hi = imagesc(ax, x, y, dat);
-try %#ok<*TRYNC> % Octave at least thru 5.1 has scalar alphadata
-  set(hi, 'alphadata', ~isnan(dat));
-end
+hi = imagesc(x, y, dat, 'parent', ax);
+set(hi, 'alphadata', ~isnan(dat));
 %% line annotation
-plot(ax,[P.minxp, P.maxxp],[P.altref, P.altref],'w--','LineWidth',2);
+if ~verLessThan('matlab', '9.5')
+  yline(ax, P.altref, 'Color', 'w', 'LineStyle', '--', 'LineWidth',2)
+end
 if ~isempty(P.sourcemlat)
   plot(ax,P.sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
 end

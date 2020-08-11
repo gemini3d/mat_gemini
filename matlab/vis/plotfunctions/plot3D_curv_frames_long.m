@@ -4,6 +4,7 @@ narginchk(3,8)
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
 validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
+
 if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
 
@@ -13,14 +14,16 @@ else
   validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
 
-if nargin < 6  || isempty(sourceloc) % leave || for validate
+if nargin < 6  || isempty(sourceloc)
   sourceloc = [];
 else
   validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
+
 if nargin < 7 || isempty(hf)
   hf = figure();
 end
+
 if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
@@ -205,9 +208,9 @@ if verLessThan('matlab', '9.7')
   ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
 else
   t = tiledlayout(hf, 1, 3);
-  ax1 = nexttile(t, 'nextplot', 'add');
-  ax2 = nexttile(t, 'nextplot', 'add');
-  ax3 = nexttile(t, 'nextplot', 'add');
+  ax1 = nexttile(t);
+  ax2 = nexttile(t);
+  ax3 = nexttile(t);
 end
 h=imagesc(ax1,xp,zp,parmp);
 if (flagsource)
