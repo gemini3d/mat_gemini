@@ -123,8 +123,9 @@ if p.flagoutput ~= 3
   try
   plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', ...
     Phitop_lim, [dat.mlatsrc, dat.mlonsrc], h.f9, Phi_cmap)
-  catch excp
-    warning(excp)
+  catch e
+    % casting an error to warning requires this syntax for Matlab < R2020a
+    warning(e.identifier, '%s', e.message)
   end
 end
 
