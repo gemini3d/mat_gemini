@@ -11,6 +11,7 @@ validateattributes(lwave, {'numeric'}, {'scalar', 'integer', 'positive'})
 switch ext
   case '.dat', cAur = loadglow_aurmap_raw(filename, lx2, lx3, lwave);
   case '.h5', cAur = loadglow_aurmap_hdf5(filename);
+  case '.nc', cAur = loadglow_aurmap_nc(filename);
   otherwise, error('loadglow_aurmap:value_error', 'unknown file type %s', filename)
 end
 
@@ -33,13 +34,14 @@ end % function
 function cAur = loadglow_aurmap_hdf5(filename)
 narginchk(1,1)
 
-if isoctave
-  D = load(filename);
-  cAur = D.aurora.iverall;
-else
-  cAur = h5read(filename, '/aurora/iverout');
-end
+cAur = squeeze(h5read(filename, '/aurora/iverout'));
 
-cAur = squeeze(cAur);
+end % function
+
+
+function cAur = loadglow_aurmap_nc(filename)
+narginchk(1,1)
+
+cAur = squeeze(ncread(filename, 'iverout'));
 
 end % function

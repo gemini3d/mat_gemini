@@ -4,10 +4,6 @@ narginchk(1,1)
 %% SIMULATION RESULTS
 dat.filename = fn;
 
-if isoctave
-  pkg('load','netcdf')
-end
-
 dat.ns = ncread(fn, 'nsall');
 dat.vs1 = ncread(fn, 'vs1all');
 dat.Ts = ncread(fn, 'Tsall');

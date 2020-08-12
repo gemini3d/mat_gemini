@@ -10,28 +10,16 @@ addpath([fileparts(mfilename('fullpath')), '/../../../matlab'])
 
 exist_or_skip(fn, 'file')
 
-if isoctave
-  h = load(fn);
-  L = h.lt;
-  x1 = h.x1;
-else
-  L = h5read(fn, '/lt');
-  x1 = h5read(fn, '/x1');
-end
+L = h5read(fn, '/lt');
+x1 = h5read(fn, '/x1');
 
 for it=1:L
   ic = num2str(it, '%4.4d');
-  if isoctave
-    t(it) = h.(['t',ic]);
-    TsEuler(:, it) = h.(['TsEuler', ic]);
-    TsBDF2(:, it) = h.(['TsBDF2', ic]);
-    Tstrue(:, it) = h.(['TsTrue', ic]);
-  else
-    t(it) = h5read(fn, ['/t',ic]);
-    TsEuler(:, it) = h5read(fn, ['/TsEuler', ic]);
-    TsBDF2(:, it) = h5read(fn, ['/TsBDF2', ic]);
-    Tstrue(:, it) = h5read(fn, ['/TsTrue', ic]);
-  end
+
+  t(it) = h5read(fn, ['/t',ic]);
+  TsEuler(:, it) = h5read(fn, ['/TsEuler', ic]);
+  TsBDF2(:, it) = h5read(fn, ['/TsBDF2', ic]);
+  Tstrue(:, it) = h5read(fn, ['/TsTrue', ic]);
 end
 
 % reltol = 1e-5 for real32

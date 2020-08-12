@@ -26,27 +26,18 @@ function xgf = read_hdf5(path)
 
 fn = fullfile(path, 'simgrid.h5');
 
-if isoctave
-  xgf = load(fn);
-else
-  for v = h5variables(fn)
-    xgf.(v{:}) = h5read(fn, ['/',v{:}]);
-  end
+for v = h5variables(fn)
+  xgf.(v{:}) = h5read(fn, ['/',v{:}]);
 end
 
-% do this last to avoid overwriting e.g. Octave
+% do this last to avoid overwriting
 xgf.filename = fn;
 xgf.lx = simsize(path);
-
 
 end  % function read_hdf5
 
 
 function xgf = read_nc4(path)
-
-if isoctave
-  pkg('load','netcdf')
-end
 
 fn = fullfile(path, 'simgrid.nc');
 

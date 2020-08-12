@@ -5,10 +5,6 @@ addpath(cwd) % since we have to cd() in runner()
 
 run(fullfile(cwd, '../setup.m'))
 
-if isoctave
-  pkg('load','netcdf')
-end
-
 %% test2dew_eq_nc
 runner('2dew_eq', 'nc')
 %% test2dew_fang_nc

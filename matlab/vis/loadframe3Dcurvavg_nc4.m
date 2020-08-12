@@ -4,10 +4,6 @@ narginchk(1,1)
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-if isoctave
-  pkg('load','netcdf')
-end
-
 %% Number densities
 dat.ne = ncread(filename, 'neall');
 %% Parallel Velocities

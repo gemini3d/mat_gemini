@@ -5,21 +5,11 @@ narginchk(1,1)
 
 exist_or_skip(fn, 'file')
 
-if isoctave
-h = load(fn);
-
-x2 = h.x2;
-x3 = h.x3;
-Phi = h.Phi;
-Phi2 = h.Phi2squeeze;
-Phitrue = h.Phitrue;
-else
 x2 = h5read(fn, '/x2');
 x3 = h5read(fn, '/x3');
 Phi = h5read(fn, '/Phi');
 Phi2 = h5read(fn, '/Phi2squeeze');
 Phitrue = h5read(fn, '/Phitrue');
-end
 
 
 assert_allclose(Phi2(13, 13), 0.00032659, 1e-5,[],'Potential 2d accuracy')

@@ -4,20 +4,11 @@ narginchk(1,1)
 
 exist_or_skip(fn, 'file')
 
-if isoctave
-  h = load(fn);
-  lx1 = h.lx1;
-  lx2 = h.lx2;
-  x1 = h.x1;
-  x2 = h.x2;
-  f = h.f;
-else
-  lx1 = h5read(fn, '/lx1');
-  lx2 = h5read(fn, '/lx2');
-  x1 = h5read(fn, '/x1');
-  x2 = h5read(fn, '/x2');
-  f = h5read(fn, '/f');
-end
+lx1 = h5read(fn, '/lx1');
+lx2 = h5read(fn, '/lx2');
+x1 = h5read(fn, '/x1');
+x2 = h5read(fn, '/x2');
+f = h5read(fn, '/f');
 
 assert(lx1==500, 'x1 size')
 assert(lx2==1000, 'x2 size')

@@ -152,10 +152,6 @@ end % function
 
 function write_nc4(p, xg)
 
-if isoctave
-  pkg('load','netcdf')
-end
-
 %% size
 fn = with_suffix(p.indat_size, '.nc');
 disp(['write ',fn])

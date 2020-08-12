@@ -8,8 +8,8 @@ assert(is_file(filename), 'not a file: %s', filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);
-  case {'.h5'}, dat= read_hdf5(filename);
-  case ('.nc'), dat = read_nc4(filename);
+  case '.h5', dat= read_hdf5(filename);
+  case '.nc', dat = read_nc4(filename);
   otherwise, error('loadframe3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
 
@@ -38,9 +38,6 @@ end % function
 
 function dat = read_nc4(filename)
 
-if isoctave
-  pkg('load', 'netcdf')
-end
 dat.ne = ncread(filename, 'neall');
 end % function
 

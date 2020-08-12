@@ -63,10 +63,6 @@ end % function
 
 function write_nc4(fn, time, ns, vsx1, Ts, Phitop)
 
-if isoctave
-  pkg('load','netcdf')
-end
-
 fn = with_suffix(fn, '.nc');
 
 disp(['write ',fn])
