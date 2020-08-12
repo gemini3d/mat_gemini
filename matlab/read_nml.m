@@ -23,10 +23,7 @@ if isfield(p, 'eqdir')
   p.eq_dir = p.eqdir;
 end
 
-read_if_present(p, filename, 'neutral_perturb');
-if ~isfield(p, 'mloc')
-  p.mloc=[];
-end
+p = read_if_present(p, filename, 'neutral_perturb');
 
 p = read_if_present(p, filename,  'precip');
 % don't make prec_dir absolute here, to respect upcoming p.outdir
