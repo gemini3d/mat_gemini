@@ -1,4 +1,4 @@
-function writedata(time ,ns, vsx1, Ts, fn, file_format, Phitop)
+function writedata(time, ns, vsx1, Ts, fn, file_format, Phitop)
 
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE
@@ -9,13 +9,19 @@ function writedata(time ,ns, vsx1, Ts, fn, file_format, Phitop)
 % INPUT ARRAYS SHOULD BE TRIMMED TO THE CORRECT SIZE
 % I.E. THEY SHOULD NOT INCLUDE GHOST CELLS
 
-narginchk(6,7)
+narginchk(5,7)
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(ns, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'density', 2)
 validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 3)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 4)
 validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',5)
+
+if nargin < 6
+  [~, ~, suffix] = fileparts(fn);
+  file_format = suffix(2:end);
+end
 validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',6)
+
 if nargin < 7
     warning('Setting unspecified potential to zero...')
     Phitop = zeros(size(ns,2),size(ns,3));
