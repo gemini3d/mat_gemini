@@ -1,18 +1,16 @@
-function [xg, ok] = readgrid(path, realbits)
+function [xg, ok] = readgrid(path)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
 % one file format while the equilibrium sim was in another file format
-narginchk(1,2)
-if nargin < 2 || isempty(realbits), realbits = 64; end
-validateattributes(realbits, {'numeric'}, {'scalar', 'integer'}, mfilename, '32 or 64', 2)
+narginchk(1,1)
 
 [path, suffix] = get_simsize_path(path);
 
 switch suffix
   case '.h5', xg = read_hdf5(path);
   case '.nc', xg = read_nc4(path);
-  case '.dat', xg = read_raw(path, realbits);
+  case '.dat', xg = read_raw(path);
   otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
 end
 
@@ -62,7 +60,7 @@ xgf.lx = simsize(path);
 end  % function read_nc4
 
 
-function xgf = read_raw(path, realbits)
+function xgf = read_raw(path)
 
 filename = fullfile(path, 'simgrid.dat');
 if ~is_file(filename)
@@ -81,7 +79,7 @@ gridsizeghost=[lx1+4,lx2+4,lx3+4];
 
 %% Grid file
 
-freal = ['float', int2str(realbits)];
+freal = 'float64';
 
 fid = fopen(filename, 'r');
 

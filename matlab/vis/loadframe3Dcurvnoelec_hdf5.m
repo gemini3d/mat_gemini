@@ -4,14 +4,6 @@ narginchk(1,1)
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-if isoctave
-  D = load(filename);
-  dat.ns = D.nsall;
-  dat.vs1 = D.vs1all;
-  dat.Ts = D.Tsall;
-  return
-end
-
 varnames = h5variables(filename);
 
 if any(strcmp('nsall', varnames))

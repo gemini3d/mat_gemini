@@ -25,7 +25,7 @@ switch p.file_format
     write_nc4(p, xg)
     [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.nc'));
   case 'dat'
-    write_raw(p, xg, p.realbits)
+    write_raw(p, xg)
     [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.dat'));
   otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
 end
@@ -254,9 +254,9 @@ ncsave(fn, 'z', xg.z, [dimx1, dimx2, dimx3], freal)
 end % function
 
 
-function write_raw(outdir, xg, realbits)
+function write_raw(p, xg)
 
-freal = ['float', int2str(realbits)];
+freal = 'float64';
 
 %% size
 fn = with_suffix(p.indat_size, '.dat');

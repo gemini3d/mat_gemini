@@ -20,34 +20,16 @@ function lxs = read_h5(path)
 
 fn=fullfile(path, 'simsize.h5');
 
-if isoctave
+varnames = h5variables(fn);
 
-  d = load(fn);
-  if isfield(d, 'lxs')
-    lxs = d.lxs;
-  elseif isfield(d, 'lx')
-    lxs = d.lx;
-  elseif isfield(d, 'lx1')
-    % octave bug: octave_base_value::int32_scalar_value(): wrong type argument 'int32 matrix'
-    lxs = [d.lx1; d.lx2; d.lx3];
-  else
-    error('simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
-  end
-
+if any(strcmp('lxs', varnames))
+  lxs = h5read(fn, '/lxs');
+elseif any(strcmp('lx', varnames))
+  lxs = h5read(fn, '/lx');
+elseif any(strcmp('lx1', varnames))
+  lxs = [h5read(fn, '/lx1'), h5read(fn, '/lx2'), h5read(fn, '/lx3')];
 else
-
-  varnames = h5variables(fn);
-
-  if any(strcmp('lxs', varnames))
-    lxs = h5read(fn, '/lxs');
-  elseif any(strcmp('lx', varnames))
-    lxs = h5read(fn, '/lx');
-  elseif any(strcmp('lx1', varnames))
-    lxs = [h5read(fn, '/lx1'), h5read(fn, '/lx2'), h5read(fn, '/lx3')];
-  else
-    error('simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
-  end
-
+  error('simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
 end
 
 end % function

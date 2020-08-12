@@ -20,6 +20,7 @@ if nargin < 7
     warning('Setting unspecified potential to zero...')
     Phitop = zeros(size(ns,2),size(ns,3));
 end %if
+validateattributes(Phitop, {'numeric'}, {'size', [size(ns, 2), size(ns,3)]}, 7)
 % FIXME:  may want validate potential input
 
 switch file_format

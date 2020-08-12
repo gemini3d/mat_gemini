@@ -1,11 +1,9 @@
-function dat = loadframe(filename, flagoutput, mloc, xg, config_file, realbits)
+function dat = loadframe(filename, flagoutput, mloc, xg, config_file)
 
 
 %% Error checking and setup
-narginchk(1,6)
+narginchk(1,5)
 validateattributes(filename, {'char'}, {'vector'}, 1)
-
-if nargin < 6 || isempty(realbits), realbits = 64; end
 
 if nargin < 2 || isempty(flagoutput)
   if nargin >= 5
@@ -30,7 +28,7 @@ if ~isempty(mloc)
 end
 
 if nargin < 4 || isempty(xg)
-  [xg, ok] = readgrid(fileparts(filename), realbits);
+  [xg, ok] = readgrid(fileparts(filename));
   if ~ok
     error('loadframe:value_error', 'grid did not have appropriate parameters')
   end
