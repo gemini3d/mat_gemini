@@ -1,4 +1,4 @@
-function model_setup_equilibrium(p)
+function xg = model_setup_equilibrium(p)
 %% setup equilibrium simulation
 % this is to be called by model_setup.m
 

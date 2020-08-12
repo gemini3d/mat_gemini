@@ -1,4 +1,4 @@
-function cfg = model_setup(cfg, outdir)
+function [cfg, xg] = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 
 narginchk(1, 2)
@@ -14,7 +14,7 @@ if isstruct(cfg)
   % pass
 elseif ischar(cfg)
   % path to config.nml
-  cfg = read_nml(cfg);
+  cfg = read_config(cfg);
 else
   error('model_setup:value_error', 'need path to config.nml')
 end
@@ -37,10 +37,10 @@ copy_file(cfg.nml, cfg.input_dir)
 
 %% is this equilibrium or interpolated simulation
 if isfield(cfg, 'eq_dir') && ~isempty(cfg.eq_dir)
-  model_setup_interp(cfg)
+  xg = model_setup_interp(cfg);
 else
-  model_setup_equilibrium(cfg)
+  xg = model_setup_equilibrium(cfg);
 end
 
-if ~nargout, clear('cfg'), end
+if ~nargout, clear('cfg', 'xg'), end
 end % function

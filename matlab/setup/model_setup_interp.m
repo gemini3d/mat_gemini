@@ -1,4 +1,4 @@
-function model_setup_interp(p)
+function xg = model_setup_interp(p)
 %% setup interpolated simulation based on equilibrium simulation
 % this is to be called by model_setup.m
 narginchk(1,1)
