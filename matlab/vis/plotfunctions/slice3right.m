@@ -13,6 +13,6 @@ end
 %% axes
 axes_tidy(ax, P)
 
-xlabel(ax, 'northward dist. (km)');
-ylabel(ax, 'altitude (km)');
+xlabel(ax, P.right_xlabel)
+ylabel(ax, P.right_ylabel)
 end

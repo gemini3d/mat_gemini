@@ -1,18 +1,21 @@
 function h=plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
 
 narginchk(3,8)
+
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
 validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
 
 if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
+plotparams.parmlbl = parmlbl;
 
 if nargin < 5
   caxlims=[];
 else
   validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
+plotparams.caxlims = caxlims;
 
 if nargin < 6  || isempty(sourceloc)
   sourceloc = [];
@@ -28,8 +31,9 @@ if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
 
+plotparams.cmap = cmap;
 
-%SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
+%% SOURCE LOCATION
 if (~isempty(sourceloc))
   sourcemlat=sourceloc(1);
   sourcemlon=sourceloc(2);
@@ -37,21 +41,29 @@ if (~isempty(sourceloc))
 else
   flagsource=0;
 end
+plotparams.sourcemlat = sourcemlat;
+plotparams.sourcemlon = sourcemlon;
 
-%SIZE OF SIMULATION
+plotparams.left_xlabel = 'magnetic latitude (deg.)';
+plotparams.left_ylabel = 'altitude (km)';
+
+plotparams.mid_ylabel = 'magnetic latitude (deg.)';
+plotparams.mid_xlabel = 'magnetic longitude (deg.)';
+
+plotparams.right_xlabel = 'magnetic latitude (deg.)';
+plotparams.right_ylabel = 'altitude (km)';
+%% SIZE OF SIMULATION
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2;
 inds2=3:lx2+2;
 inds3=3:lx3+2;
 Re=6370e3;
 
-
-%JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
+%% JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 ix3=floor(lx3/2);
-altref=375;
+plotparams.altref=375;
 
-
-%SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
+%% SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
 meantheta=mean(xg.theta(:));
 meanphi=mean(xg.phi(:));
 x=(xg.theta-meantheta);   %this is a mag colat. coordinate and is only used for defining grid in linspaces below
@@ -187,20 +199,9 @@ yp=(yp+meanphi)*180/pi;
 parmp2=parmp2(inds,:,:);
 parmp3=parmp3(inds,:,:);
 
-
-%COMPUTE SOME BOUNDS FOR THE PLOTTING
-minxp=min(xp(:));
-maxxp=max(xp(:));
-%minyp=min(yp(:));
-%maxyp=max(yp(:));
-minzp=min(zp(:));
-maxzp=max(zp(:));
-
-
-%NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
+%% NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
 FS=8;
-
 
 if verLessThan('matlab', '9.7')
   ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
@@ -212,63 +213,11 @@ else
   ax2 = nexttile(t);
   ax3 = nexttile(t);
 end
-h=imagesc(ax1,xp,zp,parmp);
-if (flagsource)
-  plot(ax1,[minxp,maxxp],[altref,altref],'--','LineWidth',1,'Color',[0.25 0.25 0.25]);
-  plot(ax1,[sourcemlat,sourcemlat],[minzp,maxzp],'k--','LineWidth',1);
-  plot(ax1,sourcemlat,0,'r^','MarkerSize',6,'LineWidth',2);
-end
-set(h,'alphadata',~isnan(parmp));
 
-colormap(ax1,cmap)
-caxis(ax1,caxlims);
-c=colorbar(ax1);
-xlabel(c,parmlbl);
-xlabel(ax1,'magnetic latitude (deg.)');
-ylabel(ax1,'altitude (km)');
+slice3left(ax1, xp, zp, parmp, plotparams)
 
-title(ax1, [datestr(time), ' UT']);
+slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
 
-%% middle
-%h=imagesc(xp,yp,parmp2(:,:,2));
-h=imagesc(ax2,yp,xp,parmp2(:,:,2)');    %so latitude is the vertical axis
-if (flagsource)
-  %plot([minxp,maxxp],[sourcemlon,sourcemlon],'w--','LineWidth',2);
-  %plot(sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
-%  plot([sourcemlon,sourcemlon],[minxp,maxxp],'w--','LineWidth',1);
-  plot(ax2,sourcemlon,sourcemlat,'r^','MarkerSize',6,'LineWidth',2);
-end
-%set(h,'alphadata',~isnan(parmp2(:,:,2)));
-set(h,'alphadata',~isnan(parmp2(:,:,2)'));
-
-colormap(ax2,cmap)
-caxis(ax2,caxlims);
-c=colorbar(ax2);
-xlabel(c,parmlbl);
-%xlabel('magnetic latitude (deg.)');
-%ylabel('magnetic longitude (deg.)');
-xlabel(ax2,'magnetic long. (deg.)');
-ylabel(ax2,'magnetic lat. (deg.)');
-
-%% right
-h=imagesc(ax3,yp,zp3,squeeze(parmp3(:,2,:))');    %so latitude is the vertical axis
-if (flagsource)
-%  plot([sourcemlon,sourcemlon],[minzp3,maxzp3],'k--','LineWidth',1);
-  plot(ax3,sourcemlon,0,'r^','MarkerSize',6,'LineWidth',2);
-end
-%set(h,'alphadata',~isnan(squeeze(parmp3(:,2,:))'));
-
-colormap(ax3,cmap)
-caxis(ax3,caxlims);
-c=colorbar(ax3);
-xlabel(c,parmlbl);
-xlabel(ax3,'magnetic long. (deg.)');
-ylabel(ax3,'altitude (km)');
-
-if verLessThan('matlab', '9.7')
-  for a = [ax1, ax2, ax3]
-    tight_axis(a)
-  end
-end
+slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
 
 end % function

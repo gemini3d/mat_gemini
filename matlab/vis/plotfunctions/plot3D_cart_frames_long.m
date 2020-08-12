@@ -2,34 +2,38 @@ function plot3D_cart_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf
 
 narginchk(3,8)
 
-validateattributes(time, {'datetime'}, {'scalar'},1)
+validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
 
-if nargin<4, parmlbl=''; end
+if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
+plotparams.parmlbl = parmlbl;
 
-if nargin<5
+if nargin < 5
   caxlims=[];
 else
   validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
 end
+plotparams.caxlims = caxlims;
 
-if nargin<6 || isempty(sourceloc)
+if nargin < 6  || isempty(sourceloc)
   sourceloc = [];
 else
   validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
 end
 
-if nargin<7 || isempty(hf)
+if nargin < 7 || isempty(hf)
   hf = figure();
 end
 
-if nargin<8 || isempty(cmap)
+if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
 
-%% SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
+plotparams.cmap = cmap;
+
+%% SOURCE LOCATION
 if (~isempty(sourceloc))
   sourcemlat=sourceloc(1);
   sourcemlon=sourceloc(2);
@@ -37,7 +41,17 @@ else
   sourcemlat=[];
   sourcemlon=[];
 end
+plotparams.sourcemlat = sourcemlat;
+plotparams.sourcemlon = sourcemlon;
 
+plotparams.left_xlabel = 'magnetic longitude (deg.)';
+plotparams.left_ylabel = 'altitude (km)';
+
+plotparams.mid_ylabel = 'magnetic latitude (deg.)';
+plotparams.mid_xlabel = 'magnetic longitude (deg.)';
+
+plotparams.right_xlabel = 'magnetic latitude (deg.)';
+plotparams.right_ylabel = 'altitude (km)';
 %% SIZE OF SIMULATION
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2;
@@ -47,8 +61,7 @@ Re=6370e3;
 
 %% JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 ix3=floor(lx3/2);
-altref=110;
-
+plotparams.altref=110;
 
 %% SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
 meantheta=mean(xg.theta(:));
@@ -186,76 +199,26 @@ xp=(xp+meanphi)*180/pi;
 parmp=parmp(:,inds,:);
 parmp2=parmp2(:,inds,:);
 
-
-%COMPUTE SOME BOUNDS FOR THE PLOTTING
-minxp=min(xp(:));
-maxxp=max(xp(:));
-%minyp=min(yp(:));
-%maxyp=max(yp(:));
-%minzp=min(zp(:));
-%maxzp=max(zp(:));
-
-
 %NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
 FS=12;
 
-%MAKE THE PLOT!
-ha=subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
-h=imagesc(ha,xp,zp,parmp);
-plot(ha,[minxp,maxxp],[altref,altref],'w--','LineWidth',2);
-if (~isempty(sourcemlat))
-  plot(ha,sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
+
+if verLessThan('matlab', '9.7')
+  ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+else
+  t = tiledlayout(hf, 1, 3);
+  ax1 = nexttile(t);
+  ax2 = nexttile(t);
+  ax3 = nexttile(t);
 end
-set(h,'alphadata',~isnan(parmp));
 
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims)
-c=colorbar(ha);
-xlabel(c,parmlbl);
-xlabel(ha,'magnetic longitude (deg.)');
-ylabel(ha,'altitude (km)');
+slice3left(ax1, xp, zp, parmp, plotparams)
 
+slice3mid(ax2, xp, yp, parmp2(:,:,2), plotparams)
 
-ha=subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
-h=imagesc(ha,xp,yp,parmp2(:,:,2));
-if (~isempty(sourcemlat))
-  plot(ha,[minxp,maxxp],[sourcemlon,sourcemlon],'w--','LineWidth',2);
-  plot(ha,sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
-end
-set(h,'alphadata',~isnan(parmp2(:,:,2)));
-
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims)
-c=colorbar(ha);
-xlabel(c,parmlbl);
-ylabel(ha,'magnetic latitude (deg.)');
-xlabel(ha,'magnetic longitude (deg.)');
-
-ha=subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize',FS);
-h=imagesc(ha,yp,zp,parmp3);
-%plot([minyp,maxyp],[altref,altref],'w--','LineWidth',2);
-if (~isempty(sourcemlat))
-  plot(ha,sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
-end
-set(h,'alphadata',~isnan(parmp3))
-
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims)
-c=colorbar(ha);
-xlabel(c,parmlbl);
-xlabel(ha,'magnetic latitude (deg.)')
-ylabel(ha,'altitude (km)')
-
-
-%% CONSTRUCT A STRING FOR THE TIME AND DATE
-ha = subplot(1,3,1);
-
-title(ha, [datestr(time), ' UT'])
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
+slice3right(ax3, yp, zp, parmp3, plotparams)
 
 end

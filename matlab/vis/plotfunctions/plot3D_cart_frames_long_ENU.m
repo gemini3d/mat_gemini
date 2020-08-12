@@ -2,9 +2,9 @@ function plot3D_cart_frames_long_ENU(time,xg,parm,parmlbl,caxlims,sourceloc,hf,c
 
 narginchk(3,8)
 
-validateattributes(time, {'datetime'}, {'scalar'},1)
+validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot',3)
+validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
 
 if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
@@ -32,19 +32,27 @@ if nargin < 8 || isempty(cmap)
 end
 
 plotparams.cmap = cmap;
-plotparams.sourceloc = sourceloc;
 
-%SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
+%% SOURCE LOCATION
 if (~isempty(sourceloc))
-  plotparams.sourcemlat=sourceloc(1);
-  plotparams.sourcemlon=sourceloc(2);
+  sourcemlat=sourceloc(1);
+  sourcemlon=sourceloc(2);
 else
-  plotparams.sourcemlat=[];
-  plotparams.sourcemlon=[];
+  sourcemlat=[];
+  sourcemlon=[];
 end
+plotparams.sourcemlat = sourcemlat;
+plotparams.sourcemlon = sourcemlon;
 
+plotparams.left_xlabel = 'eastward dist. (km)';
+plotparams.left_ylabel = 'altitude (km)';
 
-%SIZE OF SIMULATION
+plotparams.mid_ylabel = 'northward dist. (km)';
+plotparams.mid_xlabel = 'eastward dist. (km)';
+
+plotparams.right_xlabel = 'northward dist. (km)';
+plotparams.right_ylabel = 'altitude (km)';
+%% SIZE OF SIMULATION
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2;
 inds2=3:lx2+2;
@@ -54,7 +62,6 @@ Re=6370e3;
 %% JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 ix3=floor(lx3/2);
 plotparams.altref=300;
-
 
 %% SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
 meantheta=mean(xg.theta(:));
@@ -209,9 +216,6 @@ if ndims(parm) == 3
 else
   parmp2 = parmp2(:, inds);
 end
-%% COMPUTE SOME BOUNDS FOR THE PLOTTING
-plotparams.minxp=min(xp(:));
-plotparams.maxxp=max(xp(:));
 
 %% NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);

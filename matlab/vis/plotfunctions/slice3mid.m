@@ -16,7 +16,7 @@ end
 %% axes
 axes_tidy(ax, P)
 
-ylabel(ax, 'northward dist. (km)');
-xlabel(ax, 'eastward dist. (km)');
+ylabel(ax, P.mid_ylabel)
+xlabel(ax, P.mid_xlabel)
 
 end
