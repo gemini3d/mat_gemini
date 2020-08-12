@@ -16,6 +16,8 @@ validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 3)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 4)
 validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',5)
 
+assert(~is_folder(fn), '%s muse be a filename, not a directory', fn)
+
 if nargin < 6 || isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
   file_format = suffix(2:end);
@@ -23,7 +25,7 @@ end
 validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',6)
 
 if nargin < 7
-    warning('Setting unspecified potential to zero...')
+    disp('NOTE: Setting unspecified potential to zero')
     Phitop = zeros(size(ns,2),size(ns,3));
 end %if
 validateattributes(Phitop, {'numeric'}, {'size', [size(ns, 2), size(ns,3)]}, 7)
