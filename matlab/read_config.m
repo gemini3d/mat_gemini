@@ -22,6 +22,13 @@ if ~isfield(p, 'file_format')
   p.file_format = ext(2:end);
 end
 
+%% setup functions
+if isfield(p, 'setup_functions')
+   if ischar(p.setup_functions)
+     p.setup_functions = {p.setup_functions};
+   end
+end
+
 end % function
 
 % Copyright 2020 Michael Hirsch, Ph.D.

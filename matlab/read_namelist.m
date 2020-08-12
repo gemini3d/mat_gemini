@@ -39,7 +39,11 @@ while ~feof(fid)
   % need textscan instead of sscanf to handle corner cases
   vals = cell2mat(textscan(matches{1}{2}, '%f','Delimiter',','));
   if isempty(vals)  % must be a string
-    vals = matches{1}{2};
+    vals = split(strrep(line, char(39), ''), '=');
+    vals = strip(vals{2});
+    if contains(vals, ',')
+      vals = split(vals, ',');
+    end
   else
     vals = vals(:).';
   end

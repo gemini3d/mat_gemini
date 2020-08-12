@@ -13,12 +13,6 @@ p = read_namelist(filename, 'base');
 p = merge_struct(p, read_namelist(filename, 'flags'));
 p = merge_struct(p, read_namelist(filename, 'files'));
 
-%% deduce data file format from simsize format
-if ~isfield(p, 'file_format')
-  [~,~,ext] = fileparts(p.indat_size);
-  p.file_format = ext(2:end);
-end
-
 %% optional namelists
 if ~isfield(p, 'nml')
   p.nml = filename;

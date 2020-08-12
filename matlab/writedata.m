@@ -16,7 +16,7 @@ validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 3)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 4)
 validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',5)
 
-if nargin < 6
+if nargin < 6 || isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
   file_format = suffix(2:end);
 end

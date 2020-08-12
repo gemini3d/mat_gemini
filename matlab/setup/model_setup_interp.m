@@ -1,22 +1,13 @@
-function xg = model_setup_interp(p)
+function xg = model_setup_interp(cfg)
 %% setup interpolated simulation based on equilibrium simulation
 % this is to be called by model_setup.m
 narginchk(1,1)
-validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
+validateattributes(cfg, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 
 %% GRID GENERATION
-xg = makegrid_cart_3D(p);
+xg = makegrid_cart_3D(cfg);
 
-eq2dist(p, xg);
+eq2dist(cfg, xg);
 
-%% potential boundary conditions
-if isfield(p, 'E0_dir')
-  Efield_BCs(p, xg);
-end
-
-%% aurora
-if isfield(p, 'prec_dir')
-  particles_BCs(p, xg)
-end
-
+setup_post_process(cfg, xg)
 end % function
