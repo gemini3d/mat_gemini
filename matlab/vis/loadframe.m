@@ -2,8 +2,10 @@ function dat = loadframe(filename, cfg, xg)
 % loadframe(filename, cfg, xg)
 % load a single time step of data
 
-narginchk(2,3)
+narginchk(1,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
+
+if nargin < 2, cfg = struct(); end
 validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 
 if nargin < 3 || isempty(xg)
@@ -24,22 +26,39 @@ if strcmp(ext,'.h5')
   % to do a full read; this is a bit messy because loadframe will check
   % again below if h5 is used...
   if h5exists(filename, '/nsall')
-   disp('Full or milestone input detected.')
-   dat = loadframe3Dcurv(filename);
-  else   %only two possibilities left
-    switch cfg.flagoutput
-      case 1, dat = loadframe3Dcurv(filename);
-      case 2, dat = loadframe3Dcurvavg(filename);
-      case 3, dat = loadframe3Dcurvne(filename);
-      otherwise, error('Problem with file input selection related to milestone detection.')
-    end %switch
+    disp('Full or milestone input detected.')
+    flagoutput = 1;
+  elseif isfield(cfg, 'flagoutput')
+    flagoutput = cfg.flagoutput;
+  elseif h5exists(filename, '/neall')
+    flagoutput = 3;
+  else
+    flagoutput = 2;
   end
+
+  switch flagoutput
+    case 1, dat = loadframe3Dcurv(filename);
+    case 2, dat = loadframe3Dcurvavg(filename);
+    case 3, dat = loadframe3Dcurvne(filename);
+    otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
+  end %switch
 else
   % currently only HDF5 supports milestones
-  switch cfg.flagoutput
+  if isfield(cfg, 'flagoutput')
+    flagoutput = cfg.flagoutput;
+  elseif ncexists(cfg, 'neall')
+    flagoutput = 3;
+  elseif ncexists(cfg, 'Tavgall')
+    flagoutput = 2;
+  else
+    flagoutput = 1;
+  end
+
+  switch flagoutput
     case 1, dat = loadframe3Dcurv(filename);
-    case 2,dat = loadframe3Dcurvavg(filename);
-    otherwise, dat = loadframe3Dcurvne(filename);
+    case 2, dat = loadframe3Dcurvavg(filename);
+    case 3, dat = loadframe3Dcurvne(filename);
+    otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
   end
 end
 
