@@ -1,12 +1,25 @@
 function dat = loadframe(filename, cfg, xg)
 % loadframe(filename, cfg, xg)
 % load a single time step of data
+%
+% example use
+% dat = loadframe(filename)
+% dat = loadframe(direc, datetime)
+% dat = loadframe(filename, cfg)
+% dat = loadframe(filename, cfg, xg)
 
 narginchk(1,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
 
-if nargin < 2, cfg = struct(); end
-validateattributes(cfg, {'struct'}, {'scalar'}, 2)
+if nargin < 2
+   cfg = struct();
+end
+
+if isdatetime(cfg)
+  filename = get_frame_filename(filename, cfg);
+  cfg = struct();
+end
+assert(isstruct(cfg), 'cfg must be a datetime or struct')
 
 if nargin < 3 || isempty(xg)
   [xg, ok] = readgrid(fileparts(filename));

@@ -12,6 +12,9 @@ else
   stem0 = datelab(time, UTsec);
 end
 direc = expanduser(direc);
+if ~is_folder(direc)
+  error('get_frame_filename:file_not_found', '%s is not a folder', direc)
+end
 % so that we return a usable path
 
 suffix = {'.h5', '.nc', '.dat'};
