@@ -3,7 +3,6 @@ name: ci
 on:
   push:
     paths:
-    - "**.m"
     - "**/CMakeLists.txt"
     - "**.cmake"
     - ".github/workflows/ci.yml"
@@ -14,10 +13,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-
-    - run: |
-        sudo apt -yq update
-        sudo apt install -yq --no-install-recommends octave octave-netcdf
 
     - run: ctest -S setup.cmake -VV
       env:
