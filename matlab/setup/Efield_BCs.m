@@ -69,6 +69,7 @@ end
 
 %% CREATE DATA FOR BOUNDARY CONDITIONS FOR POTENTIAL SOLUTION
 % if 0 data is interpreted as FAC, else we interpret it as potential
+E.flagdirich=zeros(Nt,1);    %in principle can have different boundary types for different time steps...
 E.Vminx1it = zeros(E.llon,E.llat, Nt);
 E.Vmaxx1it = zeros(E.llon,E.llat, Nt);
 %these are just slices
