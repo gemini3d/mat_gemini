@@ -17,7 +17,13 @@ end
 % e.g. "inputs" than the base simdir
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
-switch p.file_format
+if isfield(p, 'file_format')
+  file_format = p.file_format;
+else
+    [~, ~, suffix] = fileparts(p.indat_grid);
+    file_format = suffix(2:end);
+end
+switch file_format
   case 'h5'
     write_hdf5(p, xg)
     [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.h5'));
