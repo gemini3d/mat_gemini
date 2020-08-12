@@ -51,6 +51,11 @@ else
   end
 end
 
+%% close parallel pool
+% in case Matlab PCT was invoked for model_setup, shut it down, otherwise too much RAM can
+% be wasted while PCT is idle--like several gigabytes.
+delete(gcp('nocreate'))
+
 log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
 
 %% assemble run command
