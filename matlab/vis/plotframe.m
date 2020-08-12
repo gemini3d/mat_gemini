@@ -100,29 +100,29 @@ end
 if lotsplots   % 3D simulation or a very long 2D simulation - do separate plots for each time frame
 
 clf(h.f10)
-plotfun(time, xg, dat.ne, 'n_e (m^{-3})', nelim,[dat.mlatsrc,dat.mlonsrc], h.f10, Ncmap);
+plotfun(time, xg, dat.ne, 'n_e (m^{-3})', nelim,[p.sourcemlat,p.sourcemlon], h.f10, Ncmap);
 
 if p.flagoutput ~= 3
   clf(h.f1)
-  plotfun(time, xg, dat.v1, 'v_1 (m/s)', v1lim,[dat.mlatsrc,dat.mlonsrc], h.f1, Vcmap);
+  plotfun(time, xg, dat.v1, 'v_1 (m/s)', v1lim,[p.sourcemlat,p.sourcemlon], h.f1, Vcmap);
   clf(h.f2)
-  plotfun(time, xg, dat.Ti,'T_i (K)',Tilim,[dat.mlatsrc,dat.mlonsrc], h.f2, Tcmap);
+  plotfun(time, xg, dat.Ti,'T_i (K)',Tilim,[p.sourcemlat,p.sourcemlon], h.f2, Tcmap);
   clf(h.f3)
-  plotfun(time, xg, dat.Te,'T_e (K)',Telim,[dat.mlatsrc,dat.mlonsrc], h.f3, Tcmap);
+  plotfun(time, xg, dat.Te,'T_e (K)',Telim,[p.sourcemlat,p.sourcemlon], h.f3, Tcmap);
   clf(h.f4)
-  plotfun(time, xg, dat.J1,'J_1 (A/m^2)',J1lim,[dat.mlatsrc,dat.mlonsrc],h.f4, Jcmap);
+  plotfun(time, xg, dat.J1,'J_1 (A/m^2)',J1lim,[p.sourcemlat,p.sourcemlon],h.f4, Jcmap);
   clf(h.f5)
-  plotfun(time, xg, dat.v2,'v_2 (m/s)',v2lim,[dat.mlatsrc,dat.mlonsrc],h.f5, Vcmap);
+  plotfun(time, xg, dat.v2,'v_2 (m/s)',v2lim,[p.sourcemlat,p.sourcemlon],h.f5, Vcmap);
   clf(h.f6)
-  plotfun(time, xg, dat.v3,'v_3 (m/s)',v3lim,[dat.mlatsrc,dat.mlonsrc],h.f6, Vcmap);
+  plotfun(time, xg, dat.v3,'v_3 (m/s)',v3lim,[p.sourcemlat,p.sourcemlon],h.f6, Vcmap);
   clf(h.f7)
-  plotfun(time, xg, dat.J2,'J_2 (A/m^2)',J2lim,[dat.mlatsrc,dat.mlonsrc],h.f7, Jcmap);
+  plotfun(time, xg, dat.J2,'J_2 (A/m^2)',J2lim,[p.sourcemlat,p.sourcemlon],h.f7, Jcmap);
   clf(h.f8)
-  plotfun(time, xg, dat.J3,'J_3 (A/m^2)',J3lim,[dat.mlatsrc,dat.mlonsrc],h.f8, Jcmap);
+  plotfun(time, xg, dat.J3,'J_3 (A/m^2)',J3lim,[p.sourcemlat,p.sourcemlon],h.f8, Jcmap);
   clf(h.f9)
   try
   plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', ...
-    Phitop_lim, [dat.mlatsrc, dat.mlonsrc], h.f9, Phi_cmap)
+    Phitop_lim, [p.sourcemlat, p.sourcemlon], h.f9, Phi_cmap)
   catch e
     % casting an error to warning requires this syntax for Matlab < R2020a
     warning(e.identifier, '%s', e.message)
@@ -136,36 +136,36 @@ Rsp = 4;
 Csp = 3;
 ha = subplot(Rsp, Csp, it, 'parent',h.f10);
 nelim =  [9 11.3];
-plotfun(time, xg,log10(ne), 'log_{10} n_e (m^{-3})',nelim,[dat.mlatsrc,dat.mlonsrc],ha);
+plotfun(time, xg,log10(ne), 'log_{10} n_e (m^{-3})',nelim,[p.sourcemlat,p.sourcemlon],ha);
 
 if p.flagoutput ~= 3
   ha = subplot(Rsp, Csp,it,'parent',h.f1);
-  plotfun(time, xg, dat.v1(:,:,:),'v_1 (m/s)',v1lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.v1(:,:,:),'v_1 (m/s)',v1lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f2);
-  plotfun(time, xg, dat.Ti(:,:,:),'T_i (K)',Tilim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.Ti(:,:,:),'T_i (K)',Tilim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f3);
-  plotfun(time, xg, dat.Te(:,:,:),'T_e (K)',Telim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.Te(:,:,:),'T_e (K)',Telim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f4);
-  plotfun(time, xg, dat.J1(:,:,:),'J_1 (A/m^2)',J1lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.J1(:,:,:),'J_1 (A/m^2)',J1lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f5);
-  plotfun(time, xg, dat.v2(:,:,:),'v_2 (m/s)',v2lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.v2(:,:,:),'v_2 (m/s)',v2lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f6);
-  plotfun(time, xg, dat.v3(:,:,:),'v_3 (m/s)',v3lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.v3(:,:,:),'v_3 (m/s)',v3lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f7);
-  plotfun(time, xg, dat.J2(:,:,:),'J_2 (A/m^2)',J2lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.J2(:,:,:),'J_2 (A/m^2)',J2lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f8);
-  plotfun(time, xg, dat.J3(:,:,:),'J_3 (A/m^2)',J3lim,[dat.mlatsrc,dat.mlonsrc],ha);
+  plotfun(time, xg, dat.J3(:,:,:),'J_3 (A/m^2)',J3lim,[p.sourcemlat,p.sourcemlon],ha);
 
   ha = subplot(Rsp, Csp,it,'parent',h.f9);
 
-%  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', Phitop_lim, [dat.mlatsrc, dat.mlonsrc], h.f9, Phi_cmap)
+%  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', Phitop_lim, [p.sourcemlat, p.sourcemlon], h.f9, Phi_cmap)
 end
 
 end
