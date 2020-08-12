@@ -82,8 +82,8 @@ Nt = length(params.times);
 ok = 0;
 
 for i = 1:Nt
-  out = loadframe(get_frame_filename(outdir, params.times(i)));
-  ref = loadframe(get_frame_filename(refdir, params.times(i)));
+  out = loadframe(get_frame_filename(outdir, params.times(i)), params);
+  ref = loadframe(get_frame_filename(refdir, params.times(i)), params);
 
   st = datestr(params.times(i));
 

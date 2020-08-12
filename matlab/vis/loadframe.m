@@ -2,7 +2,7 @@ function dat = loadframe(filename, cfg, xg)
 % loadframe(filename, cfg, xg)
 % load a single time step of data
 
-narginchk(1,3)
+narginchk(2,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
 validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 
