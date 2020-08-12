@@ -11,7 +11,7 @@ makedir([direc, '/TECplots']);    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc] = readconfig(direc);
+cfg = read_config(direc);
 
 
 %WE ALSO NEED TO LOAD THE GRID FILE (UNLESS IT ALREADY EXISTS IN THE WORKSPACE)
@@ -38,26 +38,18 @@ end
 
 
 %DEFINE A CENTER AND REGION OF INTEREST
-if (isempty(mloc))    %in case this run didn't have a disturbance!
-  mlatsrc=(pi/2-mean(xg.theta(:)))*180/pi;
-  mlonsrc=mean(xg.phi(:))*180/pi;
-else
-  mlatsrc=mloc(1);
-  mlonsrc=mloc(2);
+if (isempty(cfg.sourcemloc))    %in case this run didn't have a disturbance!
+  cfg.sourcemlat = (pi/2-mean(xg.theta(:)))*180/pi;
+  cfg.sourcemlon = mean(xg.phi(:))*180/pi;
 end
-thdist=pi/2-mlatsrc*pi/180;    %zenith angle of source location
-phidist=mlonsrc*pi/180;
+thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+phidist = deg2rad(cfg.sourcemlon);
 
 
 %ANGULAR RANGE TO COVER FOR TEC CALCULATIONS
 %dang=3.5;
 %dang=10;
 dang=180;
-
-
-%TIMES OF INTEREST (MEASURED IN SECONDS FROM BEGINNING SIMJULATION DAY START
-times=UTsec0:dtout:UTsec0+tdur;
-
 
 %NEW (PLOT) GRID SIZE IN R,TH
 Re=6370e3;
@@ -122,18 +114,14 @@ itop=lr-1;
 
 
 %MAIN LOOP FOR TEC CALCULATION
-fprintf('Processing %d files...\n',numel(times))
-ymd=ymd0;
-UTsec=UTsec0;
+fprintf('Processing %d files...\n',numel(cfg.times))
 vTEC=[];
 vTEC_control=[];
 dvTEC=[];
-simdate_series=[];
-for it=1:length(times)
-    %LOAD DIST. FILE
-    dat = loadframe(get_frame_filename(direc,ymd,UTsec), flagoutput,mloc,xg);
-    simdate=[ymd,UTsec/3600,0,0];    %create a datevec for matlab
 
+for it=1:length(cfg.times)
+    %LOAD DIST. FILE
+    dat = loadframe(get_frame_filename(direc,cfg.times(it)), cfg, xg);
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -162,7 +150,7 @@ for it=1:length(times)
 
 
     %LOAD CONTROL SIMULATION
-    dat = loadframe(get_frame_filename(direc_control,ymd,UTsec), flagoutput,mloc,xg);
+    dat = loadframe(get_frame_filename(direc_control, cfg.times(it)), cfg, xg);
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION
@@ -227,16 +215,11 @@ for it=1:length(times)
     end
 
 
-    %CREATE A DATEVEC FOR THIS SIM TIME SERIES
-    simdate_series=[simdate_series;simdate];
-    [ymd,UTsec]=dateinc(dtout,ymd,UTsec);
-
-
     %PLOT THE TOTAL ELECTRON CONTENT EACH TIME FRAME IF WE HAAVE DONE A 3D SIMULATION, OTHERWISE WAIT UNTIL THE END OR A SINGLE PLOT
     if (~flag2D)
       disp('Printing TEC plot for current time frame...')
       direc = [basedir, simname];
-      filename = datelab(ymd,UTsec);
+      filename = datelab(cfg.times(it));
       FS=18;
       imagesc(mlong,mlat,dvTEC(:,:,it));
       colormap(parula(256));
@@ -254,9 +237,9 @@ for it=1:length(times)
       ylabel('magnetic lat. (deg.)')
       hold on;
       ax=axis;
-      plot(mlonsrc,mlatsrc,'r^','MarkerSize',10,'LineWidth',2);
+      plot(cfg.sourcemlon,cfg.sourcemlat,'r^','MarkerSize',10,'LineWidth',2);
       hold off;
-      titlestring=datestr(datenum(simdate));
+      titlestring = datestr(cfg.times(i));
       title(titlestring);
       print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
     end
@@ -268,27 +251,27 @@ if (flag2D)
   fprintf('Printing TEC plot for entire time series...\n');
   direc=[basedir,simname]
   FS=18;
-  t=datenum(simdate_series);
-  imagesc(t,mlat,dvTEC(:,:));
+
+  imagesc(cfg.times, mlat, dvTEC(:,:));
   colormap(parula(256));
   set(gca,'FontSize',FS);
   axis xy;
   datetick;
   axis tight;
   caxis([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
-  c=colorbar
+  c=colorbar;
   set(c,'FontSize',FS)
   xlabel(c,'\Delta vTEC (TECU)')
   xlabel('UT')
   ylabel('magnetic lat. (deg.)')
   hold on;
   ax=axis;
-  plot([t(1), t(end)],[mlatsrc, mlatsrc],'r--','MarkerSize',10,'LineWidth',2);
+  yline(cfg.sourcemlat,'r--','MarkerSize',10,'LineWidth',2);
   hold off;
   print('-dpng',[direc,'/TECplots/TEC_timeseries.png'],'-r300');
 end
 
 
 %SAVE THE DATA TO A .MAT FILE IN CASE WE3 NEED IT LATER
-t=datenum(simdate_series);
-save([direc,'/vTEC.mat'],'mlat','mlong','t','simdate_series','*vTEC*','-v7');
+
+save([direc,'/vTEC.mat'],'mlat','mlong','t','cfg','*vTEC*','-v7');

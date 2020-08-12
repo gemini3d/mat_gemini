@@ -5,7 +5,7 @@ direc=[basedir,simname];
 
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc] = readconfig(direc);
+cfg = read_config(direc);
 
 
 %ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)
@@ -36,11 +36,9 @@ if ~exist('xg','var')
 
 
   %TABULATE THE SOURCE OR GRID CENTER LOCATION
-  if (~isempty(mloc))
-    mlatsrc=mloc(1);
-    mlonsrc=mloc(2);
-    thdist=pi/2-mlatsrc*pi/180;    %zenith angle of source location
-    phidist=mlonsrc*pi/180;
+  if ~isempty(cfg.sourcemlon)
+    thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+    phidist= deg2rad(cfg.sourcemlon);
   else
     thdist=mean(xg.theta(:));
     phidist=mean(xg.phi(:));

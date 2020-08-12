@@ -32,7 +32,7 @@ end
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 %% LOAD THE last equilibrium frame
-dat = loadframe(get_frame_filename(p.eq_dir, peq.times(end)), peq.flagoutput, peq.mloc, xgin);
+dat = loadframe(get_frame_filename(p.eq_dir, peq.times(end)), peq, xgin);
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)

@@ -7,7 +7,7 @@ if nargin < 2
   validateattributes(time, {'datetime'}, {'scalar'},1)
 
   day = datetime(time.Year, time.Month, time.Day);
-  UTsec = seconds(time - datetime(day));
+  UTsec = seconds(time - day);
 else
   % legacy
   validateattributes(time, {'numeric'}, {'integer', 'positive', 'numel', 3}, mfilename, 'year month day', 1)

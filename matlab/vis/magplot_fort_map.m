@@ -14,14 +14,14 @@ makedir([direc, '/Bphiplots'])
 makedir([direc, '/Bphiplots_eps'])
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc] = readconfig([direc, '/inputs']);
-times=UTsec0:dtout:UTsec0+tdur;
-lt=numel(times);
+cfg = read_config(direc);
+
+lt=numel(cfg.times);
 
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
-basemagdir=[direc,'/magfields.ground.20deg.highres/'];
-fid=fopen([basemagdir,'/input/magfieldpoints.dat'],'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
+basemagdir= fullfile(direc,'magfields.ground.20deg.highres/');
+fid=fopen(fullfile(basemagdir,'input/magfieldpoints.dat'),'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
 lpoints=fread(fid,1,'integer*4');
 r=fread(fid,lpoints,'real*8');
 theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
@@ -49,30 +49,16 @@ mlon=phi*180/pi;
 mlon=mlon(1,ilonsort);
 
 
-%DEAL WITH ANY TIMIING OFFSET ERRORS...
-toffset=0;
-UTsec0=UTsec0+toffset;
-
-
 %THESE DATA ARE ALMOST CERTAINLY NOT LARGE SO LOAD THEM ALL AT ONCE (CAN
 %CHANGE THIS LATER).  NOTE THAT THE DATA NEED TO BE SORTED BY MLAT,MLON AS
 %WE GO
-ymd=ymd0;
-UTsec=UTsec0;
-simdate_series=[];
 Brt=zeros(1,ltheta,lphi,lt);
 Bthetat=zeros(1,ltheta,lphi,lt);
 Bphit=zeros(1,ltheta,lphi,lt);
 
-%file[ymd,UTsec]=dateinc(dtout,ymd,UTsec);
 for it=1:lt-1
-  if (it==1)
-    UTsec=UTsec+0.000001;
-  end
-  if (it==2)
-    UTsec=UTsec-0.000001;
-  end
-  filename=datelab(ymd,UTsec);
+
+  filename=datelab(cfg.times(it));
   fid=fopen([basemagdir,filename,'.dat'],'r');
 
   data=fread(fid,lpoints,'real*8');
@@ -89,15 +75,12 @@ for it=1:lt-1
   Bphit(:,:,:,it)=Bphit(:,:,ilonsort,it);
 
   fclose(fid);
-  ymd=ymd(:)';
-  simdate_series=cat(1,simdate_series,[ymd(1:3),UTsec/3600,0,0]);
-  [ymd,UTsec]=dateinc(dtout,ymd,UTsec);
 end
 fprintf('...Done reading data...\n');
 
 
 %STORE THE DATA IN A MATLAB FILE FOR LATER USE
-save([direc,'/magfields_fort.mat'],'simdate_series','mlat','mlon','Brt','Bthetat','Bphit','mloc');
+save([direc,'/magfields_fort.mat'],'simdate_series','mlat','mlon','Brt','Bthetat','Bphit';
 
 
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING
@@ -118,20 +101,18 @@ fprintf('...Done interpolating...\n');
 
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig([direc, '/inputs']);
+cfg = read_config(direc);
 
 
 %TABULATE THE SOURCE OR GRID CENTER LOCATION
-if (~isempty(mloc))
-  mlatsrc=mloc(1);
-  mlonsrc=mloc(2);
-  thdist=pi/2-mlatsrc*pi/180;    %zenith angle of source location
-  phidist=mlonsrc*pi/180;
+if ~isempty(cfg.sourcemlat)
+  thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+  phidist = deg2rad(cfg.sourcemlon);
 else
   thdist=mean(theta(:));
   phidist=mean(phi(:));
-  mlatsrc=90-thdist*180/pi;
-  mlonsrc=phidist*180/pi;
+  cfg.sourcemlat = 90 - rad2deg(thdist);
+  cfg.sourcemlon = rad2deg(phidist);
 end
 
 
@@ -142,12 +123,8 @@ for it=1:lt-1
     figure(1);
     FS=8;
 
-    datehere=simdate_series(it,:);
-    ymd=datehere(1:3);
-    UTsec=datehere(4)*3600+datehere(5)*60+datehere(6);
-    filename=datelab(ymd,UTsec);
-    filename=[filename,'.dat']
-    titlestring=datestr(datenum(datehere));
+    filename = datelab(cfg.times(it));
+    titlestring = datestr(cfg.times(it));
 
 %    subplot(131);
     figure(1);
@@ -175,7 +152,7 @@ for it=1:lt-1
     ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
     hold on;
     ax=axis;
-    plotm(mlatsrc,mlonsrc,'r^','MarkerSize',6,'LineWidth',2);
+    plotm(cfg.sourcemlat, cfg.sourcemlon,'r^','MarkerSize',6,'LineWidth',2);
     hold off;
 
 %    subplot(132);
@@ -199,7 +176,7 @@ for it=1:lt-1
     ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
     hold on;
     ax=axis;
-    plotm(mlatsrc,mlonsrc,'r^','MarkerSize',6,'LineWidth',2);
+    plotm(cfg.sourcemlat, cfg.sourcemlon,'r^','MarkerSize',6,'LineWidth',2);
     hold off;
 
 %    subplot(133);
@@ -224,7 +201,7 @@ for it=1:lt-1
     ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
     hold on;
     ax=axis;
-    plotm(mlatsrc,mlonsrc,'r^','MarkerSize',6,'LineWidth',2);
+    plotm(cfg.sourcemlat, cfg.sourcemlon, 'r^','MarkerSize',6,'LineWidth',2);
     hold off;
 
 

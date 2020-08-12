@@ -14,14 +14,12 @@ mlon=mlong;
 
 
 %SIMULATION META-DATA
-[ymd0,UTsec0,tdur,dtout,flagoutput,mloc]=readconfig(direc);
+cfg = read_config(direc);
 
 
 %TABULATE THE SOURCE LOCATION
-mlatsrc=mloc(1);
-mlonsrc=mloc(2);
-thdist=pi/2-mlatsrc*pi/180;    %zenith angle of source location
-phidist=mlonsrc*pi/180;
+thdist = pi/2 - deg2rad(p.sourcemlat);    %zenith angle of source location
+phidist = deg2rad(p.sourcemlon);
 
 
 figure(1);

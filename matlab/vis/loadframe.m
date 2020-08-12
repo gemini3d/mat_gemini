@@ -1,33 +1,12 @@
-function dat = loadframe(filename, flagoutput, mloc, xg, config_file)
+function dat = loadframe(filename, cfg, xg)
+% loadframe(filename, cfg, xg)
+% load a single time step of data
 
-
-%% Error checking and setup
-narginchk(1,5)
+narginchk(1,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
+validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 
-if nargin < 2 || isempty(flagoutput)
-  if nargin >= 5
-    p = read_config(config_file);
-  elseif is_file(filename)
-    p = read_config(fileparts(filename));
-  elseif is_folder(filename)
-    p = read_config(filename);
-  else
-    error('loadframe:file_not_found', '%s is not a folder or file', filename)
-  end
-  flagoutput = p.flagoutput;
-  mloc = p.mloc;
-end
-validateattributes(flagoutput,{'numeric'},{'scalar', 'integer'},mfilename,'output flag',2)
-
-if nargin < 3
-  mloc = [];
-end
-if ~isempty(mloc)
-  validateattributes(mloc, {'numeric'}, {'vector', 'numel', 2}, 3)
-end
-
-if nargin < 4 || isempty(xg)
+if nargin < 3 || isempty(xg)
   [xg, ok] = readgrid(fileparts(filename));
   if ~ok
     error('loadframe:value_error', 'grid did not have appropriate parameters')
@@ -48,7 +27,7 @@ if strcmp(ext,'.h5')
    disp('Full or milestone input detected.')
    dat = loadframe3Dcurv(filename);
   else   %only two possibilities left
-    switch flagoutput
+    switch cfg.flagoutput
       case 1, dat = loadframe3Dcurv(filename);
       case 2, dat = loadframe3Dcurvavg(filename);
       case 3, dat = loadframe3Dcurvne(filename);
@@ -57,7 +36,7 @@ if strcmp(ext,'.h5')
   end
 else
   % currently only HDF5 supports milestones
-  switch flagoutput
+  switch cfg.flagoutput
     case 1, dat = loadframe3Dcurv(filename);
     case 2,dat = loadframe3Dcurvavg(filename);
     otherwise, dat = loadframe3Dcurvne(filename);
@@ -65,14 +44,7 @@ else
 end
 
 dat.time = get_time(filename);
-%% SET MAGNETIC LATITUDE AND LONGITUDE OF THE SOURCE
-if ~isempty(mloc)
-    dat.mlatsrc=mloc(1);
-    dat.mlonsrc=mloc(2);
-else
-    dat.mlatsrc=[];
-    dat.mlonsrc=[];
-end
+
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result
 dat_shape = size(dat.ne);

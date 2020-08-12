@@ -62,7 +62,7 @@ plotfun = grid2plotfun(plotfun, xg);
 i = interp1(p.times, 1:length(p.times), time_req, 'nearest');
 time = p.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = loadframe(get_frame_filename(direc, time), p.flagoutput, p.mloc, xg);
+dat = loadframe(get_frame_filename(direc, time), p, xg);
 disp([dat.filename, ' => ', func2str(plotfun)])
 
 %% UNTIL WE PROVIDE A WAY FOR THE USER TO SPECIFY COLOR AXES, JUST TRY TO SET THEM AUTOMATICALLY
