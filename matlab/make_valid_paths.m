@@ -18,7 +18,7 @@ for n = {'indat_size', 'indat_grid', 'indat_file'}
   cfg.(n{:}) = make_valid_filename(cfg.(n{:}), top);
 end
 
-for n = {'eqdir', 'E0_dir', 'prec_dir'}
+for n = {'eq_dir', 'eq_zip', 'E0_dir', 'prec_dir'}
   if isfield(cfg, n{:}) && ~isempty(cfg.(n{:}))
     cfg.(n{:}) = make_valid_folder(cfg.(n{:}), top);
   end
@@ -33,7 +33,7 @@ function folder = make_valid_folder(folder, top)
 folder = expanduser(folder);
 % in case absolute path was specified
 
-if ~is_folder(folder)
+if ~is_folder(folder)  && ~is_absolute_path(folder)
   folder = fullfile(top, folder);
 end
 

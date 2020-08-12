@@ -10,22 +10,29 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 % this script is called from numerous places, so ensure necessary path
 addpath(fullfile(fileparts(mfilename('fullpath')), '../vis'))
 %% READ Equilibrium SIMULATION INFO
-if ~is_folder(p.eqdir)
-  error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?', p.eqdir)
+if ~is_folder(p.eq_dir)
+  if isfield(p, 'eq_url')
+    if ~is_file(p.eq_zip)
+      web_save(p.eq_zip, p.eq_url)
+    end
+    unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
+  else
+    error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?  Or specify eq_url and eq_zip to download.', p.eq_dir)
+  end
 end
 
-peq = read_config(p.eqdir);
+peq = read_config(p.eq_dir);
 %% read equilibrium grid
-[xgin, ok] = readgrid(p.eqdir);
+[xgin, ok] = readgrid(p.eq_dir);
 
 if ~ok
-  error('eq2dist:value_error', 'problem with equilibrium input grid %s', p.eqdir)
+  error('eq2dist:value_error', 'problem with equilibrium input grid %s', p.eq_dir)
 end
 
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 %% LOAD THE last equilibrium frame
-dat = loadframe(get_frame_filename(p.eqdir, peq.times(end)), peq.flagoutput, peq.mloc, xgin);
+dat = loadframe(get_frame_filename(p.eq_dir, peq.times(end)), peq.flagoutput, peq.mloc, xgin);
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)

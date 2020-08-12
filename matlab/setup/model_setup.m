@@ -36,7 +36,7 @@ copy_file(cfg.nml, cfg.input_dir)
 
 
 %% is this equilibrium or interpolated simulation
-if isfield(cfg, 'eqdir') && ~isempty(cfg.eqdir)
+if isfield(cfg, 'eq_dir') && ~isempty(cfg.eq_dir)
   model_setup_interp(cfg)
 else
   model_setup_equilibrium(cfg)

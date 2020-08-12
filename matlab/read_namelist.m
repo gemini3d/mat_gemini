@@ -1,12 +1,12 @@
 function params = read_namelist(filename, namelist)
 
 narginchk(2,2)
-assert(is_file(filename), [filename, ' not found.'])
 validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2)
 
 params = struct();
 
 filename = expanduser(filename);
+assert(is_file(filename),  '%s not found.', filename)
 
 fid = fopen(filename);
 while ~feof(fid)

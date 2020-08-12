@@ -18,12 +18,12 @@ p = read_config(test_dir);
 p.file_format = file_format;
 p.outdir = fullfile(tempdir, ['test',name]);
 
-% patch eqdir to use reference data
-if isfield(p, 'eqdir')
-  eqdir = fullfile(fileparts(test_dir), path_tail(p.eqdir));
-  if is_folder(eqdir)
-    fprintf('Using %s for equilibrium data \n', eqdir)
-    p.eqdir = eqdir;
+% patch eq_dir to use reference data
+if isfield(p, 'eq_dir')
+  eq_dir = fullfile(fileparts(test_dir), path_tail(p.eq_dir));
+  if is_folder(eq_dir)
+    fprintf('Using %s for equilibrium data \n', eq_dir)
+    p.eqd_ir = eq_dir;
   end
 end
 

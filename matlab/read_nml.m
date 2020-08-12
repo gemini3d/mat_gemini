@@ -25,6 +25,9 @@ if ~isfield(p, 'nml')
 end
 
 p = read_if_present(p, filename, 'setup');
+if isfield(p, 'eqdir')
+  p.eq_dir = p.eqdir;
+end
 
 read_if_present(p, filename, 'neutral_perturb');
 if ~isfield(p, 'mloc')
