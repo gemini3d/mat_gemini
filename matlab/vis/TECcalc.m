@@ -1,9 +1,9 @@
 %SIMULATIONS LOCAITONS
-simname='tohoku20113D_lowres/';
-simname_control='tohoku20113D_lowres_control/';
-%simname='mooreOK3D_hemis_medres/';
-%simname_control='mooreOK3D_hemis_medres_control/';
-basedir='~/zettergmdata/simulations/';
+%simname='tohoku20113D_lowres/';
+%simname_control='tohoku20113D_lowres_control/';
+simname='mooreOK3D_hemis_medres_corrected/';
+simname_control='mooreOK3D_hemis_medres_corrected_control/';
+basedir='../../../simulations/';
 direc=[basedir,simname];
 direc_control=[basedir,simname_control];
 
@@ -38,7 +38,7 @@ end
 
 
 %DEFINE A CENTER AND REGION OF INTEREST
-if (isempty(cfg.sourcemloc))    %in case this run didn't have a disturbance!
+if (isempty(cfg.sourcemlat))    %in case this run didn't have a disturbance!
   cfg.sourcemlat = (pi/2-mean(xg.theta(:)))*180/pi;
   cfg.sourcemlon = mean(xg.phi(:))*180/pi;
 end
@@ -48,8 +48,8 @@ phidist = deg2rad(cfg.sourcemlon);
 
 %ANGULAR RANGE TO COVER FOR TEC CALCULATIONS
 %dang=3.5;
-%dang=10;
-dang=180;
+dang=10;
+%dang=180;
 
 %NEW (PLOT) GRID SIZE IN R,TH
 Re=6370e3;
@@ -239,7 +239,7 @@ for it=1:length(cfg.times)
       ax=axis;
       plot(cfg.sourcemlon,cfg.sourcemlat,'r^','MarkerSize',10,'LineWidth',2);
       hold off;
-      titlestring = datestr(cfg.times(i));
+      titlestring = datestr(cfg.times(it));
       title(titlestring);
       print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
     end
