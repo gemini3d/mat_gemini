@@ -42,7 +42,7 @@ while ~feof(fid)
     vals = split(strrep(line, char(39), ''), '=');
     vals = strip(vals{2});
     if contains(vals, ',')
-      vals = split(vals, ',');
+      vals = strip(split(vals, ','));
     end
   else
     vals = vals(:).';
