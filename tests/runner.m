@@ -23,7 +23,7 @@ if isfield(p, 'eq_dir')
   eq_dir = fullfile(fileparts(test_dir), path_tail(p.eq_dir));
   if is_folder(eq_dir)
     fprintf('Using %s for equilibrium data \n', eq_dir)
-    p.eqd_ir = eq_dir;
+    p.eq_dir = eq_dir;
   end
 end
 
