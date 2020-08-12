@@ -12,11 +12,7 @@ tdur = params.tdur;
 dtout = params.dtout;
 flagoutput = params.flagoutput;
 activ = params.activ;
-try
-  mloc = params.mloc;
-catch
-  mloc = [];
-end
+mloc = params.mloc;
 indat_size=params.indat_size;
 indat_grid=params.indat_grid;
 indat_file=params.indat_file;

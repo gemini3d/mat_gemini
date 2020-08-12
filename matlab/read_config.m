@@ -14,7 +14,10 @@ end
 
 t0 = datetime(p.ymd(1), p.ymd(2), p.ymd(3)) + seconds(p.UTsec0);
 p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
-
+%% mloc default
+if ~isfield(p, 'mloc')
+  p.mloc = [];
+end
 %% deduce data file format from simsize format
 % needs to be here and in read_nml
 if ~isfield(p, 'file_format')
