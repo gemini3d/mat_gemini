@@ -273,5 +273,5 @@ end
 
 
 %SAVE THE DATA TO A .MAT FILE IN CASE WE3 NEED IT LATER
-
+t=cfg.times;
 save([direc,'/vTEC.mat'],'mlat','mlong','t','cfg','*vTEC*','-v7');
