@@ -21,7 +21,7 @@ if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
   cfg = struct();
 end
-assert(isstruct(cfg), 'cfg must be a datetime or struct')
+validateattributes(cfg, {'struct'}, {'scalar'}, mfilename, 'cfg must be a datetime or struct', 2)
 
 if nargin < 3 || isempty(xg)
   [xg, ok] = gemini3d.readgrid(fileparts(filename));
@@ -29,7 +29,7 @@ if nargin < 3 || isempty(xg)
     error('loadframe:value_error', 'grid did not have appropriate parameters')
   end
 end
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
+validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
 
 %% LOAD DIST. FILE
 
