@@ -55,7 +55,7 @@ h5save(fn, '/mlat', E.mlat, [], freal)
 
 disp(['write to ', dir_out])
 
-parfor i = 1:length(E.times)
+for i = 1:length(E.times)
 
   fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.h5']);
   if is_file(fn), delete(fn), end
@@ -96,7 +96,7 @@ ncsave(fn, 'mlat', E.mlat, dlat, freal)
 
 disp(['write to ', dir_out])
 
-parfor i = 1:length(E.times)
+for i = 1:length(E.times)
 
   fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.nc']);
   if is_file(fn), delete(fn), end
