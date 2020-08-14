@@ -1,13 +1,14 @@
-function exe = get_gemini_exe(exe)
-import gemini3d.fileio.*
+function exe = get_gemini_exe(params)
 
 narginchk(0,1)
 
-if nargin == 0 || isempty(exe)
+if nargin >= 1 && isfield(params, 'gemini_exe')
+  exe = params.gemini_exe;
+else
   exe = find_gemini();
 end
 
-if ~is_file(exe)
+if ~gemini3d.fileio.is_file(exe)
   error('get_gemini_exe:file_not_found', 'Gemini.bin executable not found in %s', fileparts(exe))
 end
 %% sanity check gemini.bin executable
@@ -19,13 +20,12 @@ end % function
 
 
 function exe = find_gemini()
-import gemini3d.fileio.*
 
 narginchk(0,0)
 
 gemini_root = getenv('GEMINI_ROOT');
 assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
-assert(is_folder(gemini_root), 'Gemini3D directory not found: %s', gemini_root)
+assert(gemini3d.fileio.is_folder(gemini_root), 'Gemini3D directory not found: %s', gemini_root)
 exe = fullfile(gemini_root, 'build/gemini.bin');
 if ispc
   exe = [exe, '.exe'];

@@ -29,10 +29,10 @@ assert(~isempty(names), 'No inputs under %s with %s', topdir, only)
 disp('Generating data for: ')
 celldisp(names)
 
-gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format);
+gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format, 'gemini_exe', gemini_exe);
 
 for i = 1:length(names)
-  gemini3d.gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
+  gemini3d.gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gem_params)
 end
 
 end % function

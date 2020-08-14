@@ -1,15 +1,11 @@
-function gemini_run(cfgfile, outdir, gemini_exe, gemini_params)
+function gemini_run(cfgfile, outdir, gemini_params)
 %% setup and run Gemini simulation
 % gemini_run('/path/to/config.nml', 'output_dir')
-import gemini3d.fileio.*
 
-narginchk(2, 4)
+narginchk(2, 3)
 
 %% defaults
 if nargin < 3
-  gemini_exe = [];
-end
-if nargin < 4
   gemini_params = struct('overwrite', false, 'mpiexec', 'mpiexec');
 end
 validateattributes(gemini_params, {'struct'}, {'scalar'})
@@ -18,7 +14,7 @@ if ~isfield(gemini_params, 'mpiexec') || isempty(gemini_params.mpiexec)
 end
 
 %% get gemini.bin executable
-gemini_exe = gemini3d.get_gemini_exe(gemini_exe);
+gemini_exe = gemini3d.get_gemini_exe(gemini_params);
 %% ensure mpiexec is available
 [ret, msg] = system('mpiexec -help');
 assert(ret == 0, 'mpiexec not found')
@@ -30,7 +26,7 @@ if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
 end
 %% check if model needs to be setup
 cfg = gemini3d.read_config(cfgfile);
-cfg.outdir = expanduser(outdir);
+cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
 if isfield(gemini_params, 'file_format') && ~isempty(gemini_params.file_format)
   cfg.file_format = gemini_params.file_format;
@@ -44,7 +40,7 @@ if isfield(gemini_params, 'overwrite') && gemini_params.overwrite
   gemini3d.setup.model_setup(cfg)
 else
   for k = {'indat_size', 'indat_grid', 'indat_file'}
-    if ~is_file(cfg.(k{:}))
+    if ~gemini3d.fileio.is_file(cfg.(k{:}))
       gemini3d.setup.model_setup(cfg)
       break
     end
