@@ -7,7 +7,7 @@ function dat = loadframe(filename, cfg, xg)
 % dat = loadframe(direc, datetime)
 % dat = loadframe(filename, cfg)
 % dat = loadframe(filename, cfg, xg)
-import gemini3d.fileio.*
+
 import gemini3d.vis.*
 
 narginchk(1,3)
@@ -32,50 +32,13 @@ end
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
 
 %% LOAD DIST. FILE
-[~,~,ext] = fileparts(filename);
-% This is messy but it was difficult to have the milestone check before
-% deciding what type of file is being read...  May be a more elegant way to
-% rewrite.
-if strcmp(ext,'.h5')
-  % regardless of what the output type is if variabl nsall exists we need
-  % to do a full read; this is a bit messy because loadframe will check
-  % again below if h5 is used...
-  if h5exists(filename, '/nsall')
-    disp('Full or milestone input detected.')
-    flagoutput = 1;
-  elseif isfield(cfg, 'flagoutput')
-    flagoutput = cfg.flagoutput;
-  elseif h5exists(filename, '/neall')
-    flagoutput = 3;
-  else
-    flagoutput = 2;
-  end
 
-  switch flagoutput
-    case 1, dat = loadframe3Dcurv(filename);
-    case 2, dat = loadframe3Dcurvavg(filename);
-    case 3, dat = loadframe3Dcurvne(filename);
-    otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
-  end %switch
-else
-  % currently only HDF5 supports milestones
-  if isfield(cfg, 'flagoutput')
-    flagoutput = cfg.flagoutput;
-  elseif ncexists(cfg, 'neall')
-    flagoutput = 3;
-  elseif ncexists(cfg, 'Tavgall')
-    flagoutput = 2;
-  else
-    flagoutput = 1;
-  end
-
-  switch flagoutput
-    case 1, dat = loadframe3Dcurv(filename);
-    case 2, dat = loadframe3Dcurvavg(filename);
-    case 3, dat = loadframe3Dcurvne(filename);
-    otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
-  end
-end
+switch get_flagoutput(filename, cfg)
+  case 1, dat = loadframe3Dcurv(filename);
+  case 2, dat = loadframe3Dcurvavg(filename);
+  case 3, dat = loadframe3Dcurvne(filename);
+  otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
+end %switch
 
 dat.time = get_time(filename);
 
@@ -111,6 +74,37 @@ if xg.lx(3) > 1
       error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
     end
  end
+end
+
+end % function
+
+
+function flag = get_flagoutput(filename, cfg)
+narginchk(2,2)
+validateattributes(filename, {'char'}, {'vector'}, 1)
+validateattributes(cfg, {'struct'}, {'scalar'}, 2)
+
+[~,~,ext] = fileparts(filename);
+ % regardless of what the output type is if variabl nsall exists we need
+% to do a full read; this is a bit messy because loadframe will check
+% again below if h5 is used...
+switch ext
+  case '.h5', var_names = gemini3d.fileio.h5variables(filename);
+  case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
+  otherwise, error('loadframe:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
+end
+
+if any(contains(var_names, 'nsall'))
+  disp('Full or milestone input detected.')
+  flag = 1;
+elseif isfield(cfg, 'flagoutput')
+  flag = cfg.flagoutput;
+elseif any(contains(var_names, 'Tavgall'))
+  flag = 2;
+elseif any(contains(var_names, 'neall'))
+  flag = 3;
+else
+  error('loadframe:value_error', 'could not determine flagoutput for %s', filename)
 end
 
 end % function
