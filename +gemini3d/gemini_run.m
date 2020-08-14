@@ -36,7 +36,7 @@ if isfield(gemini_params, 'file_format') && ~isempty(gemini_params.file_format)
   cfg.file_format = gemini_params.file_format;
 end
 
-if gemini_params.overwrite
+if isfield(gemini_params, 'overwrite') && gemini_params.overwrite
   % note, if an old, incompatible shape exists this will fail
   % we didn't want to automatically recursively delete directories,
   % so it's best to manually ensure all the old directories are removed
@@ -56,9 +56,6 @@ end
 % be wasted while PCT is idle--like several gigabytes.
 delete(gcp('nocreate'))
 
-gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
-                      fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
-
 %% assemble run command
 np = gemini3d.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = gemini3d.sys.modify_path();
@@ -76,7 +73,14 @@ ret = system([cmd, ' -dryrun']);
 if ret~=0
   error('gemini_run:runtime_error', 'Gemini dryrun failed')
 end
+
+if isfield(gemini_params, 'dryrun') && gemini_params.dryrun
+  return
+end
 %% run simulation
+gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
+                      fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
+
 ret = system(cmd);
 if ret~=0
   error('gemini_run:runtime_error', 'Gemini run failed')
