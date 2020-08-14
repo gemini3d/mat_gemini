@@ -5,10 +5,10 @@ narginchk(3,8)
 
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-validateattributes(parm, {'numeric'}, {'real'}, mfilename, 'parameter to plot', 3)
 
 if nargin < 4, parmlbl=''; end
 validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
+validateattributes(parm, {'numeric'}, {'real', 'nonempty'}, mfilename, [parmlbl, ': parameter to plot'], 3)
 plotparams.parmlbl = parmlbl;
 
 if nargin < 5

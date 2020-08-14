@@ -3,9 +3,9 @@ function saveframe(flagoutput, direc, filename, saveplot_fmt, h)
 import gemini3d.vis.export_graphics
 
 narginchk(5,5)
-validateattributes(flagoutput, {'numeric'}, {'scalar'}, mfilename)
-validateattributes(direc, {'char'}, {'vector'}, mfilename)
-validateattributes(filename, {'char'}, {'vector'}, mfilename)
+validateattributes(flagoutput, {'numeric'}, {'scalar'}, 1)
+validateattributes(direc, {'char'}, {'vector'}, 2)
+validateattributes(filename, {'char'}, {'vector'}, 3)
 validateattributes(h, {'struct'}, {'vector'}, mfilename, 'figure handles', 5)
 
 if isempty(saveplot_fmt)
