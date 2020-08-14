@@ -2,7 +2,7 @@ function testinterp(fn)
 
 narginchk(1,1)
 
-exist_or_skip(fn, 'file')
+gemini3d.exist_or_skip(fn, 'file')
 
 lx1 = h5read(fn, '/lx1');
 lx2 = h5read(fn, '/lx2');
@@ -14,7 +14,7 @@ assert(lx1==500, 'x1 size')
 assert(lx2==1000, 'x2 size')
 assert(all(size(f) == [lx1,lx2]), 'array size mismatch')
 
-if ~isinteractive
+if ~gemini3d.sys.isinteractive
   return
 end
 %% PLOT

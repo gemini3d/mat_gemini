@@ -10,7 +10,6 @@ function N = get_mpi_count(sizefn, max_cpu)
 %    -------
 %    N: number of MPI images
 
-import gemini3d.*
 import gemini3d.fileio.*
 
 narginchk(1,2)
@@ -19,17 +18,17 @@ if nargin < 2, max_cpu = []; end
 %% config.nml file or directory or simsize.h5?
 
 if is_folder(sizefn)
-  dsize = simsize(sizefn);
+  dsize = gemini3d.simsize(sizefn);
 elseif is_folder(fileparts(sizefn))
-  dsize = simsize(fileparts(sizefn));
+  dsize = gemini3d.simsize(fileparts(sizefn));
 elseif is_file(sizefn)
   [~,~,ext] = fileparts(sizefn);
   if any(strcmp(ext, {'.h5', '.nc', '.dat'}))
-    dsize = simsize(sizefn);
+    dsize = gemini3d.simsize(sizefn);
   elseif any(strcmp(ext, {'.ini', '.nml'}))
-    params = read_config(sizefn);
+    params = gemini3d.read_config(sizefn);
     % OK to use indat_size because we're going to run a sim on this machine
-    dsize = simsize(params.indat_size);
+    dsize = gemini3d.simsize(params.indat_size);
   else
     error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
   end
@@ -37,6 +36,6 @@ else
   error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
 end
 
-N = max_mpi(dsize, max_cpu);
+N = gemini3d.sys.max_mpi(dsize, max_cpu);
 
 end % function

@@ -3,7 +3,7 @@ function [x1,x2,x3,f] = testinterp3(fn)
 
 narginchk(1,1)
 
-exist_or_skip(fn, 'file')
+gemini3d.exist_or_skip(fn, 'file')
 
 lx1 = h5read(fn, '/lx1');
 lx2 = h5read(fn, '/lx2');
@@ -18,7 +18,7 @@ assert(lx2==256, int2str(size(lx2)))
 assert(lx3==256, int2str(size(lx3)))
 assert(all(size(f) == [lx1,lx2,lx3]), 'array size mismatch')
 
-if ~isinteractive
+if ~gemini3d.sys.isinteractive
   if ~nargout, clear, end
   return
 end

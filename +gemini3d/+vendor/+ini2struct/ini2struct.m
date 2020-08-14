@@ -20,7 +20,7 @@ while ~feof(f)                              % and read until it ends
     continue
   end
   if s(1)=='['                            % section header
-    Section = makeValidName(strtok(s(2:end), ']'));
+    Section = matlab.lang.makeValidName(strtok(s(2:end), ']'));
     Struct.(Section) = [];              % create field
     continue
   end
@@ -44,9 +44,9 @@ while ~feof(f)                              % and read until it ends
   end
 
   if ~exist('Section', 'var')             % No section found before
-    Struct.(makeValidName(Key)) = Val;
+    Struct.(matlab.lang.makeValidName(Key)) = Val;
   else                                    % Section found before, fill it
-    Struct.(Section).(makeValidName(Key)) = Val;
+    Struct.(Section).(matlab.lang.makeValidName(Key)) = Val;
   end
 
 end

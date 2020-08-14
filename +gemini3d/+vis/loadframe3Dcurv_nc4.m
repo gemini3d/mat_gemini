@@ -1,5 +1,4 @@
 function dat = loadframe3Dcurv_nc4(fn)
-import gemini3d.fileio.*
 
 narginchk(1,1)
 %% SIMULATION RESULTS

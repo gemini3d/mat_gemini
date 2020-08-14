@@ -84,7 +84,7 @@ neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
 %% FOR USERS INFO CONVERT SOURCE LOCATION TO GEOMAG
-[sourcetheta,sourcephi]=geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
+[sourcetheta,sourcephi]=gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
 sourcemlat=90-sourcetheta*180/pi;
 sourcemlon=sourcephi*180/pi;
 
@@ -92,7 +92,7 @@ sourcemlon=sourcephi*180/pi;
 %% RUN THE GRID GENERATION CODE
 if ~exist('xg', 'var')
   if iscurv
-    xg = makegrid_tilteddipole_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
+    xg = gemini3d.setup.gridgen.makegrid_tilteddipole_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_oneside_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
   else
@@ -105,7 +105,7 @@ end
 
 %% PLOT THE GRID AND NEUTRAL INPUT EXTENT
 %ha=plotgrid(xg,flagsource,sourcelat,sourcelong,neugridtype,zmin,zmax,rhomax);
-ha = plot_mapgrid(xg,flagsource,neuinfo);
+ha = gemini3d.setup.plot_mapgrid(xg,flagsource,neuinfo);
 end % function
 
 %% ADDITIONAL EXAMPLES OF GRIDS AND SOURCE LOCATIONS...

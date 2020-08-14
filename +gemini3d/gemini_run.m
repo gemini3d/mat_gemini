@@ -2,7 +2,6 @@ function gemini_run(cfgfile, outdir, gemini_exe, gemini_params)
 %% setup and run Gemini simulation
 % gemini_run('/path/to/config.nml', 'output_dir')
 import gemini3d.fileio.*
-import gemini3d.setup.*
 
 narginchk(2, 4)
 
@@ -42,11 +41,11 @@ if gemini_params.overwrite
   % we didn't want to automatically recursively delete directories,
   % so it's best to manually ensure all the old directories are removed
   % first.
-  model_setup(cfg)
+  gemini3d.setup.model_setup(cfg)
 else
   for k = {'indat_size', 'indat_grid', 'indat_file'}
     if ~is_file(cfg.(k{:}))
-      model_setup(cfg)
+      gemini3d.setup.model_setup(cfg)
       break
     end
   end
@@ -57,7 +56,8 @@ end
 % be wasted while PCT is idle--like several gigabytes.
 delete(gcp('nocreate'))
 
-gemini3d.log_meta_nml(git_revision(fileparts(gemini_exe)), fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
+gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
+                      fullfile(cfg.outdir, 'setup_meta.nml'), 'setup_gemini')
 
 %% assemble run command
 np = gemini3d.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));

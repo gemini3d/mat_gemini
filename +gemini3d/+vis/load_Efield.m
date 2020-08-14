@@ -1,15 +1,18 @@
-function dat = load_Efield(filename)
+function dat = load_Efield(filename, time)
 
-narginchk(1,1)
+narginchk(1,2)
 
-assert(isfile(filename), ['E-field file not found ', filename])
+if nargin > 1
+  assert(gemini3d.fileio.is_folder(filename), 'either filename or folder + time')
+  filename = gemini3d.get_frame_filename(filename, time);
+end
+assert(gemini3d.fileio.is_file(filename), 'E-field file not found %s', filename)
 
 [~,~,ext] = fileparts(filename);
 
 switch ext
   case '.h5', dat = load_h5(filename);
   case '.nc', dat = load_nc(filename);
-  case '.dat', dat = load_raw(filename);
   otherwise, error('load_Efield:value_error', 'could not determine file type %s', filename)
 end
 
@@ -30,13 +33,5 @@ function dat = load_nc(filename)
 for k = {'flagdirich', 'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
   dat.(k{:}) = ncread(filename, ['/', k{:}]);
 end
-
-end % function
-
-
-function dat = load_raw(filename)
-
-dat = struct();
-error('load_Efield:load_raw:not_implemented', 'not yet implemented: raw Efield read')
 
 end % function

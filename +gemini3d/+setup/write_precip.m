@@ -17,7 +17,6 @@ end % function
 
 function write_hdf5(outdir, pg)
 import gemini3d.fileio.*
-import gemini3d.*
 
 narginchk(2,2)
 fn = fullfile(outdir, 'simsize.h5');
@@ -34,7 +33,7 @@ h5save(fn, '/mlat', pg.mlat, [], freal)
 
 for i = 1:length(pg.times)
 
-  fn = fullfile(outdir, [datelab(pg.times(i)), '.h5']);
+  fn = fullfile(outdir, [gemini3d.datelab(pg.times(i)), '.h5']);
   if is_file(fn), delete(fn), end
 
   h5save(fn, '/Qp', pg.Qit(:,:,i), [pg.llon, pg.llat], freal)
@@ -46,7 +45,6 @@ end % function
 
 function write_nc4(outdir, pg)
 import gemini3d.fileio.*
-import gemini3d.*
 
 narginchk(2,2)
 
@@ -63,7 +61,7 @@ ncsave(fn, 'mlon', pg.mlon, {'lon', length(pg.mlon)}, freal)
 ncsave(fn, 'mlat', pg.mlat, {'lat', length(pg.mlat)}, freal)
 
 for i = 1:length(pg.times)
-  fn = fullfile(outdir, [datelab(pg.times(i)), '.nc']);
+  fn = fullfile(outdir, [gemini3d.datelab(pg.times(i)), '.nc']);
   if is_file(fn), delete(fn), end
 
   ncsave(fn, 'Qp', pg.Qit(:,:,i), {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, freal)
@@ -74,7 +72,6 @@ end % function
 
 
 function write_raw(outdir, pg)
-import gemini3d.*
 
 narginchk(2,2)
 
@@ -97,7 +94,7 @@ for i = 1:size(pg.expdate, 1)
   UTsec = pg.expdate(i,4)*3600 + pg.expdate(i,5)*60 + pg.expdate(i,6);
   ymd = pg.expdate(i, 1:3);
 
-  filename = fullfile(outdir, [datelab(ymd,UTsec), '.dat']);
+  filename = fullfile(outdir, [gemini3d.datelab(ymd,UTsec), '.dat']);
 
   fid = fopen(filename,'w');
   fwrite(fid, pg.Qit(:,:,i), freal);

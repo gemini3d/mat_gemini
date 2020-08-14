@@ -11,10 +11,7 @@ function xg = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 %   0: plot serially (not in parallel)
 %   1: auto-determine number of workers ~ number of CPU cores -- lots of RAM used but fast
 %   2..inf: request specific number of workers--useful if you get "out of memory" errors
-import gemini3d.*
-import gemini3d.sys.*
 import gemini3d.vis.*
-import gemini3d.fileio.*
 
 narginchk(1,5)
 
@@ -37,16 +34,16 @@ validateattributes(parallel, {'numeric'}, {'scalar'}, mfilename, 'Number of task
 
 visible = isempty(saveplot_fmt);
 
-lxs = simsize(direc);
+lxs = gemini3d.simsize(direc);
 disp(['sim grid dimensions: ',num2str(lxs)])
 
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
-params = read_config(direc);
+params = gemini3d.read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(xg)
-  xg = readgrid(direc);
+  xg = gemini3d.readgrid(direc);
 end
 
 plotfun = grid2plotfun(plotfun, xg);
@@ -77,7 +74,7 @@ if ~visible
       plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
     end
   end
-elseif isinteractive
+elseif gemini3d.sys.isinteractive
   % displaying interactively, not saving
   for t = params.times
     plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
@@ -90,7 +87,7 @@ else
   error('plotall:runtime_error', 'No Matlab desktop so cannot plot. Was also not told to save')
 end % if saveplots
 
-if is_folder(fullfile(direc, 'aurmaps')) % glow sim
+if gemini3d.fileio.is_folder(fullfile(direc, 'aurmaps')) % glow sim
   plotglow(direc, saveplot_fmt, visible)
 end
 

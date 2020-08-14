@@ -1,5 +1,4 @@
 import gemini3d.fileio.*
-import gemini3d.*
 
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_lowres/';
@@ -14,13 +13,13 @@ makedir([direc, '/TECplots']);    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION
-cfg = read_config(direc);
+cfg = gemini3d.read_config(direc);
 
 
 %WE ALSO NEED TO LOAD THE GRID FILE (UNLESS IT ALREADY EXISTS IN THE WORKSPACE)
 if (~exist('xg','var'))
   disp('Reading dist. grid...')
-  xg=readgrid([direc,'/inputs']);
+  xg = gemini3d.readgrid([direc,'/inputs']);
   lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
   lh=lx1;   %possibly obviated in this version - need to check
   if (lx3==1)
@@ -34,7 +33,7 @@ end
 %ON THE OFF CHANCE THE CONTROL GRID IS DIFFERENT, LOAD IT TOO
 if (~exist('xgc','var'))
   disp('Reading control grid...')
-  xgc=readgrid([direc_control,'/inputs']);
+  xgc=gemini3d.readgrid([direc_control,'/inputs']);
   lx1c=xgc.lx(1); lx2c=xgc.lx(2); lx3c=xgc.lx(3);
   lhc=lx1c;   %possibly obviated in this version - need to check
 end
@@ -124,7 +123,7 @@ dvTEC=[];
 
 for it=1:length(cfg.times)
     %LOAD DIST. FILE
-    dat = loadframe(get_frame_filename(direc,cfg.times(it)), cfg, xg);
+    dat = gemini3d.vis.loadframe(direc, cfg.times(it), xg);
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -153,7 +152,7 @@ for it=1:length(cfg.times)
 
 
     %LOAD CONTROL SIMULATION
-    dat = loadframe(get_frame_filename(direc_control, cfg.times(it)), cfg, xg);
+    dat = gemini3d.vis.loadframe(direc_control, cfg.times(it), xg);
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION

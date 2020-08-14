@@ -6,7 +6,7 @@ function exists = h5exists(filename, varname)
 %
 % exists: boolean
 
-import gemini3d.fileio.*
+import gemini3d.fileio.h5variables
 
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)

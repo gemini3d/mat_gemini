@@ -1,6 +1,5 @@
 function plotframe(direc, time_req, saveplot_fmt, plotfun, xg, h, visible)
 %% CHECK ARGS AND SET SOME DEFAULT VALUES ON OPTIONAL ARGS
-import gemini3d.*
 import gemini3d.vis.*
 import gemini3d.vis.plotfunctions.*
 
@@ -44,25 +43,25 @@ J3lim=[-10 10];
 %}
 
 %% READ IN THE SIMULATION INFORMATION (this is low cost so reread no matter what)
-p = read_config(direc);
+p = gemini3d.read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(xg)
   disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
-  xg = readgrid(fullfile(direc, 'inputs'));
+  xg = gemini3d.readgrid(fullfile(direc, 'inputs'));
 end
 
 if nargin < 6 || isempty(h)
-  h = plotinit(xg, visible);
+  h = gemini3d.vis.plotinit(xg, visible);
 end
 
-plotfun = grid2plotfun(plotfun, xg);
+plotfun = gemini3d.vis.grid2plotfun(plotfun, xg);
 
 %% LOCATE TIME index NEAREST TO THE REQUESTED DATE=
 i = interp1(p.times, 1:length(p.times), time_req, 'nearest');
 time = p.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = loadframe(get_frame_filename(direc, time), p, xg);
+dat = gemini3d.vis.loadframe(direc, time, xg);
 disp([dat.filename, ' => ', func2str(plotfun)])
 
 %% UNTIL WE PROVIDE A WAY FOR THE USER TO SPECIFY COLOR AXES, JUST TRY TO SET THEM AUTOMATICALLY
@@ -93,7 +92,6 @@ if (~flagcaxlims)
 %   J2lim = [NaN,NaN];
 %   J3lim=[NaN,NaN];
 end
-
 
 %% MAKE THE PLOTS (WHERE APPROPRIATE)
 %Electron number density, 'position', [.1, .1, .5, .5], 'units', 'normalized'
@@ -173,7 +171,7 @@ end
 
 if lotsplots && ~isempty(saveplot_fmt)
   % for 3D or long 2D plots print and output file every time step
-  saveframe(p.flagoutput, direc, dat.filename, saveplot_fmt, h)
+  gemini3d.vis.saveframe(p.flagoutput, direc, dat.filename, saveplot_fmt, h)
 end
 
 end % function plotframe

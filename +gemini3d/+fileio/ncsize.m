@@ -5,7 +5,7 @@ function fsize = ncsize(filename, varname)
 % variable: name of variable inside file
 %
 % fsize: vector of variable size per dimension
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)

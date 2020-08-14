@@ -1,5 +1,5 @@
 function ret = is_file(path)
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(1,1)
 

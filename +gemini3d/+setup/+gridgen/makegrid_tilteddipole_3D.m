@@ -33,7 +33,7 @@ Re=6370e3;
 
 
 %TD SPHERICAL LOCATION OF REQUESTED CENTER POINT
-[thetatd,phid]=geog2geomag(glat,glon);
+[thetatd,phid]=gemini3d.geog2geomag(glat,glon);
 
 
 %SETS THE EDGES OF THE GRID
@@ -359,7 +359,8 @@ xg.Bmag=Bmag;
 
 %xg.glat=(pi/2-theta)*180/pi; xg.glon=phi*180/pi*ones(lx(1),lx(2));
 for iphi=1:lphi
-  [glats,glons]=geomag2geog(xg.theta(:,:,iphi),xg.phi(1,1,iphi)*ones(lq,lp));    %only meant to work for one latitude at at time
+  [glats,glons]=gemini3d.geomag2geog(xg.theta(:,:,iphi),xg.phi(1,1,iphi)*ones(lq,lp));
+  % only meant to work for one latitude at at time
   xg.glat(:,:,iphi)=glats;
   xg.glon(:,:,iphi)=glons;
 end

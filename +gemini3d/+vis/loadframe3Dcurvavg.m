@@ -1,5 +1,5 @@
 function dat = loadframe3Dcurvavg(filename)
-import gemini3d.fileio.*
+import gemini3d.fileio.is_file
 import gemini3d.vis.*
 
 narginchk(1,1)
@@ -13,7 +13,7 @@ switch ext
   otherwise, error('loadframe3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
 
-lxs = simsize(filename);
+lxs = gemini3d.simsize(filename);
 
 %% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
 if any(lxs(2:3) == 1)    %a 2D simulations was done in x1 and x3

@@ -1,5 +1,4 @@
 function dat = loadframe3Dcurv_raw(filename)
-import gemini3d.fileio.*
 import gemini3d.vis.*
 
 narginchk(1,1)

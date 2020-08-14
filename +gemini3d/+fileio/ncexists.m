@@ -5,7 +5,7 @@ function exists = ncexists(filename, varname)
 % varname: name of variable inside file
 %
 % exists: boolean
-import gemini3d.fileio.*
+import gemini3d.fileio.ncvariables
 
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)

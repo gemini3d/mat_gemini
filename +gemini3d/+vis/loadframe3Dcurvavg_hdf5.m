@@ -1,5 +1,4 @@
 function dat = loadframe3Dcurvavg_hdf5(filename)
-import gemini3d.fileio.*
 
 narginchk(1,1)
 %% SIMULATIONS RESULTS

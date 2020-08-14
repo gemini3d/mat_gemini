@@ -17,7 +17,7 @@ end % function
 
 
 function lxs = read_h5(path)
-import gemini3d.fileio.*
+import gemini3d.fileio.h5variables
 
 fn=fullfile(path, 'simsize.h5');
 
@@ -37,7 +37,7 @@ end % function
 
 
 function lxs = read_nc(path)
-import gemini3d.fileio.*
+import gemini3d.fileio.ncvariables
 
 % use temporary variable to be R2017b OK
 fn = fullfile(path, 'simsize.nc');

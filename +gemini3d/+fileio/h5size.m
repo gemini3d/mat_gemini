@@ -6,7 +6,7 @@ function fsize = h5size(filename, variable)
 %
 % fsize: vector of variable size per dimension
 
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)

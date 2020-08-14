@@ -1,7 +1,7 @@
 function [names, groups] = h5variables(filename, group)
 % get dataset names and groups in an HDF5 file
 
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(1,2)
 

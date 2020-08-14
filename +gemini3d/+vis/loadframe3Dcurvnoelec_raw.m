@@ -1,6 +1,5 @@
 function dat = loadframe3Dcurvnoelec_raw(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
-import gemini3d.fileio.*
 import gemini3d.vis.*
 
 narginchk(1,1)

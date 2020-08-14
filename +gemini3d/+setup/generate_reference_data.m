@@ -10,6 +10,7 @@ function generate_reference_data(topdir, outdir, only, gemini_exe, file_format)
 % only: cell array of simulation names to run
 % gemini_exe: full path to Gemini.bin executable
 % file_format: 'h5' or 'nc' (defaults to HDF5)
+import gemini3d.fileio.*
 
 narginchk(2, 5)
 
@@ -23,7 +24,7 @@ outdir = expanduser(outdir);
 assert(is_folder(topdir), '%s is not a folder', topdir)
 
 %% run each simulation
-names = get_testnames(topdir, only);
+names = gemini3d.get_testnames(topdir, only);
 assert(~isempty(names), 'No inputs under %s with %s', topdir, only)
 disp('Generating data for: ')
 celldisp(names)
@@ -31,7 +32,7 @@ celldisp(names)
 gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format);
 
 for i = 1:length(names)
-  gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
+  gemini3d.gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gemini_exe, gem_params)
 end
 
 end % function

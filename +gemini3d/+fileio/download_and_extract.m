@@ -11,7 +11,7 @@ validateattributes(data_dir, {'char'}, {'vector'}, mfilename, 'data directory',2
 
 if nargin < 3
   cwd = fileparts(mfilename('fullpath'));
-  url_ini = fullfile(cwd, '../tests/gemini3d_url.ini');
+  url_ini = fullfile(cwd, '../+tests/gemini3d_url.ini');
 end
 
 test_dir = fullfile(data_dir, ['test', test_name]);

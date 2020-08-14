@@ -1,7 +1,7 @@
 function isabs = is_absolute_path(path)
 %% true if path is absolute. Path need not yet exist.
 
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(1,1)
 

@@ -34,7 +34,6 @@ end % function
 
 function write_hdf5(dir_out, E)
 import gemini3d.fileio.*
-import gemini3d.*
 
 narginchk(2, 2)
 
@@ -58,7 +57,7 @@ disp(['write to ', dir_out])
 
 parfor i = 1:length(E.times)
 
-  fn = fullfile(dir_out, [datelab(E.times(i)), '.h5']);
+  fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.h5']);
   if is_file(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
@@ -77,7 +76,6 @@ end % function
 
 function write_nc4(dir_out, E)
 import gemini3d.fileio.*
-import gemini3d.*
 
 narginchk(2, 2)
 
@@ -100,7 +98,7 @@ disp(['write to ', dir_out])
 
 parfor i = 1:length(E.times)
 
-  fn = fullfile(dir_out, [datelab(E.times(i)), '.nc']);
+  fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.nc']);
   if is_file(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
@@ -118,7 +116,6 @@ end % function
 
 
 function write_raw(dir_out, E)
-import gemini3d.*
 
 narginchk(2,2)
 
@@ -135,7 +132,7 @@ fwrite(fid, E.mlat, freal);
 fclose(fid);
 
 for i = 1:length(E.times)
-  fid = fopen(fullfile(dir_out, [datelab(E.times(i)), '.dat']), 'w');
+  fid = fopen(fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.dat']), 'w');
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
 %  fwrite(fid, p.flagdirich, 'int32');

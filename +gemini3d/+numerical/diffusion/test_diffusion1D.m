@@ -3,12 +3,11 @@ function [x1,TsEuler,TsBDF2,Tstrue] = test_diffusion1D(fn)
 %LOAD AND PLOT NUMERICAL SOLUTION to diffusion problem
 %return the test data to the user in case they want to
 %look over the differences and numerical error.
-import gemini3d.*
-import gemini3d.fileio.*
+import gemini3d.assert_allclose
 
 narginchk(1,1)
 
-exist_or_skip(fn, 'file')
+gemini3d.exist_or_skip(fn, 'file')
 
 L = h5read(fn, '/lt');
 x1 = h5read(fn, '/x1');
@@ -30,7 +29,7 @@ assert_allclose(Tstrue(13,13),  0.763014494788105, 1e-5,[],'1-D true diffusion a
 
 disp('OK: 1d diffusion')
 
-if ~isinteractive
+if ~gemini3d.sys.isinteractive
   if ~nargout, clear, end
   return
 end

@@ -1,7 +1,7 @@
 function N = get_cpu_count()
 %% get apparent number of CPU cores
 
-if isoctave
+if gemini3d.isoctave
   N = idivide(nproc, 2);  % assume hyperthreading
 else
   N = maxNumCompThreads;

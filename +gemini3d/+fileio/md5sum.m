@@ -1,12 +1,11 @@
 function hash = md5sum(file)
 % compute MD5 hash of file
-import gemini3d.fileio.*
 
 narginchk(1,1)
 
-file = expanduser(file);
+file = gemini3d.fileio.expanduser(file);
 
-assert(is_file(file), '%s not found', file)
+assert(gemini3d.fileio.is_file(file), '%s not found', file)
 
 hash = [];
 

@@ -4,7 +4,7 @@ narginchk(1,1)
 
 [~,~,ext] = fileparts(filename);
 
-assert(is_file(filename), 'not a file: %s', filename)
+assert(gemini3d.fileio.is_file(filename), 'not a file: %s', filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);
@@ -24,7 +24,7 @@ dat.J2=[];
 dat.J3=[];
 dat.Phitop=[];
 
-lxs = simsize(filename);
+lxs = gemini3d.simsize(filename);
 
 if any(lxs(2:3) == 1)    % 2D sim
   dat.ne = squeeze(dat.ne);
@@ -33,14 +33,10 @@ end % function
 
 
 function dat = read_hdf5(filename)
-import gemini3d.fileio.*
-
 dat.ne = h5read(filename, '/neall');
 end % function
 
 function dat = read_nc4(filename)
-import gemini3d.fileio.*
-
 dat.ne = ncread(filename, 'neall');
 end % function
 
@@ -51,7 +47,7 @@ lxs = gemini3d.simsize(fileparts(filename));
 %% SIMULATION RESULTS
 fid=fopen(filename,'r');
 
-dat.time = get_time(fid);
+dat.time = gemini3d.vis.get_time(fid);
 
 ns=fread(fid,prod(lxs),'real*8');
 ns=reshape(ns, lxs);

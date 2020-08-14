@@ -1,6 +1,6 @@
 function names = ncvariables(filename)
 % get dataset names and groups in an NetCDF4 file
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(1,1)
 

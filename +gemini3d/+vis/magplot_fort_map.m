@@ -1,4 +1,3 @@
-import gemini3d.*
 
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_highres_var/';
@@ -60,7 +59,7 @@ Bphit=zeros(1,ltheta,lphi,lt);
 
 for it=1:lt-1
 
-  filename=datelab(cfg.times(it));
+  filename= gemini3d.datelab(cfg.times(it));
   fid=fopen([basemagdir,filename,'.dat'],'r');
 
   data=fread(fid,lpoints,'real*8');
@@ -125,7 +124,7 @@ for it=1:lt-1
     figure(1);
     FS=8;
 
-    filename = datelab(cfg.times(it));
+    filename = gemini3d.datelab(cfg.times(it));
     titlestring = datestr(cfg.times(it));
 
 %    subplot(131);
@@ -210,7 +209,7 @@ for it=1:lt-1
     %ADD A MAP OF COASTLINES
 %    if (license('test','Map_Toolbox'))
         load coastlines;
-        [thetacoast,phicoast]=geog2geomag(coastlat,coastlon);
+        [thetacoast,phicoast]= gemini3d.geog2geomag(coastlat,coastlon);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 

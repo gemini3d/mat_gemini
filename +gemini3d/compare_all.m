@@ -84,8 +84,8 @@ Nt = length(params.times);
 ok = 0;
 
 for i = 1:Nt
-  out = loadframe(outdir, params.times(i));
-  ref = loadframe(refdir, params.times(i));
+  out = gemini3d.vis.loadframe(outdir, params.times(i));
+  ref = gemini3d.vis.loadframe(refdir, params.times(i));
 
   st = datestr(params.times(i));
 
@@ -176,15 +176,14 @@ end % function compare_input
 
 
 function compare_grid(outdir, refdir, tol)
-import gemini3d.*
 import gemini3d.fileio.*
 
 narginchk(3,3)
 
-[ref, ok] = readgrid(refdir);
+[ref, ok] =  gemini3d.readgrid(refdir);
 assert(ok, 'reference grid %s has bad values', refdir)
 
-[new, ok] = readgrid(outdir);
+[new, ok] =  gemini3d.readgrid(outdir);
 assert(ok, 'grid %s has bad values', outdir)
 
 errs = 0;
@@ -201,7 +200,7 @@ for k = h5variables(ref.filename)
     error("compare_all:value_error", [k{:}, ': ref shape ', int2str(size(b)), ' != data shape ', int2str(size(a))])
   end
 
-  if ~allclose(a, b, tol.rtol, tol.atol)
+  if ~gemini3d.allclose(a, b, tol.rtol, tol.atol)
     errs = errs + 1;
     warning("mismatch: %s\n", k{:})
   end
@@ -223,8 +222,8 @@ errs = 0;
 
 % often we reuse precipitation inputs without copying over files
 for i = 1:size(times)
-  ref = load_precip(get_frame_filename(ref_prec_dir, times(i)));
-  new = load_precip(get_frame_filename(prec_dir, times(i)));
+  ref = load_precip(ref_prec_dir, times(i));
+  new = load_precip(prec_dir, times(i));
 
   for k = {'E0', 'Q'}
     b = ref.(k{:});
@@ -234,7 +233,7 @@ for i = 1:size(times)
       error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
     end
 
-    if ~allclose(a, b, tol.rtol, tol.atol)
+    if ~ gemini3d.allclose(a, b, tol.rtol, tol.atol)
       errs = errs + 1;
       warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
     end
@@ -249,15 +248,14 @@ end % function
 
 
 function errs = compare_efield(times, E0_dir, ref_E0_dir, tol)
-import gemini3d.vis.*
-import gemini3d.*
+import gemini3d.vis.load_Efield
 
 errs = 0;
 
 % often we reuse Efield inputs without copying over files
 for i = 1:size(times)
-  ref = load_Efield(get_frame_filename(ref_E0_dir, times(i)));
-  new = load_Efield(get_frame_filename(E0_dir, times(i)));
+  ref = load_Efield(ref_E0_dir, times(i));
+  new = load_Efield(E0_dir, times(i));
 
 
   for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
@@ -268,7 +266,7 @@ for i = 1:size(times)
       error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
     end
 
-    if ~allclose(a, b, tol.rtol, tol.atol)
+    if ~gemini3d.allclose(a, b, tol.rtol, tol.atol)
       errs = errs + 1;
       warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
     end

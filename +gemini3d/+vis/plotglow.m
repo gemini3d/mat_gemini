@@ -12,7 +12,7 @@ end
 
 if nargin<2, saveplot_fmt={'png'}; end
 
-assert(is_folder(direc), 'not a directory: %s', direc)
+assert(gemini3d.fileio.is_folder(direc), 'not a directory: %s', direc)
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -20,10 +20,10 @@ wavelengths = {'3371', '4278', '5200', '5577', '6300', '7320', '10400', ...
   '3466', '7774', '8446', '3726', 'LBH', '1356', '1493', '1304'};
 
 %READ IN SIMULATION INFO
-params = read_config(direc);
+params = gemini3d.read_config(direc);
 
 %READ IN THE GRID
-xg = readgrid(direc);
+xg = gemini3d.readgrid(direc);
 
 %% GET THE SYSTEM SIZE
 lwave=length(wavelengths);
@@ -45,7 +45,7 @@ time_str = [datestr(time), ' UT'];
 hf = [];
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
-  bFrame = loadglow_aurmap(filename, lx2, lx3, lwave);
+  bFrame = gemini3d.vis.loadglow_aurmap(filename, lx2, lx3, lwave);
 
 if lx2 > 1 && lx3 > 1
     % 3D sim
@@ -61,7 +61,7 @@ else
 end
 
   if params.flagoutput ~= 3
-    save_glowframe(filename, saveplot_fmt, hf)
+    gemini3d.vis.save_glowframe(filename, saveplot_fmt, hf)
   end
   % we use dtout instead of dtglow because we're only plotting times the
   % full simulation outputs too.

@@ -99,7 +99,7 @@ elseif lx2 == 1 % 2-D north-south
   end
 
   % Detect old non-padded grid and workaround
-  if allclose(xgin.x3(1), xg.x3(3), [], 1)
+  if gemini3d.allclose(xgin.x3(1), xg.x3(3), [], 1)
     % old sim, no external ghost cells.
     % Instead of discarding good cells,keep them and say there are
     % new ghost cells outside the grid

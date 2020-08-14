@@ -1,4 +1,3 @@
-import gemini3d.fileio.*
 
 %SIMULATIONS LOCAITONS
 %simname='iowa3D_hemis_medres2/';

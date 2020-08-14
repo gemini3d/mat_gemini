@@ -3,7 +3,7 @@ function test_potential2D(fn)
 
 narginchk(1,1)
 
-exist_or_skip(fn, 'file')
+gemini3d.exist_or_skip(fn, 'file')
 
 x2 = h5read(fn, '/x2');
 x3 = h5read(fn, '/x3');
@@ -12,7 +12,7 @@ Phi2 = h5read(fn, '/Phi2squeeze');
 Phitrue = h5read(fn, '/Phitrue');
 
 
-assert_allclose(Phi2(13, 13), 0.00032659, 1e-5,[],'Potential 2d accuracy')
+gemini3d.assert_allclose(Phi2(13, 13), 0.00032659, 1e-5,[],'Potential 2d accuracy')
 
 if ~isinteractive
   return

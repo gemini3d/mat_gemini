@@ -1,5 +1,7 @@
 function cAur = loadglow_aurmap(filename, lx2, lx3, lwave)
 %% loads simulated auroral emissions
+import gemini3d.fileio.is_file
+
 narginchk(4,4)
 assert(is_file(filename), [filename, " is not a filename"])
 validateattributes(lx2, {'numeric'}, {'scalar', 'integer', 'positive'})
@@ -32,16 +34,10 @@ end % function
 
 
 function cAur = loadglow_aurmap_hdf5(filename)
-narginchk(1,1)
-
 cAur = squeeze(h5read(filename, '/aurora/iverout'));
-
 end % function
 
 
 function cAur = loadglow_aurmap_nc(filename)
-narginchk(1,1)
-
 cAur = squeeze(ncread(filename, 'iverout'));
-
 end % function

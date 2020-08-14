@@ -1,7 +1,6 @@
 function particles_BCs(p, xg)
 % create particle precipitation
 import gemini3d.fileio.*
-import gemini3d.setup.*
 
 narginchk(2,2)
 validateattributes(p, {'struct'}, {'scalar'})
@@ -56,11 +55,11 @@ else
   E0precip = p.E0precip;
 end
 
-precip = precip_grid(xg, p, precip);
+precip = gemini3d.setup.precip_grid(xg, p, precip);
 
 % NOTE: in future, E0 could be made time-dependent in config.nml as 1D array
 for i = i_on:i_off
-   precip.Qit(:,:,i) = precip_gaussian2d(precip, Qprecip, Qprecip_bg);
+   precip.Qit(:,:,i) = gemini3d.setup.precip_gaussian2d(precip, Qprecip, Qprecip_bg);
    precip.E0it(:,:,i) = E0precip;
 end
 
@@ -71,6 +70,6 @@ if any(~isfinite(precip.E0it)), error('particle_BCs:value_error', 'E0 not finite
 %E0it = max(E0it,0.100);
 %E0it = E0it*1e3;
 
-write_precip(precip, outdir, p.file_format)
+gemini3d.setup.write_precip(precip, outdir, p.file_format)
 
 end % function
