@@ -1,6 +1,6 @@
 function saveframe(flagoutput, direc, filename, saveplot_fmt, h)
 %% CREATES IMAGE FILES FROM PLOTS
-import gemini3d.vis.export_grpahics
+import gemini3d.vis.export_graphics
 
 narginchk(5,5)
 validateattributes(flagoutput, {'numeric'}, {'scalar'}, mfilename)
