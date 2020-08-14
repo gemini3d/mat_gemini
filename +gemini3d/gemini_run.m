@@ -29,8 +29,10 @@ end % if ispc
 cfg = gemini3d.read_config(cfgfile);
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
-if isfield(gemini_params, 'file_format') && ~isempty(gemini_params.file_format)
-  cfg.file_format = gemini_params.file_format;
+for k = {'ssl_verify', 'file_format'}
+  if isfield(gemini_params, k{:})
+    cfg.(k{:}) = gemini_params.(k{:});
+  end
 end
 
 if isfield(gemini_params, 'overwrite') && gemini_params.overwrite

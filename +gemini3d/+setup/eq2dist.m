@@ -10,7 +10,14 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 if ~gemini3d.fileio.is_folder(p.eq_dir)
   if isfield(p, 'eq_url')
     if ~gemini3d.fileio.is_file(p.eq_zip)
-      websave(p.eq_zip, p.eq_url)
+        if isfield(p, 'ssl_verify') && ~p.ssl_verify
+          % disable SSL, better to fix your SSL certificates as arbitrary
+          % code can be downloaded
+          web_opt = weboptions('CertificateFilename', '');
+        else
+          web_opt = weboptions('CertificateFilename', 'default');
+        end
+      websave(p.eq_zip, p.eq_url, web_opt)
     end
     unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
   else
