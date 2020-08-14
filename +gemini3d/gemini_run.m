@@ -24,6 +24,7 @@ if ispc
 if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
   error('gemini_run:runtime_error', 'MinGW is not compatible with Intel MPI')
 end
+end % if ispc
 %% check if model needs to be setup
 cfg = gemini3d.read_config(cfgfile);
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
