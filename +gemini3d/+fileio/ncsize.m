@@ -5,13 +5,12 @@ function fsize = ncsize(filename, varname)
 % variable: name of variable inside file
 %
 % fsize: vector of variable size per dimension
-import gemini3d.fileio.expanduser
 
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)
 validateattributes(varname, {'char'}, {'vector'}, 2)
 
-vinf = ncinfo(expanduser(filename), varname);
+vinf = ncinfo(gemini3d.fileio.expanduser(filename), varname);
 fsize = vinf.Size;
 
 % Octave compatibility

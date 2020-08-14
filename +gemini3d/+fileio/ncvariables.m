@@ -1,11 +1,9 @@
 function names = ncvariables(filename)
 % get dataset names and groups in an NetCDF4 file
-import gemini3d.fileio.expanduser
-
 narginchk(1,1)
 
 % use temporary variable to be R2017b OK
-finf = ncinfo(expanduser(filename));
+finf = ncinfo(gemini3d.fileio.expanduser(filename));
 ds = finf.Variables(:);
 names = {ds(:).Name};
 

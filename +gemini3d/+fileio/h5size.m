@@ -6,13 +6,11 @@ function fsize = h5size(filename, variable)
 %
 % fsize: vector of variable size per dimension
 
-import gemini3d.fileio.expanduser
-
 narginchk(2,2)
 validateattributes(filename, {'char'}, {'vector'}, 1)
 validateattributes(variable, {'char'}, {'vector'}, 2)
 
-finf = h5info(expanduser(filename), variable);
+finf = h5info(gemini3d.fileio.expanduser(filename), variable);
 fsize = finf.Dataspace.Size;
 
 end % function

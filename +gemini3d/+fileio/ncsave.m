@@ -1,9 +1,8 @@
 function ncsave(filename, varname, A, ncdims, dtype)
-import gemini3d.fileio.*
 
 narginchk(3, 5)
 
-filename = expanduser(filename);
+filename = gemini3d.fileio.expanduser(filename);
 
 if nargin >= 4 && ~isempty(ncdims)
   for i = 2:2:length(ncdims)
@@ -30,11 +29,11 @@ else
 end
 % coerce if needed
 if nargin >= 5 && ~isempty(dtype)
-  A = coerce_ds(A, dtype);
+  A = gemini3d.fileio.coerce_ds(A, dtype);
 end
 
 
-if is_file(filename) && ncexists(filename, varname)
+if gemini3d.fileio.is_file(filename) && gemini3d.fileio.ncexists(filename, varname)
   exist_file(filename, varname, A, sizeA)
 else
   new_file(filename, varname, A, sizeA, ncdims)
@@ -44,11 +43,10 @@ end % function
 
 
 function exist_file(filename, varname, A, sizeA)
-import gemini3d.fileio.*
 
 narginchk(4,4)
 
-diskshape = ncsize(filename, varname);
+diskshape = gemini3d.fileio.ncsize(filename, varname);
 
 if all(diskshape == sizeA)
   ncwrite(filename, varname, A)
@@ -62,12 +60,11 @@ end % function
 
 
 function new_file(filename, varname, A, sizeA, ncdims)
-import gemini3d.fileio.*
 
 narginchk(5,5)
 
 folder = fileparts(filename);
-assert(is_folder(folder), '%s is not a folder, cannot create %s', folder, filename)
+assert(gemini3d.fileio.is_folder(folder), '%s is not a folder, cannot create %s', folder, filename)
 
 
 if isscalar(A)
@@ -80,7 +77,9 @@ else
   % "Datatype" to be Octave case-sensitive keyword compatible
   nccreate(filename, varname, 'Dimensions', ncdims, ...
     'Datatype', class(A), ...
-    'DeflateLevel', 1, 'Shuffle', true, 'ChunkSize', auto_chunk_size(sizeA), 'Format', 'netcdf4')
+    'DeflateLevel', 1, 'Shuffle', true, ...
+    'ChunkSize', gemini3d.fileio.auto_chunk_size(sizeA), ...
+    'Format', 'netcdf4')
 end
 
 ncwrite(filename, varname, A)
