@@ -6,7 +6,7 @@ narginchk(2, 3)
 
 %% defaults
 if nargin < 3
-  gemini_params = struct('overwrite', false, 'mpiexec', 'mpiexec');
+  gemini_params = struct();
 end
 validateattributes(gemini_params, {'struct'}, {'scalar'})
 if ~isfield(gemini_params, 'mpiexec') || isempty(gemini_params.mpiexec)
