@@ -78,7 +78,9 @@ myfunc(cfg, xg)
 ```
 
 then they can be specified in the config.nml file under setup/setup_functions.
-For examples see [GDI_periodic_lowres](./GDI_periodic_lowres) and [KHI_periodic_lowres](./KHI_periodic_lowres).
+For examples see
+[GDI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/GDI_periodic_lowres) and
+[KHI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/KHI_periodic_lowres).
 
 ### Regenerate self-test reference datasets
 
