@@ -36,7 +36,7 @@ If you have the Parallel Computing Toolbox, the tests will run in parallel.
 ### Plot all simulation outputs
 
 ```matlab
-plot_all('~/data/mysim', 'png')
+gemini_plot('~/data/mysim', 'png')
 ```
 
 Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just displays the plots without saving.
