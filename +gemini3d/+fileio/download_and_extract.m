@@ -28,7 +28,7 @@ zipfile = fullfile(data_dir, ['test', test_name, '.zip']);
 if ~is_file(zipfile)
   k = 'url';
   url = urls.(['x', test_name]).(k);
-  websave(zipfile, url)
+  websave(zipfile, url);
 end
 
 %% md5sum check
