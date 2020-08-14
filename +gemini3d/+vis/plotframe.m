@@ -119,8 +119,7 @@ if p.flagoutput ~= 3
   plotfun(time, xg, dat.J3,'J_3 (A/m^2)',J3lim,[p.sourcemlat,p.sourcemlon],h.f8, Jcmap);
   clf(h.f9)
   try
-  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', ...
-    Phitop_lim, [p.sourcemlat, p.sourcemlon], h.f9, Phi_cmap)
+  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', Phitop_lim, [p.sourcemlat, p.sourcemlon], h.f9, Phi_cmap)
   catch e
     % casting an error to warning requires this syntax for Matlab < R2020a
     warning(e.identifier, '%s', e.message)

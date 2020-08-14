@@ -40,22 +40,21 @@ end
 assert(~isempty(file_list), ['No auroral data found in ', aurora_dir])
 
 %% make plots
-time = params.times;
-time_str = [datestr(time), ' UT'];
 hf = [];
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
   bFrame = gemini3d.vis.loadglow_aurmap(filename, lx2, lx3, lwave);
+  t_str = [datestr(params.times(i)), ' UT'];
 
 if lx2 > 1 && lx3 > 1
     % 3D sim
-    hf = plot_emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible);
+    hf = plot_emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
 elseif lx2 > 1
      % 2D east-west
-    hf = plot_emissions(x2, wavelengths, bFrame, time_str, hf, visible);
+    hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible);
 elseif lx3 > 1
      % 2D north-south
-    hf = plot_emissions(x3, wavelengths, bFrame, time_str, hf, visible);
+    hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible);
 else
   error('impossible configuration')
 end
@@ -63,10 +62,6 @@ end
   if params.flagoutput ~= 3
     gemini3d.vis.save_glowframe(filename, saveplot_fmt, hf)
   end
-  % we use dtout instead of dtglow because we're only plotting times the
-  % full simulation outputs too.
-  time = time + seconds(params.dtout);
-  time_str = [datestr(time), ' UT'];
 end
 
 end % function

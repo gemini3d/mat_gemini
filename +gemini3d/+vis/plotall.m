@@ -74,17 +74,17 @@ if ~visible
       plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
     end
   end
-elseif gemini3d.sys.isinteractive
-  % displaying interactively, not saving
+else
+  % displaying, not saving
   for t = params.times
     plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
-    pause
+    if gemini3d.sys.isinteractive
+      fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
+      pause
+    end
   end
-else
-  error('plotall:runtime_error', 'No Matlab desktop so cannot plot. Was also not told to save')
 end % if saveplots
 
 if gemini3d.fileio.is_folder(fullfile(direc, 'aurmaps')) % glow sim

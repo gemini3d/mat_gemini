@@ -7,13 +7,11 @@ validateattributes(y, {'numeric'}, {'vector'}, mfilename, 'y distance', 2)
 validateattributes(Phitop, {'numeric'}, {'2d'}, mfilename, 'Potential', 3)
 validateattributes(P, {'struct'}, {'scalar'}, mfilename, 'parameters', 5)
 
-ax = get_axes(h);
+ax = gemini3d.vis.plotfunctions.get_axes(h);
 hi = imagesc(x, y, Phitop, 'parent', ax);
-try %#ok<TRYNC> octave < 5
-  set(hi, 'alphadata', ~isnan(Phitop))
-end
+set(hi, 'alphadata', ~isnan(Phitop))
 
-axes_tidy(ax, P)
+% axes_tidy(ax, P)
 
 ylabel(ax, 'northward dist. (km)')
 xlabel(ax, 'eastward dist. (km)')
