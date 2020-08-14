@@ -2,5 +2,5 @@ build*/
 resources/project/
 *.asv
 *.m~
-tests/reference
-tests/data
+
++gemini3d/+tests/data

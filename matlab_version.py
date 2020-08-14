@@ -32,7 +32,7 @@ for w in wanted_matlab:
     else:
         bat = "matlab -batch"
 
-    ret = subprocess.run(mod_cmd + " && " + bat + " version_runner", universal_newlines=True, shell=True, cwd='tests')
+    ret = subprocess.run(mod_cmd + " && " + bat + " gemini3d.tests.version_runner", universal_newlines=True, shell=True)
     if ret.returncode != 0:
         failed += 1
 
