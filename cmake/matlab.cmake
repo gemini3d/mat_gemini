@@ -15,32 +15,21 @@ endif()
 # * appdata\version.xml
 # * appdata\prodcontents.json
 # I have observed over the years that this directory name scheme is universally used.
-
-string(REGEX MATCH "R([0-9][0-9][0-9][0-9][a-z])" Matlab_RELEASE ${Matlab_ROOT_DIR})
-matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
+# NOTE: some do not put an "R" in front that is /opt/matlab/2020a/... instead of /opt/matlab/R2020a/...
+#
+set(Matlab_VERSION)
+string(REGEX MATCH "([0-9][0-9][0-9][0-9][a-z])" Matlab_RELEASE ${Matlab_ROOT_DIR})
+if(Matlab_RELEASE) # don't fail if installed in custom directory
+  matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
+endif()
 
 if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.6)
   message(STATUS "Matlab >= R2019a required for -batch mode")
   return()
 endif()
 
-include(ProcessorCount)
-ProcessorCount(Ncpu)
-
-function(matlab_test test_name test_cell parallel)
-# with short tests, useparallel makes take longer due to long parallel pool startup time
-
 add_test(NAME matlab:${test_name}
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests(${test_cell}, 'UseParallel', ${parallel}); assert(~any(cell2mat({r.Failed})), '${test_name} fail')"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch test_gemini
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 set_tests_properties(matlab:${test_name} PROPERTIES
-  PROCESSORS ${Ncpu}
   TIMEOUT 600)
-
-endfunction(matlab_test)
-
-matlab_test(lint "{'test_lint'}" 0)
-
-matlab_test(unit "{'test_unit', 'test_msis', 'test_hdf5', 'test_netcdf'}" 1)
-
-matlab_test(project "{'test_project_hdf5', 'test_project_netcdf'}" 1)
