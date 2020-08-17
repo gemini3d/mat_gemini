@@ -80,9 +80,9 @@ else
     plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    if gemini3d.sys.isinteractive
-      fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
-      pause
+    if gemini3d.sys.isinteractive && params.times(end) ~= t
+      q = input('\n *** press Enter to plot next time step, or "q" Enter to stop ***\n', 's');
+      if ~isempty(q), break, end
     end
   end
 end % if saveplots
