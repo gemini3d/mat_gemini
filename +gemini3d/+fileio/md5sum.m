@@ -17,7 +17,7 @@ if isempty(char(p.Version)) % Python not configured
   return
 end
 h = py.hashlib.md5();
-h.update(py.pathlib.Path(file).read_bytes())
+h.update(py.open(file, 'rb').read())
 hash = char(h.hexdigest());
 
 %% sanity check
