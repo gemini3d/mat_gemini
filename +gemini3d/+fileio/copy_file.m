@@ -9,7 +9,7 @@ narginchk(2,2)
 fin = absolute_path(in);
 fout = absolute_path(out);
 
-if isfolder(fout)
+if ~isfolder(fout)
   error('copyfile:file_not_found', '%s is not a directory', fout)
 end
 
