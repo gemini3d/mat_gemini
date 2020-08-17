@@ -4,15 +4,6 @@ function cmake(srcdir)
 
 narginchk(1,1)
 
-%% MacOS workaround
-% Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
-% Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
-
-if ismac
-  sys_path = ['/usr/local/bin:', getenv('PATH')];
-  setenv('PATH', sys_path)
-end
-
 ret = system('cmake --version');
 if ret ~= 0
   error('cmake:environment_error', 'CMake not found')
