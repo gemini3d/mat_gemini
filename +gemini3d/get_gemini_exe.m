@@ -5,11 +5,14 @@ narginchk(0,1)
 if nargin >= 1 && isfield(params, 'gemini_exe')
   exe = params.gemini_exe;
 else
-  exe = find_gemini();
+  exe = fullfile(get_gemini_root(), 'build/gemini.bin');
+if ispc
+  exe = [exe, '.exe'];
+end
 end
 
 if ~isfile(exe)
-  error('get_gemini_exe:file_not_found', 'Gemini.bin executable not found in %s', fileparts(exe))
+  error('get_gemini_exe:file_not_found', 'Gemini.bin executable not found in %s\n\nTry to build Gemini3d by: \n ctest -S gemini3d/setup.cmake -VV', fileparts(exe))
 end
 %% sanity check gemini.bin executable
 prepend = gemini3d.sys.modify_path();
@@ -19,16 +22,15 @@ assert(ret==0, 'problem with %s: %s', exe, msg)
 end % function
 
 
-function exe = find_gemini()
-
-narginchk(0,0)
+function gemini_root = get_gemini_root()
 
 gemini_root = getenv('GEMINI_ROOT');
-assert(~isempty(gemini_root), 'specify top-level path to Gemini in environment variable GEMINI_ROOT')
-assert(isfolder(gemini_root), 'Gemini3D directory not found: %s', gemini_root)
-exe = fullfile(gemini_root, 'build/gemini.bin');
-if ispc
-  exe = [exe, '.exe'];
+if isempty(gemini_root)
+  cwd = fileparts(mfilename('fullpath'));
+  gemini_root = fullfile(cwd, '../../gemini3d');
+end
+if ~isfolder(gemini_root)
+  error('get_gemini_exe:file_not_found', 'Gemini3D directory not found: %s\n\nPlease specify top-level path to Gemini in environment variable GEMINI_ROOT', gemini_root)
 end
 
-end
+end % function
