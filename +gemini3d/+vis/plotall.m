@@ -60,10 +60,13 @@ if ~visible
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
     if parallel > 1
       % specific number of workers requested
-      pool = gcp('nocreate');
-      if isempty(pool) || pool.NumWorkers ~= parallel
-        delete(pool)
-        parpool('local', parallel)
+      addons = matlab.addons.installedAddons();
+      if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+        pool = gcp('nocreate');
+        if isempty(pool) || pool.NumWorkers ~= parallel
+          delete(pool)
+          parpool('local', parallel)
+        end
       end
     end
     parfor i = 1:Nt
