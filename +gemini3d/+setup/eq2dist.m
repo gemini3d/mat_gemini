@@ -17,6 +17,7 @@ if ~isfolder(p.eq_dir)
         else
           web_opt = weboptions('CertificateFilename', 'default');
         end
+      gemini3d.fileio.makedir(p.eq_dir)
       websave(p.eq_zip, p.eq_url, web_opt);
     end
     unzip(p.eq_zip, fullfile(p.eq_dir, '..'))

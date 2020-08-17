@@ -13,6 +13,7 @@ if nargin < 3
   url_ini = fullfile(cwd, '../+tests/gemini3d_url.ini');
 end
 
+data_dir = gemini3d.fileio.expanduser(data_dir);
 test_dir = fullfile(data_dir, ['test', test_name]);
 if isfolder(test_dir)
   return
