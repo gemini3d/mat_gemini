@@ -1,6 +1,7 @@
 function copy_file(in, out)
 %% copy_file(path) overloads copyfile with tilde expansion
 % distinction: copy_file "out" must be directory.
+
 import gemini3d.fileio.*
 
 narginchk(2,2)
@@ -8,7 +9,7 @@ narginchk(2,2)
 fin = absolute_path(in);
 fout = absolute_path(out);
 
-if ~is_folder(fout)
+if isfolder(fout)
   error('copyfile:file_not_found', '%s is not a directory', fout)
 end
 

@@ -87,7 +87,7 @@ else
   end
 end % if saveplots
 
-if gemini3d.fileio.is_folder(fullfile(direc, 'aurmaps')) % glow sim
+if isfolder(fullfile(direc, 'aurmaps')) % glow sim
   plotglow(direc, saveplot_fmt, visible)
 end
 

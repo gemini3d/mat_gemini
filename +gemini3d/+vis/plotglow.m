@@ -12,7 +12,7 @@ end
 
 if nargin<2, saveplot_fmt={'png'}; end
 
-assert(gemini3d.fileio.is_folder(direc), 'not a directory: %s', direc)
+assert(isfolder(direc), 'not a directory: %s', direc)
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
