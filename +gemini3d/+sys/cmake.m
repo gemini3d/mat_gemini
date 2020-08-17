@@ -8,17 +8,17 @@ narginchk(1,1)
 % Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
 % Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
 
-env_fix = '';
 if ismac
-  env_fix = 'export PATH=$PATH:/usr/local/bin &&';
+  sys_path = ['/usr/local/bin:', getenv('PATH')];
+  setenv('PATH', sys_path)
 end
 
-ret = system([env_fix,' cmake --version']);
+ret = system('cmake --version');
 if ret ~= 0
   error('cmake:environment_error', 'CMake not found')
 end
 
-ret = system([env_fix,' ctest -S ', fullfile(srcdir, 'setup.cmake'), ' -VV']);
+ret = system(['ctest -S ', fullfile(srcdir, 'setup.cmake'), ' -VV']);
 if ret ~= 0
   error('cmake:runtime_error', 'error building with CMake')
 end

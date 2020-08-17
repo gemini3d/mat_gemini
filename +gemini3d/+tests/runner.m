@@ -20,7 +20,7 @@ p.outdir = fullfile(tempdir, ['test',name]);
 
 % patch eq_dir to use reference data
 if isfield(p, 'eq_dir')
-  eq_dir = fullfile(fileparts(test_dir), path_tail(p.eq_dir));
+  eq_dir = fullfile(fileparts(test_dir), gemini3d.fileio.path_tail(p.eq_dir));
   if isfolder(eq_dir)
     fprintf('Using %s for equilibrium data \n', eq_dir)
     p.eq_dir = eq_dir;
