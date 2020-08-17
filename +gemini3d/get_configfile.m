@@ -1,23 +1,22 @@
 function filename = get_configfile(path)
 %% get configuration file
-import gemini3d.fileio.*
 
 narginchk(1,1)
 
-path = expanduser(path);
+path = gemini3d.fileio.expanduser(path);
 
-if is_file(path)
+if isfile(path)
   filename = path;
-elseif is_folder(path)
+elseif isfolder(path)
   names = {'config.nml', 'inputs/config.nml', 'config.ini', 'inputs/config.ini'};
   filename = check_names(path, names);
 
-  if ~is_file(filename)
+  if ~isfile(filename)
     files = dir(fullfile(path, 'inputs/config*.nml'));
     filename = check_names(fullfile(path, 'inputs'), {files.name});
   end
 
-  if ~is_file(filename)
+  if ~isfile(filename)
     files = dir(fullfile(path, 'config*.nml'));
     filename = check_names(path, {files.name});
   end
@@ -25,7 +24,7 @@ else
   error('get_configfile:file_not_found', 'could not find %s', path)
 end
 
-if ~is_file(filename)
+if ~isfile(filename)
   error('get_configfile:file_not_found', 'could not find config.nml under %s', path)
 end
 
@@ -33,7 +32,6 @@ end % function
 
 
 function filename = check_names(path, names)
-import gemini3d.fileio.*
 
 narginchk(2,2)
 validateattributes(path, {'char'}, {'vector'})
@@ -43,7 +41,7 @@ filename = '';
 
 for s = names
   filename = fullfile(path, s{:});
-  if is_file(filename)
+  if isfile(filename)
     break
   end
 end

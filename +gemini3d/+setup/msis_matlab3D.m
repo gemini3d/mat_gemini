@@ -15,7 +15,6 @@ function natm = msis_matlab3D(p, xg)
 %       9 - N NUMBER DENSITY(M-3)
 %       10 - Anomalous oxygen NUMBER DENSITY(M-3)
 %       11 - TEMPERATURE AT ALT
-import gemini3d.fileio.is_file
 
 narginchk(2,2)
 validateattributes(p, {'struct'}, {'scalar'})
@@ -29,11 +28,11 @@ exe = fullfile(build_dir, 'msis_setup');
 if ispc, exe = [exe, '.exe']; end
 
 %% build exe if not present
-if ~is_file(exe)
+if ~isfile(exe)
   gemini3d.sys.cmake(src_dir)
 end
 
-assert (is_file(exe), 'MSIS setup executable not found: %s', exe)
+assert (isfile(exe), 'MSIS setup executable not found: %s', exe)
 
 %% SPECIFY SIZES ETC.
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);

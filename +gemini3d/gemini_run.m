@@ -43,7 +43,7 @@ if isfield(gemini_params, 'overwrite') && gemini_params.overwrite
   gemini3d.setup.model_setup(cfg)
 else
   for k = {'indat_size', 'indat_grid', 'indat_file'}
-    if ~gemini3d.fileio.is_file(cfg.(k{:}))
+    if ~isfile(cfg.(k{:}))
       gemini3d.setup.model_setup(cfg)
       break
     end

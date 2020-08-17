@@ -4,11 +4,14 @@
 [![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
 [![View MatGemini on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/78676-matgemini)
 
-These scripts form the basic core needed to work with Gemini to:
+These scripts form the basic core needed to work with Gemini3D ionospheric model to:
 
 * generate a new simulation from scratch
 * read simulation output
 * plot simulation
+
+Matlab &ge; R2017b is required.
+Optionally, Matlab &ge; R2020a has better plot quality due to new Matlab graphics backend and functions.
 
 ## Quick Start
 

@@ -54,10 +54,9 @@ end  % function read_nc4
 
 
 function xgf = read_raw(path)
-import gemini3d.fileio.*
 
 filename = fullfile(path, 'simgrid.dat');
-if ~is_file(filename)
+if ~isfile(filename)
   error('readgrid:read_raw:file_not_found', '%s not found', filename)
 end
 

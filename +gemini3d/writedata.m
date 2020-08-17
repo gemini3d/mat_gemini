@@ -8,7 +8,6 @@ function writedata(time, ns, vsx1, Ts, fn, file_format, Phitop)
 %
 % INPUT ARRAYS SHOULD BE TRIMMED TO THE CORRECT SIZE
 % I.E. THEY SHOULD NOT INCLUDE GHOST CELLS
-import gemini3d.fileio.*
 
 narginchk(5,7)
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
@@ -17,7 +16,7 @@ validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 3)
 validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 4)
 validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',5)
 
-assert(~is_folder(fn), '%s must be a filename, not a directory', fn)
+assert(~isfolder(fn), '%s must be a filename, not a directory', fn)
 
 if nargin < 6 || isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
@@ -44,12 +43,12 @@ end % function
 
 
 function write_hdf5(fn, time, ns, vsx1, Ts, Phitop)
-import gemini3d.fileio.*
+import gemini3d.fileio.h5save
 
-fn = with_suffix(fn, '.h5');
+fn = gemini3d.fileio.with_suffix(fn, '.h5');
 
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
@@ -66,12 +65,12 @@ end % function
 
 
 function write_nc4(fn, time, ns, vsx1, Ts, Phitop)
-import gemini3d.fileio.*
+import gemini3d.fileio.ncsave
 
-fn = with_suffix(fn, '.nc');
+fn = gemini3d.fileio.with_suffix(fn, '.nc');
 
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 day = [time.Year, time.Month, time.Day];
 ncsave(fn, 'ymd', int32(day), {'time', 3})
@@ -91,9 +90,8 @@ end % function
 
 
 function write_raw(fn, time, ns, vsx1, Ts)
-import gemini3d.fileio.*
 
-fn = with_suffix(fn, '.dat');
+fn = gemini3d.fileio.with_suffix(fn, '.dat');
 
 disp(['write ',fn])
 fid=fopen(fn, 'w');

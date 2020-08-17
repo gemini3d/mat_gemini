@@ -33,12 +33,12 @@ end % function
 
 
 function write_hdf5(dir_out, E)
-import gemini3d.fileio.*
+import gemini3d.fileio.h5save
 
 narginchk(2, 2)
 
 fn = fullfile(dir_out, 'simsize.h5');
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 h5save(fn, '/llon', int32(E.llon))
 h5save(fn, '/llat', int32(E.llat))
 
@@ -46,7 +46,7 @@ llon = E.llon;
 llat = E.llat;
 
 fn = fullfile(dir_out, 'simgrid.h5');
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
@@ -58,7 +58,7 @@ disp(['write to ', dir_out])
 for i = 1:length(E.times)
 
   fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.h5']);
-  if is_file(fn), delete(fn), end
+  if isfile(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
@@ -75,17 +75,17 @@ end % function
 
 
 function write_nc4(dir_out, E)
-import gemini3d.fileio.*
+import gemini3d.fileio.ncsave
 
 narginchk(2, 2)
 
 fn = fullfile(dir_out, 'simsize.nc');
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 ncsave(fn, 'llon', int32(E.llon))
 ncsave(fn, 'llat', int32(E.llat))
 
 fn = fullfile(dir_out, 'simgrid.nc');
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 freal = 'float32';
 dlon = {'lon', E.llon};
@@ -99,7 +99,7 @@ disp(['write to ', dir_out])
 for i = 1:length(E.times)
 
   fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.nc']);
-  if is_file(fn), delete(fn), end
+  if isfile(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))

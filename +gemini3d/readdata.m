@@ -1,12 +1,11 @@
 function [t,ns,Ts,vs1,J1,J2,J3,v2,v3,Phitop]=readdata(lxs,filename)
-import gemini3d.fileio.*
 
 narginchk(2,2)
 validateattributes(lxs, {'numeric'}, {'vector', 'numel', 3, 'positive'}, mfilename, 'grid dimensions', 1)
 
 lsp = 7;
 
-assert(is_file(filename), '%s not found.', filename)
+assert(isfile(filename), '%s not found.', filename)
 %% READ DATA FROM AN OUTPUT FILE WRITTEN BY FORTRAN CODE
 
 fid=fopen(filename,'r');

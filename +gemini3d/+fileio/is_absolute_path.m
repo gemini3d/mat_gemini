@@ -1,11 +1,9 @@
 function isabs = is_absolute_path(path)
 %% true if path is absolute. Path need not yet exist.
 
-import gemini3d.fileio.expanduser
-
 narginchk(1,1)
 
-path = expanduser(path);
+path = gemini3d.fileio.expanduser(path);
 % Must expanduser() before Java
 
 if usejava('jvm')

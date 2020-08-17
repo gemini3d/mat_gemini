@@ -2,7 +2,7 @@ function writegrid(p, xg)
 %% write grid to raw binary files
 % includes STUFF NOT NEEDED BY FORTRAN CODE BUT POSSIBLY USEFUL FOR PLOTTING
 import gemini3d.readgrid
-import gemini3d.fileio.*
+import gemini3d.fileio.with_suffix
 
 narginchk(2, 2)
 validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
@@ -61,7 +61,7 @@ import gemini3d.fileio.*
 %% size
 fn = with_suffix(p.indat_size, '.h5');
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 h5save(fn, '/lx1', int32(xg.lx(1)))
 h5save(fn, '/lx2', int32(xg.lx(2)))
@@ -74,7 +74,7 @@ lx3 = xg.lx(3);
 %% grid
 fn = with_suffix(p.indat_grid, '.h5');
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
@@ -163,7 +163,7 @@ import gemini3d.fileio.*
 %% size
 fn = with_suffix(p.indat_size, '.nc');
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 ncsave(fn, 'lx1', int32(xg.lx(1)))
 ncsave(fn, 'lx2', int32(xg.lx(2)))
@@ -176,7 +176,7 @@ lx3 = xg.lx(3);
 %% grid
 fn = with_suffix(p.indat_grid, '.nc');
 disp(['write ',fn])
-if is_file(fn), delete(fn), end
+if isfile(fn), delete(fn), end
 
 freal = 'float32';
 Ng = 4; % number of ghost cells
@@ -259,7 +259,7 @@ end % function
 
 
 function write_raw(p, xg)
-import gemini3d.fileio.*
+import gemini3d.fileio.with_suffix
 freal = 'float64';
 
 %% size

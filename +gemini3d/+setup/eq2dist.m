@@ -7,9 +7,9 @@ validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'parameters', 1)
 validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid struct', 2)
 
 %% READ Equilibrium SIMULATION INFO
-if ~gemini3d.fileio.is_folder(p.eq_dir)
+if ~isfolder(p.eq_dir)
   if isfield(p, 'eq_url')
-    if ~gemini3d.fileio.is_file(p.eq_zip)
+    if ~isfile(p.eq_zip)
         if isfield(p, 'ssl_verify') && ~p.ssl_verify
           % disable SSL, better to fix your SSL certificates as arbitrary
           % code can be downloaded

@@ -23,7 +23,7 @@ if ischar(A)
   sizeA = size(A);
 end
 
-if gemini3d.fileio.is_file(filename) && gemini3d.fileio.h5exists(filename, varname)
+if isfile(filename) && gemini3d.fileio.h5exists(filename, varname)
   exist_file(filename, varname, A, sizeA)
 else
   new_file(filename, varname, A, sizeA)
@@ -61,7 +61,7 @@ function new_file(filename, varname, A, sizeA)
 narginchk(4,4)
 
 folder = fileparts(filename);
-assert(gemini3d.fileio.is_folder(folder), '%s is not a folder, cannot create %s', folder, filename)
+assert(isfolder(folder), '%s is not a folder, cannot create %s', folder, filename)
 
 if isvector(A)
   h5create(filename, varname, sizeA, 'DataType', class(A))

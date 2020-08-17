@@ -5,7 +5,7 @@ narginchk(1,1)
 
 file = gemini3d.fileio.expanduser(file);
 
-assert(gemini3d.fileio.is_file(file), '%s not found', file)
+assert(isfile(file), '%s not found', file)
 
 hash = [];
 
