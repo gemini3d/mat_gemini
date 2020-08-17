@@ -27,4 +27,3 @@ endif()
 add_subdirectory(${msis_path} ${PROJECT_BINARY_DIR}/msis)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/matlab.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/octave.cmake)
