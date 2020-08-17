@@ -18,7 +18,7 @@ if isfolder(test_dir)
   return
 end
 
-makedir(data_dir)
+gemini3d.fileio.makedir(data_dir)
 
 urls = gemini3d.vendor.ini2struct.ini2struct(url_ini);
 

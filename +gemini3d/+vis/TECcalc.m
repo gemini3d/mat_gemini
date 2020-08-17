@@ -9,7 +9,7 @@ basedir='../../../simulations/';
 direc=[basedir,simname];
 direc_control=[basedir,simname_control];
 
-makedir([direc, '/TECplots']);    %store output plots with the simulation data
+gemini3d.fileio.makedir([direc, '/TECplots']);    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION

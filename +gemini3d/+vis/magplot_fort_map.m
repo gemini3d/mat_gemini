@@ -1,3 +1,4 @@
+import gemini3d.fileio.makedir
 
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_highres_var/';
@@ -15,7 +16,7 @@ makedir([direc, '/Bphiplots'])
 makedir([direc, '/Bphiplots_eps'])
 
 %SIMULATION META-DATA
-cfg = read_config(direc);
+cfg = gemini3d.read_config(direc);
 
 lt=numel(cfg.times);
 
@@ -102,7 +103,7 @@ fprintf('...Done interpolating...\n');
 
 
 %SIMULATION META-DATA
-cfg = read_config(direc);
+cfg = gemini3d.read_config(direc);
 
 
 %TABULATE THE SOURCE OR GRID CENTER LOCATION
