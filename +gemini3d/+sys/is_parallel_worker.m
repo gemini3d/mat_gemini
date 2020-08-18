@@ -4,6 +4,15 @@ function ispar = is_parallel_worker()
 %
 % Reference: https://www.mathworks.com/help/parallel-computing/getcurrenttask.html
 %
+% test by:
+% >> is_parallel_worker
+%
+% ans = logical 0
+%
+% >> parfor i = 1:1, is_parallel_worker, end
+% Starting parallel pool (parpool) using the 'local' profile ...
+%
+% ans = logical 1
 
 ispar = false;
 

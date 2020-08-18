@@ -7,13 +7,14 @@ file = gemini3d.fileio.expanduser(file);
 
 assert(isfile(file), '%s not found', file)
 
-hash = [];
+hash = '';
 
 if verLessThan('matlab', '9.7')
   return
 end
 p = pyenv();
-if isempty(char(p.Version)) % Python not configured
+if length(p.Version) <= 1
+% Python not configured. Not isempty()!
   return
 end
 h = py.hashlib.md5();

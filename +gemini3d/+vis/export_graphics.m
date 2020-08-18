@@ -9,16 +9,18 @@ function export_graphics(varargin)
 % 2. call the exportgraphics or copygraphics function inside a parfor loop
 % 3. start MATLAB session with the -nodisplay option
 
+narginchk(2,inf)
+
 use_print = verLessThan('matlab', '9.8') || ...
             ~gemini3d.sys.isinteractive || ...
-            contains(rendererinfo(varargin{1}).GraphicsRenderer, 'Painters') || ...
+            is_painters(varargin{1}) || ...
             gemini3d.sys.is_parallel_worker;
 
 if use_print
-  if strcmpi(varargin{3}, 'resolution')
+  if nargin >= 4 && strcmpi(varargin{3}, 'resolution')
     dpi = ['-r', int2str(varargin{4})];
   else
-    dpi = '-r150';
+    dpi = [];
   end
   [~,~,ext] = fileparts(varargin{2});
   flag = printflag(ext(2:end));
@@ -42,3 +44,20 @@ switch fmt
 end
 
 end % function
+
+
+function is_p = is_painters(h)
+
+if isa(h,'matlab.ui.Figure')
+  h = get(h, 'children');
+  if length(h) > 1
+    h = h(1);
+  end
+end
+
+try
+  is_p = contains(rendererinfo(h).GraphicsRenderer, 'Painters');
+catch
+  is_p = true;  % failsafe
+end
+end
