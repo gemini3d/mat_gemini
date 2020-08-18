@@ -1,8 +1,20 @@
 function export_graphics(varargin)
-% Matlab >= R2020a uses factory exportgraphics()
-% otherwise, uses next best factory print() function
+% Matlab R2020a brought exportgraphics(), which looks great, but
+% fail to render under several conditions relevant to HPC:
+% https://www.mathworks.com/support/bugreports/details/2195498
+% Until this bug is fixed, we use next best factory print() function
+%
+% Bug description: any of these triggers R2020a exportgraphics bug:
+% 1. The Renderer property of the figure is set to 'painters'
+% 2. call the exportgraphics or copygraphics function inside a parfor loop
+% 3. start MATLAB session with the -nodisplay option
 
-if verLessThan('matlab', '9.8')
+use_print = verLessThan('matlab', '9.8') || ...
+            ~gemini3d.sys.isinteractive || ...
+            contains(rendererinfo(varargin{1}).GraphicsRenderer, 'Painters') || ...
+            gemini3d.sys.is_parallel_worker;
+
+if use_print
   if strcmpi(varargin{3}, 'resolution')
     dpi = ['-r', int2str(varargin{4})];
   else
