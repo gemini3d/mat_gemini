@@ -11,6 +11,9 @@ if ~verLessThan('matlab', '9.5') && ~isempty(P.sourcemlat)
   plot(ax,P.sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
 end
 %% axes
+if isfield(P, 'parmlbl')
+  P = rmfield(P, 'parmlbl');
+end
 gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 xlabel(ax, P.left_xlabel);

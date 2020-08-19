@@ -15,6 +15,9 @@ if ~isempty(P.sourcemlat)
 end
 
 %% axes
+if isfield(P, 'parmlbl')
+  P = rmfield(P, 'parmlbl');
+end
 gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 ylabel(ax, P.mid_ylabel)

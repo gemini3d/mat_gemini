@@ -12,6 +12,8 @@ end
 
 c = colorbar('peer', ax);
 
-xlabel(c, P.parmlbl);
-
+if isfield(P, 'parmlbl') && ~isempty(P.parmlbl)
+  xlabel(c, P.parmlbl);
 end
+
+end % function
