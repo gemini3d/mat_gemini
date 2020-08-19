@@ -3,10 +3,15 @@ narginchk(2,2)
 
 validateattributes(P, {'struct'}, {'scalar'}, 2)
 
-colormap(ax, P.cmap)
-caxis(ax, P.caxlims);
+set(ax, 'ydir', 'normal')
 
-c = colorbar(ax);
+colormap(ax, P.cmap)
+if ~isempty(P.caxlims) && all(~isnan(P.caxlims)) && P.caxlims(1) < P.caxlims(2)
+  caxis(ax, P.caxlims);
+end
+
+c = colorbar('peer', ax);
+
 xlabel(c, P.parmlbl);
 
 end

@@ -1,5 +1,4 @@
 function plot3D_cart_frames_long_ENU(time,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(3,8)
 
@@ -220,25 +219,25 @@ end
 
 %% NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
-plotparams.FS=9;
+% FS=9;
 plotparams.time = time;
 
 if ndims(parm) == 3
   if verLessThan('matlab', '9.7')
-    ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
-    ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
-    ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+    ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
+    ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
+    ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
   else
     t = tiledlayout(hf, 1, 3);
     ax1 = nexttile(t);
     ax2 = nexttile(t);
     ax3 = nexttile(t);
   end
-  slice3left(ax1, xp, zp, parmp, plotparams)
-  slice3mid(ax2, xp, yp, parmp2, plotparams)
-  slice3right(ax3, yp, zp, parmp3, plotparams)
+  gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
+  gemini3d.vis.plotfunctions.slice3mid(ax2, xp, yp, parmp2, plotparams)
+  gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp, parmp3, plotparams)
 else
-  plot_phitop(xp, yp, parmp2, hf, plotparams)
+  gemini3d.vis.plotfunctions.plot_phitop(xp, yp, parmp2, hf, plotparams)
 end
 
 end

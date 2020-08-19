@@ -1,5 +1,4 @@
 function plot2D_cart(time,xg,parm,parmlbl,caxlims,sourceloc,ha, cmap)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(3,8)
 validateattributes(time,{'datetime'}, {'scalar'},1)
@@ -21,19 +20,20 @@ else
 end
 
 if nargin<7 || isempty(ha)
-  ha = get_axes();
+  ha = gemini3d.vis.plotfunctions.get_axes();
 else
-  ha = get_axes(ha);
+  ha = gemini3d.vis.plotfunctions.get_axes(ha);
 end
 
 if nargin<8 || isempty(cmap)
   cmap = parula(256);
 end
 
-
+params.cmap = cmap;
+params.caxlims = caxlims;
+params.parmlbl = parmlbl;
 %% PLOT parameters
 %set(h,'PaperPosition',[0 0 11 4.5]);
-
 
 %SOURCE LOCATION
 if ~isempty(sourceloc)
@@ -55,7 +55,7 @@ Re=6370e3;
 
 %JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 %ix3=floor(lx3/2);
-altref=300;
+params.altref=300;
 
 
 %SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
@@ -125,105 +125,77 @@ elseif (xg.lx(3)==1)
   %parmp2=parmp2(:,inds,:);
 end
 
-%% BOUNDS FOR THE PLOTTING
-minxp=min(xp(:));
-maxxp=max(xp(:));
-%minyp=min(yp(:));
-%maxyp=max(yp(:));
-%minzp=min(zp(:));
-%maxzp=max(zp(:));
-
-%% MAKE THE PLOT!
+%% MAKE THE PLOT
 if isvector(parm)
   if xg.lx(3) == 1
-    plot1d2(xp, parmp, ha, parmlbl)
+    plot1d2(xp, parmp, ha, params)
   elseif xg.lx(2) == 1
-    plot1d3(yp, parmp, ha, parmlbl)
+    plot1d3(yp, parmp, ha, params)
   end
 else
   if xg.lx(3)==1
-    plot12(xp, zp, parmp, ha, sourcemlat, minxp, maxxp, altref, cmap, caxlims, parmlbl)
+    plot12(xp, zp, parmp, ha, sourcemlat, params)
   elseif xg.lx(2)==1
-    plot13(yp, zp, parmp, ha, sourcemlat, cmap, caxlims, parmlbl)
+    plot13(yp, zp, parmp, ha, sourcemlat, params)
   end
 end
 
 title(ha, [datestr(time), ' UT'])
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
 
-end
+end % function
 
-function plot1d2(xp, parm, ha, parmlbl)
+function plot1d2(xp, parm, ha, params)
 narginchk(4,4)
 plot(ha, xp/1e3, parm)
 xlabel(ha, 'eastward dist. (km)')
-ylabel(ha, parmlbl)
+ylabel(ha, params.parmlbl)
 end % function
 
 
-function plot1d3(yp, parm, ha, parmlbl)
+function plot1d3(yp, parm, ha, params)
 narginchk(4,4)
 plot(ha, yp/1e3, parm)
 xlabel(ha, 'northward dist. (km)')
-ylabel(ha, parmlbl)
+ylabel(ha, params.parmlbl)
 end % function
 
 
-function plot12(xp, zp, parmp, ha, sourcemlat, minxp, maxxp, altref, cmap, caxlims, parmlbl)
-narginchk(11, 11)
+function plot12(xp, zp, parmp, ha, sourcemlat, params)
+narginchk(6, 6)
 hi = imagesc(xp/1e3, zp/1e3,parmp, 'parent', ha);
 hold(ha, 'on')
-plot(ha, [minxp/1e3,maxxp/1e3],[altref, altref],'w--','LineWidth',2)
+yline(ha, params.altref,'w--','LineWidth',2)
 
 if ~isempty(sourcemlat)
   plot(ha, sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2)
 end
 hold(ha, 'off')
 
-try %#ok<*TRYNC> % octave < 5
-  set(hi, 'alphadata', ~isnan(parmp))
-end
+set(hi, 'alphadata', ~isnan(parmp))
 
-make_colorbar(ha, cmap, caxlims, parmlbl)
+gemini3d.vis.plotfunctions.axes_tidy(ha, params)
 
 xlabel(ha, 'eastward dist. (km)')
 ylabel(ha, 'altitude (km)')
 
 end
 
-function plot13(yp, zp, parmp, ha, sourcemlat, cmap, caxlims, parmlbl)
-narginchk(8,8)
+
+function plot13(yp, zp, parmp, ha, sourcemlat, params)
+narginchk(6,6)
 hi = imagesc(yp/1e3, zp/1e3, parmp, 'parent', ha);
 hold(ha, 'on')
-%plot([minyp,maxyp],[altref,altref],'w--','LineWidth',2);
+% yline(ha, altref, 'w--','LineWidth',2);
 if (~isempty(sourcemlat))
   plot(ha, sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
 end
 hold(ha, 'off')
 
-try % % octave < 5
-  set(hi, 'alphadata', ~isnan(parmp));
-end
+set(hi, 'alphadata', ~isnan(parmp))
 
-make_colorbar(ha, cmap, caxlims, parmlbl)
+gemini3d.vis.plotfunctions.axes_tidy(ha, params)
 
 xlabel(ha, 'northward dist. (km)')
 ylabel(ha, 'altitude (km)')
-
-end % function
-
-
-function make_colorbar(ha, cmap, lims, parmlbl)
-import gemini3d.vis.plotfunctions.*
-
-tight_axis(ha)
-colormap(ha, cmap)
-if ~isempty(lims) && all(~isnan(lims)) && lims(1) < lims(2)
-  % keep semicolon here as caxis can be buggy and output to console
-  caxis(ha, lims);
-end
-c=colorbar('peer', ha);
-xlabel(c, parmlbl)
 
 end % function
