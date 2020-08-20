@@ -48,7 +48,7 @@ else               %SH
   qtmp=(Re/(Re+altmin))^2*cos(thetax2max);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2min)^4/qtmp); %bottom right grid p, why mixing of max/min here???
 end
-rtmp=fminbnd(@(x) qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
+rtmp=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
 
 
 
@@ -127,7 +127,7 @@ qtol=1e-9;
 disp('MAKEGRID_TILTEDDIPOLE_3D: Converting q,p grid centers to spherical coords.')
 for iq=1:lq
     for ip=1:lp
-        [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) qp2robj(x,q(iq),p(ip)),0,100*Re);
+        [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,q(iq),p(ip)),0,100*Re);
         if abs(q(iq))<qtol
             theta(iq,ip)=pi/2;
         elseif q(iq)>=0        %northern hemisphere
@@ -201,7 +201,7 @@ rqi=zeros(lq+1,lp);
 thetaqi=zeros(lq+1,lp);
 for iq=1:lq+1
     for ip=1:lp
-        [rqi(iq,ip),fval(iq,ip)]=fminbnd(@(x) qp2robj(x,qi(iq),p(ip)),0,100*Re);
+        [rqi(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,qi(iq),p(ip)),0,100*Re);
         if abs(qi(iq))<qtol
             thetaqi(iq,ip)=pi/2;
         elseif qi(iq)>=0        %northern hemisphere
@@ -223,7 +223,7 @@ rpi=zeros(lq,lp+1);
 thetapi=zeros(lq,lp+1);
 for iq=1:lq
     for ip=1:lp+1
-        [rpi(iq,ip),fval(iq,ip)]=fminbnd(@(x) qp2robj(x,q(iq),pii(ip)),0,100*Re);
+        [rpi(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,q(iq),pii(ip)),0,100*Re);
         if abs(q(iq))<qtol
             thetapi(iq,ip)=pi/2;
         elseif q(iq)>=0        %northern hemisphere
