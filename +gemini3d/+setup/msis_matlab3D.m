@@ -1,4 +1,4 @@
-function natm = msis_matlab3D(p, xg)
+function natm = msis_matlab3D(p, xg, time)
 %% calls MSIS Fortran exectuable from Matlab.
 % compiles if not present
 %
@@ -16,9 +16,14 @@ function natm = msis_matlab3D(p, xg)
 %       10 - Anomalous oxygen NUMBER DENSITY(M-3)
 %       11 - TEMPERATURE AT ALT
 
-narginchk(2,2)
+narginchk(2,3)
 validateattributes(p, {'struct'}, {'scalar'})
 validateattributes(xg, {'struct'}, {'scalar'})
+
+if nargin < 3
+  time = p.times(1);
+end
+validateattributes(time, {'datetime'}, {'scalar'}, 3)
 
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
@@ -53,7 +58,6 @@ else
   ap3 = p.Ap;
 end
 
-time = p.times(1);
 doy = gemini3d.day_of_year(time);
 
 %fprintf('MSIS00 DOY %s\n', doy)
