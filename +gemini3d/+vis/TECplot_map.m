@@ -1,15 +1,16 @@
+run('~/Projects/mat_gemini/setup.m');
+
 
 %SIMULATIONS LOCAITONS
-%simname='iowa3D_hemis_medres2/';
-simname='mooreOK3D_hemis_medres/';
-basedir='~/simulations/'
+simname='mooreOK3D_hemis_medres_corrected/';
+basedir='~/simulations/';
 direc=[basedir,simname];
-makedir([direc, '/TECplots']);    %store output plots with the simulation data
-%makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
+gemini3d.fileio.makedir([direc, '/TECplots']);    %store output plots with the simulation data
+gemini3d.fileio.makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
 
 
-%LOAD THE COMPUTED MAGNETIC FIELD DATA
-load([direc,'/vTEC.10deg.mat']);
+%LOAD THE COMPUTED TEC DATA
+load([direc,'/vTEC.mat']);
 lt=numel(t);
 mlon=mlong;
 
@@ -19,8 +20,8 @@ cfg = gemini3d.read_config(direc);
 
 
 %TABULATE THE SOURCE LOCATION
-thdist = pi/2 - deg2rad(p.sourcemlat);    %zenith angle of source location
-phidist = deg2rad(p.sourcemlon);
+thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+phidist = deg2rad(cfg.sourcemlon);
 
 
 figure(1);
@@ -36,24 +37,25 @@ for it=1:lt
 %    FS=16;
     FS=10;
 
-    datehere=simdate_series(it,:);
+    %datehere=simdate_series(it,:);
+    datehere=datevec(cfg.times(it));
     ymd=datehere(1:3);
     UTsec=datehere(4)*3600+datehere(5)*60+datehere(6);
     filename = gemini3d.datelab(ymd,UTsec);
     filename=[filename,'.dat'];
     titlestring=datestr(datenum(datehere));
 
-    mlatlimplot=[min(mlat)-0.5,max(mlat)+0.5];
-    mlonlimplot=[min(mlon)-0.5,max(mlon)+0.5];
+    mlatlimplot=double([min(mlat)-0.5,max(mlat)+0.5]);
+    mlonlimplot=double([min(mlon)-0.5,max(mlon)+0.5]);
     axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
     param=dvTEC(:,:,it);
     param=dvTEC(:,:,it)-dvTEC(:,:,5);   %flat-field dvTEC just in case
     %imagesc(mlon,mlat,param);
-    mlatlim=[min(mlat),max(mlat)];
-    mlonlim=[min(mlon),max(mlon)];
+    mlatlim=double([min(mlat),max(mlat)]);
+    mlonlim=double([min(mlon),max(mlon)]);
     [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
     pcolorm(MLAT,MLON,param);
-%    colormap(parula(256));
+%    cmap=colormap(old_parula(256));
 %    colormap(bwr());
     cmap=lbmap(256,'redblue');
     cmap=flipud(cmap);
@@ -69,9 +71,9 @@ for it=1:lt
     ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
     hold on;
     ax=axis;
-    plotm(mlatsrc,mlonsrc,'r^','MarkerSize',10,'LineWidth',2);
+    plotm(cfg.sourcemlat,cfg.sourcemlon,'r^','MarkerSize',10,'LineWidth',2);
     hold off;
-    titlestring=datestr(datenum(simdate_series(it,:)));
+    titlestring=datestr(datenum(datehere));
     title(sprintf([titlestring,'\n\n']));
     %gridm;
 
@@ -82,7 +84,7 @@ for it=1:lt
     mlatcoast=90-thetacoast*180/pi;
     mloncoast=phicoast*180/pi;
 
-    if (360-mlonsrc<20)
+    if (360-cfg.sourcemlon<20)
         inds=find(mloncoast>180);
         mloncoast(inds)=mloncoast(inds)-360;
     end
@@ -98,5 +100,5 @@ for it=1:lt
 
     %PRINT THE THING
     print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
-%    print('-depsc2',[direc,'/TECplots_eps/',filename,'.eps']);
+    print('-depsc2',[direc,'/TECplots_eps/',filename,'.eps']);
 end
