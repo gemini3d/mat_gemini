@@ -37,7 +37,9 @@ end
 %% END FRAME time of equilibrium simulation
 % PRESUMABLY THIS WILL BE THE STARTING point FOR another
 %% LOAD THE last equilibrium frame
-dat = gemini3d.vis.loadframe(p.eq_dir, peq.times(end), xgin);
+% we need to pass in peq so that flagoutput works for .dat files, particularly for big old simulations
+% we don't want to spend time rerunning.
+dat = gemini3d.vis.loadframe(gemini3d.get_frame_filename(p.eq_dir, peq.times(end)), peq, xgin);
 
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)
