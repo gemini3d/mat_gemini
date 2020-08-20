@@ -1,10 +1,9 @@
 function time = get_time(file)
-import gemini3d.fileio.*
 
 narginchk(1,1)
 
 time = [];  % in case not present in file
-%% file handle
+%% file handle (.dat file)
 if isinteger(file)
   % raw file handle
   t = fread(file, 4, 'real*8');
@@ -20,7 +19,7 @@ assert(ischar(file), 'must have integer file handle or filename input')
 
 switch suffix
 case '.h5'
-  [vars, grps] = h5variables(file);
+  [vars, grps] = gemini3d.fileio.h5variables(file);
 
   if ~(any(contains(vars, 'ymd')) || any(contains(grps, 'time')))
     return
@@ -28,7 +27,7 @@ case '.h5'
 
   if contains(grps, 'time')
     i = '/time';
-    vars = h5variables(file, 'time');
+    vars = gemini3d.fileio.h5variables(file, 'time');
   else
     i = '';
   end
@@ -43,7 +42,7 @@ case '.h5'
   end
 
 case '.nc'
-  vars = ncvariables(file);
+  vars = gemini3d.fileio.ncvariables(file);
 
   if ~any(contains(vars, 'ymd'))
     return

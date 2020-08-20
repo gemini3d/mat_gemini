@@ -1,15 +1,13 @@
 function dat = loadframe3Dcurvavg(filename)
 
-import gemini3d.vis.*
-
 narginchk(1,1)
 [~,~,ext] = fileparts(filename);
 assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
-  case '.h5', dat = loadframe3Dcurvavg_hdf5(filename);
-  case '.dat', dat = loadframe3Dcurvavg_raw(filename);
-  case '.nc', dat = loadframe3Dcurvavg_nc4(filename);
+  case '.h5', dat = gemini3d.vis.loadframe3Dcurvavg_hdf5(filename);
+  case '.dat', dat = gemini3d.vis.loadframe3Dcurvavg_raw(filename);
+  case '.nc', dat = gemini3d.vis.loadframe3Dcurvavg_nc4(filename);
   otherwise, error('loadframe3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
 

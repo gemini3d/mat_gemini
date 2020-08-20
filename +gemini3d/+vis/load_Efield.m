@@ -13,6 +13,7 @@ assert(isfile(filename), 'E-field file not found %s', filename)
 switch ext
   case '.h5', dat = load_h5(filename);
   case '.nc', dat = load_nc(filename);
+  case '.dat', error('load_Efield:value_error', 'raw .dat files are not supported by load_precip')
   otherwise, error('load_Efield:value_error', 'could not determine file type %s', filename)
 end
 

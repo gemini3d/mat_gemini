@@ -2,7 +2,7 @@ function cAur = loadglow_aurmap(filename, lx2, lx3, lwave)
 %% loads simulated auroral emissions
 
 narginchk(4,4)
-assert(isfile(filename), [filename, " is not a filename"])
+assert(isfile(filename), '%s is not a filename', filename)
 validateattributes(lx2, {'numeric'}, {'scalar', 'integer', 'positive'})
 validateattributes(lx3, {'numeric'}, {'scalar', 'integer', 'positive'})
 validateattributes(lwave, {'numeric'}, {'scalar', 'integer', 'positive'})

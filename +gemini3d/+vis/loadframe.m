@@ -8,8 +8,6 @@ function dat = loadframe(filename, cfg, xg)
 % dat = loadframe(filename, cfg)
 % dat = loadframe(filename, cfg, xg)
 
-import gemini3d.vis.*
-
 narginchk(1,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
 
@@ -34,13 +32,13 @@ validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
 %% LOAD DIST. FILE
 
 switch get_flagoutput(filename, cfg)
-  case 1, dat = loadframe3Dcurv(filename);
-  case 2, dat = loadframe3Dcurvavg(filename);
-  case 3, dat = loadframe3Dcurvne(filename);
+  case 1, dat = gemini3d.vis.loadframe3Dcurv(filename);
+  case 2, dat = gemini3d.vis.loadframe3Dcurvavg(filename);
+  case 3, dat = gemini3d.vis.loadframe3Dcurvne(filename);
   otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
 end %switch
 
-dat.time = get_time(filename);
+dat.time = gemini3d.vis.get_time(filename);
 
 %% ensure input/simgrid matches data
 % if overwrote one directory or the other, a size mismatch can result

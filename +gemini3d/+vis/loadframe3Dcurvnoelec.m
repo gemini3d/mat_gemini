@@ -1,17 +1,14 @@
 function dat = loadframe3Dcurvnoelec(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
-import gemini3d.vis.*
-
-narginchk(1,1)
 
 narginchk(1,1)
 [~,~,ext] = fileparts(filename);
 assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
-  case '.h5', dat = loadframe3Dcurvnoelec_hdf5(filename);
-  case '.dat', dat = loadframe3Dcurvnoelec_raw(filename);
-  case '.nc', dat = loadframe3Dcurvnoelec_nc4(filename);
+  case '.h5', dat = gemini3d.vis.loadframe3Dcurvnoelec_hdf5(filename);
+  case '.dat', dat = gemini3d.vis.loadframe3Dcurvnoelec_raw(filename);
+  case '.nc', dat = gemini3d.vis.loadframe3Dcurvnoelec_nc4(filename);
   otherwise, error('loadframe3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
 end
 

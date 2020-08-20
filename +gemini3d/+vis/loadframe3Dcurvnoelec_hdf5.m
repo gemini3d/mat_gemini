@@ -1,12 +1,11 @@
 function dat = loadframe3Dcurvnoelec_hdf5(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
-import gemini3d.fileio.h5variables
 
 narginchk(1,1)
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-varnames = h5variables(filename);
+varnames = gemini3d.fileio.h5variables(filename);
 
 if any(strcmp('nsall', varnames))
   i = '/nsall';

@@ -33,7 +33,7 @@ x2=xg.x2(3:end-2);
 x3=xg.x3(3:end-2);
 
 %% get file list
-for ext = {'.h5', '.dat'}
+for ext = {'.h5', '.nc', '.dat'}
   file_list = dir([aurora_dir, '/*', ext{1}]);
   if ~isempty(file_list), break, end
 end
