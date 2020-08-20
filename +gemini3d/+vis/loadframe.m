@@ -91,6 +91,7 @@ validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 switch ext
   case '.h5', var_names = gemini3d.fileio.h5variables(filename);
   case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
+  case '.dat', var_names = {};
   otherwise, error('loadframe:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end
 
