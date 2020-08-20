@@ -1,10 +1,10 @@
 function dat = loadframe3Dcurv(filename)
-import gemini3d.fileio.is_file
+
 import gemini3d.vis.*
 
 narginchk(1,1)
 [~,~,ext] = fileparts(filename);
-assert(is_file(filename), 'not a file: %s', filename)
+assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
   case '.h5', dat = loadframe3Dcurv_hdf5(filename);

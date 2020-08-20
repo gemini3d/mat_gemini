@@ -1,5 +1,4 @@
 function plot2D_curv(time,xg,parm,parmlbl,caxlims, sourceloc, ha, cmap)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(3,8)
 validateattributes(time, {'datetime'}, {'scalar'}, 1)
@@ -22,14 +21,18 @@ else
 end
 
 if nargin < 7 || isempty(ha)
-  ha = get_axes();
+  ha = gemini3d.vis.plotfunctions.get_axes();
 else
-  ha = get_axes(ha);
+  ha = gemini3d.vis.plotfunctions.get_axes(ha);
 end
 
 if nargin < 8 || isempty(cmap)
   cmap = parula(256);
 end
+
+params.cmap = cmap;
+params.caxlims = caxlims;
+params.parmlbl = parmlbl;
 
 
 %SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
@@ -157,36 +160,20 @@ parmp=parmp(inds,:,:);
 %parmp2=parmp2(inds,:,:);
 %}
 
-%COMPUTE SOME BOUNDS FOR THE PLOTTING
-minxp=min(xp(:));
-maxxp=max(xp(:));
-%minyp=min(yp(:));
-%maxyp=max(yp(:));
-%minzp=min(zp(:));
-%maxzp=max(zp(:));
-
-
 %NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
-FS=12;
+%FS=12;
 
 %MAKE THE PLOT!
 %subplot(121);
 hi=imagesc(ha,xp,zp,parmp);
 hold(ha,'on')
-plot(ha,[minxp,maxxp],[altref,altref],'w--','LineWidth',2);
+yline(ha, altref,'w--','LineWidth',2);
 plot(ha,sourcemlat,0,'r^','MarkerSize',8,'LineWidth',2);
 hold(ha,'off')
-try %#ok<*TRYNC> % octave uses scalar alphadata
-  set(hi,'alphadata',~isnan(parmp));
-end
-set(ha,'FontSize',FS)
+set(hi,'alphadata',~isnan(parmp))
 
-tight_axis(ha)
-colormap(ha,cmap)
-caxis(ha,caxlims)
-c=colorbar(ha);
-xlabel(c,parmlbl)
+gemini3d.vis.plotfunctions.axes_tidy(ha, params)
 xlabel(ha,'magnetic latitude (deg.)')
 ylabel(ha,'altitude (km)')
 
@@ -195,29 +182,16 @@ ylabel(ha,'altitude (km)')
 subplot(122);
 hi=imagesc(xp,yp,parmp2(:,:,2));
 hold on;
-plot([minxp,maxxp],[sourcemlon,sourcemlon],'w--','LineWidth',2);
+yline(sourcemlon,'w--','LineWidth',2);
 plot(sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
 hold off;
-try % octave < 5
-  set(hi,'alphadata',~isnan(parmp2(:,:,2)));
-end
-set(gca,'FontSize',FS);
+set(hi,'alphadata',~isnan(parmp2(:,:,2)));
 
-tight_axis(gca)
-colormap(cmap)
-caxis(caxlims)
-c=colorbar;
-xlabel(c,parmlbl)
+gemini3d.vis.plotfunctions.axes_tidy(gca, params)
 xlabel('magnetic latitude (deg.)')
 ylabel('magnetic longitude (deg.)')
 %}
 
-
-%CONSTRUCT A STRING FOR THE TIME AND DATE
-%subplot(121);
-
 title(ha, [datestr(time), ' UT'])
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',18,'Color',[0.66 0.66 0.66],'FontWeight','bold');
-%text(xp(round(lxp/10)),zp(lzp-round(lzp/7.5)),strval,'FontSize',16,'Color',[0.5 0.5 0.5],'FontWeight','bold');
 
 end % function

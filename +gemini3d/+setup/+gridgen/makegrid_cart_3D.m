@@ -7,7 +7,7 @@ import gemini3d.setup.gridgen.*
 %p.alt_scale = [10e3, 8e3, 500e3, 150e3];
 if isfield(p, 'alt_min') && isfield(p, 'alt_max') && isfield(p, 'alt_scale') && isfield(p,'Bincl')
   z = altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
-elseif isfield(p, 'eq_dir') && gemini3d.fileio.is_file(p.eq_dir)
+elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   fprintf('makegrid_cart_3D: using altitude (z) grid from %s\n', p.eq_dir)
   xeq = readgrid(p.eq_dir);
   z = xeq.x1;

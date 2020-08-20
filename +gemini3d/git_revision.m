@@ -2,7 +2,6 @@ function git = git_revision(cwd)
 % return Git metadata
 %
 % strtrim() removes the \n newline
-import gemini3d.fileio.*
 
 narginchk(0,1)
 
@@ -10,7 +9,7 @@ if nargin < 1
   cwd = fileparts(mfilename('fullpath'));
 end
 
-assert(is_folder(cwd), '%s is not a folder', cwd)
+assert(isfolder(cwd), '%s is not a folder', cwd)
 
 % empty init in case can't read Git info
 % this avoids a lot of needless "if isfield" statements in consumers

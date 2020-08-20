@@ -4,7 +4,7 @@ narginchk(1,1)
 
 [~,~,ext] = fileparts(filename);
 
-assert(gemini3d.fileio.is_file(filename), 'not a file: %s', filename)
+assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);

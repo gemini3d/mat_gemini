@@ -1,5 +1,4 @@
 function slice3mid(ax, x, y, dat, P)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(5,5)
 
@@ -16,7 +15,10 @@ if ~isempty(P.sourcemlat)
 end
 
 %% axes
-axes_tidy(ax, P)
+if isfield(P, 'parmlbl')
+  P = rmfield(P, 'parmlbl');
+end
+gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 ylabel(ax, P.mid_ylabel)
 xlabel(ax, P.mid_xlabel)

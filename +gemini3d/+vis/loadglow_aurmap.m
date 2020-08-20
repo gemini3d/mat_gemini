@@ -1,9 +1,8 @@
 function cAur = loadglow_aurmap(filename, lx2, lx3, lwave)
 %% loads simulated auroral emissions
-import gemini3d.fileio.is_file
 
 narginchk(4,4)
-assert(is_file(filename), [filename, " is not a filename"])
+assert(isfile(filename), [filename, " is not a filename"])
 validateattributes(lx2, {'numeric'}, {'scalar', 'integer', 'positive'})
 validateattributes(lx3, {'numeric'}, {'scalar', 'integer', 'positive'})
 validateattributes(lwave, {'numeric'}, {'scalar', 'integer', 'positive'})

@@ -1,13 +1,12 @@
 function params = read_namelist(filename, namelist)
-import gemini3d.fileio.*
 
 narginchk(2,2)
 validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2)
 
 params = struct();
 
-filename = expanduser(filename);
-assert(is_file(filename),  '%s not found.', filename)
+filename = gemini3d.fileio.expanduser(filename);
+assert(isfile(filename),  '%s not found.', filename)
 
 fid = fopen(filename);
 while ~feof(fid)

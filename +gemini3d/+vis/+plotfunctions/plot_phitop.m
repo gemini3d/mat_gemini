@@ -11,7 +11,7 @@ ax = gemini3d.vis.plotfunctions.get_axes(h);
 hi = imagesc(x, y, Phitop, 'parent', ax);
 set(hi, 'alphadata', ~isnan(Phitop))
 
-% axes_tidy(ax, P)
+gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 ylabel(ax, 'northward dist. (km)')
 xlabel(ax, 'eastward dist. (km)')

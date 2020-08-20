@@ -33,7 +33,7 @@ if nargin >= 5 && ~isempty(dtype)
 end
 
 
-if gemini3d.fileio.is_file(filename) && gemini3d.fileio.ncexists(filename, varname)
+if isfile(filename) && gemini3d.fileio.ncexists(filename, varname)
   exist_file(filename, varname, A, sizeA)
 else
   new_file(filename, varname, A, sizeA, ncdims)
@@ -64,7 +64,7 @@ function new_file(filename, varname, A, sizeA, ncdims)
 narginchk(5,5)
 
 folder = fileparts(filename);
-assert(gemini3d.fileio.is_folder(folder), '%s is not a folder, cannot create %s', folder, filename)
+assert(isfolder(folder), '%s is not a folder, cannot create %s', folder, filename)
 
 
 if isscalar(A)

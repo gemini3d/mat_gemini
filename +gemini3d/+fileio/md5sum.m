@@ -5,19 +5,20 @@ narginchk(1,1)
 
 file = gemini3d.fileio.expanduser(file);
 
-assert(gemini3d.fileio.is_file(file), '%s not found', file)
+assert(isfile(file), '%s not found', file)
 
-hash = [];
+hash = '';
 
 if verLessThan('matlab', '9.7')
   return
 end
 p = pyenv();
-if isempty(char(p.Version)) % Python not configured
+if length(p.Version) <= 1
+% Python not configured. Not isempty()!
   return
 end
 h = py.hashlib.md5();
-h.update(py.pathlib.Path(file).read_bytes())
+h.update(py.open(file, 'rb').read())
 hash = char(h.hexdigest());
 
 %% sanity check

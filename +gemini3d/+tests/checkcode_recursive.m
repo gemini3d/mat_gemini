@@ -7,10 +7,7 @@ function results = checkcode_recursive(folder, verbose)
 narginchk(0,2)
 if nargin < 1, folder = pwd; end
 if nargin < 2, verbose = false; end
-
-if ~verLessThan('matlab', '9.3')
-  assert(isfolder(folder), '%s is not a folder', folder)
-end
+assert(isfolder(folder), '%s is not a folder', folder)
 
 flist = dir([folder, '/**/*.m']);
 N = length(flist);

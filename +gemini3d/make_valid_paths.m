@@ -1,6 +1,6 @@
 function cfg = make_valid_paths(cfg, top)
 %% resolve all paths in the config struct
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(1,2)
 
@@ -36,7 +36,7 @@ import gemini3d.fileio.*
 folder = expanduser(folder);
 % in case absolute path was specified
 
-if ~is_folder(folder)  && ~is_absolute_path(folder)
+if ~isfolder(folder)  && ~is_absolute_path(folder)
   folder = fullfile(top, folder);
 end
 
@@ -44,12 +44,11 @@ end % function
 
 
 function filename = make_valid_filename(filename, top)
-import gemini3d.fileio.*
 
-filename = expanduser(filename);
+filename = gemini3d.fileio.expanduser(filename);
 % in case absolute path was specified
 
-if ~is_folder(fileparts(filename))
+if ~isfolder(fileparts(filename))
   filename = fullfile(top, filename);
 end
 

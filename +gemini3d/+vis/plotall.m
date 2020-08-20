@@ -60,10 +60,13 @@ if ~visible
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
     if parallel > 1
       % specific number of workers requested
-      pool = gcp('nocreate');
-      if isempty(pool) || pool.NumWorkers ~= parallel
-        delete(pool)
-        parpool('local', parallel)
+      addons = matlab.addons.installedAddons();
+      if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+        pool = gcp('nocreate');
+        if isempty(pool) || pool.NumWorkers ~= parallel
+          delete(pool)
+          parpool('local', parallel)
+        end
       end
     end
     parfor i = 1:Nt
@@ -80,14 +83,14 @@ else
     plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    if gemini3d.sys.isinteractive
-      fprintf('\n *** press any key to plot next time step, or Ctrl C to stop ***\n')
-      pause
+    if gemini3d.sys.isinteractive && params.times(end) ~= t
+      q = input('\n *** press Enter to plot next time step, or "q" Enter to stop ***\n', 's');
+      if ~isempty(q), break, end
     end
   end
 end % if saveplots
 
-if gemini3d.fileio.is_folder(fullfile(direc, 'aurmaps')) % glow sim
+if isfolder(fullfile(direc, 'aurmaps')) % glow sim
   plotglow(direc, saveplot_fmt, visible)
 end
 

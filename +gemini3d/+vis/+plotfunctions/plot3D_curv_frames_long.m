@@ -1,5 +1,4 @@
 function h=plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(3,8)
 
@@ -202,12 +201,12 @@ parmp3=parmp3(inds,:,:);
 
 %% NOW THAT WE'VE SORTED, WE NEED TO REGENERATE THE MESHGRID
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
-FS=8;
+% FS=8;
 
 if verLessThan('matlab', '9.7')
-  ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
-  ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
-  ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add', 'FontSize', FS);
+  ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
+  ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
+  ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
 else
   t = tiledlayout(hf, 1, 3);
   ax1 = nexttile(t);
@@ -215,10 +214,10 @@ else
   ax3 = nexttile(t);
 end
 
-slice3left(ax1, xp, zp, parmp, plotparams)
+gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
 
-slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
+gemini3d.vis.plotfunctions.slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
 
-slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
+gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
 
 end % function

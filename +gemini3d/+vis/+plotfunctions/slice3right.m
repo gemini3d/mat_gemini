@@ -1,5 +1,4 @@
 function slice3right(ax, x, y, dat, P)
-import gemini3d.vis.plotfunctions.*
 
 narginchk(5,5)
 %% image
@@ -13,7 +12,7 @@ if ~isempty(P.sourcemlat)
   plot(ax, P.sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
 end
 %% axes
-axes_tidy(ax, P)
+gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 xlabel(ax, P.right_xlabel)
 ylabel(ax, P.right_ylabel)

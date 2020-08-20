@@ -5,13 +5,13 @@ function exist_or_skip(filename, path_type)
 % ------
 % * filename: directory or filename to look for
 % * path_path: 'dir' or 'file'
-import gemini3d.fileio.*
+import gemini3d.sys.isinteractive
 
 narginchk(2,2)
 validateattributes(path_type, {'char'}, {'vector'}, mfilename, 'dir or file', 2)
 
 if strcmp(path_type, 'file')
-    if ~is_file(filename)
+    if ~isfile(filename)
       if isinteractive
         error('exist_or_skip:file_not_found', 'could not find %s', filename)
       else
@@ -20,7 +20,7 @@ if strcmp(path_type, 'file')
       end
     end
 elseif strcmp(path_type, 'dir')
-    if ~is_folder(filename)
+    if ~isfolder(filename)
       if isinteractive
         error('exist_or_skip:not_a_directory', 'could not find %s', filename)
       else

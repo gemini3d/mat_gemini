@@ -4,12 +4,6 @@ hash = md5sum(fullfile(fileparts(mfilename('fullpath')), 'gemini3d_url.ini'));
 if ~isempty(hash)
   assert(strcmp(hash, 'b5f96c19e312374a5f9839410d681514'), 'md5sum %s', hash)
 end
-%% is_file
-assert(is_file([mfilename('fullpath'), '.m']), 'is_file true')
-assert(~is_file('~'), 'is_file false')
-%% is_folder
-assert(~is_folder([mfilename('fullpath'), '.m']), 'is_folder false')
-assert(is_folder('~'), 'is_folder expandued')
 %% expanduser
 pexp = expanduser('~/foo');
 assert(~strcmp(pexp(1), '~'), 'expanduser')

@@ -10,7 +10,7 @@ function generate_reference_data(topdir, outdir, only, gemini_exe, file_format)
 % only: cell array of simulation names to run
 % gemini_exe: full path to Gemini.bin executable
 % file_format: 'h5' or 'nc' (defaults to HDF5)
-import gemini3d.fileio.*
+import gemini3d.fileio.expanduser
 
 narginchk(2, 5)
 
@@ -21,7 +21,7 @@ if nargin < 5, file_format = []; end
 topdir = expanduser(topdir);
 outdir = expanduser(outdir);
 
-assert(is_folder(topdir), '%s is not a folder', topdir)
+assert(isfolder(topdir), '%s is not a folder', topdir)
 
 %% run each simulation
 names = gemini3d.get_testnames(topdir, only);

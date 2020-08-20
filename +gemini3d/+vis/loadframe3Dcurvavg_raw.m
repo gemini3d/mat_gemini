@@ -1,5 +1,5 @@
 function dat = loadframe3Dcurvavg_raw(filename)
-import gemini3d.fileio.is_file
+
 import gemini3d.vis.*
 
 narginchk(1,1)
@@ -9,7 +9,7 @@ lxs = gemini3d.simsize(filename);
 % (NOTE THAT THIS IS NOT THE ENTIRE THING - THAT NEEDS TO BE DONE WITH READGRID.M.  WE NEED THIS HERE TO DO MESHGRIDS
 %[x1, x2, x3] = simaxes(filename);
 %% SIMULATION RESULTS
-assert(is_file(filename), '%s is not a file.', filename)
+assert(isfile(filename), '%s is not a file.', filename)
 dat.filename = filename;
 
 fid = fopen(filename,'r');

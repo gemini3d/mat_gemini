@@ -3,10 +3,10 @@ function dat = load_Efield(filename, time)
 narginchk(1,2)
 
 if nargin > 1
-  assert(gemini3d.fileio.is_folder(filename), 'either filename or folder + time')
+  assert(isfolder(filename), 'either filename or folder + time')
   filename = gemini3d.get_frame_filename(filename, time);
 end
-assert(gemini3d.fileio.is_file(filename), 'E-field file not found %s', filename)
+assert(isfile(filename), 'E-field file not found %s', filename)
 
 [~,~,ext] = fileparts(filename);
 

@@ -43,7 +43,7 @@ if isfield(gemini_params, 'overwrite') && gemini_params.overwrite
   gemini3d.setup.model_setup(cfg)
 else
   for k = {'indat_size', 'indat_grid', 'indat_file'}
-    if ~gemini3d.fileio.is_file(cfg.(k{:}))
+    if ~isfile(cfg.(k{:}))
       gemini3d.setup.model_setup(cfg)
       break
     end
@@ -53,8 +53,10 @@ end
 %% close parallel pool
 % in case Matlab PCT was invoked for model_setup, shut it down, otherwise too much RAM can
 % be wasted while PCT is idle--like several gigabytes.
-delete(gcp('nocreate'))
-
+addons = matlab.addons.installedAddons();
+if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+  delete(gcp('nocreate'))
+end
 %% assemble run command
 np = gemini3d.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = gemini3d.sys.modify_path();

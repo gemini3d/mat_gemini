@@ -12,7 +12,7 @@ end
 
 if nargin<2, saveplot_fmt={'png'}; end
 
-assert(gemini3d.fileio.is_folder(direc), 'not a directory: %s', direc)
+assert(isfolder(direc), 'not a directory: %s', direc)
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -97,11 +97,11 @@ end
 
 function hf = plot_emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible)
 narginchk(5,7)
-validateattributes(x2, {'numeric'}, {'vector'}, mfilename)
-validateattributes(x3, {'numeric'}, {'vector'}, mfilename)
-validateattributes(bFrame, {'numeric'}, {'ndims', 3}, mfilename)
-validateattributes(time_str, {'cell'}, {'vector'}, mfilename)
-validateattributes(wavelengths, {'cell'}, {'vector'}, mfilename)
+validateattributes(x2, {'numeric'}, {'vector'}, 1)
+validateattributes(x3, {'numeric'}, {'vector'}, 2)
+validateattributes(bFrame, {'numeric'}, {'ndims', 3}, 3)
+validateattributes(time_str, {'char'}, {'vector'}, 4)
+validateattributes(wavelengths, {'cell'}, {'vector'}, 5)
 if nargin < 7, visible = true; end
 
 if nargin < 5 || isempty(hf)
@@ -122,7 +122,7 @@ for i=1:length(inds)
   cb = colorbar('peer', ax);
   %set(cb,'yticklabel',sprintf('10^{%g}|', get(cb,'ytick')))
   ylabel(cb,'Intensity (R)')
-  title(ax, [wavelengths{inds(i)},'\AA  intensity: ', time_str{1}, ' ', time_str{2}], 'interpreter', 'latex')
+  title(ax, [wavelengths{inds(i)},'\AA  intensity: ', time_str], 'interpreter', 'latex')
 end
 
 ax=subplot(2,2,3);

@@ -1,22 +1,24 @@
 function copy_file(in, out)
 %% copy_file(path) overloads copyfile with tilde expansion
 % distinction: copy_file "out" must be directory.
-import gemini3d.fileio.*
+
+
 
 narginchk(2,2)
 
-fin = absolute_path(in);
-fout = absolute_path(out);
+in = gemini3d.fileio.expanduser(in);
+out = gemini3d.fileio.expanduser(out);
 
-if ~is_folder(fout)
-  error('copyfile:file_not_found', '%s is not a directory', fout)
+if ~isfolder(out)
+  error('copyfile:file_not_found', '%s is not a directory', out)
 end
 
-if strcmp(fin, fout) || strcmp(fileparts(fin), fout)
-  fprintf(2, 'SKIP: copy of file onto itself: %s\n', fin);
-  return
+try
+  copyfile(in, out);
+catch e
+  if ~strcmp(e.identifier, 'MATLAB:COPYFILE:SourceAndDestinationSame')
+    rethrow(e)
+  end
 end
 
-copyfile(fin, fout);
-
-end
+end % function
