@@ -1,11 +1,14 @@
-function dat = loadframe3Dcurvavg_nc4(filename)
+function dat = loadframe3Dcurvavg_nc4(filename, vars)
 
-narginchk(1,1)
+narginchk(2,2)
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
 %% Number densities
 dat.ne = ncread(filename, 'neall');
+if length(vars) == 1 && strcmp(vars{1}, 'ne')
+  return
+end
 %% Parallel Velocities
 dat.v1 = ncread(filename, 'v1avgall');
 %% Temperatures

@@ -1,12 +1,15 @@
-function dat = loadframe(filename, cfg, xg)
-% loadframe(filename, cfg, xg)
+function dat = loadframe(filename, cfg, vars)
+% loadframe(filename, cfg, vars)
 % load a single time step of data
 %
 % example use
 % dat = loadframe(filename)
 % dat = loadframe(direc, datetime)
 % dat = loadframe(filename, cfg)
-% dat = loadframe(filename, cfg, xg)
+% dat = loadframe(filename, cfg, vars)
+%
+% The "vars" argument allows loading a subset of variables.
+% currently only works for "ne"
 
 narginchk(1,3)
 validateattributes(filename, {'char'}, {'vector'}, 1)
@@ -14,26 +17,28 @@ validateattributes(filename, {'char'}, {'vector'}, 1)
 if nargin < 2
    cfg = struct();
 end
-
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
   cfg = struct();
 end
 validateattributes(cfg, {'struct'}, {'scalar'}, mfilename, 'cfg must be a datetime or struct', 2)
 
-if nargin < 3 || isempty(xg)
-  [xg, ok] = gemini3d.readgrid(fileparts(filename));
-  if ~ok
-    error('loadframe:value_error', 'grid did not have appropriate parameters')
-  end
+if nargin < 3 || isempty(vars)
+  vars = {};
 end
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 3)
+if ischar(vars)
+  vars = {vars};
+end
+if ~isempty(vars)
+validateattributes(vars, {'cell'}, {'vector'}, mfilename, 'variables to load', 3)
+end
 
+lxs = gemini3d.simsize(filename);
 %% LOAD DIST. FILE
 
 switch get_flagoutput(filename, cfg)
-  case 1, dat = gemini3d.vis.loadframe3Dcurv(filename);
-  case 2, dat = gemini3d.vis.loadframe3Dcurvavg(filename);
+  case 1, dat = gemini3d.vis.loadframe3Dcurv(filename, vars);
+  case 2, dat = gemini3d.vis.loadframe3Dcurvavg(filename, vars);
   case 3, dat = gemini3d.vis.loadframe3Dcurvne(filename);
   otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
 end %switch
@@ -47,29 +52,29 @@ dat_shape = size(dat.ne);
 % we check each dimension because of possibility of 2D dimension swapping
 % x1
 
-if dat_shape(1) ~= xg.lx(1)
-  error('loadframe:value_error', 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), xg.lx(1))
+if dat_shape(1) ~= lxs(1)
+  error('loadframe:value_error', 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), lxs(1))
 end
 % x2
-if dat_shape(2) ~= xg.lx(2)
-  if dat_shape(2) == 1 || xg.lx(2) == 1
-    if dat_shape(2) ~= xg.lx(3) % check for swap
-      error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), xg.lx(2))
+if dat_shape(2) ~= lxs(2)
+  if dat_shape(2) == 1 || lxs(2) == 1
+    if dat_shape(2) ~= lxs(3) % check for swap
+      error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
     end
   else
-    error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), xg.lx(2))
+    error('loadframe:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
   end
 end
 % x3
-if xg.lx(3) > 1
+if lxs(3) > 1
   % squeeze() added by Matt Z. inside MatGemini can remove x3
-  if dat_shape(end) ~= xg.lx(3)
-    if dat_shape(end) == 1 || xg.lx(3) == 1
-      if dat_shape(end) ~= xg.lx(2) % check for swap
-        error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
+  if dat_shape(end) ~= lxs(3)
+    if dat_shape(end) == 1 || lxs(3) == 1
+      if dat_shape(end) ~= lxs(2) % check for swap
+        error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
       end
     else
-      error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), xg.lx(3))
+      error('loadframe:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
     end
  end
 end

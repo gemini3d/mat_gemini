@@ -61,7 +61,7 @@ plotfun = gemini3d.vis.grid2plotfun(plotfun, xg);
 i = interp1(p.times, 1:length(p.times), time_req, 'nearest');
 time = p.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = gemini3d.vis.loadframe(direc, time, xg);
+dat = gemini3d.vis.loadframe(direc, time);
 disp([dat.filename, ' => ', func2str(plotfun)])
 
 %% UNTIL WE PROVIDE A WAY FOR THE USER TO SPECIFY COLOR AXES, JUST TRY TO SET THEM AUTOMATICALLY

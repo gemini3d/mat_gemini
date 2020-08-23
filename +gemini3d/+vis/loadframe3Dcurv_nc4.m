@@ -1,10 +1,14 @@
-function dat = loadframe3Dcurv_nc4(fn)
+function dat = loadframe3Dcurv_nc4(fn, vars)
 
-narginchk(1,1)
+narginchk(2,2)
 %% SIMULATION RESULTS
 dat.filename = fn;
 
 dat.ns = ncread(fn, 'nsall');
+if length(vars) == 1 && strcmp(vars{1}, 'ne')
+  return
+end
+
 dat.vs1 = ncread(fn, 'vs1all');
 dat.Ts = ncread(fn, 'Tsall');
 dat.J1 = ncread(fn, 'J1all');

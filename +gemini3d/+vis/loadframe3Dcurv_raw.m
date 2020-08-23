@@ -1,7 +1,6 @@
-function dat = loadframe3Dcurv_raw(filename)
-import gemini3d.vis.*
+function dat = loadframe3Dcurv_raw(filename, vars)
 
-narginchk(1,1)
+narginchk(2,2)
 %% SIMULATION SIZE
 lsp=7;
 lxs = gemini3d.simsize(filename);
@@ -10,22 +9,26 @@ dat.filename = filename;
 
 fid=fopen(filename,'r');
 
-dat.time = get_time(fid);
+dat.time = gemini3d.vis.get_time(fid);
 %% load densities
-dat.ns = read4D(fid, lsp, lxs);
+dat.ns = gemini3d.vis.read4D(fid, lsp, lxs);
+if length(vars) == 1 && strcmp(vars{1}, 'ne')
+  fclose(fid);
+  return
+end
 %% load Vparallel
-dat.vs1 = read4D(fid, lsp, lxs);
+dat.vs1 = gemini3d.vis.read4D(fid, lsp, lxs);
 %% load temperatures
-dat.Ts = read4D(fid, lsp, lxs);
+dat.Ts = gemini3d.vis.read4D(fid, lsp, lxs);
 %% load current densities
-dat.J1 = read3D(fid, lxs);
-dat.J2 = read3D(fid, lxs);
-dat.J3 = read3D(fid, lxs);
+dat.J1 = gemini3d.vis.read3D(fid, lxs);
+dat.J2 = gemini3d.vis.read3D(fid, lxs);
+dat.J3 = gemini3d.vis.read3D(fid, lxs);
 %% load Vperp
-dat.v2 = read3D(fid, lxs);
-dat.v3 = read3D(fid, lxs);
+dat.v2 = gemini3d.vis.read3D(fid, lxs);
+dat.v3 = gemini3d.vis.read3D(fid, lxs);
 %% load topside potential
-dat.Phitop = read2D(fid, lxs);
+dat.Phitop = gemini3d.vis.read2D(fid, lxs);
 
 fclose(fid);
 

@@ -123,7 +123,7 @@ dvTEC=[];
 
 for it=1:length(cfg.times)
     %LOAD DIST. FILE
-    dat = gemini3d.vis.loadframe(direc, cfg.times(it), xg);
+    dat = gemini3d.vis.loadframe(direc, cfg.times(it), {'ne'});
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -147,12 +147,11 @@ for it=1:length(cfg.times)
 
     %RESHAPE AND GET RID OF NANS
     neI=reshape(neI,size(R));
-    inds=find(isnan(neI));
-    neI(inds)=0;
+    neI(isnan(neI))=0;
 
 
     %LOAD CONTROL SIMULATION
-    dat = gemini3d.vis.loadframe(direc_control, cfg.times(it), xg);
+    dat = gemini3d.vis.loadframe(direc_control, cfg.times(it), {'ne'});
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION

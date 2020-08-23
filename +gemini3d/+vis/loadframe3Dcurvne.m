@@ -8,36 +8,19 @@ assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);
-  case '.h5', dat= read_hdf5(filename);
-  case '.nc', dat = read_nc4(filename);
+  case '.h5', dat.ne = h5read(filename, '/neall');
+  case '.nc', dat.ne = ncread(filename, 'neall');
   otherwise, error('loadframe3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
 
 dat.filename=filename;
-dat.Ti=[];
-dat.Te=[];
-dat.v1=[];
-dat.v2=[];
-dat.v3=[];
-dat.J1=[];
-dat.J2=[];
-dat.J3=[];
-dat.Phitop=[];
 
 lxs = gemini3d.simsize(filename);
 
 if any(lxs(2:3) == 1)    % 2D sim
   dat.ne = squeeze(dat.ne);
 end
-end % function
 
-
-function dat = read_hdf5(filename)
-dat.ne = h5read(filename, '/neall');
-end % function
-
-function dat = read_nc4(filename)
-dat.ne = ncread(filename, 'neall');
 end % function
 
 
