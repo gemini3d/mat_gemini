@@ -1,4 +1,4 @@
-function export_graphics(varargin)
+function export_graphics(handle, filename, varargin)
 % Matlab R2020a brought exportgraphics(), which looks great, but
 % fail to render under several conditions relevant to HPC:
 % https://www.mathworks.com/support/bugreports/details/2195498
@@ -13,21 +13,23 @@ narginchk(2,inf)
 
 use_print = verLessThan('matlab', '9.8') || ...
             ~gemini3d.sys.isinteractive || ...
-            is_painters(varargin{1}) || ...
+            is_painters(handle) || ...
             gemini3d.sys.is_parallel_worker;
 
+filename = gemini3d.fileio.expanduser(filename);
+
 if use_print
-  if nargin >= 4 && strcmpi(varargin{3}, 'resolution')
-    dpi = ['-r', int2str(varargin{4})];
+  if nargin >= 4 && strcmpi(varargin{1}, 'resolution')
+    dpi = ['-r', int2str(varargin{2})];
   else
     dpi = [];
   end
-  [~,~,ext] = fileparts(varargin{2});
+  [~,~,ext] = fileparts(filename);
   flag = printflag(ext(2:end));
   % legacy figure saving function
-  print(varargin{1}, flag, varargin{2}, dpi)
+  print(handle, flag, filename, dpi)
 else
-  exportgraphics(varargin{:})
+  exportgraphics(handle, filename, varargin{:})
 end
 
 end % function
