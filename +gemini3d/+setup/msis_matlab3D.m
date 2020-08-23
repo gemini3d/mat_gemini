@@ -67,8 +67,9 @@ day = datetime(time.Year, time.Month, time.Day);
 UTsec0 = seconds(time - day);
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
-%% CREATE INPUT FILE FOR FORTRAN PROGRAM
-fin = tempname;
+%% temporary files for MSIS
+fin = [tempname, '_msis_in.dat'];
+fout = [tempname, '_msis_out.dat'];
 % need a unique input temporary filename for parallel runs
 
 fid=fopen(fin,'w');
@@ -84,23 +85,26 @@ fwrite(fid,glon,'real*4');
 fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
-cmd = sprintf('%s %s - %d',exe, fin, lz);
+cmd = sprintf('%s %s %s %d',exe, fin, fout, lz);
 % disp(cmd)
 prepend = gemini3d.sys.modify_path();
 [status, msg] = system([prepend, ' ', cmd]);   %output written to file
 assert(status==0, 'problem running MSIS %s', msg)
 delete(fin);
 %% binary output
-% fid=fopen(fout,'r');
-% msis_dat=fread(fid,lz*11,'real*4=>real*8');
-% msis_dat=reshape(msis_dat,[11 lz]);
-% msis_dat=msis_dat';
-% fclose(fid);
-% delete(fout);
+% using stdout becomes a problem due to 100's of MBs of output for non-trival simulation grids.
+% keep this as a binary file.
+fid=fopen(fout,'r');
+msis_dat=fread(fid,lz*11,'real*4=>real*8');
+msis_dat=reshape(msis_dat,[11 lz]);
+msis_dat=msis_dat';
+fclose(fid);
+delete(fout);
 %% stdout
-msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
-assert(all(size(msis_dat) == [lz, 11]), 'msis_setup did not return expected shape')
+% msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
 %% ORGANIZE
+assert(all(size(msis_dat) == [lz, 11]), 'msis_setup did not return expected shape')
+
 nO=reshape(msis_dat(:,3), xg.lx);
 nN2=reshape(msis_dat(:,4), xg.lx);
 nO2=reshape(msis_dat(:,5), xg.lx);
