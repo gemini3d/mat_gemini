@@ -6,7 +6,9 @@ narginchk(1,1)
 path = gemini3d.fileio.expanduser(path);
 % Must expanduser() before Java
 
-if usejava('jvm')
+if gemini3d.sys.isoctave
+  isabs = is_absolute_filename(path);
+elseif usejava('jvm')
   isabs = java.io.File(path).isAbsolute();
 elseif ispc
   isabs = isletter(path(1)) && strcmp(path(2), ':') && any(strcmp(path(3), ['/', '\']));

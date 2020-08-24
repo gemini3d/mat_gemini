@@ -28,6 +28,11 @@ end
 
 validateattributes(p, {'char'}, {'vector'}, 1)
 
+if gemini3d.sys.isoctave
+  expanded = tilde_expand(p);
+  return
+end
+
 expanded = p;
 
 if strcmp(expanded(1), '~')

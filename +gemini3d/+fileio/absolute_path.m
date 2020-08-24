@@ -1,4 +1,3 @@
-%!assert(ischar(absolute_path('~')))
 function abspath = absolute_path(path)
 % path need not exist, but absolute path is returned
 %
@@ -12,18 +11,20 @@ function abspath = absolute_path(path)
 %
 % Copyright (c) 2020 Michael Hirsch (MIT License)
 
-import gemini3d.fileio.*
-
 narginchk(1,1)
 
 % have to expand ~ first
-path = expanduser(path);
+path = gemini3d.fileio.expanduser(path);
 
-if ~is_absolute_path(path)
+if gemini3d.sys.isoctave
+  abspath = make_absolute_filename(path);
+  return
+end
+
+if ~gemini3d.fileio.is_absolute_path(path)
   % otherwise the default is Documents/Matlab, which is probably not wanted.
   path = fullfile(pwd, path);
 end
-
 if ~usejava('jvm')
   abspath = path;
   return

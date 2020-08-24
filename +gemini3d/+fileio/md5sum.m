@@ -9,9 +9,10 @@ assert(isfile(file), '%s not found', file)
 
 hash = '';
 
-if verLessThan('matlab', '9.7')
+if gemini3d.sys.isoctave || verLessThan('matlab', '9.7')
   return
 end
+
 p = pyenv();
 if length(p.Version) <= 1
 % Python not configured. Not isempty()!
