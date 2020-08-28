@@ -1,4 +1,4 @@
-function xg = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
+function h = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 % PLOTALL plot all Gemini parameters from a simulation output
 %
 % Parameters
@@ -11,28 +11,16 @@ function xg = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 %   0: plot serially (not in parallel)
 %   1: auto-determine number of workers ~ number of CPU cores -- lots of RAM used but fast
 %   2..inf: request specific number of workers--useful if you get "out of memory" errors
-import gemini3d.vis.*
 
-narginchk(1,5)
-
-validateattributes(direc, {'char'}, {'vector'}, mfilename, 'path to data', 1)
-
-if nargin<2, saveplot_fmt={}; end  %e.g. {'png'} or {'png', 'eps'}
-
-if nargin<3, plotfun=[]; end
-if ~isempty(plotfun)
-  validateattributes(plotfun, {'char', 'function_handle'}, {'nonempty'}, mfilename, 'plotting function',3)
+arguments
+  direc (1,1) string
+  saveplot_fmt (1,:) string = []
+  plotfun (1,1) string = ""
+  xg (1,1) struct = struct()
+  parallel (1,1) {mustBeInteger,mustBeFinite} = 0
 end
 
-if nargin<4, xg=[]; end
-if ~isempty(xg)
-  validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 4)
-end
-
-if nargin < 5, parallel =0; end
-validateattributes(parallel, {'numeric'}, {'scalar'}, mfilename, 'Number of tasks to plot in parallel (lots of RAM for big simulations)', 5)
-
-visible = isempty(saveplot_fmt);
+visible = saveplot_fmt == "";
 
 lxs = gemini3d.simsize(direc);
 disp(['sim grid dimensions: ',num2str(lxs)])
@@ -42,16 +30,17 @@ disp(['sim grid dimensions: ',num2str(lxs)])
 params = gemini3d.read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
-if isempty(xg)
+if isempty(fieldnames(xg))
   xg = gemini3d.readgrid(direc);
 end
 
-plotfun = grid2plotfun(plotfun, xg);
+plotfun = gemini3d.vis.grid2plotfun(plotfun, xg);
 
 %% MAIN FIGURE LOOP
 Nt = length(params.times);
 
-h = plotinit(xg, visible);
+h = gemini3d.vis.plotinit(xg, visible);
+times = params.times;
 
 if ~visible
   if parallel > 0
@@ -70,31 +59,31 @@ if ~visible
       end
     end
     parfor i = 1:Nt
-      plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
+      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
     end
   else
     for i = 1:Nt
-      plotframe(direc, params.times(i), saveplot_fmt, plotfun, xg, h)
+      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
     end
   end
 else
   % displaying, not saving
-  for t = params.times
-    plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
+  for t = times
+    gemini3d.vis.plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
 
     drawnow % need this here to ensure plots update (race condition)
-    if gemini3d.sys.isinteractive && params.times(end) ~= t
+    if gemini3d.sys.isinteractive && times(end) ~= t
       q = input('\n *** press Enter to plot next time step, or "q" Enter to stop ***\n', 's');
       if ~isempty(q), break, end
     end
   end
 end % if saveplots
 
-if isfolder(fullfile(direc, 'aurmaps')) % glow sim
-  plotglow(direc, saveplot_fmt, visible)
+if isfolder(fullfile(direc, "aurmaps")) % glow sim
+  gemini3d.vis.plotglow(direc, saveplot_fmt, visible)
 end
 
 %% Don't print
-if nargout==0, clear('xg'), end
+if nargout==0, clear('h'), end
 
 end % function

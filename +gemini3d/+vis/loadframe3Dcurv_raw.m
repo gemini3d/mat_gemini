@@ -1,6 +1,7 @@
-function dat = loadframe3Dcurv_raw(filename, vars)
-
-narginchk(2,2)
+function dat = loadframe3Dcurv_raw(filename)
+arguments
+  filename (1,1) string
+end
 %% SIMULATION SIZE
 lsp=7;
 lxs = gemini3d.simsize(filename);
@@ -12,10 +13,6 @@ fid=fopen(filename,'r');
 dat.time = gemini3d.vis.get_time(fid);
 %% load densities
 dat.ns = gemini3d.vis.read4D(fid, lsp, lxs);
-if length(vars) == 1 && strcmp(vars{1}, 'ne')
-  fclose(fid);
-  return
-end
 %% load Vparallel
 dat.vs1 = gemini3d.vis.read4D(fid, lsp, lxs);
 %% load temperatures

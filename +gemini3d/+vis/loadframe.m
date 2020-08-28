@@ -10,27 +10,15 @@ function dat = loadframe(filename, cfg, vars)
 %
 % The "vars" argument allows loading a subset of variables.
 % currently only works for "ne"
-
-narginchk(1,3)
-validateattributes(filename, {'char'}, {'vector'}, 1)
-
-if nargin < 2
-   cfg = struct();
+arguments
+  filename (1,1) string
+  cfg (1,1) = struct()
+  vars (:,1) string = string([])
 end
+
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
   cfg = struct();
-end
-validateattributes(cfg, {'struct'}, {'scalar'}, mfilename, 'cfg must be a datetime or struct', 2)
-
-if nargin < 3 || isempty(vars)
-  vars = {};
-end
-if ischar(vars)
-  vars = {vars};
-end
-if ~isempty(vars)
-validateattributes(vars, {'cell'}, {'vector'}, mfilename, 'variables to load', 3)
 end
 
 lxs = gemini3d.simsize(filename);
@@ -83,9 +71,6 @@ end % function
 
 
 function flag = get_flagoutput(filename, cfg)
-narginchk(2,2)
-validateattributes(filename, {'char'}, {'vector'}, 1)
-validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 
 [~,~,ext] = fileparts(filename);
  % regardless of what the output type is if variabl nsall exists we need
@@ -94,18 +79,18 @@ validateattributes(cfg, {'struct'}, {'scalar'}, 2)
 switch ext
   case '.h5', var_names = gemini3d.fileio.h5variables(filename);
   case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
-  case '.dat', var_names = {};
+  case '.dat', var_names = string([]);
   otherwise, error('loadframe:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end
 
-if any(contains(var_names, 'nsall'))
+if any(var_names == "nsall")
   disp('Full or milestone input detected.')
   flag = 1;
 elseif isfield(cfg, 'flagoutput')
   flag = cfg.flagoutput;
-elseif any(contains(var_names, 'Tavgall'))
+elseif any(var_names == "Tavgall")
   flag = 2;
-elseif any(contains(var_names, 'neall'))
+elseif any(var_names == "neall")
   flag = 3;
 else
   error('loadframe:value_error', 'could not determine flagoutput for %s', filename)

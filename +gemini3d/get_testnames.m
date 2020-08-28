@@ -3,19 +3,20 @@ function names = get_testnames(topdir, only)
 %
 % Parameters
 % only: string or string array
-%
-narginchk(1,2)
 
-if nargin < 2, only = {}; end
+arguments
+  topdir (1,1) string
+  only (:,1) string = string([])
+end
 
-names = {};
+names = string([]);
 j = 1;
-dirs = dir(topdir);
+dirs = dir(gemini3d.fileio.expanduser(topdir));
 for i = 1:length(dirs)
   if dirs(i).isdir && length(dirs(i).name) > 2
     [~, name] = fileparts(dirs(i).name);
     if isempty(only) || contains(name, only)
-      names{j} = name; %#ok<AGROW>
+      names(j) = string(name);
       j = j+1;
     end
   end

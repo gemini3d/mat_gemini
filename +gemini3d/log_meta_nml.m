@@ -1,9 +1,10 @@
 function log_meta_nml(meta, filename, namelist)
 
-narginchk(3,3)
-validateattributes(meta, {'struct'}, {'scalar'},1)
-validateattributes(filename, {'char'}, {'vector'},2)
-validateattributes(namelist, {'char'}, {'vector'}, 3)
+arguments
+  meta (1,1) struct
+  filename (1,1) string
+  namelist (1,1) string
+end
 
 filename = gemini3d.fileio.expanduser(filename);
 

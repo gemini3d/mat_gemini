@@ -1,23 +1,26 @@
 function filename = get_configfile(path)
 %% get configuration file
-
-narginchk(1,1)
+arguments
+  path (1,1) string
+end
 
 path = gemini3d.fileio.expanduser(path);
 
 if isfile(path)
   filename = path;
+  return
 elseif isfolder(path)
-  names = {'config.nml', 'inputs/config.nml', 'config.ini', 'inputs/config.ini'};
+  names = ["config.nml", "inputs/config.nml", "config.ini", "inputs/config.ini"];
   filename = check_names(path, names);
-
-  if ~isfile(filename)
-    files = dir(fullfile(path, 'inputs/config*.nml'));
-    filename = check_names(fullfile(path, 'inputs'), {files.name});
+  if isfile(filename)
+    return
   end
 
+  files = dir(fullfile(path, "inputs/config*.nml"));
+  filename = check_names(fullfile(path, "inputs"), {files.name});
+
   if ~isfile(filename)
-    files = dir(fullfile(path, 'config*.nml'));
+    files = dir(fullfile(path, "config*.nml"));
     filename = check_names(path, {files.name});
   end
 else
@@ -33,14 +36,10 @@ end % function
 
 function filename = check_names(path, names)
 
-narginchk(2,2)
-validateattributes(path, {'char'}, {'vector'})
-assert(iscell(names), 'names is a cell vector of filenames')
-
-filename = '';
+filename = "";
 
 for s = names
-  filename = fullfile(path, s{:});
+  filename = fullfile(path, s);
   if isfile(filename)
     break
   end

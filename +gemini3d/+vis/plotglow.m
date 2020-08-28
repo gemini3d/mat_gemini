@@ -1,23 +1,17 @@
 function plotglow(direc, saveplot_fmt, visible)
 % plots Gemini-Glow auroral emissions
-narginchk(1,3)
-
-if nargin<3
-  if nargin < 2 || isempty(saveplot_fmt)
-    visible =true;
-  else
-    visible = false;
-  end
+arguments
+  direc (1,1) string
+  saveplot_fmt (:,1) string = string([])
+  visible (1,1) logical = isempty(saveplot_fmt) || saveplot_fmt == ""
 end
-
-if nargin<2, saveplot_fmt={'png'}; end
 
 assert(isfolder(direc), 'not a directory: %s', direc)
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
-wavelengths = {'3371', '4278', '5200', '5577', '6300', '7320', '10400', ...
-  '3466', '7774', '8446', '3726', 'LBH', '1356', '1493', '1304'};
+wavelengths = ["3371", "4278", "5200", "5577", "6300", "7320", "10400", ...
+  "3466", "7774", "8446", "3726", "LBH", "1356", "1493", "1304"];
 
 %READ IN SIMULATION INFO
 params = gemini3d.read_config(direc);
@@ -33,34 +27,34 @@ x2=xg.x2(3:end-2);
 x3=xg.x3(3:end-2);
 
 %% get file list
-for ext = {'.h5', '.nc', '.dat'}
-  file_list = dir([aurora_dir, '/*', ext{1}]);
+for ext = [".h5", ".nc", ".dat"]
+  file_list = dir(aurora_dir + "/*" + ext);
   if ~isempty(file_list), break, end
 end
-assert(~isempty(file_list), ['No auroral data found in ', aurora_dir])
+assert(~isempty(file_list), 'No auroral data found in %s', aurora_dir)
 
 %% make plots
 hf = [];
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
   bFrame = gemini3d.vis.loadglow_aurmap(filename, lx2, lx3, lwave);
-  t_str = [datestr(params.times(i)), ' UT'];
+  t_str = datestr(params.times(i)) + " UT";
 
 if lx2 > 1 && lx3 > 1
-    % 3D sim
-    hf = plot_emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
+  % 3D sim
+  hf = plot_emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
 elseif lx2 > 1
-     % 2D east-west
-    hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible);
+   % 2D east-west
+  hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible);
 elseif lx3 > 1
-     % 2D north-south
-    hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible);
+  % 2D north-south
+  hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible);
 else
   error('impossible configuration')
 end
 
   if params.flagoutput ~= 3
-    gemini3d.vis.save_glowframe(filename, saveplot_fmt, hf)
+    gemini3d.vis.save_glowframe(hf, filename, saveplot_fmt)
   end
 end
 
@@ -68,13 +62,8 @@ end % function
 
 
 function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible)
-narginchk(4,6)
-validateattributes(x, {'numeric'}, {'vector'}, 1)
-validateattributes(bFrame, {'numeric'}, {'nonnegative'}, 3)
-validateattributes(wavelengths, {'cell'}, {'vector'}, 2)
-if nargin < 6, visible = true; end
 
-if nargin < 5 || isempty(hf)
+if isempty(hf)
   hf = make_glowfig(visible);
 else
   clf(hf)
@@ -96,15 +85,8 @@ end
 
 
 function hf = plot_emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible)
-narginchk(5,7)
-validateattributes(x2, {'numeric'}, {'vector'}, 1)
-validateattributes(x3, {'numeric'}, {'vector'}, 2)
-validateattributes(bFrame, {'numeric'}, {'ndims', 3}, 3)
-validateattributes(time_str, {'char'}, {'vector'}, 4)
-validateattributes(wavelengths, {'cell'}, {'vector'}, 5)
-if nargin < 7, visible = true; end
 
-if nargin < 5 || isempty(hf)
+if isempty(hf)
   hf = make_glowfig(visible);
 else
   clf(hf)
@@ -122,7 +104,7 @@ for i=1:length(inds)
   cb = colorbar('peer', ax);
   %set(cb,'yticklabel',sprintf('10^{%g}|', get(cb,'ytick')))
   ylabel(cb,'Intensity (R)')
-  title(ax, [wavelengths{inds(i)},'\AA  intensity: ', time_str], 'interpreter', 'latex')
+  title(ax, wavelengths(inds(i)) + "\AA  intensity: " + time_str, 'interpreter', 'latex')
 end
 
 ax=subplot(2,2,3);
@@ -133,8 +115,6 @@ end % function
 
 
 function hf = make_glowfig(visible)
-narginchk(0,1)
-if nargin < 1, visible = true; end
 
 hf = figure('toolbar', 'none', 'name', 'aurora', 'unit', 'pixels',  'VIsible', visible);
 pos = get(hf, 'position');

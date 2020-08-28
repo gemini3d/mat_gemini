@@ -2,11 +2,8 @@ function git = git_revision(cwd)
 % return Git metadata
 %
 % strtrim() removes the \n newline
-
-narginchk(0,1)
-
-if nargin < 1
-  cwd = fileparts(mfilename('fullpath'));
+arguments
+  cwd (1,1) string = fileparts(mfilename('fullpath'))
 end
 
 assert(isfolder(cwd), '%s is not a folder', cwd)
@@ -15,27 +12,27 @@ assert(isfolder(cwd), '%s is not a folder', cwd)
 % this avoids a lot of needless "if isfield" statements in consumers
 git = struct('git_version', '', 'remote', '', 'branch', '', 'commit', '', 'porcelain', false);
 
-[ret, msg] = system(['git -C ', cwd, ' --version']);
+[ret, msg] = system("git -C " + cwd + " --version");
 if ret ~= 0
   warning('Git was not available or is too old')
   return
 end
 git.git_version = strtrim(msg);
 
-ret = system(['git -C ', cwd, ' rev-parse']);
+ret = system("git -C " + cwd + " rev-parse");
 if ret~=0
   warning('%s is not a Git repo', cwd)
   return
 end
 
-[ret, msg] = system(['git -C ', cwd, ' rev-parse --abbrev-ref HEAD']);
+[ret, msg] = system("git -C " + cwd + " rev-parse --abbrev-ref HEAD");
 if ret ~= 0
   warning('Could not determine Git branch')
   return
 end
 git.branch = strtrim(msg);
 
-[ret,msg] = system(['git -C ', cwd, ' remote -v']);
+[ret,msg] = system("git -C " + cwd + " remote -v");
 if ret ~= 0
   warning('Could not determine Git remote')
   return
@@ -45,14 +42,14 @@ if ~isempty(mat)
   git.remote = mat{1}{1};
 end
 
-[ret, msg] = system(['git -C ', cwd, ' rev-parse --short HEAD']);
+[ret, msg] = system("git -C " + cwd + " rev-parse --short HEAD");
 if ret ~= 0
   warning('Could not determine Git commit')
   return
 end
 git.commit = strtrim(msg);
 
-[ret, msg] = system(['git -C ', cwd, ' status --porcelain']);
+[ret, msg] = system("git -C " + cwd + " status --porcelain");
 if ret ~= 0, error('Could not determine Git status'), end
 if isempty(msg)
   git.porcelain = 'true';

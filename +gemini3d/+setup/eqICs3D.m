@@ -3,18 +3,16 @@ function [ns,Ts,vsx1] = eqICs3D(p, xg)
 % NOTE: only works on symmmetric closed grids!
 %
 % [f107a, f107, ap] = activ;
-
-import gemini3d.setup.*
-
-narginchk(2,2)
-validateattributes(p, {'struct'},{'scalar'})
-validateattributes(xg, {'struct'},{'scalar'})
+arguments
+  p (1,1) struct
+  xg (1,1) struct
+end
 
 %% MAKE UP SOME INITIAL CONDITIONS FOR FORTRAN CODE
 mindens=1e-100;
 
 %% SLICE THE FIELD IN HALF IF WE ARE CLOSED
-natm = msis_matlab3D(p, xg);
+natm = gemini3d.setup.msis_matlab3D(p, xg);
 
 closeddip = abs(xg.r(1,1,1) - xg.r(xg.lx(1),1,1)) < 50e3;     %logical flag marking the grid as closed dipole
 if closeddip         %closed dipole grid
@@ -58,7 +56,7 @@ for ix3=1:lx3
     z0f=325e3;
     He = 2 * kb * Tn(:,ix2,ix3) / amu / 30 ./ g(:,ix2,ix3);
     z0e = 120e3;
-    ne = chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf)+chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
+    ne = gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf) +  gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
     rho = 1/2*tanh((alt(:,ix2,ix3)-200e3)/45e3)-1/2*tanh((alt(:,ix2,ix3)-1000e3)/200e3);
 
     inds=find(alt(:,ix2,ix3)>z0f);
@@ -181,7 +179,7 @@ for ix3=1:lx3
         [~,iref]=max(alt(:,ix2,ix3));
         n0=1e6;
     end
-    ns(inds1,ix2,ix3,6)=chapmana(z,n0,alt(iref,ix2,ix3),mean(Hf));
+    ns(inds1,ix2,ix3,6)= gemini3d.setup.chapmana(z,n0,alt(iref,ix2,ix3),mean(Hf));
   end
 end
 ns(:,:,:,1:6)=max(ns(:,:,:,1:6),mindens);

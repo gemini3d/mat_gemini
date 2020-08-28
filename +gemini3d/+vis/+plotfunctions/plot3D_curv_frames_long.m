@@ -1,40 +1,22 @@
-function h=plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
+function plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
+arguments
+  time (1,1) datetime
+  xg (1,1) struct
+  parm (:,:,:) {mustBeNumeric,mustBeNonempty}
+  parmlbl (1,1) string = ""
+  caxlims (1,:) {mustBeNumeric} = []
+  sourceloc (1,:) {mustBeNumeric} = []
+  hf (1,1) matlab.ui.Figure = figure()
+  cmap (:,:) {mustBeNumeric,mustBeFinite} = parula(256)
+end
 
-narginchk(3,8)
-
-validateattributes(time, {'datetime'}, {'scalar'}, 1)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-validateattributes(parm, {'numeric'}, {'real', 'nonempty'}, mfilename, 'parameter to plot', 3)
-
-if nargin < 4, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
+plotparams.time = time;
 plotparams.parmlbl = parmlbl;
-
-if nargin < 5
-  caxlims=[];
-else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
-end
 plotparams.caxlims = caxlims;
-
-if nargin < 6  || isempty(sourceloc)
-  sourceloc = [];
-else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
-end
-
-if nargin < 7 || isempty(hf)
-  hf = figure();
-end
-
-if nargin < 8 || isempty(cmap)
-  cmap = parula(256);
-end
-
 plotparams.cmap = cmap;
 
 %% SOURCE LOCATION
-if (~isempty(sourceloc))
+if ~isempty(sourceloc)
   sourcemlat=sourceloc(1);
   sourcemlon=sourceloc(2);
   flagsource=1;

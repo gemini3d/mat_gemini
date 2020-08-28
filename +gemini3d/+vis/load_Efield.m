@@ -1,8 +1,10 @@
 function dat = load_Efield(filename, time)
+arguments
+  filename (1,1) string
+  time (1,1) datetime = []
+end
 
-narginchk(1,2)
-
-if nargin > 1
+if ~isempty(time)
   assert(isfolder(filename), 'either filename or folder + time')
   filename = gemini3d.get_frame_filename(filename, time);
 end
@@ -22,8 +24,8 @@ end % function
 
 function dat = load_h5(filename)
 
-for k = {'flagdirich', 'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
-  dat.(k{:}) = h5read(filename, ['/', k{:}]);
+for k = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
+  dat.(k) = h5read(filename, "/" + k);
 end
 
 end % function
@@ -31,8 +33,8 @@ end % function
 
 function dat = load_nc(filename)
 
-for k = {'flagdirich', 'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
-  dat.(k{:}) = ncread(filename, ['/', k{:}]);
+for k = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
+  dat.(k) = ncread(filename, "/" + k);
 end
 
 end % function

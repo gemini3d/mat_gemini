@@ -1,7 +1,8 @@
 function axes_tidy(ax, P)
-narginchk(2,2)
-
-validateattributes(P, {'struct'}, {'scalar'}, 2)
+arguments
+  ax (1,1)
+  P (1,1) struct
+end
 
 set(ax, 'ydir', 'normal')
 

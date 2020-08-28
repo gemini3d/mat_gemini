@@ -3,7 +3,9 @@ function [xg, ok] = readgrid(path)
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
 % one file format while the equilibrium sim was in another file format
-narginchk(1,1)
+arguments
+  path (1,1) string
+end
 
 [path, suffix] = gemini3d.get_simsize_path(path);
 
@@ -27,7 +29,7 @@ function xgf = read_hdf5(path)
 fn = fullfile(path, 'simgrid.h5');
 
 for v = gemini3d.fileio.h5variables(fn)
-  xgf.(v{:}) = h5read(fn, ['/',v{:}]);
+  xgf.(v) = h5read(fn, "/" + v);
 end
 
 % do this last to avoid overwriting
@@ -42,7 +44,7 @@ function xgf = read_nc4(path)
 fn = fullfile(path, 'simgrid.nc');
 
 for v = gemini3d.fileio.ncvariables(fn)
-  xgf.(v{:}) = ncread(fn, v{:});
+  xgf.(v) = ncread(fn, v);
 end
 
 xgf.filename = fn;

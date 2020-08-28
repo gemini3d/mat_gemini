@@ -1,25 +1,28 @@
 function dat = loadframe3Dcurvnoelec_nc4(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
-
-narginchk(1,1)
+arguments
+  filename (1,1) string
+end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-try
+varnames = gemini3d.fileio.ncvariables(filename);
+
+if any(varnames == "nsall")
   dat.ns = ncread(filename, 'nsall');
-catch
+else
   dat.ns = ncread(filename, 'ns');
 end
 
-try
+if any(varnames == "vs1all")
   dat.vs1 = ncread(filename, 'vs1all');
-catch
+else
   dat.vs1 = ncread(filename, 'vsx1');
 end
 
-try
+if any(varnames == "Tsall")
   dat.Ts = ncread(filename, 'Tsall');
-catch
+else
   dat.Ts = ncread(filename, 'Ts');
 end
 

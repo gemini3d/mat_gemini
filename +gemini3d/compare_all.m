@@ -1,4 +1,4 @@
-function ok = compare_all(outdir, refdir, only)
+function compare_all(outdir, refdir, only)
 % compare entire output directory data files, and input files
 %
 % absolute and relative tolerance account for slight IEEE-754 based differences,
@@ -17,12 +17,11 @@ function ok = compare_all(outdir, refdir, only)
 % vi,v2,v3=2 m/s
 % J1,J2,J3 = 1e-9
 
-import gemini3d.*
-import gemini3d.fileio.*
-
-narginchk(2,3)
-
-if nargin < 3, only = []; end
+arguments
+  outdir (1,1) string
+  refdir (1,1) string
+  only (:,1) string = string([])
+end
 
 tol.rtol = 1e-5;
 tol.rtolN = 1e-5;
@@ -35,25 +34,25 @@ tol.atolT = 100;
 tol.atolJ = 1e-7;
 tol.atolV = 50;
 
-outdir = absolute_path(outdir);
-refdir = absolute_path(refdir);
+outdir = gemini3d.fileio.absolute_path(outdir);
+refdir = gemini3d.fileio.absolute_path(refdir);
 
-exist_or_skip(outdir, 'dir')
-exist_or_skip(refdir, 'dir')
+gemini3d.exist_or_skip(outdir, 'dir')
+gemini3d.exist_or_skip(refdir, 'dir')
 %% check that paths not the same
-if strcmp(outdir, refdir)
+if outdir == refdir
   error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir)
 end
 %% times
 
 %% check output dirs
 out_ok = 0;
-if isempty(only) || any(strcmp(only, 'out'))
+if isempty(only) || any(only == "out")
   out_ok = compare_output(outdir, refdir, tol);
 end
 %% check input dirs
 in_ok = 0;
-if isempty(only) || any(strcmp(only, 'in'))
+if isempty(only) || any(only == "in")
   in_ok = compare_input(outdir, refdir, tol);
 end
 %% finish up
@@ -65,14 +64,13 @@ end % function
 
 
 function ok = compare_output(outdir, refdir, tol)
-import gemini3d.*
+import gemini3d.assert_allclose
 
-narginchk(3,3)
 %% READ IN THE SIMULATION INFORMATION
-params = read_config(outdir);
+params = gemini3d.read_config(outdir);
 
-lxs = simsize(outdir);
-lxs_ref = simsize(refdir);
+lxs = gemini3d.simsize(outdir);
+lxs_ref = gemini3d.simsize(refdir);
 if any(lxs ~= lxs_ref)
   error('compare_all:value_error', ['ref dims ', int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
 end
@@ -138,19 +136,16 @@ end % function compare_output
 
 function errs = compare_input(outdir, refdir, tol)
 import gemini3d.*
-import gemini3d.vis.*
-
-narginchk(3,3)
 
 %% check simulation grid
 compare_grid(outdir, refdir, tol)
 
 %% check initial condition data
 ref_params = make_valid_paths(read_config(refdir), refdir);
-ref = loadframe3Dcurvnoelec(ref_params.indat_file);
+ref = gemini3d.vis.loadframe3Dcurvnoelec(ref_params.indat_file);
 
 new_params = make_valid_paths(read_config(outdir), outdir);
-new = loadframe3Dcurvnoelec(new_params.indat_file);
+new = gemini3d.vis.loadframe3Dcurvnoelec(new_params.indat_file);
 
 errs = 0;
 
@@ -176,38 +171,35 @@ end % function compare_input
 
 
 function compare_grid(outdir, refdir, tol)
-import gemini3d.fileio.*
 
-narginchk(3,3)
-
-[ref, ok] =  gemini3d.readgrid(refdir);
+[ref, ok] = gemini3d.readgrid(refdir);
 assert(ok, 'reference grid %s has bad values', refdir)
 
-[new, ok] =  gemini3d.readgrid(outdir);
+[new, ok] = gemini3d.readgrid(outdir);
 assert(ok, 'grid %s has bad values', outdir)
 
 errs = 0;
-for k = h5variables(ref.filename)
-  if ~isnumeric(ref.(k{:}))
+for k = gemini3d.fileio.h5variables(ref.filename)
+  if ~isnumeric(ref.(k))
     % metadata
     continue
   end
 
-  b = ref.(k{:});
-  a = new.(k{:});
+  b = ref.(k);
+  a = new.(k);
 
   if any(size(a) ~= size(b))
-    error("compare_all:value_error", [k{:}, ': ref shape ', int2str(size(b)), ' != data shape ', int2str(size(a))])
+    error("compare_all:value_error", k + ": ref shape " + int2str(size(b)) + " != data shape " + int2str(size(a)))
   end
 
-  if ~gemini3d.allclose(a, b, tol.rtol, tol.atol)
+  if ~gemini3d.allclose(a, b, 'rtol', tol.rtol, 'atol', tol.atol)
     errs = errs + 1;
-    warning("mismatch: %s\n", k{:})
+    warning("mismatch: %s\n", k)
   end
 end
 
 if errs == 0
-  disp(['OK: simulation input grid ', outdir])
+  disp("OK: simulation input grid " + outdir)
 end
 
 
@@ -215,33 +207,31 @@ end % function
 
 
 function errs = compare_precip(times, prec_dir, ref_prec_dir, tol)
-import gemini3d.*
-import gemini3d.vis.*
 
 errs = 0;
 
 % often we reuse precipitation inputs without copying over files
 for i = 1:size(times)
-  ref = load_precip(ref_prec_dir, times(i));
-  new = load_precip(prec_dir, times(i));
+  ref = gemini3d.vis.load_precip(ref_prec_dir, times(i));
+  new = gemini3d.vis.load_precip(prec_dir, times(i));
 
-  for k = {'E0', 'Q'}
-    b = ref.(k{:});
-    a = new.(k{:});
+  for k = ["E0", "Q"]
+    b = ref.(k);
+    a = new.(k);
 
     if any(size(a) ~= size(b))
-      error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
+      error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k)
     end
 
-    if ~ gemini3d.allclose(a, b, tol.rtol, tol.atol)
+    if ~ gemini3d.allclose(a, b, 'rtol', tol.rtol, 'atol', tol.atol)
       errs = errs + 1;
-      warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
+      warning("mismatch: %s %s\n", k, datestr(times(i)))
     end
   end
 end % for i
 
 if errs == 0
-  disp(['OK: precipitation input ', prec_dir])
+  disp("OK: precipitation input " + prec_dir)
 end
 
 end % function
@@ -258,15 +248,15 @@ for i = 1:size(times)
   new = load_Efield(E0_dir, times(i));
 
 
-  for k = {'Exit', 'Eyit', 'Vminx1it', 'Vmaxx1it', 'Vminx2ist', 'Vmaxx2ist', 'Vminx3ist', 'Vmaxx3ist'}
-    b = ref.(k{:});
-    a = new.(k{:});
+  for k = ["Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
+    b = ref.(k);
+    a = new.(k);
 
     if any(size(a) ~= size(b))
       error("compare_all:value_error", "%s: ref shape {b.shape} != data shape {a.shape}", k{:})
     end
 
-    if ~gemini3d.allclose(a, b, tol.rtol, tol.atol)
+    if ~gemini3d.allclose(a, b, 'rtol', tol.rtol, 'atol', tol.atol)
       errs = errs + 1;
       warning("mismatch: %s %s\n", k{:}, datestr(times(i)))
     end
@@ -274,7 +264,7 @@ for i = 1:size(times)
 end % for i
 
 if errs == 0
-  disp(['OK: Efield input ', E0_dir])
+  disp("OK: Efield input " + E0_dir)
 end
 
 end % function

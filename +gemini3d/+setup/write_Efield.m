@@ -1,9 +1,9 @@
 function write_Efield(E, dir_out, file_format)
-
-narginchk(3,3)
-validateattributes(E, {'struct'}, {'scalar'})
-validateattributes(dir_out, {'char'}, {'vector'})
-validateattributes(file_format, {'char'}, {'vector'})
+arguments
+  E (1,1) struct
+  dir_out (1,1) string
+  file_format (1,1) string
+end
 
 nan_check(E)
 
@@ -18,24 +18,16 @@ end
 
 
 function nan_check(E)
-narginchk(1,1)
-
 %% this is also done in Fortran, but just to help ensure results.
-assert(all(isfinite(E.Exit(:))), 'NaN in Exit')
-assert(all(isfinite(E.Eyit(:))), 'NaN in Eyit')
-assert(all(isfinite(E.Vminx1it(:))), 'NaN in Vminx1it')
-assert(all(isfinite(E.Vmaxx1it(:))), 'NaN in Vmaxx1it')
-assert(all(isfinite(E.Vminx2ist(:))), 'NaN in Vminx2ist')
-assert(all(isfinite(E.Vmaxx2ist(:))), 'NaN in Vmaxx2ist')
-assert(all(isfinite(E.Vminx3ist(:))), 'NaN in Vminx3ist')
-assert(all(isfinite(E.Vmaxx3ist(:))), 'NaN in Vmaxx3ist')
+for i = ["Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
+  mustBeFinite(E.(i))
+end
 end % function
 
 
 function write_hdf5(dir_out, E)
 import gemini3d.fileio.h5save
 
-narginchk(2, 2)
 
 fn = fullfile(dir_out, 'simsize.h5');
 if isfile(fn), delete(fn), end
@@ -45,19 +37,21 @@ h5save(fn, '/llat', int32(E.llat))
 llon = E.llon;
 llat = E.llat;
 
-fn = fullfile(dir_out, 'simgrid.h5');
-if isfile(fn), delete(fn), end
+fn = fullfile(dir_out, "simgrid.h5");
+if isfile(fn)
+  delete(fn)
+end
 
 freal = 'float32';
 
 h5save(fn, '/mlon', E.mlon, [], freal)
 h5save(fn, '/mlat', E.mlat, [], freal)
 
-disp(['write to ', dir_out])
+disp("write to " + dir_out)
 
 for i = 1:length(E.times)
 
-  fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.h5']);
+  fn = fullfile(dir_out, gemini3d.datelab(E.times(i)) + ".h5");
   if isfile(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
@@ -77,8 +71,6 @@ end % function
 function write_nc4(dir_out, E)
 import gemini3d.fileio.ncsave
 
-narginchk(2, 2)
-
 fn = fullfile(dir_out, 'simsize.nc');
 if isfile(fn), delete(fn), end
 ncsave(fn, 'llon', int32(E.llon))
@@ -94,12 +86,14 @@ dlat = {'lat', E.llat};
 ncsave(fn, 'mlon', E.mlon, dlon, freal)
 ncsave(fn, 'mlat', E.mlat, dlat, freal)
 
-disp(['write to ', dir_out])
+disp("write to " + dir_out)
 
 for i = 1:length(E.times)
 
-  fn = fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.nc']);
-  if isfile(fn), delete(fn), end
+  fn = fullfile(dir_out, gemini3d.datelab(E.times(i)) + ".nc");
+  if isfile(fn)
+    delete(fn)
+  end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
   ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
@@ -117,8 +111,6 @@ end % function
 
 function write_raw(dir_out, E)
 
-narginchk(2,2)
-
 freal = 'float64';
 
 fid = fopen(fullfile(dir_out, 'simsize.dat'), 'w');
@@ -132,7 +124,7 @@ fwrite(fid, E.mlat, freal);
 fclose(fid);
 
 for i = 1:length(E.times)
-  fid = fopen(fullfile(dir_out, [gemini3d.datelab(E.times(i)), '.dat']), 'w');
+  fid = fopen(fullfile(dir_out, gemini3d.datelab(E.times(i)) + ".dat"), 'w');
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
 %  fwrite(fid, p.flagdirich, 'int32');

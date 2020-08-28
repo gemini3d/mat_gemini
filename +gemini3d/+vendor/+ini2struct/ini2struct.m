@@ -1,4 +1,4 @@
-function Struct = ini2struct(FileName)
+function Struct = ini2struct(filename)
 % Parses .ini file
 % Returns a structure with section names and keys as fields.
 %
@@ -6,10 +6,11 @@ function Struct = ini2struct(FileName)
 % 2014/02/01
 %
 % robustified by Michael Hirsch 2020
+arguments
+  filename (1,1) string
+end
 
-narginchk(1,1)
-
-f = fopen(FileName,'r');                    % open file
+f = fopen(filename,'r');                    % open file
 if f < 1
   error('ini2struct:os_error', 'could not open %s', FileName)
 end

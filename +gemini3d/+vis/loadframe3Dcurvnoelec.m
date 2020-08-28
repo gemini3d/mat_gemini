@@ -1,7 +1,9 @@
 function dat = loadframe3Dcurvnoelec(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
+arguments
+  filename (1,1) string
+end
 
-narginchk(1,1)
 [~,~,ext] = fileparts(filename);
 assert(isfile(filename), 'not a file: %s', filename)
 

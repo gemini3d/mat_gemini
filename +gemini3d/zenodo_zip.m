@@ -2,20 +2,17 @@ function zenodo_zip(path, glob, saveplot_fmt)
 % zips directories matching glob under path
 % we zip and plot as two steps to avoid making
 % plots in frequently downloaded data
-
-narginchk(1, 3)
-if nargin < 2
-  glob = '*';
-end
-if nargin < 3
-  saveplot_fmt = 'png';
+arguments
+  path (1,1) string
+  glob (1,1) string = "*"
+  saveplot_fmt (:,1) string = "png"
 end
 
 path = gemini3d.fileio.expanduser(path);
 
 if ~contains(glob, '*')
   % if given single directory, will list files in that directory instead of the directory
-  glob = [glob, '*'];
+  glob = glob + "*";
 end
 dirs = dir(fullfile(path, glob));
 assert(~isempty(dirs), 'did not find any dirs under %s', path)

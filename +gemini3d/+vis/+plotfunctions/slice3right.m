@@ -1,6 +1,5 @@
 function slice3right(ax, x, y, dat, P)
 
-narginchk(5,5)
 %% image
 hi = imagesc(ax, x, y, dat);
 set(hi, 'alphadata', ~isnan(dat));
@@ -16,4 +15,5 @@ gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
 xlabel(ax, P.right_xlabel)
 ylabel(ax, P.right_ylabel)
-end
+
+end % function

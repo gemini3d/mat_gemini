@@ -16,38 +16,15 @@ function testok = assert_allclose(actual, desired, rtol, atol, err_msg,warnonly,
 %
 % if "actual" is within atol OR rtol of "desired", no error is emitted.
 
-narginchk(2,8)
-validateattributes(actual, {'numeric'}, {'nonempty'}, mfilename, 'measured values', 1)
-validateattributes(desired, {'numeric'}, {'nonempty'}, mfilename, 'desired reference values', 2)
-if nargin < 3 || isempty(rtol)
-  rtol=1e-8;
-else
-  validateattributes(rtol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'relative tolerance', 3)
-end
-if nargin < 4 || isempty(atol)
-  atol = 1e-9;
-else
-  validateattributes(atol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'absolute tolerance', 4)
-end
-if nargin < 5
-  err_msg='';
-else
-  validateattributes(err_msg, {'char'}, {'vector'}, mfilename, 'error message text', 5)
-end
-if nargin < 6
-  warnonly=false;
-else
-  validateattributes(warnonly, {'logical'}, {'scalar'}, mfilename, 'warn instead of error', 6)
-end
-if nargin < 7
-  notclose=false;
-else
-  validateattributes(notclose, {'logical'}, {'scalar'}, mfilename, 'check values not too close', 7)
-end
-if nargin < 8
-  verbose = false;
-else
-  validateattributes(verbose, {'logical'}, {'scalar'}, mfilename, 'verbose output', 8)
+arguments
+  actual {mustBeNumeric}
+  desired {mustBeNumeric}
+  rtol (1,1) double {mustBePositive} = 1e-8
+  atol (1,1) double {mustBeNonnegative} = 1e-9
+  err_msg (1,1) string = ""
+  warnonly (1,1) logical = false
+  notclose (1,1) logical = false
+  verbose (1,1) logical = false
 end
 
 if warnonly

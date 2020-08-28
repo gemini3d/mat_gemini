@@ -1,10 +1,10 @@
 function ha = plot_mapgrid(xg,flagsource,neuinfo)
 
-narginchk(3,3)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename)
-validateattributes(flagsource, {'numeric'}, {'scalar'}, mfilename)
-validateattributes(neuinfo, {'struct'}, {'scalar'}, mfilename)
-
+arguments
+  xg (1,1) struct
+  flagsource (1,1) {mustBeInteger}
+  neuinfo (1,1) struct
+end
 
 %% INPUT COORDS NEED TO BE CONVERTED TO MAGNETIC
 mlon=xg.phi*180/pi;

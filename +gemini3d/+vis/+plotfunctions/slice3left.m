@@ -1,6 +1,5 @@
 function slice3left(ax, x, y, dat, P)
 
-narginchk(5,5)
 %% image
 hi = imagesc(x, y, dat, 'parent', ax);
 set(hi, 'alphadata', ~isnan(dat));
@@ -21,4 +20,4 @@ ylabel(ax, P.left_ylabel);
 
 title(ax, [datestr(P.time), ' UT'])
 
-end
+end % function

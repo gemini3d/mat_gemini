@@ -1,15 +1,17 @@
 function xgf = makegrid_cart_3D(p)
 %% make 3D grid and save to disk
-import gemini3d.setup.gridgen.*
+arguments
+  p (1,1) struct
+end
 %% create altitude grid
 %p.alt_min = 80e3;
 %p.alt_max = 1000e3;
 %p.alt_scale = [10e3, 8e3, 500e3, 150e3];
-if isfield(p, 'alt_min') && isfield(p, 'alt_max') && isfield(p, 'alt_scale') && isfield(p,'Bincl')
-  z = altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
+if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
+  z = gemini3d.setup.gridgen.altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   fprintf('makegrid_cart_3D: using altitude (z) grid from %s\n', p.eq_dir)
-  xeq = readgrid(p.eq_dir);
+  xeq = gemini3d.readgrid(p.eq_dir);
   z = xeq.x1;
   clear('xeq')
 else
@@ -20,14 +22,14 @@ end
 % EAST
 if isfield(p, 'x2parms')
   disp('Nonuniform x2 grid chosen...')
-  x = xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
+  x = gemini3d.setup.gridgen.xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
 else
   disp('Uniform x2 grid chosen...')
-  x = xgrid_gen(p.xdist, p.lxp);
+  x = gemini3d.setup.gridgen.xgrid_gen(p.xdist, p.lxp);
 end
 
 % NORTH
-y = ygrid_gen(p.ydist, p.lyp);
+y = gemini3d.setup.gridgen.ygrid_gen(p.ydist, p.lyp);
 
 %% COMPUTE CELL WALL LOCATIONS
 lx2 = length(x);
@@ -221,7 +223,7 @@ xgf.glat=xgf.glat(inds1,inds2,inds3);
 xgf.glon=xgf.glon(inds1,inds2,inds3);
 xgf.alt=xgf.alt(inds1,inds2,inds3);
 
-xgf.Bmag=xgf.Bmag(inds1,inds2,inds3);
+xgf.Bmag = xgf.Bmag(inds1,inds2,inds3);
 
 xgf.I=xgf.I(inds2,inds3);
 

@@ -8,7 +8,7 @@ function prepend = modify_path()
 %
 % system([prepend, ' ', 'foo.exe'])
 
-prepend = '';
+prepend = "";
 
 if ~ispc, return, end
 
@@ -30,7 +30,7 @@ i = contains(path_orig, 'MATLAB');  % Matlab's MPIexec will fail
 path_new = join(path_orig(~i), ';');
 
 % setenv('PATH', path_new{1}) % does not help
-prepend = ['set PATH=', path_new{1}, ' && '];
+prepend = "set PATH=" + path_new{1} + " && ";
 
 
 end % function

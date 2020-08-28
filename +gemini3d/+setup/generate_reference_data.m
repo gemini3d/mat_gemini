@@ -10,16 +10,16 @@ function generate_reference_data(topdir, outdir, only, gemini_exe, file_format)
 % only: cell array of simulation names to run
 % gemini_exe: full path to Gemini.bin executable
 % file_format: 'h5' or 'nc' (defaults to HDF5)
-import gemini3d.fileio.expanduser
+arguments
+  topdir (1,1) string
+  outdir (1,1) string
+  only (1,:) string = string([])
+  gemini_exe (1,1) string = ""
+  file_format (1,1) string = ""
+end
 
-narginchk(2, 5)
-
-if nargin < 3, only = ''; end
-if nargin < 4, gemini_exe = []; end
-if nargin < 5, file_format = []; end
-
-topdir = expanduser(topdir);
-outdir = expanduser(outdir);
+topdir = gemini3d.fileio.expanduser(topdir);
+outdir = gemini3d.fileio.expanduser(outdir);
 
 assert(isfolder(topdir), '%s is not a folder', topdir)
 
@@ -27,12 +27,13 @@ assert(isfolder(topdir), '%s is not a folder', topdir)
 names = gemini3d.get_testnames(topdir, only);
 assert(~isempty(names), 'No inputs under %s with %s', topdir, only)
 disp('Generating data for: ')
-celldisp(names)
+disp(names)
 
-gem_params = struct('overwrite', true, 'mpiexec', [] , 'file_format', file_format, 'gemini_exe', gemini_exe);
+gem_params = struct('overwrite', true, 'mpiexec', "",...
+    'file_format', file_format, 'gemini_exe', gemini_exe);
 
-for i = 1:length(names)
-  gemini3d.gemini_run(fullfile(topdir, names{i}), fullfile(outdir, names{i}), gem_params)
+for n = names
+  gemini3d.gemini_run(fullfile(topdir, n), fullfile(outdir, n), gem_params)
 end
 
 end % function

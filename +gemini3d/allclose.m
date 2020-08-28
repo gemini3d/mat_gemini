@@ -1,4 +1,4 @@
-function close_enough = allclose(actual, desired, rtol, atol)
+function close_enough = allclose(actual, desired, namedargs)
 % close_enough = allclose(actual, desired, rtol, atol)
 %
 % Inputs
@@ -15,19 +15,11 @@ function close_enough = allclose(actual, desired, rtol, atol)
 % for Matlab and GNU Octave
 %
 % if "actual" is within atol OR rtol of "desired", return true
-
-narginchk(2,4)
-validateattributes(actual, {'numeric'}, {'nonempty'}, mfilename, 'measured values', 1)
-validateattributes(desired, {'numeric'}, {'nonempty'}, mfilename, 'desired reference values', 2)
-if nargin < 3 || isempty(rtol)
-  rtol=1e-8;
-else
-  validateattributes(rtol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'relative tolerance', 3)
-end
-if nargin < 4 || isempty(atol)
-  atol = 1e-9;
-else
-  validateattributes(atol, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'absolute tolerance', 4)
+arguments
+  actual {mustBeNumeric}
+  desired {mustBeNumeric}
+  namedargs.rtol (1,1) double {mustBePositive} = 1e-8
+  namedargs.atol (1,1) double {mustBeNonnegative} = 1e-9
 end
 
 %% compare
@@ -40,7 +32,7 @@ if isinteger(desired)
 end
 
 measdiff = abs(actual-desired);
-tol = atol + rtol * abs(desired);
+tol = namedargs.atol + namedargs.rtol * abs(desired);
 
 close_enough = all(measdiff <= tol);
 

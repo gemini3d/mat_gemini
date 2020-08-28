@@ -10,8 +10,7 @@ These scripts form the basic core needed to work with Gemini3D ionospheric model
 * read simulation output
 * plot simulation
 
-Matlab &ge; R2017b is required.
-Optionally, Matlab &ge; R2020a has better plot quality due to new Matlab graphics backend and functions.
+Matlab R2020a Update 5 and newer have better plot quality due to new Matlab graphics backend.
 
 ## Quick Start
 
@@ -92,7 +91,7 @@ When a significant change is made to internal Gemini3D code, this may change the
 If determined that new reference datasets are needed:
 
 ```matlab
-gemini3d.generate_reference_data('../gemini-examples/initialize', '~/sim', 'test2d')
+gemini3d.setup.generate_reference_data('../gemini-examples/initialize', '~/sim', 'test2d')
 ```
 
 That makes all tests with subdirectory names containing "test2d".

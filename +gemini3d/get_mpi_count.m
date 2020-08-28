@@ -9,9 +9,10 @@ function N = get_mpi_count(sizefn, max_cpu)
 %    Returns
 %    -------
 %    N: number of MPI images
-
-narginchk(1,2)
-if nargin < 2, max_cpu = []; end
+arguments
+  sizefn (1,1) string
+  max_cpu (1,1) {mustBeInteger,mustBeNonnegative} = 0
+end
 
 %% config.nml file or directory or simsize.h5?
 
@@ -21,9 +22,9 @@ elseif isfolder(fileparts(sizefn))
   dsize = gemini3d.simsize(fileparts(sizefn));
 elseif isfile(sizefn)
   [~,~,ext] = fileparts(sizefn);
-  if any(strcmp(ext, {'.h5', '.nc', '.dat'}))
+  if any(contains(ext, [".h5", ".nc", ".dat"]))
     dsize = gemini3d.simsize(sizefn);
-  elseif any(strcmp(ext, {'.ini', '.nml'}))
+  elseif any(contains(ext, [".ini", ".nml"]))
     params = gemini3d.read_config(sizefn);
     % OK to use indat_size because we're going to run a sim on this machine
     dsize = gemini3d.simsize(params.indat_size);

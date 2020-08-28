@@ -1,11 +1,11 @@
 function cAur = loadglow_aurmap(filename, lx2, lx3, lwave)
 %% loads simulated auroral emissions
-
-narginchk(4,4)
-assert(isfile(filename), '%s is not a filename', filename)
-validateattributes(lx2, {'numeric'}, {'scalar', 'integer', 'positive'})
-validateattributes(lx3, {'numeric'}, {'scalar', 'integer', 'positive'})
-validateattributes(lwave, {'numeric'}, {'scalar', 'integer', 'positive'})
+arguments
+  filename (1,1) string
+  lx2 (1,1) {mustBeInteger,mustBePositive}
+  lx3 (1,1) {mustBeInteger,mustBePositive}
+  lwave (1,1) {mustBeInteger,mustBePositive}
+end
 
 [~,~,ext] = fileparts(filename);
 
@@ -20,7 +20,6 @@ end
 
 
 function cAur = loadglow_aurmap_raw(filename, lx2, lx3, lwave)
-narginchk(4,4)
 
 fid=fopen(filename,'r');
 cAur = fread(fid,lx2*lx3*lwave,'real*8');

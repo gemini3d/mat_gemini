@@ -1,6 +1,9 @@
 function setup_post_process(cfg, xg)
 % based on Namelist post_process characater array of function names, process data
-narginchk(2,2)
+arguments
+  cfg (1,1) struct
+  xg (1,1) struct
+end
 
 if isfield(cfg, 'setup_functions')
   for i = 1:length(cfg.setup_functions)

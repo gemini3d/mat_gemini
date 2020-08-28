@@ -8,7 +8,7 @@ A3 = A2(:,1:3,1);
 A3(:,:,2) = 2*A3;
 A4(:,:,:,5) = A3;
 
-basic = [tempname, '.h5'];
+basic = tempname + ".h5";
 % create test data first, so that parallel tests works
 h5save(basic, '/A0', A0)
 h5save(basic, '/A1', A1)
@@ -25,6 +25,7 @@ assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
 %% test_exists
 assert(h5exists(basic, '/A3'), 'A3 exists')
 assert(~h5exists(basic, '/oops'), 'oops not exist')
+assert(all(h5exists(basic, ["A3", "oops"]) == [true, false]), 'h5exists array')
 %% test_size
 s = h5size(basic, '/A0');
 assert(isscalar(s) && s==1, 'A0 shape')

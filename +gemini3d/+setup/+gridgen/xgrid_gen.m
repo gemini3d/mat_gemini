@@ -1,18 +1,18 @@
 function x = xgrid_gen(xdist,lxp,xparms)
 %% generate a 1D grid
 % not named "xgrid" to avoid conflict with Matlab toolbox
-
-narginchk(2,3)
-validateattributes(xdist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way x-distance from origin (meters)',1)
-validateattributes(lxp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of x-points',2)
-if (~exist('xparms','var'))
-    xparms=[];
-end %if
+% xdist: one-way x-distance from origin (meters)
+% lxp: number of x-points
+arguments
+  xdist (1,1) {mustBePositive}
+  lxp (1,1) {mustBeInteger,mustBePositive}
+  xparms (:,1) double = []
+end
 
 xmin = -xdist/2;
 xmax = xdist/2;
 
-if (isempty(xparms))     %uniform grid being created...
+if isempty(xparms)     %uniform grid being created...
     if lxp == 1  % degenerate dimension
         % add 2 ghost cells on each side
         x = linspace(xmin, xmax, lxp + 4);
@@ -25,6 +25,9 @@ if (isempty(xparms))     %uniform grid being created...
         x=[x(1)-2*dx1, x(1)-dx1, x, x(end)+dxn, x(end)+2*dxn];
     end
 else   %nonuniform grid; assume we are degrading resolution near the edges - this will ignore lxp
+    if length(xparms)~=4
+      error('xgrid_gen:value_error', 'xparms must have 4 parameters')
+    end
     degdist=xparms(1);    % distance from boundary at which we start to degrade resolution
     dx0=xparms(2);        % min step size for grid
     dxincr=xparms(3);     % max step size increase for grid

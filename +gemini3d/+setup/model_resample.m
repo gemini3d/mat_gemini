@@ -1,12 +1,11 @@
 function [nsi,vs1i,Tsi] = model_resample(xgin,ns,vs1,Ts,xg)
-import gemini3d.*
-
-narginchk(5, 5)
-validateattributes(xgin, {'struct'}, {'scalar'})
-validateattributes(ns, {'numeric'}, {'positive', 'finite'})
-validateattributes(vs1, {'numeric'}, {'finite'})
-validateattributes(Ts, {'numeric'}, {'positive','finite'})
-validateattributes(xg, {'struct'}, {'scalar'})
+arguments
+  xgin (1,1) struct
+  ns (:,:,:,:) {mustBeFinite,mustBePositive}
+  vs1 (:,:,:,:) {mustBeFinite}
+  Ts (:,:,:,:) {mustBeFinite,mustBePositive}
+  xg (1,1) struct
+end
 
 %% NEW GRID SIZES
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
@@ -99,7 +98,7 @@ elseif lx2 == 1 % 2-D north-south
   end
 
   % Detect old non-padded grid and workaround
-  if gemini3d.allclose(xgin.x3(1), xg.x3(3), [], 1)
+  if gemini3d.allclose(xgin.x3(1), xg.x3(3), 'atol', 1)
     % old sim, no external ghost cells.
     % Instead of discarding good cells,keep them and say there are
     % new ghost cells outside the grid

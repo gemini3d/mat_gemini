@@ -8,7 +8,7 @@ A3 = A2(:,1:3,1);
 A3(:,:,2) = 2*A3;
 A4(:,:,:,5) = A3;
 
-basic = [tempname, '.nc'];
+basic = tempname + ".nc";
 
 % create test data first, so that parallel tests works
 ncsave(basic, 'A0', A0)

@@ -1,7 +1,9 @@
 function params = read_namelist(filename, namelist)
 
-narginchk(2,2)
-validateattributes(namelist, {'char'}, {'vector'}, mfilename, 'namelist name', 2)
+arguments
+  filename (1,1) string
+  namelist (1,1) string
+end
 
 params = struct();
 
@@ -11,7 +13,7 @@ assert(isfile(filename),  '%s not found.', filename)
 fid = fopen(filename);
 while ~feof(fid)
   line = fgetl(fid);
-  mgrp = regexp(line, ['^\s*&(', namelist, ')'], 'match');
+  mgrp = regexp(line, "^\s*&(" + namelist + ")", 'match');
   if ~isempty(mgrp)
      break
   end
@@ -44,6 +46,7 @@ while ~feof(fid)
     if contains(vals, ',')
       vals = strip(split(vals, ','));
     end
+    vals = string(vals);
   else
     vals = vals(:).';
   end

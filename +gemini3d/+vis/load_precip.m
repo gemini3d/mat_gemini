@@ -1,8 +1,10 @@
 function dat = load_precip(filename, time)
+arguments
+  filename (1,1) string
+  time (1,1) datetime = []
+end
 
-narginchk(1,2)
-
-if nargin > 1
+if ~isempty(time)
   assert(isfolder(filename), 'either filename or folder + time')
   filename = gemini3d.get_frame_filename(filename, time);
 end

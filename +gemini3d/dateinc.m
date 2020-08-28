@@ -1,9 +1,9 @@
 function [ymdnew,UTsecnew] = dateinc(dt, ymd, UTsec)
-
-narginchk(3,3)
-validateattributes(dt, {'numeric'}, {'scalar', 'positive'}, mfilename, 'time step', 1)
-validateattributes(ymd, {'numeric'}, {'integer', 'positive', 'numel', 3}, mfilename, 'year month day', 2)
-validateattributes(UTsec, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'UTC second', 3)
+arguments
+  dt (1,1) {mustBeNonnegative,mustBeFinite}
+  ymd (3,1) {mustBeInteger,mustBePositive,mustBeFinite}
+  UTsec (1,1) {mustBeNonnegative,mustBeFinite}
+end
 
 t0 = datetime(ymd(1), ymd(2), ymd(3));
 t1 = t0 + seconds(UTsec) + seconds(dt);
