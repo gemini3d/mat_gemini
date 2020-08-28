@@ -1,6 +1,7 @@
-function dat = loadframe3Dcurvavg_raw(filename, vars)
-
-narginchk(2,2)
+function dat = loadframe3Dcurvavg_raw(filename)
+arguments
+  filename (1,1) string
+end
 %% SIMULATION SIZE
 lxs = gemini3d.simsize(filename);
 %% SIMULATION GRID FILE
@@ -15,10 +16,6 @@ fid = fopen(filename,'r');
 dat.time = gemini3d.vis.get_time(fid);
 %% Number densities
 dat.ne = gemini3d.vis.read3D(fid, lxs);
-if length(vars) == 1 && strcmp(vars{1}, 'ne')
-  fclose(fid);
-  return
-end
 %% Parallel Velocities
 dat.v1 = gemini3d.vis.read3D(fid, lxs);
 %% Temperatures

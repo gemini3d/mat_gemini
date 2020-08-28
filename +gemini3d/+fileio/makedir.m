@@ -1,8 +1,9 @@
 function makedir(direc)
 %% malformed paths can be "created" but are not accessible.
 % This function works around that bug in Matlab mkdir().
-
-narginchk(1,1)
+arguments
+  direc (1,1) string
+end
 
 direc = gemini3d.fileio.expanduser(direc);
 

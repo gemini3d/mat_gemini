@@ -1,39 +1,25 @@
-function plot2D_curv(time,xg,parm,parmlbl,caxlims, sourceloc, ha, cmap)
-
-narginchk(3,8)
-validateattributes(time, {'datetime'}, {'scalar'}, 1)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-
-if nargin < 4, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
-validateattributes(parm, {'numeric'}, {'real', 'nonempty'}, mfilename, [parmlbl, ': parameter to plot'], 3)
-
-if nargin < 5
-  caxlims=[];
-else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
+function plot2D_curv(time,xg,parm,parmlbl,caxlims, sourceloc, h, cmap)
+arguments
+  time (1,1) datetime
+  xg (1,1) struct
+  parm (:,:,:) {mustBeNumeric,mustBeNonempty}
+  parmlbl (1,1) string = ""
+  caxlims (1,:) {mustBeNumeric} = []
+  sourceloc (1,:) {mustBeNumeric} = []
+  h (1,1) = []
+  cmap (:,:) {mustBeNumeric,mustBeFinite} = parula(256)
 end
 
-if nargin < 6  || isempty(sourceloc) % leave || for validate
-  sourceloc = [];
-else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
+plotparams.time = time;
+plotparams.parmlbl = parmlbl;
+plotparams.caxlims = caxlims;
+plotparams.cmap = cmap;
+
+if isa(h, 'matlab.ui.Figure')
+  ha = axes('parent', h);
+elseif isa(h, 'matlab.graphics.axis.Axes')
+  ha = h;
 end
-
-if nargin < 7 || isempty(ha)
-  ha = gemini3d.vis.plotfunctions.get_axes();
-else
-  ha = gemini3d.vis.plotfunctions.get_axes(ha);
-end
-
-if nargin < 8 || isempty(cmap)
-  cmap = parula(256);
-end
-
-params.cmap = cmap;
-params.caxlims = caxlims;
-params.parmlbl = parmlbl;
-
 
 %SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
 sourcemlat=sourceloc(1);
@@ -173,7 +159,7 @@ plot(ha,sourcemlat,0,'r^','MarkerSize',8,'LineWidth',2);
 hold(ha,'off')
 set(hi,'alphadata',~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, params)
+gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
 xlabel(ha,'magnetic latitude (deg.)')
 ylabel(ha,'altitude (km)')
 
@@ -187,7 +173,7 @@ plot(sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
 hold off;
 set(hi,'alphadata',~isnan(parmp2(:,:,2)));
 
-gemini3d.vis.plotfunctions.axes_tidy(gca, params)
+gemini3d.vis.plotfunctions.axes_tidy(gca, plotparams)
 xlabel('magnetic latitude (deg.)')
 ylabel('magnetic longitude (deg.)')
 %}

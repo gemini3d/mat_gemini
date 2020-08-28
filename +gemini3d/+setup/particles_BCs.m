@@ -1,13 +1,12 @@
 function particles_BCs(p, xg)
 % create particle precipitation
-import gemini3d.fileio.*
-
-narginchk(2,2)
-validateattributes(p, {'struct'}, {'scalar'})
-validateattributes(xg, {'struct'}, {'scalar'})
+arguments
+  p (1,1) struct
+  xg (1,1) struct
+end
 
 outdir = p.prec_dir;
-makedir(outdir)
+gemini3d.fileio.makedir(outdir)
 
 %% CREATE PRECIPITATION CHARACTERISTICS data
 % number of grid cells.

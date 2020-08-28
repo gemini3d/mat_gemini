@@ -1,9 +1,12 @@
 function N = max_mpi(dsize, max_cpu)
 % maximum MPI images for this grid size (lx1,lx2,lx3)
 
-validateattributes(dsize, {'numeric'}, {'positive','integer', 'numel',3}, 1)
+arguments
+  dsize (3,1) {mustBeInteger,mustBePositive,mustBeFinite}
+  max_cpu (1,1) {mustBeInteger,mustBeFinite,mustBeNonnegative} = 0
+end
 
-if nargin < 2 || isempty(max_cpu)
+if isempty(max_cpu) || max_cpu == 0
   max_cpu = gemini3d.sys.get_cpu_count();
 end
 
@@ -19,9 +22,6 @@ end % function
 
 
 function N = max_gcd(s, M)
-
-validateattributes(s, {'numeric'}, {'scalar','integer','positive'})
-validateattributes(M, {'numeric'}, {'scalar','integer','positive'})
 
 N = 1;
 for i = M:-1:2

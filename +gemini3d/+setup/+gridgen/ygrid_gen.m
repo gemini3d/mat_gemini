@@ -1,8 +1,12 @@
 function y = ygrid_gen(ydist, lyp)
 %% generate a 1D grid
-narginchk(2,2)
-validateattributes(ydist, {'numeric'}, {'scalar','nonnegative'}, mfilename, 'one-way y-distance from origin (meters)',1)
-validateattributes(lyp, {'numeric'}, {'scalar','integer','positive'}, mfilename, 'number of y-points',2)
+% ydist: one-way y-distance from origin (meters)
+% lyp: number of y-points
+
+arguments
+  ydist (1,1) {mustBePositive}
+  lyp (1,1) {mustBeInteger,mustBePositive}
+end
 
 ymin = -ydist/2;
 ymax = ydist/2;

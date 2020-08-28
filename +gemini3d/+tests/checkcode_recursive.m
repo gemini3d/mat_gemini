@@ -3,13 +3,14 @@ function results = checkcode_recursive(folder, verbose)
 % distinct from mlintrpt() in that this function is all CLI instead of GUI
 %
 % Copyright (c) 2020 Michael Hirsch (MIT License)
+arguments
+  folder (1,1) string = pwd
+  verbose (1,1) logical = false
+end
 
-narginchk(0,2)
-if nargin < 1, folder = pwd; end
-if nargin < 2, verbose = false; end
 assert(isfolder(folder), '%s is not a folder', folder)
 
-flist = dir([folder, '/**/*.m']);
+flist = dir(folder + "/**/*.m");
 N = length(flist);
 
 fprintf('checking %d Matlab files under %s\n', N, folder)

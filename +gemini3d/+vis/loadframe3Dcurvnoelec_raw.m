@@ -1,8 +1,11 @@
 function dat = loadframe3Dcurvnoelec_raw(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
-import gemini3d.vis.*
+arguments
+  filename (1,1) string
+end
 
-narginchk(1,1)
+import gemini3d.vis.read4D
+
 %% SIMULATION SIZE
 lsp=7;
 lxs = gemini3d.simsize(filename);

@@ -15,22 +15,20 @@ function natm = msis_matlab3D(p, xg, time)
 %       9 - N NUMBER DENSITY(M-3)
 %       10 - Anomalous oxygen NUMBER DENSITY(M-3)
 %       11 - TEMPERATURE AT ALT
-
-narginchk(2,3)
-validateattributes(p, {'struct'}, {'scalar'})
-validateattributes(xg, {'struct'}, {'scalar'})
-
-if nargin < 3
-  time = p.times(1);
+arguments
+  p (1,1) struct
+  xg (1,1) struct
+  time (1,1) datetime = p.times(1)
 end
-validateattributes(time, {'datetime'}, {'scalar'}, 3)
 
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-src_dir = fullfile(cwd, '../..');
-build_dir = fullfile(src_dir, 'build');
-exe = fullfile(build_dir, 'msis_setup');
-if ispc, exe = [exe, '.exe']; end
+src_dir = fullfile(cwd, "../..");
+build_dir = fullfile(src_dir, "build");
+exe = fullfile(build_dir, "msis_setup");
+if ispc
+  exe = exe + ".exe";
+end
 
 %% build exe if not present
 if ~isfile(exe)
@@ -68,8 +66,8 @@ UTsec0 = seconds(time - day);
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
 %% temporary files for MSIS
-fin = [tempname, '_msis_in.dat'];
-fout = [tempname, '_msis_out.dat'];
+fin = tempname + "_msis_in.dat";
+fout = tempname + "_msis_out.dat";
 % need a unique input temporary filename for parallel runs
 
 fid=fopen(fin,'w');
@@ -85,10 +83,10 @@ fwrite(fid,glon,'real*4');
 fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
-cmd = sprintf('%s %s %s %d',exe, fin, fout, lz);
+cmd = exe + " " + fin + " " + fout + " " + lz;
 % disp(cmd)
 prepend = gemini3d.sys.modify_path();
-[status, msg] = system([prepend, ' ', cmd]);   %output written to file
+[status, msg] = system(prepend + " " + cmd);   %output written to file
 assert(status==0, 'problem running MSIS %s', msg)
 delete(fin);
 %% binary output

@@ -1,17 +1,13 @@
-run('~/Projects/mat_gemini/setup.m');
-
-
-%SIMULATIONS LOCAITONS
-simname='mooreOK3D_hemis_medres_corrected/';
-basedir='~/simulations/';
-direc=[basedir,simname];
-gemini3d.fileio.makedir([direc, '/TECplots']);    %store output plots with the simulation data
-gemini3d.fileio.makedir([direc, '/TECplots_eps']);    %store output plots with the simulation data
+function TECplot_map(direc)
+arguments
+  direc (1,1) string
+end
+gemini3d.fileio.makedir(direc + "/TECplots");    %store output plots with the simulation data
+gemini3d.fileio.makedir(direc + "/TECplots_eps");    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED TEC DATA
-load([direc,'/vTEC.mat']);
-lt=numel(t);
+load(direc + "/vTEC.mat", "mlong", "mlat", "dvTEC");
 mlon=mlong;
 
 
@@ -29,27 +25,21 @@ figure(1);
 
 
 %MAKE THE PLOTS AND SAVE TO A FILE
-for it=1:lt
-    disp('Printing TEC plots...')
+for it=1:length(cfg.times)
     %CREATE A MAP AXIS
     figure(1);
     clf;
 %    FS=16;
     FS=10;
 
-    %datehere=simdate_series(it,:);
-    datehere=datevec(cfg.times(it));
-    ymd=datehere(1:3);
-    UTsec=datehere(4)*3600+datehere(5)*60+datehere(6);
-    filename = gemini3d.datelab(ymd,UTsec);
-    filename=[filename,'.dat'];
-    titlestring=datestr(datenum(datehere));
+    filename = gemini3d.datelab(cfg.times(it)) + ".dat";
+    disp(filename)
 
     mlatlimplot=double([min(mlat)-0.5,max(mlat)+0.5]);
     mlonlimplot=double([min(mlon)-0.5,max(mlon)+0.5]);
     axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
-    param=dvTEC(:,:,it);
-    param=dvTEC(:,:,it)-dvTEC(:,:,5);   %flat-field dvTEC just in case
+    % param=dvTEC(:,:,it);
+    param= dvTEC(:,:,it) - dvTEC(:,:,5);   %flat-field dvTEC just in case
     %imagesc(mlon,mlat,param);
     mlatlim=double([min(mlat),max(mlat)]);
     mlonlim=double([min(mlon),max(mlon)]);
@@ -64,22 +54,20 @@ for it=1:lt
     tightmap;
 %    caxis([-3,3]);
     caxis([-0.5,0.5]);
-    c=colorbar
+    c=colorbar;
     set(c,'FontSize',FS)
     xlabel(c,'\Delta vTEC (TECU)')
     xlabel(sprintf('magnetic long. (deg.)\n\n'))
     ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
     hold on;
-    ax=axis;
     plotm(cfg.sourcemlat,cfg.sourcemlon,'r^','MarkerSize',10,'LineWidth',2);
     hold off;
-    titlestring=datestr(datenum(datehere));
-    title(sprintf([titlestring,'\n\n']));
+
+    title(datestr(cfg.times(it)))
     %gridm;
 
-
     %ADD A MAP OF COASTLINES
-    load coastlines;
+    load("coastlines", "coastlat", "coastlon")
     [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
     mlatcoast=90-thetacoast*180/pi;
     mloncoast=phicoast*180/pi;
@@ -89,13 +77,12 @@ for it=1:lt
         mloncoast(inds)=mloncoast(inds)-360;
     end
 
-    hold on;
-    ax=axis;
+    hold on
     plotm(mlatcoast,mloncoast,'k-','LineWidth',1);
-    hold off;
+    hold off
     setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',10,'PLineLocation',5,'MLabelLocation',10,'PLabelLocation',5);
 %    setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',1,'PLineLocation',1,'MLabelLocation',1,'PLabelLocation',1);
-    gridm on;
+    gridm on
 
 
     %PRINT THE THING

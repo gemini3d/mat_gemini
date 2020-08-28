@@ -1,21 +1,22 @@
 function [cfg, xg] = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
-
-narginchk(1, 2)
-if nargin < 2, outdir = []; end
+arguments
+  cfg (1,1)
+  outdir (1,1) string = ""
+end
 
 %% parse input
 if isstruct(cfg)
   % pass
-elseif ischar(cfg)
+elseif isstring(cfg)
   % path to config.nml
   cfg = gemini3d.read_config(cfg);
 else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
-if isempty(outdir)
-  if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
+if outdir == ""
+  if ~isfield(cfg, 'outdir') || cfg.outdir == ""
     error('model_setup:file_not_found', 'please specify outdir or p.outdir')
   end
 else

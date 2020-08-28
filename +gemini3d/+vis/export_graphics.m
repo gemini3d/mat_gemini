@@ -1,24 +1,24 @@
-function export_graphics(handle, filename, varargin)
+function export_graphics(handle, filename, namedargs)
 % Matlab R2020a brought exportgraphics(), which looks great.
 % use R2020a Update 5 to avoid bug:
 % https://www.mathworks.com/support/bugreports/details/2195498
-
-narginchk(2,inf)
+arguments
+  handle (1,1)
+  filename (1,1) string
+  namedargs.resolution (1,1) {mustBeInteger,mustBePositive} = 150
+end
 
 filename = gemini3d.fileio.expanduser(filename);
 
-if matoct.version_atleast(version, '9.8.0.1451342')
-  exportgraphics(handle, filename, varargin{:})
+if gemini3d.version_atleast(version, '9.8.0.1451342')
+  exportgraphics(handle, filename, 'resolution', namedargs.resolution)
   return
 end
 
-if nargin >= 4 && strcmpi(varargin{1}, 'resolution')
-  dpi = ['-r', int2str(varargin{2})];
-else
-  dpi = [];
-end
+dpi = "-r" + int2str(namedargs.resolution);
+
 [~,~,ext] = fileparts(filename);
-flag = printflag(ext(2:end));
+flag = printflag(extractAfter(ext, 1));
 % legacy figure saving function
 print(handle, flag, filename, dpi)
 
@@ -26,12 +26,10 @@ end % function
 
 
 function flag = printflag(fmt)
-narginchk(1,1)
-validateattributes(fmt, {'char'}, {'vector'}, mfilename, 'png or eps', 1)
 
 switch fmt
-  case 'png', flag = '-dpng';
-  case 'eps', flag = '-depsc2';
+  case 'png', flag = "-dpng";
+  case 'eps', flag = "-depsc2";
   otherwise, flag = [];
 end
 

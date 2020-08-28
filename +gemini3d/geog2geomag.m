@@ -1,9 +1,8 @@
 function [thetat,phit] = geog2geomag(lat,lon)
-narginchk(2,2)
-
-%MZ - causes issues with 3D array input, not sure how to fix...
-%validateattributes(lat, {'numeric'}, {'vector'}, mfilename)
-%validateattributes(lon, {'numeric'}, {'vector'}, mfilename)
+arguments
+  lat {mustBeNumeric,mustBeFinite}
+  lon {mustBeNumeric,mustBeFinite}
+end
 
 thetan = deg2rad(11);
 phin = deg2rad(289);

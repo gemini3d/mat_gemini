@@ -1,15 +1,21 @@
 function z = altitude_grid(alt_min, alt_max, incl_deg, d)
 %% SETUP NONUNIFORM GRID IN ALTITUDE AND FIELD LINE DISTANCE
 % This defines x1 for the simulations
+% alt_min:  minimum altitude [m]
+% alt_max: maximum altitude [m]
+% incl_deg: geomagnetic inclination [deg]
+% d: tanh scales
 %
 % example:
 % x1 = altitude_grid(80e3, 1000e3, 90, [10e3, 8e3, 500e3, 150e3]);
 %
-narginchk(4,4)
-validateattributes(alt_min, {'numeric'}, {'scalar', 'positive'}, mfilename, 'minimum altitude [m]', 1)
-validateattributes(alt_max, {'numeric'}, {'scalar', 'positive'}, mfilename, 'maximum altitude [m]', 2)
-validateattributes(incl_deg, {'numeric'}, {'scalar', 'nonnegative'}, mfilename, 'geomagnetic inclination [deg]', 3)
-validateattributes(d, {'numeric'}, {'vector','positive', 'numel',4},mfilename, 'tanh scales (4 elements)',4)
+
+arguments
+  alt_min (1,1) {mustBePositive}
+  alt_max (1,1) {mustBePositive}
+  incl_deg (1,1) {mustBeNonnegative}
+  d (4,1) {mustBePositive}
+end
 
 assert(alt_max > alt_min, 'grid max must be greater than grid_min')
 

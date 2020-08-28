@@ -1,19 +1,19 @@
-function isabs = is_absolute_path(path)
+function isabs = is_absolute_path(p)
 %% true if path is absolute. Path need not yet exist.
+arguments
+  p (1,1) string
+end
 
-narginchk(1,1)
-
-path = gemini3d.fileio.expanduser(path);
+p = gemini3d.fileio.expanduser(p);
 % Must expanduser() before Java
 
-if gemini3d.sys.isoctave
-  isabs = is_absolute_filename(path);
-elseif usejava('jvm')
-  isabs = java.io.File(path).isAbsolute();
+if usejava('jvm')
+  isabs = java.io.File(p).isAbsolute();
 elseif ispc
-  isabs = isletter(path(1)) && strcmp(path(2), ':') && any(strcmp(path(3), ['/', '\']));
+  p = char(p);
+  isabs = isletter(p(1)) && strcmp(p(2), ':') && any(strcmp(p(3), ["/", "\"]));
 else
-  isabs = strcmp(path(1), '/');
+  isabs = startsWith(p, "/");
 end
 
 end % function

@@ -1,6 +1,7 @@
 function dat = loadframe3Dcurvne(filename)
-
-narginchk(1,1)
+arguments
+  filename (1,1) string
+end
 
 [~,~,ext] = fileparts(filename);
 

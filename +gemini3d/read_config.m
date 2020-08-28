@@ -1,6 +1,8 @@
 function p = read_config(path)
 % reads simulation configuration into struct
-narginchk(1,1)
+arguments
+  path (1,1) string
+end
 
 filename = gemini3d.get_configfile(path);
 
@@ -19,7 +21,7 @@ p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
 % needs to be here and in read_nml
 if ~isfield(p, 'file_format')
   [~,~,ext] = fileparts(p.indat_size);
-  p.file_format = ext(2:end);
+  p.file_format = extractAfter(ext, 1);
 end
 
 end % function

@@ -1,8 +1,9 @@
 function doy = day_of_year(date)
 % convert date [year, month, day] to day of year
+arguments
+  date (1,1) datetime
+end
 
-narginchk(1, 1)
-
-doy = day(datetime(date), 'dayofyear');
+doy = day(date, 'dayofyear');
 
 end % function

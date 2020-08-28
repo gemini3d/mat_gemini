@@ -1,7 +1,5 @@
 function slice3mid(ax, x, y, dat, P)
 
-narginchk(5,5)
-
 %% image
 hi = imagesc(x, y, dat, 'parent', ax);
 set(hi, 'alphadata', ~isnan(dat));
@@ -23,4 +21,4 @@ gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 ylabel(ax, P.mid_ylabel)
 xlabel(ax, P.mid_xlabel)
 
-end
+end % function

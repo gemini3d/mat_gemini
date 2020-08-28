@@ -1,6 +1,7 @@
 function time = get_time(file)
-
-narginchk(1,1)
+arguments
+  file (1,1) string
+end
 
 time = [];  % in case not present in file
 %% file handle (.dat file)
@@ -13,47 +14,45 @@ if isinteger(file)
 end
 
 %% filename
-assert(ischar(file), 'must have integer file handle or filename input')
-
 [~,~,suffix] = fileparts(file);
 
 switch suffix
 case '.h5'
   [vars, grps] = gemini3d.fileio.h5variables(file);
 
-  if ~(any(contains(vars, 'ymd')) || any(contains(grps, 'time')))
+  if ~(any(vars == "ymd") || any(grps == "/time"))
     return
   end
 
   if contains(grps, 'time')
-    i = '/time';
+    i = "/time";
     vars = gemini3d.fileio.h5variables(file, 'time');
   else
-    i = '';
+    i = "";
   end
 
-  d = h5read(file, [i, '/ymd']);
+  d = h5read(file, i + "/ymd");
   time = datetime(d(1), d(2), d(3));
 
-  if any(contains(vars, 'UTsec'))
-    time = time + seconds(h5read(file, [i, '/UTsec']));
-  elseif any(contains(vars, 'UThour'))
-    time = time + hours(h5read(file, [i, '/UThour']));
+  if any(vars == "UTsec")
+    time = time + seconds(h5read(file, i + "/UTsec"));
+  elseif any(vars == "UThour")
+    time = time + hours(h5read(file, i + "/UThour"));
   end
 
 case '.nc'
   vars = gemini3d.fileio.ncvariables(file);
 
-  if ~any(contains(vars, 'ymd'))
+  if ~any(vars == "ymd")
     return
   end
 
   d = ncread(file, 'ymd');
   time = datetime(d(1), d(2), d(3));
 
-  if any(contains(vars, 'UTsec'))
+  if any(vars == "UTsec")
     time = time + seconds(ncread(file, 'UTsec'));
-  elseif any(contains(vars, 'UThour'))
+  elseif any(vars == "UThour")
     time = time + hours(ncread(file, 'UThour'));
   end
 end %switch

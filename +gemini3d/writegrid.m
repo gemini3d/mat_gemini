@@ -1,12 +1,13 @@
 function writegrid(p, xg)
 %% write grid to raw binary files
 % includes STUFF NOT NEEDED BY FORTRAN CODE BUT POSSIBLY USEFUL FOR PLOTTING
+arguments
+  p (1,1) struct
+  xg (1,1) struct
+end
+
 import gemini3d.readgrid
 import gemini3d.fileio.with_suffix
-
-narginchk(2, 2)
-validateattributes(p, {'struct'}, {'scalar'}, mfilename, 'simulation parameters', 1)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid parameters', 2)
 
 %% sanity check grid
 ok = gemini3d.check_grid(xg);
@@ -22,8 +23,8 @@ end
 if isfield(p, 'file_format')
   file_format = p.file_format;
 else
-    [~, ~, suffix] = fileparts(p.indat_grid);
-    file_format = suffix(2:end);
+  [~, ~, suffix] = fileparts(p.indat_grid);
+  file_format = extractAfter(suffix, 1);
 end
 switch file_format
   case 'h5'
@@ -39,12 +40,12 @@ switch file_format
 end
 
 rtol = 1e-7;  % allow for single precision
-names = {'x1', 'x1i', 'dx1b', 'dx1h', 'x2', 'x2i', 'dx2b', 'dx2h', 'x3', 'x3i', 'dx3b', 'dx3h', ...
-  'h1','h2', 'h3','h1x1i', 'h2x1i', 'h3x1i', 'h1x2i', 'h2x2i', 'h3x2i', 'h1x3i', 'h2x3i', 'h3x3i', ...
-  'gx1', 'gx2', 'gx3', 'Bmag', 'I', 'nullpts', 'e1', 'e2', 'e3', 'er', 'etheta', 'ephi',...
-  'r','theta','phi', 'x','y','z'};
-for i = 1:length(names)
-  gemini3d.assert_allclose(xg.(names{i}), xg_check.(names{i}), rtol)
+names = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h", "x3", "x3i", "dx3b", "dx3h", ...
+  "h1", "h2", "h3", "h1x1i", "h2x1i", "h3x1i", "h1x2i", "h2x2i", "h3x2i", "h1x3i", "h2x3i", "h3x3i", ...
+  "gx1", "gx2", "gx3", "Bmag", "I", "nullpts", "e1", "e2", "e3", "er", "etheta", "ephi", ...
+  "r", "theta", "phi", "x", "y", "z"];
+for n = names
+  gemini3d.assert_allclose(xg.(n), xg_check.(n), rtol)
 end
 
 if ~ok
@@ -60,7 +61,7 @@ function write_hdf5(p, xg)
 import gemini3d.fileio.*
 %% size
 fn = with_suffix(p.indat_size, '.h5');
-disp(['write ',fn])
+disp("write " + fn)
 if isfile(fn), delete(fn), end
 
 h5save(fn, '/lx1', int32(xg.lx(1)))
@@ -73,26 +74,19 @@ lx3 = xg.lx(3);
 
 %% grid
 fn = with_suffix(p.indat_grid, '.h5');
-disp(['write ',fn])
+disp("write " + fn)
 if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
-h5save(fn, '/x1', xg.x1, [], freal)
-h5save(fn, '/x1i', xg.x1i, [], freal)
-h5save(fn, '/dx1b', xg.dx1b, [], freal)
-h5save(fn, '/dx1h', xg.dx1h, [], freal)
-
-h5save(fn, '/x2', xg.x2, [], freal)
-h5save(fn, '/x2i', xg.x2i, [], freal)
-h5save(fn, '/dx2b', xg.dx2b, [], freal)
-h5save(fn, '/dx2h', xg.dx2h, [], freal)
+for i = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h"]
+  h5save(fn, "/"+i, xg.(i), [], freal)
+end
 
 %MZ - squeeze() for dipole grids
-h5save(fn, '/x3', squeeze(xg.x3), [], freal)
-h5save(fn, '/x3i', squeeze(xg.x3i), [], freal)
-h5save(fn, '/dx3b', squeeze(xg.dx3b), [], freal)
-h5save(fn, '/dx3h', squeeze(xg.dx3h), [], freal)
+for i = ["x3", "x3i", "dx3b", "dx3h"]
+  h5save(fn, "/"+i, squeeze(xg.(i)), [], freal)
+end
 
 h5save(fn, '/h1', xg.h1, [lx1+4, lx2+4, lx3+4], freal)
 h5save(fn, '/h2', xg.h2, [lx1+4, lx2+4, lx3+4], freal)
@@ -110,34 +104,17 @@ h5save(fn, '/h1x3i', xg.h1x3i, [lx1, lx2, lx3+1], freal)
 h5save(fn, '/h2x3i', xg.h2x3i, [lx1, lx2, lx3+1], freal)
 h5save(fn, '/h3x3i', xg.h3x3i, [lx1, lx2, lx3+1], freal)
 
-h5save(fn, '/gx1', xg.gx1, [lx1, lx2, lx3], freal)
-h5save(fn, '/gx2', xg.gx2, [lx1, lx2, lx3], freal)
-h5save(fn, '/gx3', xg.gx3, [lx1, lx2, lx3], freal)
+for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
+  h5save(fn, "/"+i, xg.(i), [lx1, lx2, lx3], freal)
+end
 
-h5save(fn, '/alt', xg.alt, [lx1, lx2, lx3], freal)
-h5save(fn, '/glat', xg.glat, [lx1, lx2, lx3], freal)
-h5save(fn, '/glon', xg.glon, [lx1, lx2, lx3], freal)
-
-h5save(fn, '/Bmag', xg.Bmag, [lx1, lx2, lx3], freal)
 % MZ - squeeze() for singleton dimensions
 h5save(fn, '/I', squeeze(xg.I), [lx2, lx3], freal)
-h5save(fn, '/nullpts', xg.nullpts, [lx1, lx2, lx3], freal)
 
-h5save(fn, '/e1', xg.e1, [lx1, lx2, lx3, 3], freal)
-h5save(fn, '/e2', xg.e2, [lx1, lx2, lx3, 3], freal)
-h5save(fn, '/e3', xg.e3, [lx1, lx2, lx3, 3], freal)
+for i = ["e1","e2","e3","er","etheta","ephi"]
+  h5save(fn, "/"+i, xg.(i), [lx1, lx2, lx3, 3], freal)
+end
 
-h5save(fn, '/er', xg.er, [lx1, lx2, lx3, 3], freal)
-h5save(fn, '/etheta', xg.etheta, [lx1, lx2, lx3, 3], freal)
-h5save(fn, '/ephi', xg.ephi, [lx1, lx2, lx3, 3], freal)
-
-h5save(fn, '/r', xg.r, [lx1, lx2, lx3], freal)
-h5save(fn, '/theta', xg.theta, [lx1, lx2, lx3], freal)
-h5save(fn, '/phi', xg.phi, [lx1, lx2, lx3], freal)
-
-h5save(fn, '/x', xg.x, [lx1, lx2, lx3], freal)
-h5save(fn, '/y', xg.y, [lx1, lx2, lx3], freal)
-h5save(fn, '/z', xg.z, [lx1, lx2, lx3], freal)
 
 %% metadata
 % seems HDF5 is too buggy for strings in Matlab
@@ -159,11 +136,13 @@ end % function
 
 
 function write_nc4(p, xg)
-import gemini3d.fileio.*
+import gemini3d.fileio.ncsave
 %% size
-fn = with_suffix(p.indat_size, '.nc');
-disp(['write ',fn])
-if isfile(fn), delete(fn), end
+fn = gemini3d.fileio.with_suffix(p.indat_size, '.nc');
+disp("write " + fn)
+if isfile(fn)
+  delete(fn)
+end
 
 ncsave(fn, 'lx1', int32(xg.lx(1)))
 ncsave(fn, 'lx2', int32(xg.lx(2)))
@@ -174,9 +153,11 @@ lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
 %% grid
-fn = with_suffix(p.indat_grid, '.nc');
-disp(['write ',fn])
-if isfile(fn), delete(fn), end
+fn = gemini3d.fileio.with_suffix(p.indat_grid, '.nc');
+disp("write " + fn)
+if isfile(fn)
+  delete(fn)
+end
 
 freal = 'float32';
 Ng = 4; % number of ghost cells
@@ -227,33 +208,15 @@ ncsave(fn, 'h1x3i', xg.h1x3i, [dimx1, dimx2, dimx3i], freal)
 ncsave(fn, 'h2x3i', xg.h2x3i, [dimx1, dimx2, dimx3i], freal)
 ncsave(fn, 'h3x3i', xg.h3x3i, [dimx1, dimx2, dimx3i], freal)
 
-ncsave(fn, 'gx1', xg.gx1, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'gx2', xg.gx2, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'gx3', xg.gx3, [dimx1, dimx2, dimx3], freal)
+for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
+  ncsave(fn, i, xg.(i), [dimx1, dimx2, dimx3], freal)
+end
 
-ncsave(fn, 'alt', xg.alt, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'glat', xg.glat, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'glon', xg.glon, [dimx1, dimx2, dimx3], freal)
-
-ncsave(fn, 'Bmag', xg.Bmag, [dimx1, dimx2, dimx3], freal)
 ncsave(fn, 'I', xg.I, [dimx2, dimx3], freal)
-ncsave(fn, 'nullpts', xg.nullpts, [dimx1, dimx2, dimx3], freal)
 
-ncsave(fn, 'e1', xg.e1, [dimx1, dimx2, dimx3, dimecef], freal)
-ncsave(fn, 'e2', xg.e2, [dimx1, dimx2, dimx3, dimecef], freal)
-ncsave(fn, 'e3', xg.e3, [dimx1, dimx2, dimx3, dimecef], freal)
-
-ncsave(fn, 'er', xg.er, [dimx1, dimx2, dimx3, dimecef], freal)
-ncsave(fn, 'etheta', xg.etheta, [dimx1, dimx2, dimx3, dimecef], freal)
-ncsave(fn, 'ephi', xg.ephi, [dimx1, dimx2, dimx3, dimecef], freal)
-
-ncsave(fn, 'r', xg.r, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'theta', xg.theta, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'phi', xg.phi, [dimx1, dimx2, dimx3], freal)
-
-ncsave(fn, 'x', xg.x, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'y', xg.y, [dimx1, dimx2, dimx3], freal)
-ncsave(fn, 'z', xg.z, [dimx1, dimx2, dimx3], freal)
+for i = ["e1","e2","e3","er","etheta","ephi"]
+  ncsave(fn, i, xg.(i), [dimx1, dimx2, dimx3, dimecef], freal)
+end
 
 end % function
 
@@ -264,7 +227,7 @@ freal = 'float64';
 
 %% size
 fn = with_suffix(p.indat_size, '.dat');
-disp(['write ', fn])
+disp("write " + fn)
 
 fid = fopen(fn, 'w');
 fwrite(fid, xg.lx, 'integer*4');
@@ -272,7 +235,7 @@ fclose(fid);
 
 %% grid
 fn = with_suffix(p.indat_grid, '.h5');
-disp(['write ', fn])
+disp("write " + fn)
 
 fid = fopen(fn, 'w');
 

@@ -31,9 +31,6 @@ function map = lbmap(n,scheme)
 % http://geography.uoregon.edu/datagraphics/EOS/Light&Bartlein_EOS2004.pdf
 % Copyright 2007-2010 The MathWorks, Inc.
 
-
-narginchk(0,2)
-nargoutchk(0,1)
 %defaults
 if nargin<2
   scheme = 'Blue';

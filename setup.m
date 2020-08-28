@@ -1,8 +1,6 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
-narginchk(0,0)
-
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 
@@ -25,11 +23,11 @@ if ~ismac
 end
 
 sys_path = getenv('PATH');
-needed_paths = {'/usr/local/bin'};
+needed_paths = "/usr/local/bin";
 for np = needed_paths
-if isfolder(np{:}) && ~contains(sys_path, np{:})
-  sys_path = [np{:}, pathsep, sys_path]; %#ok<AGROW>
-end
+  if isfolder(np) && ~contains(sys_path, np)
+    sys_path = np + pathsep + sys_path;
+  end
 end
 
 setenv('PATH', sys_path)

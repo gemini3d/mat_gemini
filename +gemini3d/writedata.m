@@ -8,28 +8,25 @@ function writedata(time, ns, vsx1, Ts, fn, file_format, Phitop)
 %
 % INPUT ARRAYS SHOULD BE TRIMMED TO THE CORRECT SIZE
 % I.E. THEY SHOULD NOT INCLUDE GHOST CELLS
+arguments
+  time (1,1) datetime
+  ns (:,:,:,:) {mustBeFinite,mustBeNonnegative}
+  vsx1 (:,:,:,:) {mustBeFinite}
+  Ts (:,:,:,:) {mustBeFinite,mustBeNonnegative}
+  fn (1,1) string
+  file_format (1,1) string = ""
+  Phitop (:,:) {mustBeFinite} = zeros(size(ns,2),size(ns,3))
+end
 
-narginchk(5,7)
-validateattributes(time, {'datetime'}, {'scalar'}, 1)
-validateattributes(ns, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'density', 2)
-validateattributes(vsx1, {'numeric'}, {'ndims', 4}, mfilename, 'velocity', 3)
-validateattributes(Ts, {'numeric'}, {'ndims', 4,'nonnegative'}, mfilename, 'temperature', 4)
-validateattributes(fn, {'char'}, {'vector'}, mfilename, 'output filename',5)
+% FIXME:  may want validate potential input
 
 assert(~isfolder(fn), '%s must be a filename, not a directory', fn)
 
-if nargin < 6 || isempty(file_format)
+if file_format == ""
   [~, ~, suffix] = fileparts(fn);
-  file_format = suffix(2:end);
+  file_format = extractAfter(suffix, 1);
 end
-validateattributes(file_format, {'char'}, {'vector'}, mfilename,'hdf5 or raw',6)
 
-if nargin < 7
-    disp('NOTE: Setting unspecified potential to zero')
-    Phitop = zeros(size(ns,2),size(ns,3));
-end %if
-validateattributes(Phitop, {'numeric'}, {'size', [size(ns, 2), size(ns,3)]}, 7)
-% FIXME:  may want validate potential input
 
 switch file_format
   case 'h5', write_hdf5(fn, time, ns, vsx1, Ts, Phitop)
@@ -45,9 +42,9 @@ end % function
 function write_hdf5(fn, time, ns, vsx1, Ts, Phitop)
 import gemini3d.fileio.h5save
 
-fn = gemini3d.fileio.with_suffix(fn, '.h5');
+fn = gemini3d.fileio.with_suffix(fn, ".h5");
 
-disp(['write ',fn])
+disp("write " + fn)
 if isfile(fn), delete(fn), end
 
 freal = 'float32';
@@ -69,7 +66,7 @@ import gemini3d.fileio.ncsave
 
 fn = gemini3d.fileio.with_suffix(fn, '.nc');
 
-disp(['write ',fn])
+disp("write " + fn)
 if isfile(fn), delete(fn), end
 
 day = [time.Year, time.Month, time.Day];

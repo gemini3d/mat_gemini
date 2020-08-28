@@ -6,13 +6,13 @@ arguments
 end
 
 in = split(in, ' ');
-in = split(in(1), '.');
+in = str2double(split(in(1), '.'));
 
-ref = split(ref, '.');
+ref = str2double(split(ref, '.'));
 
 r = false;
 
-for i = min(length(in), length(ref))
+for i = 1:min(length(in), length(ref))
   if in(i) < ref(i)
     return
   end

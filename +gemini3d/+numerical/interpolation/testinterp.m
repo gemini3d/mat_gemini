@@ -1,7 +1,7 @@
 function testinterp(fn)
-
-narginchk(1,1)
-
+arguments
+  fn (1,1) string
+end
 gemini3d.exist_or_skip(fn, 'file')
 
 lx1 = h5read(fn, '/lx1');

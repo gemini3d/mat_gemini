@@ -1,14 +1,17 @@
 function cfg = make_valid_paths(cfg, top)
 %% resolve all paths in the config struct
-import gemini3d.fileio.expanduser
+arguments
+  cfg (1,1) struct
+  top (1,1) string = ""
+end
 
-narginchk(1,2)
+import gemini3d.fileio.expanduser
 
 if isfield(cfg, 'outdir')
   cfg.outdir = expanduser(cfg.outdir);
 end
 
-if nargin < 2
+if top == ""
   top = cfg.outdir;
 else
   top = expanduser(top);
@@ -16,13 +19,13 @@ end
 
 cfg.input_dir = fullfile(top, 'inputs');
 
-for n = {'indat_size', 'indat_grid', 'indat_file'}
-  cfg.(n{:}) = make_valid_filename(cfg.(n{:}), top);
+for n = ["indat_size", "indat_grid", "indat_file"]
+  cfg.(n) = make_valid_filename(cfg.(n), top);
 end
 
-for n = {'eq_dir', 'eq_zip', 'E0_dir', 'prec_dir'}
-  if isfield(cfg, n{:}) && ~isempty(cfg.(n{:}))
-    cfg.(n{:}) = make_valid_folder(cfg.(n{:}), top);
+for n = ["eq_dir", "eq_zip", "E0_dir", "prec_dir"]
+  if isfield(cfg, n) && ~isempty(cfg.(n))
+    cfg.(n) = make_valid_folder(cfg.(n), top);
   end
 end
 

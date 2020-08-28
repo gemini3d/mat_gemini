@@ -1,8 +1,8 @@
 function ok = check_grid(xg)
 % sanity check grid
-
-narginchk(1,1)
-validateattributes(xg, {'struct'}, {'scalar'}, 1)
+arguments
+  xg (1,1) struct
+end
 
 tol_inc = 1e-6;  % MZ - patched to function with dipole grids
 tol_inc_big = 1e6;
@@ -10,10 +10,10 @@ tol_big = 1e9;
 
 ok = true;
 %% check for monotonic increasing and reasonable dimension size
-for k = {'x1', 'x1i', 'x2', 'x2i', 'x3', 'x3i'}
-  p = squeeze(xg.(k{:}));
-  ok = ok && is_monotonic_increasing(p, tol_inc, tol_inc_big, k{:});
-  ok = ok && not_too_big(p, tol_big, k{:});
+for k = ["x1", "x1i", "x2", "x2i", "x3", "x3i"]
+  p = squeeze(xg.(k));
+  ok = ok && is_monotonic_increasing(p, tol_inc, tol_inc_big, k);
+  ok = ok && not_too_big(p, tol_big, k);
 end
 
 %% geo lat/lon

@@ -1,9 +1,12 @@
 function pg = precip_grid(xg, p, pg)
-
-narginchk(3, 3)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, "spatial grid", 1)
-validateattributes(p, {'struct'}, {'scalar'}, mfilename, "params", 2)
-validateattributes(pg, {'struct'}, {'scalar'}, mfilename, 'precipitation params', 3)
+% xg: spatial grid
+% p: simulation params
+% pg: precipitation params
+arguments
+  xg (1,1) struct
+  p (1,1) struct
+  pg (1,1) struct
+end
 
 thetamin = min(xg.theta(:));
 thetamax = max(xg.theta(:));

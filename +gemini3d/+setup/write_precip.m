@@ -3,8 +3,14 @@ function write_precip(pg, outdir, file_format)
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT NEED TO BE SMOOTHED.
+arguments
+  pg (1,1) struct
+  outdir (1,1) string
+  file_format (1,1) string
+end
 
-disp(['write to ',outdir])
+disp("write to " + outdir)
+
 switch file_format
   case 'h5', write_hdf5(outdir, pg)
   case 'nc', write_nc4(outdir, pg)
@@ -18,7 +24,6 @@ end % function
 function write_hdf5(outdir, pg)
 import gemini3d.fileio.h5save
 
-narginchk(2,2)
 fn = fullfile(outdir, 'simsize.h5');
 if isfile(fn), delete(fn), end
 h5save(fn, '/llon', int32(pg.llon))
@@ -33,7 +38,7 @@ h5save(fn, '/mlat', pg.mlat, [], freal)
 
 for i = 1:length(pg.times)
 
-  fn = fullfile(outdir, [gemini3d.datelab(pg.times(i)), '.h5']);
+  fn = fullfile(outdir, gemini3d.datelab(pg.times(i)) + ".h5");
   if isfile(fn), delete(fn), end
 
   h5save(fn, '/Qp', pg.Qit(:,:,i), [pg.llon, pg.llat], freal)
@@ -45,8 +50,6 @@ end % function
 
 function write_nc4(outdir, pg)
 import gemini3d.fileio.ncsave
-
-narginchk(2,2)
 
 fn = fullfile(outdir, 'simsize.nc');
 if isfile(fn), delete(fn), end
@@ -61,7 +64,7 @@ ncsave(fn, 'mlon', pg.mlon, {'lon', length(pg.mlon)}, freal)
 ncsave(fn, 'mlat', pg.mlat, {'lat', length(pg.mlat)}, freal)
 
 for i = 1:length(pg.times)
-  fn = fullfile(outdir, [gemini3d.datelab(pg.times(i)), '.nc']);
+  fn = fullfile(outdir, gemini3d.datelab(pg.times(i)) + ".nc");
   if isfile(fn), delete(fn), end
 
   ncsave(fn, 'Qp', pg.Qit(:,:,i), {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, freal)
@@ -72,8 +75,6 @@ end % function
 
 
 function write_raw(outdir, pg)
-
-narginchk(2,2)
 
 filename= fullfile(outdir, 'simsize.dat');
 fid=fopen(filename, 'w');
@@ -90,13 +91,10 @@ fwrite(fid, pg.mlon, freal);
 fwrite(fid, pg.mlat, freal);
 fclose(fid);
 
-for i = 1:size(pg.expdate, 1)
-  UTsec = pg.expdate(i,4)*3600 + pg.expdate(i,5)*60 + pg.expdate(i,6);
-  ymd = pg.expdate(i, 1:3);
+for i = 1:length(pg.times)
+  fn = fullfile(outdir, gemini3d.datelab(pg.times(i)) + ".dat");
 
-  filename = fullfile(outdir, [gemini3d.datelab(ymd,UTsec), '.dat']);
-
-  fid = fopen(filename,'w');
+  fid = fopen(fn, 'w');
   fwrite(fid, pg.Qit(:,:,i), freal);
   fwrite(fid, pg.E0it(:,:,i), freal);
   fclose(fid);

@@ -1,8 +1,8 @@
 function [x1,x2,x3,f] = testinterp3(fn)
 %  testinterp3('../../../gemini3d/build/src/numerical/interpolation/output3d.h5')
-
-narginchk(1,1)
-
+arguments
+  fn (1,1) string
+end
 gemini3d.exist_or_skip(fn, 'file')
 
 lx1 = h5read(fn, '/lx1');

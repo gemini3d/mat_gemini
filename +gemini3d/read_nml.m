@@ -1,9 +1,11 @@
 function p = read_nml(path)
 % for reading simulation config*.nml. Fortran namelist is a standard
 % format.
-import gemini3d.*
+arguments
+  path (1,1) string
+end
 
-narginchk(1,1)
+import gemini3d.*
 
 filename = gemini3d.get_configfile(path);
 
@@ -25,7 +27,7 @@ end
 
 if isfield(p, 'setup_functions')
   if ischar(p.setup_functions)
-    p.setup_functions = {p.setup_functions};
+    p.setup_functions = string({p.setup_functions});
   end
 end
 
@@ -50,8 +52,6 @@ end % function
 function p = read_if_present(p, filename, namelist)
 % read a namelist, if it exists, otherwise don't modify the input struct
 import gemini3d.*
-
-narginchk(3, 3)
 
 try
   p = merge_struct(p, read_namelist(filename, namelist));

@@ -1,7 +1,8 @@
 function test_potential2D(fn)
 % test_potential2D('../../..\gemini3d\build\src\numerical\potential\test_potential2d.h5')
-
-narginchk(1,1)
+arguments
+  fn (1,1) string
+end
 
 gemini3d.exist_or_skip(fn, 'file')
 
@@ -12,7 +13,7 @@ Phi2 = h5read(fn, '/Phi2squeeze');
 Phitrue = h5read(fn, '/Phitrue');
 
 
-gemini3d.assert_allclose(Phi2(13, 13), 0.00032659, 1e-5,[],'Potential 2d accuracy')
+gemini3d.assert_allclose(Phi2(13, 13), 0.00032659, 'rtol', 1e-5, 'msg', 'Potential 2d accuracy')
 
 if ~isinteractive
   return

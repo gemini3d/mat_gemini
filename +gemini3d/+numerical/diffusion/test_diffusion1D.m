@@ -3,9 +3,11 @@ function [x1,TsEuler,TsBDF2,Tstrue] = test_diffusion1D(fn)
 %LOAD AND PLOT NUMERICAL SOLUTION to diffusion problem
 %return the test data to the user in case they want to
 %look over the differences and numerical error.
-import gemini3d.assert_allclose
+arguments
+  fn (1,1) string
+end
 
-narginchk(1,1)
+import gemini3d.assert_allclose
 
 gemini3d.exist_or_skip(fn, 'file')
 

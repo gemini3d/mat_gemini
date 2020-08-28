@@ -1,6 +1,5 @@
 function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
 
-narginchk(9,9)
 %NOTE THAT INPUTS DTHETA AND DPHI ARE INTENDED TO REPRESENT THE FULL THETA
 %AND PHI EXTENTS OF
 
@@ -19,7 +18,17 @@ narginchk(9,9)
 % - Fortran code will interpret this grid as including ghost cells, so
 % if you want a dimension to be size "n" adjust requested grid size so that
 % it is "n+4"
-
+arguments
+    dtheta {mustBeNumeric}
+    dphi {mustBeNumeric}
+    lpp (1,1) {mustBeInteger,mustBePositive}
+    lqp (1,1) {mustBeInteger,mustBePositive}
+    lphip (1,1) {mustBeInteger,mustBePositive}
+    altmin (1,1) {mustBePositive}
+    glat {mustBeNumeric}
+    glon {mustBeNumeric}
+    gridflag {mustBeInteger}
+end
 
 %% PAD GRID WITH GHOST CELLS
 lq=lqp+4;

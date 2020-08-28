@@ -1,39 +1,26 @@
-function plot2D_cart(time,xg,parm,parmlbl,caxlims,sourceloc,ha, cmap)
+function plot2D_cart(time,xg,parm,parmlbl,caxlims,sourceloc, h, cmap)
 
-narginchk(3,8)
-validateattributes(time,{'datetime'}, {'scalar'},1)
-validateattributes(xg, {'struct'}, {'scalar'}, mfilename, 'grid structure', 2)
-
-if nargin<4, parmlbl=''; end
-validateattributes(parmlbl, {'char'}, {'vector'}, mfilename, 'parameter label', 4)
-validateattributes(parm, {'numeric'}, {'real', 'nonempty'}, mfilename, [parmlbl, ': parameter to plot'], 3)
-
-if nargin<5
-  caxlims=[];
-else
-  validateattributes(caxlims, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'plot intensity (min, max)', 5)
-end
-if nargin<6  || isempty(sourceloc) % leave || for validate
-  sourceloc = [];
-else
-  validateattributes(sourceloc, {'numeric'}, {'vector', 'numel', 2}, mfilename, 'source magnetic coordinates', 6)
+arguments
+  time (1,1) datetime
+  xg (1,1) struct
+  parm (:,:) {mustBeNumeric,mustBeNonempty}
+  parmlbl (1,1) string = ""
+  caxlims (1,:) {mustBeNumeric} = []
+  sourceloc (1,:) {mustBeNumeric} = []
+  h (1,1) = []
+  cmap (:,:) {mustBeNumeric,mustBeFinite} = parula(256)
 end
 
-if nargin<7 || isempty(ha)
-  ha = gemini3d.vis.plotfunctions.get_axes();
-else
-  ha = gemini3d.vis.plotfunctions.get_axes(ha);
-end
+plotparams.time = time;
+plotparams.parmlbl = parmlbl;
+plotparams.caxlims = caxlims;
+plotparams.cmap = cmap;
 
-if nargin<8 || isempty(cmap)
-  cmap = parula(256);
+if isa(h, 'matlab.ui.Figure')
+  ha = axes('parent', h);
+elseif isa(h, 'matlab.graphics.axis.Axes')
+  ha = h;
 end
-
-params.cmap = cmap;
-params.caxlims = caxlims;
-params.parmlbl = parmlbl;
-%% PLOT parameters
-%set(h,'PaperPosition',[0 0 11 4.5]);
 
 %SOURCE LOCATION
 if ~isempty(sourceloc)
@@ -55,7 +42,7 @@ Re=6370e3;
 
 %JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
 %ix3=floor(lx3/2);
-params.altref=300;
+plotparams.altref=300;
 
 
 %SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
@@ -128,15 +115,15 @@ end
 %% MAKE THE PLOT
 if isvector(parm)
   if xg.lx(3) == 1
-    plot1d2(xp, parmp, ha, params)
+    plot1d2(xp, parmp, ha, plotparams)
   elseif xg.lx(2) == 1
-    plot1d3(yp, parmp, ha, params)
+    plot1d3(yp, parmp, ha, plotparams)
   end
 else
   if xg.lx(3)==1
-    plot12(xp, zp, parmp, ha, sourcemlat, params)
+    plot12(xp, zp, parmp, ha, sourcemlat, plotparams)
   elseif xg.lx(2)==1
-    plot13(yp, zp, parmp, ha, sourcemlat, params)
+    plot13(yp, zp, parmp, ha, sourcemlat, plotparams)
   end
 end
 
@@ -144,27 +131,24 @@ title(ha, [datestr(time), ' UT'])
 
 end % function
 
-function plot1d2(xp, parm, ha, params)
-narginchk(4,4)
+function plot1d2(xp, parm, ha, plotparams)
 plot(ha, xp/1e3, parm)
 xlabel(ha, 'eastward dist. (km)')
-ylabel(ha, params.parmlbl)
+ylabel(ha, plotparams.parmlbl)
 end % function
 
 
-function plot1d3(yp, parm, ha, params)
-narginchk(4,4)
+function plot1d3(yp, parm, ha, plotparams)
 plot(ha, yp/1e3, parm)
 xlabel(ha, 'northward dist. (km)')
-ylabel(ha, params.parmlbl)
+ylabel(ha, plotparams.parmlbl)
 end % function
 
 
-function plot12(xp, zp, parmp, ha, sourcemlat, params)
-narginchk(6, 6)
+function plot12(xp, zp, parmp, ha, sourcemlat, plotparams)
 hi = imagesc(xp/1e3, zp/1e3,parmp, 'parent', ha);
 hold(ha, 'on')
-yline(ha, params.altref,'w--','LineWidth',2)
+yline(ha, plotparams.altref,'w--','LineWidth',2)
 
 if ~isempty(sourcemlat)
   plot(ha, sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2)
@@ -173,7 +157,7 @@ hold(ha, 'off')
 
 set(hi, 'alphadata', ~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, params)
+gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
 
 xlabel(ha, 'eastward dist. (km)')
 ylabel(ha, 'altitude (km)')
@@ -181,8 +165,7 @@ ylabel(ha, 'altitude (km)')
 end
 
 
-function plot13(yp, zp, parmp, ha, sourcemlat, params)
-narginchk(6,6)
+function plot13(yp, zp, parmp, ha, sourcemlat, plotparams)
 hi = imagesc(yp/1e3, zp/1e3, parmp, 'parent', ha);
 hold(ha, 'on')
 % yline(ha, altref, 'w--','LineWidth',2);
@@ -193,7 +176,7 @@ hold(ha, 'off')
 
 set(hi, 'alphadata', ~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, params)
+gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
 
 xlabel(ha, 'northward dist. (km)')
 ylabel(ha, 'altitude (km)')

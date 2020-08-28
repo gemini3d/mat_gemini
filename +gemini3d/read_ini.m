@@ -1,10 +1,11 @@
 function params = read_ini(filename)
 % read config*.ini files. Only for legacy use, new simulations should used
 % config.nml Namelist format.
+arguments
+  filename (1,1) string
+end
 
-narginchk(1,1)
-
-assert(isfile(filename), ['config file ', filename, ' not found.'])
+assert(isfile(filename), "config file %s not found", filename)
 
 fid=fopen(filename);
 
