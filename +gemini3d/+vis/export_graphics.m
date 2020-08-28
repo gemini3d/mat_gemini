@@ -5,22 +5,22 @@ function export_graphics(handle, filename, varargin)
 
 narginchk(2,inf)
 
-use_print = ~gemini3d.version_atleast(version, '9.8.0.1451342');
 filename = gemini3d.fileio.expanduser(filename);
 
-if use_print
-  if nargin >= 4 && strcmpi(varargin{1}, 'resolution')
-    dpi = ['-r', int2str(varargin{2})];
-  else
-    dpi = [];
-  end
-  [~,~,ext] = fileparts(filename);
-  flag = printflag(ext(2:end));
-  % legacy figure saving function
-  print(handle, flag, filename, dpi)
-else
+if matoct.version_atleast(version, '9.8.0.1451342')
   exportgraphics(handle, filename, varargin{:})
+  return
 end
+
+if nargin >= 4 && strcmpi(varargin{1}, 'resolution')
+  dpi = ['-r', int2str(varargin{2})];
+else
+  dpi = [];
+end
+[~,~,ext] = fileparts(filename);
+flag = printflag(ext(2:end));
+% legacy figure saving function
+print(handle, flag, filename, dpi)
 
 end % function
 
