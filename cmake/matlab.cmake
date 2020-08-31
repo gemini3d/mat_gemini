@@ -1,12 +1,4 @@
-# currently (August 2020) Matlab R2020b doesn't yet work due to Matlab bug.
-# So search from newest to oldest known working versions.
-
-foreach(v 9.8 9.7 9.6)
-  find_package(Matlab ${v} EXACT COMPONENTS MAIN_PROGRAM)
-  if(Matlab_FOUND)
-    break()
-  endif()
-endforeach()
+find_package(Matlab COMPONENTS MAIN_PROGRAM)
 if(NOT Matlab_FOUND)
   return()
 endif()
@@ -23,13 +15,12 @@ if(Matlab_RELEASE) # don't fail if installed in custom directory
   matlab_get_version_from_release_name(${Matlab_RELEASE} Matlab_VERSION)
 endif()
 
-if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.6)
-  message(STATUS "Matlab >= R2019a required for -batch mode")
+if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.7)
+  message(STATUS "Matlab >= R2019b required for this project")
   return()
 endif()
 
-add_test(NAME matlab:${test_name}
+add_test(NAME matlab_suite
   COMMAND ${Matlab_MAIN_PROGRAM} -batch test_gemini
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-set_tests_properties(matlab:${test_name} PROPERTIES
-  TIMEOUT 600)
+set_tests_properties(matlab_suite PROPERTIES TIMEOUT 1000)
