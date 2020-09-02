@@ -8,11 +8,13 @@ end
 
 din = gemini3d.fileio.expanduser(din);
 
-if isfile(din)
-  [din, ~, suffixes] = fileparts(din);
-else
-  suffixes = [".h5", ".nc", ".dat"];
-end
+%if isfile(din)
+%  [din, ~, suffixes] = fileparts(din);
+%else
+%  suffixes = [".h5", ".nc", ".dat"];
+%end
+[din, ~, ~] = fileparts(din);
+suffixes = [".h5", ".nc", ".dat"];    %search all suffixes in case the inputs files are different from output
 
 for suffix = suffixes
   for stem = ["inputs", ""]
