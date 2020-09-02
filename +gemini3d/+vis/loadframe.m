@@ -8,8 +8,12 @@ function dat = loadframe(filename, cfg, vars)
 % dat = loadframe(filename, cfg)
 % dat = loadframe(filename, cfg, vars)
 %
-% The "vars" argument allows loading a subset of variables.
-% currently only works for "ne"
+% The optional "vars" argument allows loading a subset of variables.
+% for example:
+%
+% loadframe(..., "ne")
+% loadframe(..., ["ne", "Te"])
+
 arguments
   filename (1,1) string
   cfg (1,1) = struct()
@@ -18,8 +22,7 @@ end
 
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
-  [direc,~,~]=fileparts(filename);
-  cfg = gemini3d.read_config(direc);
+  cfg = gemini3d.read_config(fileparts(filename));
   % if using raw output, cfg.flagoutput is necessary
 end
 
