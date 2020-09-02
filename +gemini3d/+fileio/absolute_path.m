@@ -5,7 +5,6 @@ function abspath = absolute_path(p)
 % subsystem, but are sometimes still valid--so return
 % unmodified path if this occurs.
 %
-
 % Copyright (c) 2020 Michael Hirsch (MIT License)
 arguments
   p (1,1) string

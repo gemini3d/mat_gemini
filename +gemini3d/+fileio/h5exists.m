@@ -10,15 +10,9 @@ arguments
   varnames (1,:) string
 end
 
-if startsWith(varnames, "/")
-  varnames = extractAfter(varnames, 1);
-end
+i = startsWith(varnames, "/");
+varnames(i) = extractAfter(varnames(i), 1);
 
-vars = gemini3d.fileio.h5variables(filename);
-
-exists = false(size(varnames));
-for i = 1:length(varnames)
-  exists(i) = any(vars == varnames(i));
-end
+exists = contains(varnames, gemini3d.fileio.h5variables(filename));
 
 end % function
