@@ -18,7 +18,6 @@ end
 
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
-  %cfg = struct();
   [direc,~,~]=fileparts(filename);
   cfg=gemini3d.read_config(direc);      %if using raw output this is the only way matlab will know what type of output was done
 end
