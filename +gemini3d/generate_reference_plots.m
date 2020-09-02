@@ -1,7 +1,7 @@
 function generate_reference_plots(topdir, only)
 arguments
   topdir (1,1) string
-  only (:,1) string = string([])
+  only (1,:) string = string([])
 end
 
 topdir = gemini3d.fileio.expanduser(topdir);

@@ -1,7 +1,7 @@
 function dat = loadframe3Dcurv(filename, vars)
 arguments
   filename (1,1) string
-  vars (:,1) string = string([])
+  vars (1,:) string = string([])
 end
 
 [~,~,ext] = fileparts(filename);

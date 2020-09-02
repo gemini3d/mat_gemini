@@ -17,7 +17,7 @@ function dat = loadframe(filename, cfg, vars)
 arguments
   filename (1,1) string
   cfg (1,1) = struct()  % don't coerce to datetime, but allow datetime
-  vars (:,1) string = string([])
+  vars (1,:) string = string([])
 end
 
 if isdatetime(cfg)
