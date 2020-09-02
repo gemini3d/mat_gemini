@@ -1,11 +1,11 @@
 function time = get_time(file)
 arguments
-  file (1,1) string
+  file (1,1)
 end
 
 time = [];  % in case not present in file
 %% file handle (.dat file)
-if isinteger(file)
+if isnumeric(file)
   % raw file handle
   t = fread(file, 4, 'real*8');
 
