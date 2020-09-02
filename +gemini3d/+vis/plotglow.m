@@ -2,8 +2,8 @@ function plotglow(direc, saveplot_fmt, visible)
 % plots Gemini-Glow auroral emissions
 arguments
   direc (1,1) string
-  saveplot_fmt (:,1) string = string([])
-  visible (1,1) logical = isempty(saveplot_fmt) || saveplot_fmt == ""
+  saveplot_fmt (1,:) string
+  visible (1,1) logical
 end
 
 assert(isfolder(direc), 'not a directory: %s', direc)

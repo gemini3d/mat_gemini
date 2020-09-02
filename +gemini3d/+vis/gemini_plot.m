@@ -4,10 +4,10 @@ function h = gemini_plot(direc, saveplot_fmt, parallel, xg, plotfun)
 % Parameters
 % ---------
 % simulation_dir: top-level path of simulation
-% save_Format: 'png' or 'eps' to save. If empty do not save.
+% saveplot_fmt: 'png' or 'eps' to save. If empty do not save.
 arguments
   direc (1,1) string
-  saveplot_fmt (1,:) string = ""
+  saveplot_fmt (1,:) string = string([])
   parallel (1,1) {mustBeInteger,mustBeFinite} = 0
   xg (1,1) struct = struct()
   plotfun (1,1) string = ""

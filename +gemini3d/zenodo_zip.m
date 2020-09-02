@@ -5,7 +5,7 @@ function zenodo_zip(path, glob, saveplot_fmt)
 arguments
   path (1,1) string
   glob (1,1) string = "*"
-  saveplot_fmt (:,1) string = "png"
+  saveplot_fmt (1,:) string = "png"
 end
 
 path = gemini3d.fileio.expanduser(path);
@@ -20,7 +20,7 @@ assert(~isempty(dirs), 'did not find any dirs under %s', path)
 for i = 1:length(dirs)
   if ~dirs(i).isdir, continue, end
   name = dirs(i).name;
-  zip_file = fullfile(path, [name, '.zip']);
+  zip_file = fullfile(path, name + ".zip");
   zip(zip_file, fullfile(path, name))
 end
 
@@ -29,8 +29,8 @@ for i = 1:length(dirs)
   if ~dirs(i).isdir, continue, end
   name = dirs(i).name;
   gemini3d.vis.gemini_plot(fullfile(path, name), saveplot_fmt)
-  zip_file = fullfile(path, [name, '_plots.zip']);
-  zip(zip_file, fullfile(path, name, 'plots'))
+  zip_file = fullfile(path, name + "_plots.zip");
+  zip(zip_file, fullfile(path, name, "plots"))
 end
 
 end %function

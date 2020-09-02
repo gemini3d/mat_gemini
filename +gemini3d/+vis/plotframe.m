@@ -162,7 +162,7 @@ end
 end
 
 
-if lotsplots && ~isempty(saveplot_fmt)
+if lotsplots
   % for 3D or long 2D plots print and output file every time step
   gemini3d.vis.saveframe(p.flagoutput, direc, dat.filename, saveplot_fmt, h)
 end

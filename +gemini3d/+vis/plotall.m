@@ -14,17 +14,17 @@ function h = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 
 arguments
   direc (1,1) string
-  saveplot_fmt (1,:) string = []
+  saveplot_fmt (1,:) string = string([])
   plotfun (1,1) string = ""
   xg (1,1) struct = struct()
   parallel (1,1) {mustBeInteger,mustBeFinite} = 0
 end
 
-visible = saveplot_fmt == "";
+saveplot_fmt(~strlength(saveplot_fmt)) = [];
+visible = isempty(saveplot_fmt);
 
 lxs = gemini3d.simsize(direc);
-disp(['sim grid dimensions: ',num2str(lxs)])
-
+disp("sim grid dimensions: " + num2str(lxs))
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
 params = gemini3d.read_config(direc);

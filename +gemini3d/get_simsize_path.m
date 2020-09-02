@@ -8,10 +8,15 @@ end
 
 din = gemini3d.fileio.expanduser(din);
 
-[din, ~, ~] = fileparts(din);
+if isfile(din)
+  din = fileparts(din);
+end
+if ~isfolder(din)
+  error('get_simsize_path:file_not_found', '%s is not a folder', din)
+end
+
 suffixes = [".h5", ".nc", ".dat"];
 % search all suffixes in case the inputs files are different from output
-
 for suffix = suffixes
   for stem = ["inputs", ""]
     simsize_fn = fullfile(din, stem, "simsize") + suffix;
