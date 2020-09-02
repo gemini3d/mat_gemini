@@ -78,6 +78,8 @@ params.flagdneu = str2double(datatrim);
 fgetl(fid);
 
 params.mloc=[];
+params.sourcemlat=[];
+params.sourcemlon=[];
 if params.flagdneu
   datatrim = strtok(fgetl(fid),' ');
   [mlat,remainder]=strtok(datatrim,',');
@@ -85,6 +87,8 @@ if params.flagdneu
   % NOTE: str2num necessary here in case input formatted like 1.3d0 which
   % str2double returns NaN for while str2num works
   params.mloc=[str2num(mlat), str2num(mlon)]; %#ok<ST2NM>
+  params.sourcemlat=mloc(1);
+  params.sourcemlon=mloc(2);
 end
 
 fclose(fid);
