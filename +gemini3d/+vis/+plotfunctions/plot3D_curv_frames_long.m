@@ -32,7 +32,7 @@ plotparams.left_ylabel = 'altitude (km)';
 plotparams.mid_ylabel = 'magnetic latitude (deg.)';
 plotparams.mid_xlabel = 'magnetic longitude (deg.)';
 
-plotparams.right_xlabel = 'magnetic latitude (deg.)';
+plotparams.right_xlabel = 'magnetic longitude (deg.)';
 plotparams.right_ylabel = 'altitude (km)';
 %% SIZE OF SIMULATION
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);

@@ -4,12 +4,15 @@ function slice3right(ax, x, y, dat, P)
 hi = imagesc(ax, x, y, dat);
 set(hi, 'alphadata', ~isnan(dat));
 %% line
+hold(ax,'on');
 if ~verLessThan('matlab', '9.5')
-  % yline(ha, P.altref, 'w--','LineWidth',2);
+   yline(ax, P.altref, 'w--','LineWidth',2);
 end
-if ~isempty(P.sourcemlat)
-  plot(ax, P.sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);
+if ~isempty(P.sourcemlon)
+  plot(ax, P.sourcemlon,0,'r^','MarkerSize',12,'LineWidth',2);
 end
+hold(ax,'off');
+
 %% axes
 gemini3d.vis.plotfunctions.axes_tidy(ax, P)
 
