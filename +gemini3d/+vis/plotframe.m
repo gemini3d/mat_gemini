@@ -1,4 +1,4 @@
-function plotframe(direc, time_req, saveplot_fmt, options)
+function h = plotframe(direc, time_req, saveplot_fmt, options)
 %% CHECK ARGS AND SET SOME DEFAULT VALUES ON OPTIONAL ARGS
 arguments
   direc (1,1) string
@@ -35,7 +35,7 @@ else
   xg = options.xg;
 end
 
-if any(contains(fieldnames(options), "figures"))
+if any(contains(fieldnames(options), "figures")) && all(isvalid(options.figures))
   h = options.figures;
 else
   h = gemini3d.vis.plotinit(xg, options.visible);
@@ -187,5 +187,7 @@ if lotsplots
   % for 3D or long 2D plots print and output file every time step
   gemini3d.vis.saveframe(cfg.flagoutput, direc, dat.filename, saveplot_fmt, h)
 end
+
+if nargout == 0, clear('h'), end
 
 end % function plotframe
