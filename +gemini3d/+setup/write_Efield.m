@@ -31,8 +31,8 @@ import gemini3d.fileio.h5save
 
 fn = fullfile(dir_out, 'simsize.h5');
 if isfile(fn), delete(fn), end
-h5save(fn, '/llon', int32(E.llon))
-h5save(fn, '/llat', int32(E.llat))
+h5save(fn, '/llon', E.llon, "type", "int32")
+h5save(fn, '/llat', E.llat, "type", "int32")
 
 llon = E.llon;
 llat = E.llat;
@@ -44,8 +44,8 @@ end
 
 freal = 'float32';
 
-h5save(fn, '/mlon', E.mlon, [], freal)
-h5save(fn, '/mlat', E.mlat, [], freal)
+h5save(fn, '/mlon', E.mlon, "type", freal)
+h5save(fn, '/mlat', E.mlat, "type", freal)
 
 disp("write to " + dir_out)
 
@@ -55,15 +55,15 @@ for i = 1:length(E.times)
   if isfile(fn), delete(fn), end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  h5save(fn, '/flagdirich', int32(E.flagdirich(i)))
-  h5save(fn, '/Exit', E.Exit(:,:,i), [llon, llat], freal)
-  h5save(fn, '/Eyit', E.Eyit(:,:,i), [llon, llat], freal)
-  h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), [llon, llat], freal)
-  h5save(fn, '/Vmaxx1it', E.Vmaxx1it(:,:,i), [llon, llat], freal)
-  h5save(fn, '/Vminx2ist', E.Vminx2ist(:,i), llat, freal)
-  h5save(fn, '/Vmaxx2ist', E.Vmaxx2ist(:,i), llat, freal)
-  h5save(fn, '/Vminx3ist', E.Vminx3ist(:,i), llon, freal)
-  h5save(fn, '/Vmaxx3ist', E.Vmaxx3ist(:,i), llon, freal)
+  h5save(fn, '/flagdirich', E.flagdirich(i), "type", "int32")
+  h5save(fn, '/Exit', E.Exit(:,:,i), "size", [llon, llat], "type", freal)
+  h5save(fn, '/Eyit', E.Eyit(:,:,i), "size", [llon, llat], "type", freal)
+  h5save(fn, '/Vminx1it', E.Vminx1it(:,:,i), "size", [llon, llat], "type", freal)
+  h5save(fn, '/Vmaxx1it', E.Vmaxx1it(:,:,i), "size", [llon, llat], "type", freal)
+  h5save(fn, '/Vminx2ist', E.Vminx2ist(:,i), "size", llat, "type", freal)
+  h5save(fn, '/Vmaxx2ist', E.Vmaxx2ist(:,i), "size", llat, "type", freal)
+  h5save(fn, '/Vminx3ist', E.Vminx3ist(:,i), "size", llon, "type", freal)
+  h5save(fn, '/Vmaxx3ist', E.Vmaxx3ist(:,i), "size", llon, "type", freal)
 end
 end % function
 
@@ -73,8 +73,8 @@ import gemini3d.fileio.ncsave
 
 fn = fullfile(dir_out, 'simsize.nc');
 if isfile(fn), delete(fn), end
-ncsave(fn, 'llon', int32(E.llon))
-ncsave(fn, 'llat', int32(E.llat))
+ncsave(fn, 'llon', E.llon, "type", "int32")
+ncsave(fn, 'llat', E.llat, "type", "int32")
 
 fn = fullfile(dir_out, 'simgrid.nc');
 if isfile(fn), delete(fn), end
@@ -83,8 +83,8 @@ freal = 'float32';
 dlon = {'lon', E.llon};
 dlat = {'lat', E.llat};
 
-ncsave(fn, 'mlon', E.mlon, dlon, freal)
-ncsave(fn, 'mlat', E.mlat, dlat, freal)
+ncsave(fn, 'mlon', E.mlon, "dims", dlon, "type", freal)
+ncsave(fn, 'mlat', E.mlat, "dims", dlat, "type", freal)
 
 disp("write to " + dir_out)
 
@@ -96,15 +96,15 @@ for i = 1:length(E.times)
   end
 
   %FOR EACH FRAME WRITE A BC TYPE AND THEN OUTPUT BACKGROUND AND BCs
-  ncsave(fn, 'flagdirich', int32(E.flagdirich(i)))
-  ncsave(fn, 'Exit', E.Exit(:,:,i), [dlon, dlat], freal)
-  ncsave(fn, 'Eyit', E.Eyit(:,:,i), [dlon, dlat], freal)
-  ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), [dlon, dlat], freal)
-  ncsave(fn, 'Vmaxx1it', E.Vmaxx1it(:,:,i), [dlon, dlat], freal)
-  ncsave(fn, 'Vminx2ist', E.Vminx2ist(:,i), dlat, freal)
-  ncsave(fn, 'Vmaxx2ist', E.Vmaxx2ist(:,i), dlat, freal)
-  ncsave(fn, 'Vminx3ist', E.Vminx3ist(:,i), dlon, freal)
-  ncsave(fn, 'Vmaxx3ist', E.Vmaxx3ist(:,i), dlon, freal)
+  ncsave(fn, 'flagdirich', E.flagdirich(i), "type", "int32")
+  ncsave(fn, 'Exit', E.Exit(:,:,i), "dims", [dlon, dlat], "type", freal)
+  ncsave(fn, 'Eyit', E.Eyit(:,:,i), "dims", [dlon, dlat], "type", freal)
+  ncsave(fn, 'Vminx1it', E.Vminx1it(:,:,i), "dims", [dlon, dlat], "type", freal)
+  ncsave(fn, 'Vmaxx1it', E.Vmaxx1it(:,:,i), "dims", [dlon, dlat], "type", freal)
+  ncsave(fn, 'Vminx2ist', E.Vminx2ist(:,i), "dims", dlat, "type", freal)
+  ncsave(fn, 'Vmaxx2ist', E.Vmaxx2ist(:,i), "dims", dlat, "type", freal)
+  ncsave(fn, 'Vminx3ist', E.Vminx3ist(:,i), "dims", dlon, "type", freal)
+  ncsave(fn, 'Vmaxx3ist', E.Vmaxx3ist(:,i), "dims", dlon, "type", freal)
 end
 end % function
 

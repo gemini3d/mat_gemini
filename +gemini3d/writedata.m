@@ -50,13 +50,13 @@ if isfile(fn), delete(fn), end
 freal = 'float32';
 
 day = [time.Year, time.Month, time.Day];
-h5save(fn, '/time/ymd', int32(day))
-h5save(fn, '/time/UTsec', seconds(time - datetime(day)), [], freal)
+h5save(fn, '/time/ymd', day, "type", "int32")
+h5save(fn, '/time/UTsec', seconds(time - datetime(day)), "type", freal)
 
-h5save(fn, '/nsall', ns, [], freal)
-h5save(fn, '/vs1all', vsx1, [], freal)
-h5save(fn, '/Tsall', Ts, [], freal)
-h5save(fn, '/Phiall', Phitop, [], freal)
+h5save(fn, '/nsall', ns, "type",  freal)
+h5save(fn, '/vs1all', vsx1, "type", freal)
+h5save(fn, '/Tsall', Ts, "type", freal)
+h5save(fn, '/Phiall', Phitop, "type", freal)
 
 end % function
 
@@ -70,17 +70,17 @@ disp("write " + fn)
 if isfile(fn), delete(fn), end
 
 day = [time.Year, time.Month, time.Day];
-ncsave(fn, 'ymd', int32(day), {'time', 3})
+ncsave(fn, 'ymd', day, "dims", {'time', 3}, "type", "int32")
 ncsave(fn, 'UTsec', seconds(time - datetime(day)))
 
 freal = 'float32';
 dimspec = {'x1', size(ns, 1), 'x2', size(ns, 2), 'x3', size(ns,3), 'species', 7};
 dimspec2 = {'x2', size(ns, 2), 'x3', size(ns,3)};
 
-ncsave(fn, 'nsall', ns, dimspec, freal)
-ncsave(fn, 'vs1all', vsx1, dimspec, freal)
-ncsave(fn, 'Tsall', Ts, dimspec, freal)
-ncsave(fn, 'Phiall', Phitop, dimspec2, freal)
+ncsave(fn, 'nsall', ns, "dims", dimspec, "type", freal)
+ncsave(fn, 'vs1all', vsx1, "dims", dimspec, "type", freal)
+ncsave(fn, 'Tsall', Ts, "dims", dimspec, "type", freal)
+ncsave(fn, 'Phiall', Phitop, "dims", dimspec2, "type", freal)
 
 end % function
 

@@ -64,9 +64,9 @@ fn = with_suffix(p.indat_size, '.h5');
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
-h5save(fn, '/lx1', int32(xg.lx(1)))
-h5save(fn, '/lx2', int32(xg.lx(2)))
-h5save(fn, '/lx3', int32(xg.lx(3)))
+h5save(fn, '/lx1', xg.lx(1), "type", "int32")
+h5save(fn, '/lx2', xg.lx(2), "type", "int32")
+h5save(fn, '/lx3', xg.lx(3), "type", "int32")
 
 lx1 = xg.lx(1);
 lx2 = xg.lx(2);
@@ -80,39 +80,39 @@ if isfile(fn), delete(fn), end
 freal = 'float32';
 
 for i = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h"]
-  h5save(fn, "/"+i, xg.(i), [], freal)
+  h5save(fn, "/"+i, xg.(i), "type", freal)
 end
 
 %MZ - squeeze() for dipole grids
 for i = ["x3", "x3i", "dx3b", "dx3h"]
-  h5save(fn, "/"+i, squeeze(xg.(i)), [], freal)
+  h5save(fn, "/"+i, squeeze(xg.(i)), "type", freal)
 end
 
-h5save(fn, '/h1', xg.h1, [lx1+4, lx2+4, lx3+4], freal)
-h5save(fn, '/h2', xg.h2, [lx1+4, lx2+4, lx3+4], freal)
-h5save(fn, '/h3', xg.h3, [lx1+4, lx2+4, lx3+4], freal)
+h5save(fn, '/h1', xg.h1, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
+h5save(fn, '/h2', xg.h2, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
+h5save(fn, '/h3', xg.h3, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
 
-h5save(fn, '/h1x1i', xg.h1x1i, [lx1+1, lx2, lx3], freal)
-h5save(fn, '/h2x1i', xg.h2x1i, [lx1+1, lx2, lx3], freal)
-h5save(fn, '/h3x1i', xg.h3x1i, [lx1+1, lx2, lx3], freal)
+h5save(fn, '/h1x1i', xg.h1x1i, "size", [lx1+1, lx2, lx3], "type", freal)
+h5save(fn, '/h2x1i', xg.h2x1i, "size", [lx1+1, lx2, lx3], "type", freal)
+h5save(fn, '/h3x1i', xg.h3x1i, "size", [lx1+1, lx2, lx3], "type", freal)
 
-h5save(fn, '/h1x2i', xg.h1x2i, [lx1, lx2+1, lx3], freal)
-h5save(fn, '/h2x2i', xg.h2x2i, [lx1, lx2+1, lx3], freal)
-h5save(fn, '/h3x2i', xg.h3x2i, [lx1, lx2+1, lx3], freal)
+h5save(fn, '/h1x2i', xg.h1x2i, "size", [lx1, lx2+1, lx3], "type", freal)
+h5save(fn, '/h2x2i', xg.h2x2i, "size", [lx1, lx2+1, lx3], "type", freal)
+h5save(fn, '/h3x2i', xg.h3x2i, "size", [lx1, lx2+1, lx3], "type", freal)
 
-h5save(fn, '/h1x3i', xg.h1x3i, [lx1, lx2, lx3+1], freal)
-h5save(fn, '/h2x3i', xg.h2x3i, [lx1, lx2, lx3+1], freal)
-h5save(fn, '/h3x3i', xg.h3x3i, [lx1, lx2, lx3+1], freal)
+h5save(fn, '/h1x3i', xg.h1x3i, "size", [lx1, lx2, lx3+1], "type", freal)
+h5save(fn, '/h2x3i', xg.h2x3i, "size", [lx1, lx2, lx3+1], "type", freal)
+h5save(fn, '/h3x3i', xg.h3x3i, "size", [lx1, lx2, lx3+1], "type", freal)
 
 for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
-  h5save(fn, "/"+i, xg.(i), [lx1, lx2, lx3], freal)
+  h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3], "type", freal)
 end
 
 % MZ - squeeze() for singleton dimensions
-h5save(fn, '/I', squeeze(xg.I), [lx2, lx3], freal)
+h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
 
 for i = ["e1","e2","e3","er","etheta","ephi"]
-  h5save(fn, "/"+i, xg.(i), [lx1, lx2, lx3, 3], freal)
+  h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)
 end
 
 
@@ -179,43 +179,43 @@ dimx2ghost = {'dimx2ghost', lx2 + Ng};
 dimx3ghost = {'dimx3ghost', lx3 + Ng};
 dimecef = {'ecef', 3};
 
-ncsave(fn, 'x1', xg.x1, dimx1ghost, freal)
-ncsave(fn, 'x1i', xg.x1i, dimx1i, freal)
-ncsave(fn, 'dx1b', xg.dx1b, dimx1d,freal)
-ncsave(fn, 'dx1h', xg.dx1h, dimx1, freal)
-ncsave(fn, 'x2', xg.x2, dimx2ghost, freal)
-ncsave(fn, 'x2i', xg.x2i, dimx2i, freal)
-ncsave(fn, 'dx2b', xg.dx2b, dimx2d,freal)
-ncsave(fn, 'dx2h', xg.dx2h, dimx2, freal)
-ncsave(fn, 'x3', xg.x3, dimx3ghost, freal)
-ncsave(fn, 'x3i', xg.x3i, dimx3i, freal)
-ncsave(fn, 'dx3b', xg.dx3b, dimx3d,freal)
-ncsave(fn, 'dx3h', xg.dx3h, dimx3, freal)
+ncsave(fn, 'x1', xg.x1, "dims", dimx1ghost, "type", freal)
+ncsave(fn, 'x1i', xg.x1i, "dims", dimx1i, "type", freal)
+ncsave(fn, 'dx1b', xg.dx1b, "dims", dimx1d, "type", freal)
+ncsave(fn, 'dx1h', xg.dx1h, "dims", dimx1, "type", freal)
+ncsave(fn, 'x2', xg.x2, "dims", dimx2ghost, "type", freal)
+ncsave(fn, 'x2i', xg.x2i, "dims", dimx2i, "type", freal)
+ncsave(fn, 'dx2b', xg.dx2b, "dims", dimx2d, "type", freal)
+ncsave(fn, 'dx2h', xg.dx2h, "dims", dimx2, "type", freal)
+ncsave(fn, 'x3', xg.x3, "dims", dimx3ghost, "type", freal)
+ncsave(fn, 'x3i', xg.x3i, "dims", dimx3i, "type", freal)
+ncsave(fn, 'dx3b', xg.dx3b, "dims", dimx3d, "type", freal)
+ncsave(fn, 'dx3h', xg.dx3h, "dims", dimx3, "type", freal)
 
-ncsave(fn, 'h1', xg.h1, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
-ncsave(fn, 'h2', xg.h2, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
-ncsave(fn, 'h3', xg.h3, [dimx1ghost, dimx2ghost, dimx3ghost], freal)
+ncsave(fn, 'h1', xg.h1, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
+ncsave(fn, 'h2', xg.h2, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
+ncsave(fn, 'h3', xg.h3, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
 
-ncsave(fn, 'h1x1i', xg.h1x1i, [dimx1i, dimx2, dimx3], freal)
-ncsave(fn, 'h2x1i', xg.h2x1i, [dimx1i, dimx2, dimx3], freal)
-ncsave(fn, 'h3x1i', xg.h3x1i, [dimx1i, dimx2, dimx3], freal)
+ncsave(fn, 'h1x1i', xg.h1x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
+ncsave(fn, 'h2x1i', xg.h2x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
+ncsave(fn, 'h3x1i', xg.h3x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
 
-ncsave(fn, 'h1x2i', xg.h1x2i, [dimx1, dimx2i, dimx3], freal)
-ncsave(fn, 'h2x2i', xg.h2x2i, [dimx1, dimx2i, dimx3], freal)
-ncsave(fn, 'h3x2i', xg.h3x2i, [dimx1, dimx2i, dimx3], freal)
+ncsave(fn, 'h1x2i', xg.h1x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
+ncsave(fn, 'h2x2i', xg.h2x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
+ncsave(fn, 'h3x2i', xg.h3x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
 
-ncsave(fn, 'h1x3i', xg.h1x3i, [dimx1, dimx2, dimx3i], freal)
-ncsave(fn, 'h2x3i', xg.h2x3i, [dimx1, dimx2, dimx3i], freal)
-ncsave(fn, 'h3x3i', xg.h3x3i, [dimx1, dimx2, dimx3i], freal)
+ncsave(fn, 'h1x3i', xg.h1x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
+ncsave(fn, 'h2x3i', xg.h2x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
+ncsave(fn, 'h3x3i', xg.h3x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
 
 for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
-  ncsave(fn, i, xg.(i), [dimx1, dimx2, dimx3], freal)
+  ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3], "type", freal)
 end
 
-ncsave(fn, 'I', xg.I, [dimx2, dimx3], freal)
+ncsave(fn, 'I', xg.I, "dims", [dimx2, dimx3], "type", freal)
 
 for i = ["e1","e2","e3","er","etheta","ephi"]
-  ncsave(fn, i, xg.(i), [dimx1, dimx2, dimx3, dimecef], freal)
+  ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3, dimecef], "type", freal)
 end
 
 end % function

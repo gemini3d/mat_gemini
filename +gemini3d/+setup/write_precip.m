@@ -26,23 +26,23 @@ import gemini3d.fileio.h5save
 
 fn = fullfile(outdir, 'simsize.h5');
 if isfile(fn), delete(fn), end
-h5save(fn, '/llon', int32(pg.llon))
-h5save(fn, '/llat', int32(pg.llat))
+h5save(fn, '/llon', pg.llon, "type", "int32")
+h5save(fn, '/llat', pg.llat, "type", "int32")
 
 freal = 'float32';
 
 fn = fullfile(outdir, 'simgrid.h5');
 if isfile(fn), delete(fn), end
-h5save(fn, '/mlon', pg.mlon, [], freal)
-h5save(fn, '/mlat', pg.mlat, [], freal)
+h5save(fn, '/mlon', pg.mlon, "type", freal)
+h5save(fn, '/mlat', pg.mlat, "type", freal)
 
 for i = 1:length(pg.times)
 
   fn = fullfile(outdir, gemini3d.datelab(pg.times(i)) + ".h5");
   if isfile(fn), delete(fn), end
 
-  h5save(fn, '/Qp', pg.Qit(:,:,i), [pg.llon, pg.llat], freal)
-  h5save(fn, '/E0p', pg.E0it(:,:,i),[pg.llon, pg.llat], freal)
+  h5save(fn, '/Qp', pg.Qit(:,:,i), "size", [pg.llon, pg.llat], "type", freal)
+  h5save(fn, '/E0p', pg.E0it(:,:,i), "size", [pg.llon, pg.llat], "type", freal)
 end
 
 end % function
@@ -53,22 +53,24 @@ import gemini3d.fileio.ncsave
 
 fn = fullfile(outdir, 'simsize.nc');
 if isfile(fn), delete(fn), end
-ncsave(fn, 'llon', int32(pg.llon))
-ncsave(fn, 'llat', int32(pg.llat))
+ncsave(fn, 'llon', pg.llon, "type", "int32")
+ncsave(fn, 'llat', pg.llat, "type", "int32")
 
 freal = 'float32';
 
 fn = fullfile(outdir, 'simgrid.nc');
 if isfile(fn), delete(fn), end
-ncsave(fn, 'mlon', pg.mlon, {'lon', length(pg.mlon)}, freal)
-ncsave(fn, 'mlat', pg.mlat, {'lat', length(pg.mlat)}, freal)
+ncsave(fn, 'mlon', pg.mlon, "dims", {'lon', length(pg.mlon)}, "type", freal)
+ncsave(fn, 'mlat', pg.mlat, "dims", {'lat', length(pg.mlat)}, "type", freal)
 
 for i = 1:length(pg.times)
   fn = fullfile(outdir, gemini3d.datelab(pg.times(i)) + ".nc");
   if isfile(fn), delete(fn), end
 
-  ncsave(fn, 'Qp', pg.Qit(:,:,i), {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, freal)
-  ncsave(fn, 'E0p', pg.E0it(:,:,i), {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, freal)
+  ncsave(fn, 'Qp', pg.Qit(:,:,i), ...
+    "dims", {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, "type", freal)
+  ncsave(fn, 'E0p', pg.E0it(:,:,i), ...
+    "dims", {'lon', length(pg.mlon), 'lat', length(pg.mlat)}, "type", freal)
 end
 
 end % function
