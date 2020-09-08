@@ -6,17 +6,18 @@ end
 
 import gemini3d.vis.plotfunctions.*
 
-%% DEFINE THE PLOTTING FUNCTION BASED ON THE TYPE OF GRID USED
 if isa(plotfun, "function_handle")
   return
+elseif isstring(plotfun)
+  if plotfun ~= ""
+    plotfun = str2func(plotfun);
+    return
+  end
+else
+  error('grid2plotfun:type_error',  "plotfun must be function name or function_handle")
 end
 
-assert(isstring(plotfun), "plotfun must be function handle or function name")
-
-if plotfun ~= ""
-  plotfun = str2func(plotfun);
-  return
-end
+%% DEFINE THE PLOTTING FUNCTION BASED ON THE TYPE OF GRID USED
 
 minh1=min(xg.h1(:));
 maxh1=max(xg.h1(:));

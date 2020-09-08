@@ -28,7 +28,7 @@ for i = 1:length(dirs)
   % parfor crashes, even when restricting to one worker
   if ~dirs(i).isdir, continue, end
   name = dirs(i).name;
-  gemini3d.vis.gemini_plot(fullfile(path, name), saveplot_fmt)
+  gemini3d.vis.plotall(fullfile(path, name), saveplot_fmt)
   zip_file = fullfile(path, name + "_plots.zip");
   zip(zip_file, fullfile(path, name, "plots"))
 end

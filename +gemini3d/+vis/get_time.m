@@ -24,7 +24,7 @@ case '.h5'
     return
   end
 
-  if contains(grps, 'time')
+  if any(grps == "/time")
     i = "/time";
     vars = gemini3d.fileio.h5variables(file, 'time');
   else

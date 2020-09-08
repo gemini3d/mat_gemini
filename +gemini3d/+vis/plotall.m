@@ -1,4 +1,4 @@
-function h = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
+function h = plotall(direc, saveplot_fmt, options)
 % PLOTALL plot all Gemini parameters from a simulation output
 %
 % Parameters
@@ -15,9 +15,9 @@ function h = plotall(direc, saveplot_fmt, plotfun, xg, parallel)
 arguments
   direc (1,1) string
   saveplot_fmt (1,:) string = string([])
-  plotfun (1,1) string = ""
-  xg (1,1) struct = struct()
-  parallel (1,1) {mustBeInteger,mustBeFinite} = 0
+  options.plotfun (1,1) string = ""
+  options.xg (1,1) struct = struct()
+  options.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
 end
 
 saveplot_fmt(~strlength(saveplot_fmt)) = [];
@@ -30,11 +30,13 @@ disp("sim grid dimensions: " + num2str(lxs))
 params = gemini3d.read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
-if isempty(fieldnames(xg))
+if isempty(fieldnames(options.xg))
   xg = gemini3d.readgrid(direc);
+else
+  xg = options.xg;
 end
 
-plotfun = gemini3d.vis.grid2plotfun(plotfun, xg);
+plotfun = gemini3d.vis.grid2plotfun(options.plotfun, xg);
 
 %% MAIN FIGURE LOOP
 Nt = length(params.times);
@@ -43,33 +45,33 @@ h = gemini3d.vis.plotinit(xg, visible);
 times = params.times;
 
 if ~visible
-  if parallel > 0
+  if options.parallel > 0
     % plot and save as fast as possible.
     % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
-    if parallel > 1
+    if options.parallel > 1
       % specific number of workers requested
       addons = matlab.addons.installedAddons();
       if any(contains(addons.Name, 'Parallel Computing Toolbox'))
         pool = gcp('nocreate');
-        if isempty(pool) || pool.NumWorkers ~= parallel
+        if isempty(pool) || pool.NumWorkers ~= options.parallel
           delete(pool)
-          parpool('local', parallel)
+          parpool('local', options.parallel)
         end
       end
     end
     parfor i = 1:Nt
-      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
+      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   else
     for i = 1:Nt
-      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, plotfun, xg, h)
+      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   end
 else
   % displaying, not saving
   for t = times
-    gemini3d.vis.plotframe(direc, t, saveplot_fmt, plotfun, xg, h)
+    gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
 
     drawnow % need this here to ensure plots update (race condition)
     if gemini3d.sys.isinteractive && times(end) ~= t
