@@ -10,6 +10,6 @@ arguments
   varnames (1,:) string
 end
 
-exists = contains(varnames, gemini3d.fileio.ncvariables(filename));
+exists = varnames == gemini3d.fileio.ncvariables(filename);
 
 end % function

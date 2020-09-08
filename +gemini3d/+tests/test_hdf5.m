@@ -23,9 +23,15 @@ assert(isequal(auto_chunk_size([15,250]), [15,250]), '2D small chunk fail')
 vars = h5variables(basic);
 assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
 %% test_exists
-assert(h5exists(basic, '/A3'), 'A3 exists')
+e0 = h5exists(basic, '/A3');
+assert(isscalar(e0))
+assert(e0, 'A3 exists')
+
 assert(~h5exists(basic, '/oops'), 'oops not exist')
-assert(all(h5exists(basic, ["A3", "oops"]) == [true, false]), 'h5exists array')
+
+e1 = h5exists(basic, ["A3", "oops"];
+assert(isrow(e1))
+assert(all(e1) == [true, false]), 'h5exists array')
 %% test_size
 s = h5size(basic, '/A0');
 assert(isscalar(s) && s==1, 'A0 shape')

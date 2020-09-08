@@ -13,6 +13,6 @@ end
 i = startsWith(varnames, "/");
 varnames(i) = extractAfter(varnames(i), 1);
 
-exists = contains(varnames, gemini3d.fileio.h5variables(filename));
+exists = varnames == gemini3d.fileio.h5variables(filename);
 
 end % function

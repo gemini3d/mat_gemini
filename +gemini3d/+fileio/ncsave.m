@@ -41,7 +41,7 @@ if dtype ~= ""
 end
 
 
-if isfile(filename) && gemini3d.fileio.ncexists(filename, varname)
+if isfile(filename) && any(gemini3d.fileio.ncexists(filename, varname))
   exist_file(filename, varname, A, sizeA)
 else
   new_file(filename, varname, A, sizeA, ncdims)

@@ -20,8 +20,15 @@ ncsave(basic, 'A4', A4, {'x4', size(A4,1), 'y4', size(A4,2), 'z4', size(A4,3), '
 vars = ncvariables(basic);
 assert(isequal(sort(vars),{'A0', 'A1', 'A2', 'A3', 'A4'}), 'missing variables')
 %% test_exists
-assert(ncexists(basic, 'A3'), 'A3 exists')
-assert(~ncexists(basic, 'oops'), 'oops not exist')
+e0 = ncexists(basic, '/A3');
+assert(isscalar(e0))
+assert(e0, 'A3 exists')
+
+assert(~ncexists(basic, '/oops'), 'oops not exist')
+
+e1 = ncexists(basic, ["A3", "oops"];
+assert(isrow(e1))
+assert(all(e1) == [true, false]), 'ncexists array')
 %% test_size
 s = ncsize(basic, 'A0');
 assert(isscalar(s) && s==1, 'A0 shape')
