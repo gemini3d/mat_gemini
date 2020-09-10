@@ -1,4 +1,4 @@
-function generate_reference_data(topdir, outdir, only, gemini_exe, file_format)
+function generate_reference_data(topdir, outdir, only, opts)
 % generate (run) all simulations under topdir
 % good to regenerate Zenodo reference data
 %
@@ -14,8 +14,9 @@ arguments
   topdir (1,1) string
   outdir (1,1) string
   only (1,:) string = string([])
-  gemini_exe (1,1) string = ""
-  file_format (1,1) string = ""
+  opts.overwrite (1,1) logical = true
+  opts.gemini_exe (1,1) string = ""
+  opts.file_format (1,1) string = "h5"
 end
 
 topdir = gemini3d.fileio.expanduser(topdir);
@@ -29,11 +30,9 @@ assert(~isempty(names), 'No inputs under %s with %s', topdir, only)
 disp('Generating data for: ')
 disp(names)
 
-gem_params = struct('overwrite', true, 'mpiexec', "",...
-    'file_format', file_format, 'gemini_exe', gemini_exe);
-
 for n = names
-  gemini3d.gemini_run(fullfile(topdir, n), fullfile(outdir, n), gem_params)
+  gemini3d.gemini_run(fullfile(topdir, n), fullfile(outdir, n), ...
+    'overwrite', opts.overwrite, 'gemini_exe', opts.gemini_exe, 'file_format', opts.file_format)
 end
 
 end % function

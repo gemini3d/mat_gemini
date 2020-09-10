@@ -4,9 +4,12 @@ function setup()
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 
-gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, '../gemini3d/'));
-if isfolder(gemini_root)
-  setenv('GEMINI_ROOT', gemini_root)
+gemini_root = get_env("GEMINI_ROOT");
+if isempty(gemini_root)
+  gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, '../gemini3d/'));
+  if isfolder(gemini_root)
+    setenv('GEMINI_ROOT', gemini_root)
+  end
 end
 
 fix_macos()
@@ -22,7 +25,7 @@ if ~ismac
   return
 end
 
-sys_path = getenv('PATH');
+sys_path = getenv("PATH");
 needed_paths = "/usr/local/bin";
 for np = needed_paths
   if isfolder(np) && ~contains(sys_path, np)

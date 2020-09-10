@@ -1,14 +1,11 @@
-function exe = get_gemini_exe(params)
+function exe = get_gemini_exe(exe)
 arguments
-  params (1,1) struct = struct()
+  exe (1,1) string = ""
 end
 
-if isfield(params, 'gemini_exe') && params.gemini_exe ~= ""
-  exe = params.gemini_exe;
-else
+if exe == ""
   exe = fullfile(get_gemini_root(), "build/gemini.bin");
 end
-
 if ispc && ~endsWith(exe, ".exe")
   exe = exe + ".exe";
 end
