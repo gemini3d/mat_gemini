@@ -1,7 +1,7 @@
 function filename = get_configfile(direc)
 %% get configuration file
 arguments
-  direc string
+  direc (1,1) string
 end
 
 direc = gemini3d.fileio.expanduser(direc);
