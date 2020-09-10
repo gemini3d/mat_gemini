@@ -53,9 +53,9 @@ Assume you would like to run the [GDI Periodic Lowres example](https://github.co
 3. run the example from Matlab:
 
     ```sh
-    ini = 'gemini-examples/init/GDI_periodic_lowres'
+    ini = '~/gemini-examples/init/GDI_periodic_lowres'
     out_dir = '~/sims/gdi_lowres'
-    gemini3d.gemini_run(ini, out_dir)
+    gemini3d.gemini_run(out_dir, 'config', ini)
     ```
 
 That will take about 1 hour on an 8-core 9th generation Intel i7 laptop CPU.

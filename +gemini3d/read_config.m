@@ -1,27 +1,27 @@
-function p = read_config(path)
+function cfg = read_config(direc)
 % reads simulation configuration into struct
 arguments
-  path (1,1) string
+  direc (1,1) string
 end
 
-filename = gemini3d.get_configfile(path);
+filename = gemini3d.get_configfile(direc);
 
 [~,~,ext] = fileparts(filename);
 
 switch lower(ext)
-  case '.nml', p = gemini3d.read_nml(filename);
-  case '.ini', p = gemini3d.read_ini(filename);
+  case '.nml', cfg = gemini3d.read_nml(filename);
+  case '.ini', cfg = gemini3d.read_ini(filename);
   otherwise, error('read_config:value_error', 'config file type unknown: %s', filename)
 end
 
-t0 = datetime(p.ymd(1), p.ymd(2), p.ymd(3)) + seconds(p.UTsec0);
-p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
+t0 = datetime(cfg.ymd(1), cfg.ymd(2), cfg.ymd(3)) + seconds(cfg.UTsec0);
+cfg.times = t0:seconds(cfg.dtout):(t0 + seconds(cfg.tdur));
 
 %% deduce data file format from simsize format
 % needs to be here and in read_nml
-if ~isfield(p, 'file_format')
-  [~,~,ext] = fileparts(p.indat_size);
-  p.file_format = extractAfter(ext, 1);
+if ~isfield(cfg, 'file_format')
+  [~,~,ext] = fileparts(cfg.indat_size);
+  cfg.file_format = extractAfter(ext, 1);
 end
 
 end % function

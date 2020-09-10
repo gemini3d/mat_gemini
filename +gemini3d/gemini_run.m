@@ -1,9 +1,11 @@
-function gemini_run(cfgfile, outdir, opts)
+function gemini_run(outdir, opts)
 %% setup and run Gemini simulation
-% gemini_run('/path/to/config.nml', 'output_dir')
+% gemini_run(output_dir),
+% gemini_run(output_dir) 'config', nml_path)
+
 arguments
-  cfgfile (1,1) string
   outdir (1,1) string
+  opts.config (1,1) string = pwd
   opts.overwrite (1,1) logical = true
   opts.mpiexec (1,1) string = "mpiexec"
   opts.gemini_exe (1,1) string = ""
@@ -25,7 +27,7 @@ if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
 end
 end % if ispc
 %% check if model needs to be setup
-cfg = gemini3d.read_config(cfgfile);
+cfg = gemini3d.read_config(opts.config);
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
 for k = ["ssl_verify", "file_format"]

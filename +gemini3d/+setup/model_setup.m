@@ -1,7 +1,7 @@
 function [cfg, xg] = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 arguments
-  cfg (1,1)
+  cfg (1,1) = pwd
   outdir (1,1) string = ""
 end
 

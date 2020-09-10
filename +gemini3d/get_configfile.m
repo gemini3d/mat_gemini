@@ -1,45 +1,43 @@
-function filename = get_configfile(path)
+function filename = get_configfile(direc)
 %% get configuration file
 arguments
-  path (1,1) string
+  direc string
 end
 
-path = gemini3d.fileio.expanduser(path);
+direc = gemini3d.fileio.expanduser(direc);
 
-if isfile(path)
-  filename = path;
+if isfile(direc)
+  filename = direc;
   return
-elseif isfolder(path)
+elseif isfolder(direc)
   names = ["config.nml", "inputs/config.nml", "config.ini", "inputs/config.ini"];
-  filename = check_names(path, names);
+  filename = check_names(direc, names);
   if isfile(filename)
     return
   end
 
-  files = dir(fullfile(path, "inputs/config*.nml"));
-  filename = check_names(fullfile(path, "inputs"), {files.name});
+  files = dir(fullfile(direc, "inputs/config*.nml"));
+  filename = check_names(fullfile(direc, "inputs"), {files.name});
 
   if ~isfile(filename)
-    files = dir(fullfile(path, "config*.nml"));
-    filename = check_names(path, {files.name});
+    files = dir(fullfile(direc, "config*.nml"));
+    filename = check_names(direc, {files.name});
   end
 else
-  error('get_configfile:file_not_found', 'could not find %s', path)
+  error('get_configfile:file_not_found', 'could not find %s', direc)
 end
 
 if ~isfile(filename)
-  error('get_configfile:file_not_found', 'could not find config.nml under %s', path)
+  error('get_configfile:file_not_found', 'could not find config.nml under %s', direc)
 end
 
 end % function
 
 
-function filename = check_names(path, names)
-
-filename = "";
+function filename = check_names(direc, names)
 
 for s = names
-  filename = fullfile(path, s);
+  filename = fullfile(direc, s);
   if isfile(filename)
     break
   end
