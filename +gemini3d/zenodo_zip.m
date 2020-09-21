@@ -18,7 +18,7 @@ dirs = dir(fullfile(path, glob));
 assert(~isempty(dirs), 'did not find any dirs under %s', path)
 
 for i = 1:length(dirs)
-  if ~dirs(i).isdir, continue, end
+  if ~dirs(i).isdir || any(dirs(i).name == [".", ".."]), continue, end
   name = dirs(i).name;
   zip_file = fullfile(path, name + ".zip");
   zip(zip_file, fullfile(path, name))
@@ -26,7 +26,7 @@ end
 
 for i = 1:length(dirs)
   % parfor crashes, even when restricting to one worker
-  if ~dirs(i).isdir, continue, end
+  if ~dirs(i).isdir || any(dirs(i).name == [".", ".."]), continue, end
   name = dirs(i).name;
   gemini3d.vis.plotall(fullfile(path, name), saveplot_fmt)
   zip_file = fullfile(path, name + "_plots.zip");
