@@ -26,17 +26,19 @@ urls = gemini3d.vendor.ini2struct.ini2struct(url_ini);
 zipfile = fullfile(data_dir, "test" + test_name + ".zip");
 
 if ~isfile(zipfile)
-  k = 'url';
+  k = "url";
   url = urls.("x" + test_name).(k);
   websave(zipfile, url);
 end
 
 %% md5sum check
-k = 'md5';
-exp_hash = urls.("x" + test_name).(k);
-hash = gemini3d.fileio.md5sum(zipfile);
-if hash ~= exp_hash
-  warning('%s md5 hash does not match, file may be corrupted or incorrect data', zipfile)
+k = "md5";
+if any(fieldnames(urls.("x" + test_name)) == k)
+  exp_hash = urls.("x" + test_name).(k);
+  hash = gemini3d.fileio.md5sum(zipfile);
+  if hash ~= exp_hash
+    warning('%s md5 hash does not match, file may be corrupted or incorrect data', zipfile)
+  end
 end
 %% extract
 unzip(zipfile, data_dir)
