@@ -6,7 +6,7 @@ arguments
   saveplot_fmt (1,:) string
 end
 
-dpi = '150';
+dpi = 150;
 
 [outdir, outname] = fileparts(filename);
 outdir = fullfile(outdir, "../plots");
