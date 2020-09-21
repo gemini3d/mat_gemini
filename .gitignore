@@ -1,4 +1,5 @@
 *.job
+*.job.*
 
 build*/
 resources/project/
