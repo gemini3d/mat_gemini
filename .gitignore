@@ -1,3 +1,5 @@
+*.job
+
 build*/
 resources/project/
 *.asv
