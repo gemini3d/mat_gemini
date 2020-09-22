@@ -4,7 +4,7 @@ function setup()
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 
-gemini_root = get_env("GEMINI_ROOT");
+gemini_root = getenv("GEMINI_ROOT");
 if isempty(gemini_root)
   gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, '../gemini3d/'));
   if isfolder(gemini_root)
