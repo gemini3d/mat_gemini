@@ -17,8 +17,8 @@ function testok = assert_allclose(actual, desired, rtol, atol, err_msg,warnonly,
 % if "actual" is within atol OR rtol of "desired", no error is emitted.
 
 arguments
-  actual {mustBeNumeric}
-  desired {mustBeNumeric}
+  actual {mustBeNumeric,mustBeNonempty,mustBeFinite}
+  desired {mustBeNumeric,mustBeNonempty,mustBeFinite}
   rtol (1,1) double {mustBePositive} = 1e-8
   atol (1,1) double {mustBeNonnegative} = 1e-9
   err_msg (1,1) string = ""
@@ -62,7 +62,10 @@ if ~testok
     disp(['desired:    ',num2str(desired(i))])
   end
 
-  efunc(['AssertionError: ',err_msg,' ',num2str(Nfail/numel(desired)*100,'%.2f'),'% failed accuracy. maximum error magnitude ',num2str(bigbad),' Actual: ',num2str(actual(i)),' Desired: ',num2str(desired(i)),' atol: ',num2str(atol),' rtol: ',num2str(rtol)])
+  efunc("AssertionError: " + err_msg + " " + num2str(Nfail/numel(desired)*100,'%.2f') + ...
+  "% failed accuracy. maximum error magnitude " + num2str(bigbad) + " Actual: " + ...
+  num2str(actual(i)) + " Desired: " + num2str(desired(i)) + " atol: " + num2str(atol) + ...
+  " rtol: " + num2str(rtol))
 end
 
 if nargout==0, clear('testok'), end
