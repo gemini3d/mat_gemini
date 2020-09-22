@@ -22,7 +22,21 @@ if ~isempty(sourceloc)
   flagsource=1;
 else
   flagsource=0;
+  sourcemlat=[];
+  sourcemlon=[];
 end
+
+plotparams.sourcemlat = sourcemlat;
+plotparams.sourcemlon = sourcemlon;
+
+plotparams.left_xlabel = 'magnetic latitude (deg.)';
+plotparams.left_ylabel = 'altitude (km)';
+
+plotparams.mid_ylabel = 'magnetic latitude (deg.)';
+plotparams.mid_xlabel = 'magnetic longitude (deg.)';
+
+plotparams.right_xlabel = 'magnetic longitude (deg.)';
+plotparams.right_ylabel = 'altitude (km)';
 plotparams.sourcemlat = sourcemlat;
 plotparams.sourcemlon = sourcemlon;
 
