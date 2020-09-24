@@ -14,13 +14,12 @@ function h = plotall(direc, saveplot_fmt, options)
 
 arguments
   direc (1,1) string
-  saveplot_fmt (1,:) string = string([])
-  options.plotfun (1,1) string = ""
-  options.xg (1,1) struct = struct()
+  saveplot_fmt (1,:) string = string.empty
+  options.plotfun string = string.empty
+  options.xg struct = struct.empty
   options.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
 end
 
-saveplot_fmt(~strlength(saveplot_fmt)) = [];
 visible = isempty(saveplot_fmt);
 
 lxs = gemini3d.simsize(direc);
@@ -30,7 +29,7 @@ disp("sim grid dimensions: " + num2str(lxs))
 params = gemini3d.read_config(direc);
 
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
-if isempty(fieldnames(options.xg))
+if isempty(options.xg)
   xg = gemini3d.readgrid(direc);
 else
   xg = options.xg;

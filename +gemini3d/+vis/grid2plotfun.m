@@ -1,6 +1,6 @@
 function plotfun = grid2plotfun(plotfun, xg)
 arguments
-  plotfun (1,1)
+  plotfun
   xg (1,1) struct
 end
 
@@ -9,7 +9,7 @@ import gemini3d.vis.plotfunctions.*
 if isa(plotfun, "function_handle")
   return
 elseif isstring(plotfun)
-  if plotfun ~= ""
+  if ~isempty(plotfun)
     plotfun = str2func(plotfun);
     return
   end

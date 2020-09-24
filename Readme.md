@@ -63,9 +63,10 @@ That will take about 1 hour on an 8-core 9th generation Intel i7 laptop CPU.
 ### Plot all simulation outputs
 
 ```sh
-gemini3d.vis.gemini_plot(out_dir, 'png')
+gemini3d.gemini_plot(out_dir, "png")
 ```
-That generates plots under `[outdir, '/plots']`
+
+generates plots under `out_dir + "/plots"`
 Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just displays the plots without saving.
 
 ## Advanced usage

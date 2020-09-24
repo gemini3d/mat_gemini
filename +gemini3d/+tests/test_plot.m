@@ -10,8 +10,8 @@ h = gemini3d.vis.plotinit(gemini3d.readgrid(d2));
 gemini3d.vis.plotframe(d2, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
 close(h)
 %% plot 2d
-h = gemini3d.vis.gemini_plot(d2);
+h = gemini3d.gemini_plot(d2);
 close(h)
 %% plot 3d
-h = gemini3d.vis.gemini_plot(d3);
+h = gemini3d.gemini_plot(d3);
 close(h)

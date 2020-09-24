@@ -8,10 +8,10 @@ function h = gemini_plot(direc, saveplot_fmt, options)
 
 arguments
   direc (1,1) string
-  saveplot_fmt (1,:) string = string([])
+  saveplot_fmt (1,:) string = string.empty
   options.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
-  options.xg (1,1) struct = struct()
-  options.plotfun (1,1) string = ""
+  options.xg struct = struct.empty
+  options.plotfun string = string.empty
 end
 
 h = gemini3d.vis.plotall(direc, saveplot_fmt, ...
