@@ -2,7 +2,7 @@ function cfg = make_valid_paths(cfg, top)
 %% resolve all paths in the config struct
 arguments
   cfg (1,1) struct
-  top (1,1) string = ""
+  top string = string.empty
 end
 
 import gemini3d.fileio.expanduser
@@ -11,7 +11,7 @@ if isfield(cfg, 'outdir')
   cfg.outdir = expanduser(cfg.outdir);
 end
 
-if top == ""
+if isempty(top)
   top = cfg.outdir;
 else
   top = expanduser(top);

@@ -6,7 +6,7 @@ function prepend = modify_path()
 %
 % a command is then run like
 %
-% system([prepend, ' ', 'foo.exe'])
+% system(prepend + " " + "foo.exe")
 
 prepend = "";
 
@@ -21,7 +21,7 @@ if ~ispc, return, end
 % else
 
 addons = matlab.addons.installedAddons();
-if ~any(contains(addons.Name, 'Parallel Computing Toolbox'))
+if ~any(addons.Name == "Parallel Computing Toolbox")
   return
 end
 

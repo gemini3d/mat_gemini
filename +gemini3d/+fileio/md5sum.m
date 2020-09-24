@@ -8,7 +8,7 @@ file = gemini3d.fileio.expanduser(file);
 
 assert(isfile(file), '%s not found', file)
 
-hash = "";
+hash = string.empty;
 
 if verLessThan('matlab', '9.7')
   return

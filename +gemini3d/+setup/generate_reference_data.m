@@ -13,9 +13,9 @@ function generate_reference_data(topdir, outdir, only, opts)
 arguments
   topdir (1,1) string
   outdir (1,1) string
-  only (1,:) string = string([])
+  only (1,:) string = string.empty
   opts.overwrite (1,1) logical = true
-  opts.gemini_exe (1,1) string = ""
+  opts.gemini_exe string = string.empty
   opts.file_format (1,1) string = "h5"
 end
 

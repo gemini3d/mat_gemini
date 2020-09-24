@@ -6,10 +6,10 @@ function download_and_extract(test_name, data_dir, url_ini)
 arguments
   test_name (1,1) string
   data_dir (1,1) string
-  url_ini (1,1) string = ""
+  url_ini string = string.empty
 end
 
-if url_ini == ""
+if isempty(url_ini)
   url_ini = fullfile(fileparts(mfilename('fullpath')), "../+tests/gemini3d_url.ini");
 end
 

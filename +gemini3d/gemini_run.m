@@ -1,16 +1,19 @@
 function gemini_run(outdir, opts)
 %% setup and run Gemini simulation
-% gemini_run(output_dir),
-% gemini_run(output_dir) 'config', nml_path)
+%
+% Examples:
+%
+% gemini3d.gemini_run(output_dir),
+% gemini3d.gemini_run(output_dir, "config", nml_path)
 
 arguments
   outdir (1,1) string
   opts.config (1,1) string = pwd
   opts.overwrite (1,1) logical = true
   opts.mpiexec (1,1) string = "mpiexec"
-  opts.gemini_exe (1,1) string = ""
-  opts.ssl_verify (1,1) string = ""
-  opts.file_format (1,1) string = ""
+  opts.gemini_exe string = string.empty
+  opts.ssl_verify string = string.empty
+  opts.file_format string = string.empty
   opts.dryrun (1,1) logical = false
 end
 
@@ -31,7 +34,7 @@ cfg = gemini3d.read_config(opts.config);
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
 for k = ["ssl_verify", "file_format"]
-  if opts.(k) ~= ""
+  if ~isempty(opts.(k))
     cfg.(k) = opts.(k);
   end
 end

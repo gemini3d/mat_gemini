@@ -3,7 +3,7 @@ arguments
   time (1,1) datetime
   xg (1,1) struct
   parm (:,:,:) {mustBeNumeric,mustBeNonempty}
-  parmlbl (1,1) string = ""
+  parmlbl (1,1) string = string.empty
   caxlims (1,:) {mustBeNumeric} = []
   sourceloc (1,:) {mustBeNumeric} = []
   hf (1,1) matlab.ui.Figure = figure()

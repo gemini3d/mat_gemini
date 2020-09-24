@@ -16,8 +16,8 @@ function dat = loadframe(filename, cfg, vars)
 
 arguments
   filename (1,1) string
-  cfg (1,1) = struct()  % don't coerce to datetime, but allow datetime
-  vars (1,:) string = string([])
+  cfg = struct.empty  % don't coerce to datetime, but allow datetime
+  vars (1,:) string = string.empty
 end
 
 if isdatetime(cfg)
@@ -76,6 +76,10 @@ end % function
 
 
 function flag = get_flagoutput(filename, cfg)
+arguments
+  filename (1,1) string
+  cfg (1,1) struct
+end
 
 [~,~,ext] = fileparts(filename);
  % regardless of what the output type is if variabl nsall exists we need
@@ -84,7 +88,7 @@ function flag = get_flagoutput(filename, cfg)
 switch ext
   case '.h5', var_names = gemini3d.fileio.h5variables(filename);
   case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
-  case '.dat', var_names = string([]);
+  case '.dat', var_names = string.empty;
   otherwise, error('loadframe:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end
 

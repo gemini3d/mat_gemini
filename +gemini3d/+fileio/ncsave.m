@@ -7,7 +7,7 @@ arguments
   varname (1,1) string
   A {mustBeNumeric,mustBeNonempty}
   opts.dims cell = {}
-  opts.type (1,1) string = ""
+  opts.type string = string.empty
 end
 
 filename = gemini3d.fileio.expanduser(filename);

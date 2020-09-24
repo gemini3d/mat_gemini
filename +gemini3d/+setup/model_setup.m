@@ -2,7 +2,7 @@ function [cfg, xg] = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 arguments
   cfg (1,1) = pwd
-  outdir (1,1) string = ""
+  outdir string = string.empty
 end
 
 %% parse input
@@ -15,8 +15,8 @@ else
   error('model_setup:value_error', 'need path to config.nml')
 end
 
-if outdir == ""
-  if ~isfield(cfg, 'outdir') || cfg.outdir == ""
+if isempty(outdir)
+  if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
     error('model_setup:file_not_found', 'please specify outdir or p.outdir')
   end
 else

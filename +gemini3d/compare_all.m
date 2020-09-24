@@ -20,7 +20,7 @@ function compare_all(outdir, refdir, only)
 arguments
   outdir (1,1) string
   refdir (1,1) string
-  only (:,1) string = string([])
+  only (:,1) string = string.empty
 end
 
 tol.rtol = 1e-5;

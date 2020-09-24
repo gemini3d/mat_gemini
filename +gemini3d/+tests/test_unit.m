@@ -1,7 +1,7 @@
 %% md5sum
 hash = gemini3d.fileio.md5sum(fullfile(fileparts(mfilename('fullpath')), "gemini3d_url.ini"));
-if hash ~= ""
-  assert(hash == "b5f96c19e312374a5f9839410d681514", 'md5sum %s', hash)
+if ~isempty(hash)
+  assert(hash == "945935b3d4776a4b039c0020f9604751", 'md5sum %s', hash)
 end
 %% expanduser
 pexp = gemini3d.fileio.expanduser('~/foo');

@@ -3,13 +3,13 @@ function h = plotframe(direc, time_req, saveplot_fmt, options)
 arguments
   direc (1,1) string
   time_req (1,1) datetime
-  saveplot_fmt (1,:) string = string([])
+  saveplot_fmt (1,:) string = string.empty
   options.plotfun (1,1)
-  options.xg (1,1) struct = struct()
+  options.xg struct = struct.empty
   options.figures (1,:) matlab.ui.Figure
   options.visible (1,1) logical = true
-  options.clim (1,1) struct = struct()
-  % options.vars (1,:) string = string([])  % variables to plot (future)
+  options.clim struct = struct.empty
+  % options.vars (1,:) string = string.empty  % variables to plot (future)
 end
 
 import gemini3d.vis.bwr
@@ -28,23 +28,23 @@ cfg = gemini3d.read_config(direc);
 
 %% RELOAD GRID?
 % loading grid can take a long time
-if isempty(fieldnames(options.xg))
+if isempty(options.xg)
   disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
   xg = gemini3d.readgrid(direc);
 else
   xg = options.xg;
 end
 
-if any(contains(fieldnames(options), "figures")) && all(isvalid(options.figures))
+if isfield(options, "figures") && all(isvalid(options.figures))
   h = options.figures;
 else
   h = gemini3d.vis.plotinit(xg, options.visible);
 end
 
-if any(contains(fieldnames(options), "plotfun"))
+if isfield(options, "plotfun")
   plotfun = gemini3d.vis.grid2plotfun(options.plotfun, xg);
 else
-  plotfun = gemini3d.vis.grid2plotfun("", xg);
+  plotfun = gemini3d.vis.grid2plotfun(string.empty, xg);
 end
 
 %% get time index
@@ -69,42 +69,43 @@ v3lim = [-10 10];
 J2lim = [-10 10];
 J3lim=[-10 10];
 %}
-lims = fieldnames(options.clim);
-if ~any(contains(lims, "ne"))
+
+clim = options.clim;
+if ~isfield(clim, "ne")
   clim.ne =  [min(dat.ne(:)), max(dat.ne(:))];
 end
-if ~any(contains(lims, "v1"))
+if ~isfield(clim, "v1")
 % v1mod=max(abs(v1(:)));
   v1mod = 80;
   clim.v1 = [-v1mod, v1mod];
 end
-if ~any(contains(lims, "Ti"))
+if ~isfield(clim, "Ti")
   clim.Ti = [0, max(dat.Ti(:))];
 end
-if ~any(contains(lims, "Te"))
+if ~isfield(clim, "Te")
   clim.Te = [0, max(dat.Te(:))];
 end
-if ~any(contains(lims, "J1"))
+if ~isfield(clim, "J1")
   J1mod = max(abs(dat.J1(:)));
   clim.J1 = [-J1mod, J1mod];
 end
-if ~any(contains(lims, "v2"))
+if ~isfield(clim, "v2")
   v2mod = max(abs(dat.v2(:)));
   clim.v2 = [-v2mod, v2mod];
 end
-if ~any(contains(lims, "v3"))
+if ~isfield(clim, "v3"))
   v3mod = max(abs(dat.v3(:)));
   clim.v3 = [-v3mod, v3mod];
 end
-if ~any(contains(lims, "J2"))
+if ~isfield(clim, "J2")
   J2mod = max(abs(dat.J2(:)));
   clim.J2 = [-J2mod, J2mod];
 end
-if ~any(contains(lims, "J3"))
+if ~isfield(clim, "J3")
   J3mod = max(abs(dat.J3(:)));
   clim.J3 = [-J3mod, J3mod];
 end
-if ~any(contains(lims, "Phitop"))
+if ~isfield(clim, "Phitop")
   clim.Phitop = [min(dat.Phitop(:)), max(dat.Phitop(:))];
 end
 

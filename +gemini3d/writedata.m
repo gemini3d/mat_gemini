@@ -14,7 +14,7 @@ arguments
   vsx1 (:,:,:,:) {mustBeFinite}
   Ts (:,:,:,:) {mustBeFinite,mustBeNonnegative}
   fn (1,1) string
-  file_format (1,1) string = ""
+  file_format (1,1) string = string.empty
   Phitop (:,:) {mustBeFinite} = zeros(size(ns,2),size(ns,3))
 end
 
@@ -22,7 +22,7 @@ end
 
 assert(~isfolder(fn), '%s must be a filename, not a directory', fn)
 
-if file_format == ""
+if isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
   file_format = extractAfter(suffix, 1);
 end

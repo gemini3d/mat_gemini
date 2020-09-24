@@ -1,9 +1,9 @@
 function exe = get_gemini_exe(exe)
 arguments
-  exe (1,1) string = ""
+  exe string = string.empty
 end
 
-if exe == ""
+if isempty(exe)
   exe = fullfile(get_gemini_root(), "build/gemini.bin");
 end
 if ispc && ~endsWith(exe, ".exe")

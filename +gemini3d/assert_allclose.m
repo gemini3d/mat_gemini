@@ -21,7 +21,7 @@ arguments
   desired {mustBeNumeric,mustBeNonempty,mustBeFinite}
   rtol (1,1) double {mustBePositive} = 1e-8
   atol (1,1) double {mustBeNonnegative} = 1e-9
-  err_msg (1,1) string = ""
+  err_msg string = string.empty
   warnonly (1,1) logical = false
   notclose (1,1) logical = false
   verbose (1,1) logical = false
@@ -62,10 +62,16 @@ if ~testok
     disp(['desired:    ',num2str(desired(i))])
   end
 
-  efunc("AssertionError: " + err_msg + " " + num2str(Nfail/numel(desired)*100,'%.2f') + ...
+  emsg = "AssertionError: ";
+  if ~isempty(err_msg)
+    emsg = emsg + err_msg;
+  end
+  emsg = emsg + " " + num2str(Nfail/numel(desired)*100,'%.2f') + ...
   "% failed accuracy. maximum error magnitude " + num2str(bigbad) + " Actual: " + ...
   num2str(actual(i)) + " Desired: " + num2str(desired(i)) + " atol: " + num2str(atol) + ...
-  " rtol: " + num2str(rtol))
+  " rtol: " + num2str(rtol);
+
+  efunc(emsg)
 end
 
 if nargout==0, clear('testok'), end

@@ -1,3 +1,4 @@
+
 function names = get_testnames(topdir, only)
 % get test names contained in only, if specified
 %
@@ -6,10 +7,10 @@ function names = get_testnames(topdir, only)
 
 arguments
   topdir (1,1) string
-  only (1,:) string = string([])
+  only (1,:) string = string.empty
 end
 
-names = string([]);
+names = string.empty;
 j = 1;
 dirs = dir(gemini3d.fileio.expanduser(topdir));
 for i = 1:length(dirs)

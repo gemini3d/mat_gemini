@@ -1,5 +1,3 @@
-%% dryrun gemini3d
-
 name = "2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
