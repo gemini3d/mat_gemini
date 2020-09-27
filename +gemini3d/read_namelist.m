@@ -44,7 +44,7 @@ while ~feof(fid)
     vals = split(line, '=');
     vals = strip(strip(strip(vals{2}), char(39)), '"');
     if contains(vals, ',')
-      vals = strip(split(vals, ','));
+      vals = strip(strip(strip(split(vals, ',')), char(39)), '"');
     end
     vals = string(vals);
   else

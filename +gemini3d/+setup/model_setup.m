@@ -1,14 +1,14 @@
 function [cfg, xg] = model_setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 arguments
-  cfg (1,1) = pwd
+  cfg = pwd
   outdir string = string.empty
 end
 
 %% parse input
 if isstruct(cfg)
   % pass
-elseif isstring(cfg)
+elseif isstring(cfg) || ischar(cfg)
   % path to config.nml
   cfg = gemini3d.read_config(cfg);
 else

@@ -1,13 +1,17 @@
 function setup_post_process(cfg, xg)
-% based on Namelist post_process characater array of function names, process data
+% based on Namelist "setup_functions" comma-separated string array of function names, process data
+% current limitation: function arguments must be:
+%
+% myfun(cfg, xg)
+%
 arguments
   cfg (1,1) struct
   xg (1,1) struct
 end
 
 if isfield(cfg, 'setup_functions')
-  for i = 1:length(cfg.setup_functions)
-    func = str2func(cfg.setup_functions{i});
+  for name = cfg.setup_functions(:)'
+    func = str2func(name);
     func(cfg, xg)
   end
 else
