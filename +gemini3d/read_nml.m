@@ -5,15 +5,13 @@ arguments
   path (1,1) string
 end
 
-import gemini3d.*
-
 filename = gemini3d.get_configfile(path);
 
 %% required namelists
-p = read_namelist(filename, 'base');
+p = gemini3d.read_namelist(filename, 'base');
 
-p = merge_struct(p, read_namelist(filename, 'flags'));
-p = merge_struct(p, read_namelist(filename, 'files'));
+p = gemini3d.merge_struct(p, gemini3d.read_namelist(filename, 'flags'));
+p = gemini3d.merge_struct(p, gemini3d.read_namelist(filename, 'files'));
 
 %% optional namelists
 if ~isfield(p, 'nml')

@@ -41,8 +41,8 @@ while ~feof(fid)
   % need textscan instead of sscanf to handle corner cases
   vals = cell2mat(textscan(matches{1}{2}, '%f','Delimiter',','));
   if isempty(vals)  % must be a string
-    vals = split(strrep(line, char(39), ''), '=');
-    vals = strip(vals{2});
+    vals = split(line, '=');
+    vals = strip(strip(strip(vals{2}), char(39)), '"');
     if contains(vals, ',')
       vals = strip(split(vals, ','));
     end
