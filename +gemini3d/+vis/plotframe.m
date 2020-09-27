@@ -8,7 +8,7 @@ arguments
   options.xg struct = struct.empty
   options.figures (1,:) matlab.ui.Figure
   options.visible (1,1) logical = true
-  options.clim struct = struct.empty
+  options.clim struct = struct()  % not .empty
   % options.vars (1,:) string = string.empty  % variables to plot (future)
 end
 
@@ -72,7 +72,7 @@ J3lim=[-10 10];
 
 clim = options.clim;
 if ~isfield(clim, "ne")
-  clim.ne =  [min(dat.ne(:)), max(dat.ne(:))];
+  clim.ne = [min(dat.ne(:)), max(dat.ne(:))];
 end
 if ~isfield(clim, "v1")
 % v1mod=max(abs(v1(:)));
@@ -93,7 +93,7 @@ if ~isfield(clim, "v2")
   v2mod = max(abs(dat.v2(:)));
   clim.v2 = [-v2mod, v2mod];
 end
-if ~isfield(clim, "v3"))
+if ~isfield(clim, "v3")
   v3mod = max(abs(dat.v3(:)));
   clim.v3 = [-v3mod, v3mod];
 end
