@@ -45,10 +45,10 @@ if lx2 > 1 && lx3 > 1
   hf = plot_emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
 elseif lx2 > 1
    % 2D east-west
-  hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible);
+  hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible, "Eastward");
 elseif lx3 > 1
   % 2D north-south
-  hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible);
+  hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible, "Northward");
 else
   error('impossible configuration')
 end
@@ -61,7 +61,7 @@ end
 end % function
 
 
-function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible)
+function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible, txt)
 
 if isempty(hf)
   hf = make_glowfig(visible);
@@ -72,11 +72,9 @@ end
 ax = axes('parent', hf);
 imagesc(1:length(wavelengths), x / 1e3,squeeze(bFrame))    % singleton dimension since 2D simulation
 set(ax, 'xtick', 1:length(wavelengths), 'xticklabel', wavelengths)
-if size(bFrame, 2) == 1
-  ylabel(ax, 'Northward Distance (km)')
-elseif size(bFrame, 3) == 1
-  ylabel(ax, 'Eastward Distance (km)')
-end
+
+ylabel(ax, txt + "Distance (km)")
+
 xlabel(ax, 'emission wavelength (\AA)', 'interpreter', 'latex')
 title(ax, time_str)
 hc = colorbar('peer', ax);

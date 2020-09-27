@@ -21,6 +21,7 @@ arguments
 end
 
 visible = isempty(saveplot_fmt);
+direc = gemini3d.fileio.expanduser(direc);
 
 lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
