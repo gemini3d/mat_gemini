@@ -32,13 +32,13 @@ precip.E0it = zeros(precip.llon,precip.llat, Nt);
 
 % did user specify on/off time? if not, assume always on.
 if isfield(p, 'precip_startsec')
-  i_on = round(p.precip_startsec / p.dtprec);
+  i_on = round(p.precip_startsec / p.dtprec) + 1;
 else
   i_on = 1;
 end
 
 if isfield(p, 'precip_endsec')
-  i_off = round(p.precip_endsec / p.dtprec);
+  i_off = round(min(p.tdur, p.precip_endsec) / p.dtprec);
 else
   i_off = Nt;
 end
