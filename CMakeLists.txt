@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.15)
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "use cmake -B build or similar to avoid building in-source, which is messy")
+endif()
+
+set(CMAKE_CONFIGURATION_TYPES "Release;RelWithDebInfo;Debug" CACHE STRING "Build type selections" FORCE)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "default build type")
+endif()
+
 project(MSIS LANGUAGES Fortran)
-enable_testing()
+
+include(CTest)
 
 set(gemini_url "https://github.com/gemini3d/gemini3d.git")
 set(gemini_tag "master")
@@ -26,4 +37,7 @@ endif()
 # build msis_setup executable
 add_subdirectory(${msis_path} ${PROJECT_BINARY_DIR}/msis)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/matlab.cmake)
+if(BUILD_TESTING)
+  # don't run matlab.cmake from Matlab itself or it can infinite loop CMake on MSIS build
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/matlab.cmake)
+endif()

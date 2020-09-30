@@ -32,7 +32,7 @@ end
 
 %% build exe if not present
 if ~isfile(exe)
-  gemini3d.sys.cmake(src_dir)
+  gemini3d.sys.cmake(src_dir, build_dir)
 end
 
 assert (isfile(exe), 'MSIS setup executable not found: %s', exe)
