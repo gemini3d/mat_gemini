@@ -33,7 +33,7 @@ end
 
 %% md5sum check
 k = "md5";
-if any(fieldnames(urls.("x" + test_name)) == k)
+if isfield(urls.("x" + test_name), k)
   exp_hash = urls.("x" + test_name).(k);
   hash = gemini3d.fileio.md5sum(zipfile);
   if hash ~= exp_hash
