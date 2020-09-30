@@ -12,6 +12,9 @@ endif()
 project(MSIS LANGUAGES Fortran)
 
 include(CTest)
+if(NOT DEFINED ${PROJECT_NAME}_BUILD_TESTING)
+  set(${PROJECT_NAME}_BUILD_TESTING ${BUILD_TESTING})
+endif()
 
 set(gemini_url "https://github.com/gemini3d/gemini3d.git")
 set(gemini_tag "master")
@@ -37,7 +40,7 @@ endif()
 # build msis_setup executable
 add_subdirectory(${msis_path} ${PROJECT_BINARY_DIR}/msis)
 
-if(BUILD_TESTING)
+if(${PROJECT_NAME}_BUILD_TESTING)
   # don't run matlab.cmake from Matlab itself or it can infinite loop CMake on MSIS build
   include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/matlab.cmake)
 endif()
