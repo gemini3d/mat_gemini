@@ -82,10 +82,10 @@ arguments
 end
 
 [~,~,ext] = fileparts(filename);
- % regardless of what the output type is if variabl nsall exists we need
+% regardless of what the output type is if "nsall" exists we need
 % to do a full read; this is a bit messy because loadframe will check
 % again below if h5 is used...
-switch ext
+switch lower(ext)
   case '.h5', var_names = gemini3d.fileio.h5variables(filename);
   case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
   case '.dat', var_names = string.empty;
