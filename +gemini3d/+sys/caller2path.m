@@ -3,8 +3,9 @@ function direc = caller2path()
 % allows assuming top-level function path is desired path
 stack = dbstack('-completenames', 1);
 
-assert(~isempty(stack))
+direc = string.empty;
 
+if ~isempty(stack)
 direc = fileparts(stack.file);
-
+end
 end
