@@ -56,7 +56,13 @@ inds3=3:lx3+2;
 Re=6370e3;
 
 %% JUST PICK AN X3 LOCATION FOR THE MERIDIONAL SLICE PLOT, AND AN ALTITUDE FOR THE LAT./LON. SLICE
-ix3=floor(lx3/2);
+if (size(parm,3)>1)
+    ix3=floor(lx3/2);
+else
+    ix3=1;
+    warning("plot3D_curv_frames_long.m --> only 3D parameters support plotting right now.  Skipping this one...")
+    return;   %this won't work anyway return for now...
+end %if
 plotparams.altref=375;
 
 %% SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
@@ -211,9 +217,7 @@ else
 end
 
 gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
-
 gemini3d.vis.plotfunctions.slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
-
 gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
 
 end % function

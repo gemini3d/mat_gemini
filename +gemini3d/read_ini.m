@@ -87,8 +87,8 @@ if params.flagdneu
   % NOTE: str2num necessary here in case input formatted like 1.3d0 which
   % str2double returns NaN for while str2num works
   params.mloc=[str2num(mlat), str2num(mlon)]; %#ok<ST2NM>
-  params.sourcemlat=mloc(1);
-  params.sourcemlon=mloc(2);
+  params.sourcemlat=params.mloc(1);
+  params.sourcemlon=params.mloc(2);
 end
 
 fclose(fid);
