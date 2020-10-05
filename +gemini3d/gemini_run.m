@@ -34,8 +34,8 @@ gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
                       fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
 
 ret = system(cmd);
-if ret~=0
-  error('gemini_run:runtime_error', 'Gemini run failed')
+if ret ~= 0
+  error('gemini_run:runtime_error', 'Gemini run failed, error code %d', ret)
 end
 
 end % function
