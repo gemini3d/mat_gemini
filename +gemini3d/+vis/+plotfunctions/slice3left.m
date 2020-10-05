@@ -5,7 +5,7 @@ hi = imagesc(x, y, dat, 'parent', ax);
 set(hi, 'alphadata', ~isnan(dat));
 %% line annotation
 hold(ax,'on');
-if ~verLessThan('matlab', '9.5') && ~isempty(P.sourcemlat)
+if ~isempty(P.sourcemlat)
   yline(ax, P.altref, 'Color', 'w', 'LineStyle', '--', 'LineWidth',2)
   xline(ax, P.sourcemlat, 'k--')
   plot(ax,P.sourcemlat,0,'r^','MarkerSize',12,'LineWidth',2);

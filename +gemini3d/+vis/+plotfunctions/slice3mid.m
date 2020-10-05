@@ -7,9 +7,7 @@ set(hi, 'alphadata', ~isnan(dat));
 %% line
 hold(ax,'on');
 if ~isempty(P.sourcemlat)
-  if ~verLessThan('matlab', '9.5')
-    yline(ax, P.sourcemlon, 'Color', 'w', 'LineStyle', '--', 'LineWidth',2);
-  end
+  yline(ax, P.sourcemlon, 'Color', 'w', 'LineStyle', '--', 'LineWidth',2);
   plot(ax, P.sourcemlon, P.sourcemlat,'r^','MarkerSize',12,'LineWidth',2);
 end
 hold(ax,'off');

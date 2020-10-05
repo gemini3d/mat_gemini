@@ -5,9 +5,9 @@ hi = imagesc(ax, x, y, dat);
 set(hi, 'alphadata', ~isnan(dat));
 %% line
 hold(ax,'on');
-if ~verLessThan('matlab', '9.5')
-   yline(ax, P.altref, 'w--','LineWidth',2);
-end
+
+yline(ax, P.altref, 'w--','LineWidth',2);
+
 if ~isempty(P.sourcemlon)
   plot(ax, P.sourcemlon,0,'r^','MarkerSize',12,'LineWidth',2);
 end
