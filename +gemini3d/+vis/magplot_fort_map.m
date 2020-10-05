@@ -1,11 +1,7 @@
 import gemini3d.fileio.makedir
 
 %SIMULATIONS LOCAITONS
-%simname='tohoku20113D_highres_var/';
-%simname='test3d_fang_mag/';
-simname='mooreOK3D_hemis_medres/'
-%simname='iowa3D_hemis_medres2/'
-%simname='iowa3D_hemis_medres2_control/'
+simname='tohoku20113D_lowres_test10/'
 basedir='~/simulations/'
 direc=[basedir,simname];
 makedir([direc, '/Brplots'])
@@ -17,12 +13,12 @@ makedir([direc, '/Bphiplots_eps'])
 
 %SIMULATION META-DATA
 cfg = gemini3d.read_config(direc);
-
+times=cfg.times;
 lt=numel(cfg.times);
 
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
-basemagdir= fullfile(direc,'magfields.ground.20deg.highres/');
+basemagdir= fullfile(direc,'magfields/');
 fid=fopen(fullfile(basemagdir,'input/magfieldpoints.dat'),'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
 lpoints=fread(fid,1,'integer*4');
 r=fread(fid,lpoints,'real*8');
@@ -32,14 +28,8 @@ fclose(fid);
 
 
 %REORGANIZE THE FIELD POINTS (PROBLEM-SPECIFIC)
-%ltheta=10;
-%lphi=10;
-%ltheta=192;
-%lphi=192;
-ltheta=40;
-lphi=40;
-%ltheta=1600;
-%lphi=1;
+ltheta=10;
+lphi=10;
 r=reshape(r(:),[ltheta,lphi]);
 theta=reshape(theta(:),[ltheta,lphi]);
 phi=reshape(phi(:),[ltheta,lphi]);
@@ -58,10 +48,10 @@ Brt=zeros(1,ltheta,lphi,lt);
 Bthetat=zeros(1,ltheta,lphi,lt);
 Bphit=zeros(1,ltheta,lphi,lt);
 
-for it=1:lt-1
+for it=2:lt-1    %starts at second time step due to weird magcalc quirk
 
-  filename= gemini3d.datelab(cfg.times(it));
-  fid=fopen([basemagdir,filename,'.dat'],'r');
+  filename= gemini3d.datelab(times(it));
+  fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
 
   data=fread(fid,lpoints,'real*8');
   Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
@@ -82,7 +72,7 @@ fprintf('...Done reading data...\n');
 
 
 %STORE THE DATA IN A MATLAB FILE FOR LATER USE
-save([direc,'/magfields_fort.mat'],'simdate_series','mlat','mlon','Brt','Bthetat','Bphit';
+save([direc,'/magfields_fort.mat'],'times','mlat','mlon','Brt','Bthetat','Bphit');
 
 
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING
@@ -104,6 +94,8 @@ fprintf('...Done interpolating...\n');
 
 %SIMULATION META-DATA
 cfg = gemini3d.read_config(direc);
+mlatsrc=cfg.sourcemlat;
+mlonsrc=cfg.sourcemlon;
 
 
 %TABULATE THE SOURCE OR GRID CENTER LOCATION
@@ -139,9 +131,10 @@ for it=1:lt-1
     mlonlim=[min(mlonp),max(mlonp)];
     [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
     pcolorm(MLAT,MLON,param);
-    cmap=lbmap(256,'redblue');
-    cmap=flipud(cmap);
-    colormap(cmap);
+    %cmap=lbmap(256,'redblue');
+    %cmap=flipud(cmap);
+    %colormap(cmap);
+    colormap(gemini3d.vis.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -163,9 +156,10 @@ for it=1:lt-1
     axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
     param=squeeze(Bthetatp(:,:,:,it))*1e9;
     pcolorm(MLAT,MLON,param);
-    cmap=lbmap(256,'redblue');
-    cmap=flipud(cmap);
-    colormap(cmap);
+%     cmap=lbmap(256,'redblue');
+%     cmap=flipud(cmap);
+%     colormap(cmap);
+    colormap(gemini3d.vis.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -188,9 +182,10 @@ for it=1:lt-1
     param=squeeze(Bphitp(:,:,:,it))*1e9;
     %imagesc(mlon,mlat,param);
     pcolorm(MLAT,MLON,param);
-    cmap=lbmap(256,'redblue');
-    cmap=flipud(cmap);
-    colormap(cmap);
+%     cmap=lbmap(256,'redblue');
+%     cmap=flipud(cmap);
+%     colormap(cmap);
+    colormap(gemini3d.vis.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -227,7 +222,7 @@ for it=1:lt-1
 %        setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',10,'PLineLocation',5,'MLabelLocation',10,'PLabelLocation',5);
         setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
         gridm on;
-        print('-dpng',[direc,'/Brplots/',filename,'.png'],'-r300');
+        print('-dpng',strcat(direc,"/Brplots/",filename,".png"),'-r300');
 %        print('-depsc2',[direc,'/Brplots_eps/',filename,'.eps']);
 
 %        subplot(132);
@@ -238,7 +233,7 @@ for it=1:lt-1
 %        setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',10,'PLineLocation',5,'MLabelLocation',10,'PLabelLocation',5);
         setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
         gridm on;
-        print('-dpng',[direc,'/Bthplots/',filename,'.png'],'-r300');
+        print('-dpng',strcat(direc,"/Bthplots/",filename,".png"),'-r300');
 %        print('-depsc2',[direc,'/Bthplots_eps/',filename,'.eps']);
 
 %        subplot(133);
@@ -249,7 +244,7 @@ for it=1:lt-1
 %        setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',10,'PLineLocation',5,'MLabelLocation',10,'PLabelLocation',5);
         setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
         gridm on;
-        print('-dpng',[direc,'/Bphiplots/',filename,'.png'],'-r300');
+        print('-dpng',strcat(direc,"/Bphiplots/",filename,".png"),'-r300');
 %        print('-depsc2',[direc,'/Bphiplots_eps/',filename,'.eps']);
 %    end
     axis(ax);

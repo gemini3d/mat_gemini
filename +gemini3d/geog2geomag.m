@@ -1,7 +1,9 @@
 function [thetat,phit] = geog2geomag(lat,lon)
 arguments
-  lat {mustBeNumeric,mustBeFinite}
-  lon {mustBeNumeric,mustBeFinite}
+%  lat {mustBeNumeric,mustBeFinite}
+%  lon {mustBeNumeric,mustBeFinite}
+  lat {mustBeNumeric}
+  lon {mustBeNumeric}    %map data can be NaN
 end
 
 thetan = deg2rad(11);
