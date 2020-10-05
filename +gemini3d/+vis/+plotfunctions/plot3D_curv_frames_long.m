@@ -199,16 +199,10 @@ parmp3=parmp3(inds,:,:);
 %[XP,YP,ZP]=meshgrid(xp,yp,zp);
 % FS=8;
 
-if verLessThan('matlab', '9.7')
-  ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-  ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-  ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-else
-  t = tiledlayout(hf, 1, 3);
-  ax1 = nexttile(t);
-  ax2 = nexttile(t);
-  ax3 = nexttile(t);
-end
+t = tiledlayout(hf, 1, 3);
+ax1 = nexttile(t);
+ax2 = nexttile(t);
+ax3 = nexttile(t);
 
 gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
 

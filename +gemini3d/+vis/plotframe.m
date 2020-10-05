@@ -21,8 +21,6 @@ Phi_cmap = bwr();
 Vcmap = bwr();
 Jcmap = bwr();
 
-lotsplots = true;   %@scivision may want to fix this...
-
 %% READ IN THE SIMULATION INFORMATION (this is low cost so reread no matter what)
 cfg = gemini3d.read_config(direc);
 
@@ -109,9 +107,7 @@ if ~isfield(clim, "Phitop")
   clim.Phitop = [min(dat.Phitop(:)), max(dat.Phitop(:))];
 end
 
-%% MAKE THE PLOTS (WHERE APPROPRIATE)
-%Electron number density, 'position', [.1, .1, .5, .5], 'units', 'normalized'
-if lotsplots   % 3D simulation or a very long 2D simulation - do separate plots for each time frame
+%% MAKE THE PLOTS
 
 clf(h(10))
 plotfun(time, xg, dat.ne, 'n_e (m^{-3})', clim.ne, [cfg.sourcemlat,cfg.sourcemlon], h(10), Ncmap);
@@ -142,52 +138,7 @@ if cfg.flagoutput ~= 3
 %   end
 end
 
-else    %short 2D simulation - put the entire time series in a single plot
-
-figure(h(10)) %#ok<*UNRCH>
-Rsp = 4;
-Csp = 3;
-ha = subplot(Rsp, Csp, it, 'parent',h(10));
-nelim =  [9 11.3];
-plotfun(time, xg,log10(ne), 'log_{10} n_e (m^{-3})', clim.ne,[cfg.sourcemlat,cfg.sourcemlon],ha);
-
-if cfg.flagoutput ~= 3
-  ha = subplot(Rsp, Csp,it,'parent',h(1));
-  plotfun(time, xg, dat.v1(:,:,:),'v_1 (m/s)', clim.v1, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(2));
-  plotfun(time, xg, dat.Ti(:,:,:),'T_i (K)', clim.Ti, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(3));
-  plotfun(time, xg, dat.Te(:,:,:),'T_e (K)', clim.Te, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(4));
-  plotfun(time, xg, dat.J1(:,:,:),'J_1 (A/m^2)', clim.J1, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(5));
-  plotfun(time, xg, dat.v2(:,:,:),'v_2 (m/s)', clim.v2, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(6));
-  plotfun(time, xg, dat.v3(:,:,:),'v_3 (m/s)', clim.v3, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(7));
-  plotfun(time, xg, dat.J2(:,:,:),'J_2 (A/m^2)', clim.J2, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(8));
-  plotfun(time, xg, dat.J3(:,:,:),'J_3 (A/m^2)', clim.J3, [cfg.sourcemlat,cfg.sourcemlon],ha);
-
-  ha = subplot(Rsp, Csp,it,'parent',h(9));
-
-%  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', clim.Phitop, [p.sourcemlat, p.sourcemlon], h(9, Phi_cmap)
-end
-
-end
-
-
-if lotsplots
-  % for 3D or long 2D plots print and output file every time step
-  gemini3d.vis.saveframe(cfg.flagoutput, direc, dat.filename, saveplot_fmt, h)
-end
+gemini3d.vis.saveframe(cfg.flagoutput, direc, dat.filename, saveplot_fmt, h)
 
 if nargout == 0, clear('h'), end
 

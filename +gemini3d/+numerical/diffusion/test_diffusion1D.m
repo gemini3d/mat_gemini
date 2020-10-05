@@ -7,8 +7,6 @@ arguments
   fn (1,1) string
 end
 
-import gemini3d.assert_allclose
-
 gemini3d.exist_or_skip(fn, 'file')
 
 L = h5read(fn, '/lt');
@@ -17,17 +15,17 @@ x1 = h5read(fn, '/x1');
 for it=1:L
   ic = num2str(it, '%4.4d');
 
-  t(it) = h5read(fn, ['/t',ic]);
-  TsEuler(:, it) = h5read(fn, ['/TsEuler', ic]);
-  TsBDF2(:, it) = h5read(fn, ['/TsBDF2', ic]);
-  Tstrue(:, it) = h5read(fn, ['/TsTrue', ic]);
+  time(it) = h5read(fn, "/t" + ic);
+  TsEuler(:, it) = h5read(fn, "/TsEuler" + ic);
+  TsBDF2(:, it) = h5read(fn, "/TsBDF2" + ic);
+  Tstrue(:, it) = h5read(fn, "/TsTrue" + ic);
 end
 
 % reltol = 1e-5 for real32
 % this is just a random point we're comparing.
-assert_allclose(TsEuler(13,13), 0.770938954253086, 1e-5,[],'1-D Euler diffusion accuracy')
-assert_allclose(TsBDF2(13,13),  0.763236513549944, 1e-5,[],'1-D BDF2 diffusion accuracy')
-assert_allclose(Tstrue(13,13),  0.763014494788105, 1e-5,[],'1-D true diffusion accuracy')
+gemini3d.assert_allclose(TsEuler(13,13), 0.770938954253086, 1e-5,[],'1-D Euler diffusion accuracy')
+gemini3d.assert_allclose(TsBDF2(13,13),  0.763236513549944, 1e-5,[],'1-D BDF2 diffusion accuracy')
+gemini3d.assert_allclose(Tstrue(13,13),  0.763014494788105, 1e-5,[],'1-D true diffusion accuracy')
 
 disp('OK: 1d diffusion')
 
@@ -37,18 +35,19 @@ if ~gemini3d.sys.isinteractive
 end
 %% plots
 
-figure
-ax1=subplot(1,3,1);
-imagesc(t,x1(3:end-2),TsEuler, 'parent', ax1)
+hf = figure;
+t = tiledlayout(hf, 1, 3);
+ax1 = nexttile(t);
+imagesc(time, x1(3:end-2),TsEuler, 'parent', ax1)
 ylabel(ax1,'distance (m)')
 title(ax1,'1D diffusion (backward Euler)')
 
-ax2=subplot(1,3,2);
-imagesc(t,x1(3:end-2),TsBDF2, 'parent', ax2)
+ax2 = nexttile(t);
+imagesc(time, x1(3:end-2),TsBDF2, 'parent', ax2)
 title(ax2,'1D diffusion (TRBDF2)')
 
-ax3=subplot(1,3,3);
-imagesc(t,x1(3:end-2),Tstrue, 'parent', ax3)
+ax3 = nexttile(t);
+imagesc(time, x1(3:end-2),Tstrue, 'parent', ax3)
 title(ax3,'1D diffusion (analytic)')
 
 for ax = [ax1,ax2,ax3]

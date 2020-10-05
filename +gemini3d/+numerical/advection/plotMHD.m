@@ -1,6 +1,7 @@
 function plotMHD(n,ux,uy,uz,Bx,By,Bz,p,z,t)
 
-subplot(411);
+t = tiledplot(4,1);
+nexttile(t)
 plot(z/1e3,n);
 maxn=max(n);
 minn=min(n);
@@ -11,7 +12,7 @@ xlabel('z [km]')
 ylabel('n [m^{-3}]');
 title(sprintf('t=%.1f',t));
 
-subplot(412);
+nexttile(t)
 plot(z/1e3,[ux/1e3,uy/1e3,uz/1e3]);
 maxu=max(abs([ux(:);uy(:);uz(:)]))/1e3;
 maxu=max(maxu,1e-3);
@@ -19,7 +20,7 @@ axis([min(z)/1e3 max(z)/1e3 -maxu-0.2*maxu maxu+0.2*maxu]);
 xlabel('z [km]')
 ylabel('u [km/s]');
 
-subplot(413);
+nexttile(t)
 maxB=max([Bx(:);By(:)])/1e-9;
 maxB=max(maxB,1e-3);
 plot(z/1e3,[Bx/1e-9,By/1e-9,Bz/1e-9]);
@@ -28,7 +29,7 @@ xlabel('z [km]')
 ylabel('B [nT]');
 %legend('x','y','z')
 
-subplot(414);
+nexttile(t)
 plot(z/1e3,p);
 maxn=max(p);
 minn=min(p);
