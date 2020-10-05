@@ -9,6 +9,15 @@ tol_inc_big = 1e6;
 tol_big = 1e9;
 
 ok = true;
+
+%% minimum size checks
+for k = ["x1", "x2", "x3"]
+  lx = length(xg.(k));
+  if lx < 5
+    warning("Each dimension must have at least 5 points, but l" + k + "=" + int2str(lx))
+  end
+end
+
 %% check for monotonic increasing and reasonable dimension size
 for k = ["x1", "x1i", "x2", "x2i", "x3", "x3i"]
   p = squeeze(xg.(k));

@@ -56,13 +56,13 @@ else
   ap3 = p.Ap;
 end
 
-doy = gemini3d.day_of_year(time);
+doy = day(time, 'dayofyear');
 
 %fprintf('MSIS00 DOY %s\n', doy)
 yearshort = mod(time.Year, 100);
 iyd = yearshort*1000+doy;
-day = datetime(time.Year, time.Month, time.Day);
-UTsec0 = seconds(time - day);
+date0 = datetime(time.Year, time.Month, time.Day);
+UTsec0 = seconds(time - date0);
 %% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
 %% temporary files for MSIS
