@@ -18,9 +18,9 @@ arguments
 end
 
 %% get gemini.bin executable
-gemini_exe = gemini3d.get_gemini_exe(opts.gemini_exe);
+gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 %% ensure mpiexec is available
-check_mpiexec(opts.mpiexec, gemini_exe)
+gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe)
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir);
 %% assemble run command
@@ -37,25 +37,6 @@ ret = system(cmd);
 if ret~=0
   error('gemini_run:runtime_error', 'Gemini run failed')
 end
-
-end % function
-
-
-function check_mpiexec(mpiexec, exe)
-arguments
-  mpiexec (1,1) string
-  exe (1,1) string
-end
-
-[ret, msg] = system(mpiexec + " -help");
-assert(ret == 0, 'mpiexec not found')
-if ispc
-% check that MPIexec matches gemini.bin.exe
-[~, vendor] = system(exe + " -compiler");
-if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
-  error('gemini_run:runtime_error', 'MinGW is not compatible with Intel MPI')
-end
-end % if ispc
 
 end % function
 
@@ -112,11 +93,6 @@ prepend = gemini3d.sys.modify_path();
 cmd = mpiexec + " -n " + int2str(np) + " " + gemini_exe + " " +cfg.outdir;
 disp(cmd)
 cmd = prepend + " " + cmd;
-%%% dry run
-% py_cmd = py.list(split(cmd)');
-% py_dryrun = py_cmd;
-% py_dryrun.append('-dryrun')
-% py.subprocess.check_call(py_dryrun)
 
 %% dry run
 ret = system(cmd + " -dryrun");
