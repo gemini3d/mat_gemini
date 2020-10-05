@@ -97,7 +97,7 @@ freal = 'float64';
 
 ymd = [time.Year, time.Month, time.Day];
 fwrite(fid, ymd, freal);
-fwrite(fid, seconds(time - datetime(day)), freal);
+fwrite(fid, seconds(time - datetime(ymd)), freal);
 
 fwrite(fid,ns, freal);
 fwrite(fid,vsx1, freal);

@@ -234,7 +234,7 @@ fwrite(fid, xg.lx, 'integer*4');
 fclose(fid);
 
 %% grid
-fn = with_suffix(p.indat_grid, '.h5');
+fn = with_suffix(p.indat_grid, '.dat');
 disp("write " + fn)
 
 fid = fopen(fn, 'w');
