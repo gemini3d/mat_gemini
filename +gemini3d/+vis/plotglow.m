@@ -93,8 +93,10 @@ end
 % arbitrary pick of which emission lines to plot lat/lon slices
 inds = [2, 4, 5, 9];
 
+t = tiledlayout(hf)
+
 for i=1:length(inds)
-  ax = subplot(2,2,i,'parent', hf);
+  ax = nexttile(t);
   imagesc(x2/1e3, x3/1e3, squeeze(bFrame(:,:,inds(i)))', 'parent', ax);
   axis(ax, 'xy')
   axis(ax, 'tight')
@@ -103,11 +105,10 @@ for i=1:length(inds)
   %set(cb,'yticklabel',sprintf('10^{%g}|', get(cb,'ytick')))
   ylabel(cb,'Intensity (R)')
   title(ax, wavelengths(inds(i)) + "\AA  intensity: " + time_str, 'interpreter', 'latex')
-end
 
-ax=subplot(2,2,3);
-xlabel(ax, 'Eastward Distance (km)')
-ylabel(ax, 'Northward Distance (km)')
+  xlabel(ax, 'Eastward Distance (km)')
+  ylabel(ax, 'Northward Distance (km)')
+end
 
 end % function
 

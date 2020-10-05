@@ -205,16 +205,11 @@ end
 plotparams.time = time;
 
 if ndims(parm) == 3
-  if verLessThan('matlab', '9.7')
-    ax1 = subplot(1,3,1, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-    ax2 = subplot(1,3,2, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-    ax3 = subplot(1,3,3, 'parent', hf, 'nextplot', 'add'); %, 'FontSize', FS);
-  else
-    t = tiledlayout(hf, 1, 3);
-    ax1 = nexttile(t);
-    ax2 = nexttile(t);
-    ax3 = nexttile(t);
-  end
+  t = tiledlayout(hf, 1, 3);
+  ax1 = nexttile(t);
+  ax2 = nexttile(t);
+  ax3 = nexttile(t);
+
   gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
   gemini3d.vis.plotfunctions.slice3mid(ax2, xp, yp, parmp2, plotparams)
   gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp, parmp3, plotparams)

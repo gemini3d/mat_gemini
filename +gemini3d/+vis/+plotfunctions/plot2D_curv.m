@@ -6,7 +6,7 @@ arguments
   parmlbl (1,1) string = string.empty
   caxlims (1,:) {mustBeNumeric} = []
   sourceloc (1,:) {mustBeNumeric} = []
-  h (1,1) = []
+  h (1,1) = figure
   cmap (:,:) {mustBeNumeric,mustBeFinite} = parula(256)
 end
 
@@ -17,7 +17,7 @@ plotparams.cmap = cmap;
 
 if isa(h, 'matlab.ui.Figure')
   ha = axes('parent', h);
-elseif isa(h, 'matlab.graphics.axis.Axes')
+else
   ha = h;
 end
 

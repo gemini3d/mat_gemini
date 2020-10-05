@@ -36,6 +36,8 @@ end % function
 
 function filename = check_names(direc, names)
 
+filename = string.empty;
+
 for s = names
   filename = fullfile(direc, s);
   if isfile(filename)

@@ -6,12 +6,10 @@ end
 
 filename = gemini3d.get_configfile(direc);
 
-[~,~,ext] = fileparts(filename);
-
-switch lower(ext)
-  case '.nml', cfg = gemini3d.read_nml(filename);
-  case '.ini', cfg = gemini3d.read_ini(filename);
-  otherwise, error('read_config:value_error', 'config file type unknown: %s', filename)
+if endsWith(filename, ".ini", 'IgnoreCase', true)
+  cfg = gemini3d.read_ini(filename);
+else
+  cfg = gemini3d.read_nml(filename);
 end
 
 t0 = datetime(cfg.ymd(1), cfg.ymd(2), cfg.ymd(3)) + seconds(cfg.UTsec0);

@@ -18,18 +18,35 @@ arguments
 end
 
 %% get gemini.bin executable
-exe = gemini3d.get_gemini_exe(opts.gemini_exe);
+gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 %% ensure mpiexec is available
-[ret, msg] = system(opts.mpiexec + " -help");
-assert(ret == 0, 'mpiexec not found')
-if ispc
-% check that MPIexec matches gemini.bin.exe
-[~, vendor] = system(exe + " -compiler");
-if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
-  error('gemini_run:runtime_error', 'MinGW is not compatible with Intel MPI')
-end
-end % if ispc
+gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe)
 %% check if model needs to be setup
+cfg = setup_if_needed(opts, outdir);
+%% assemble run command
+cmd = create_run(cfg, opts.mpiexec, gemini_exe);
+
+if opts.dryrun
+  return
+end
+%% run simulation
+gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
+                      fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
+
+ret = system(cmd);
+if ret~=0
+  error('gemini_run:runtime_error', 'Gemini run failed')
+end
+
+end % function
+
+
+function cfg = setup_if_needed(opts, outdir)
+arguments
+  opts
+  outdir (1,1) string
+end
+
 cfg = gemini3d.read_config(opts.config);
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
@@ -60,34 +77,27 @@ addons = matlab.addons.installedAddons();
 if any(contains(addons.Name, 'Parallel Computing Toolbox'))
   delete(gcp('nocreate'))
 end
-%% assemble run command
+
+end % function
+
+
+function cmd = create_run(cfg, mpiexec, gemini_exe)
+arguments
+  cfg (1,1) struct
+  mpiexec (1,1) string
+  gemini_exe (1,1) string
+end
+
 np = gemini3d.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = gemini3d.sys.modify_path();
-cmd = opts.mpiexec + " -n " + int2str(np) + " " + exe + " " +cfg.outdir;
+cmd = mpiexec + " -n " + int2str(np) + " " + gemini_exe + " " +cfg.outdir;
 disp(cmd)
 cmd = prepend + " " + cmd;
-%%% dry run
-% py_cmd = py.list(split(cmd)');
-% py_dryrun = py_cmd;
-% py_dryrun.append('-dryrun')
-% py.subprocess.check_call(py_dryrun)
 
 %% dry run
 ret = system(cmd + " -dryrun");
 if ret~=0
   error('gemini_run:runtime_error', 'Gemini dryrun failed')
-end
-
-if opts.dryrun
-  return
-end
-%% run simulation
-gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(exe)), ...
-                      fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
-
-ret = system(cmd);
-if ret~=0
-  error('gemini_run:runtime_error', 'Gemini run failed')
 end
 
 end % function
