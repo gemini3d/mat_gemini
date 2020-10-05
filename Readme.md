@@ -52,7 +52,7 @@ Assume you would like to run the [GDI Periodic Lowres example](https://github.co
 2. Ensure that MatGemini is on your Matlab path from Matlab run any one of {gemini3d,mat_gemini,gemini-example}/setup.m
 3. run the example from Matlab:
 
-    ```sh
+    ```matlab
     ini = '~/gemini-examples/init/GDI_periodic_lowres'
     out_dir = '~/sims/gdi_lowres'
     gemini3d.gemini_run(out_dir, 'config', ini)
@@ -62,12 +62,22 @@ That will take about 1 hour on an 8-core 9th generation Intel i7 laptop CPU.
 
 ### Plot all simulation outputs
 
-```sh
+```matlab
 gemini3d.gemini_plot(out_dir, "png")
 ```
 
 generates plots under `out_dir + "/plots"`
 Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just displays the plots without saving.
+
+### Plot simulation grid
+
+Plots of the simulation grid can be made:
+
+```matlab
+gemini3d.plot_grid(sim_path)
+```
+
+This can help show if something unintended happened.
 
 ## Advanced usage
 
