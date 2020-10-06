@@ -1,14 +1,23 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
+gemini3d_git = "https://github.com/gemini3d/gemini3d.git";
+
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 
 gemini_root = getenv("GEMINI_ROOT");
 if isempty(gemini_root)
   gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, '../gemini3d/'));
-  if isfolder(gemini_root)
+  ret = 0;
+  if ~isfolder(gemini_root)
+    cmd = "git -C " + fullfile(gemini_root, "..") + " clone " + gemini3d_git;
+    ret = system(cmd);
+  end
+  if ret == 0 && isfolder(gemini_root)
     setenv('GEMINI_ROOT', gemini_root)
+  else
+    fprintf(2, "Problem finding Gemini3D in " + gemini_root)
   end
 end
 

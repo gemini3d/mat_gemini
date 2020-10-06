@@ -11,7 +11,7 @@ if ispc && ~endsWith(exe, ".exe")
 end
 
 if ~isfile(exe)
-  error('get_gemini_exe:file_not_found', 'Gemini.bin executable not found in %s\n\nTry to build Gemini3d by: \n ctest -S gemini3d/setup.cmake -VV', fileparts(exe))
+  error('get_gemini_exe:file_not_found', "Gemini.bin executable not found in " + fileparts(exe))
 end
 %% sanity check gemini.bin executable
 prepend = gemini3d.sys.modify_path();
