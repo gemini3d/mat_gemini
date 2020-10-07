@@ -16,6 +16,7 @@ git:
 addons:
   apt:
     packages:
+    - cmake
     - gfortran
     - libhdf5-dev
     - liblapack-dev
