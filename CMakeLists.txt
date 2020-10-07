@@ -32,7 +32,7 @@ endif()
 
 set(msis_path ${gemini_root}/src/vendor/msis00)
 
-if(NOT IS_DIRECTORY ${gemini_root})
+if(NOT IS_DIRECTORY ${msis_path})
   # we put inside if() to allow working with existing development code
   git_download(${gemini_root} ${gemini_url} ${gemini_tag})
 endif()
