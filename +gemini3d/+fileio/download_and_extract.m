@@ -25,10 +25,11 @@ urls = gemini3d.vendor.ini2struct.ini2struct(url_ini);
 
 zipfile = fullfile(data_dir, "test" + test_name + ".zip");
 
-if ~isfile(zipfile)
+if ~isfile(zipfile) || dir(zipfile).bytes < 10000  % missing or empty zip
+  web_opts = weboptions('Timeout', 15);
   k = "url";
   url = urls.("x" + test_name).(k);
-  websave(zipfile, url);
+  websave(zipfile, url, web_opts);
 end
 
 %% md5sum check
