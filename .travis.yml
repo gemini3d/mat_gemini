@@ -1,4 +1,5 @@
-dist: focal
+dist: bionic
+# Matlab R2020a libstdc++ needs Ubuntu 18.04
 
 language: matlab
 
@@ -14,5 +15,12 @@ addons:
     packages:
     - gfortran
     - libhdf5-dev
+    - liblapack-dev
     - libopenmpi-dev
     - libmumps-dev
+  snaps:
+  - name: cmake
+    confinement: classic
+
+before_script:
+- export PATH=/snap/bin:$PATH

@@ -11,6 +11,8 @@ end
 
 build_dir = fileparts(exe);
 
+assert(gemini3d.sys.cmake_atleast("3.15"), "CMake >= 3.15 required for Gemini")
+
 cfg_cmd = "cmake -B" + build_dir + " -S" + gemini_root;
 ret = system(cfg_cmd);
 if ret ~= 0
