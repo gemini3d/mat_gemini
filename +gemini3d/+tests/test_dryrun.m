@@ -1,7 +1,8 @@
 name = "2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
-
+% setup so GEMINI_ROOT is set
+run(fullfile(cwd, "../../setup.m"))
 % get files if needed
 gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))
 %% MPIexec
