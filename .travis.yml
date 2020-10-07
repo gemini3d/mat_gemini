@@ -1,0 +1,18 @@
+dist: focal
+
+language: matlab
+
+matlab:
+- latest
+
+git:
+- depth: 3
+- quiet: true
+
+addons:
+  apt:
+    packages:
+    - gfortran
+    - libhdf5-dev
+    - libopenmpi-dev
+    - libmumps-dev
