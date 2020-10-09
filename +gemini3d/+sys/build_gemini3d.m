@@ -14,7 +14,13 @@ gemini_root = gemini3d.posix(gemini_root);
 
 build_dir = fileparts(exe);
 
-assert(gemini3d.sys.cmake_atleast("3.15"), "CMake >= 3.15 required for Gemini")
+if ~gemini3d.sys.cmake_atleast("3.15")
+  error("build_gemini3d:environment_error", "CMake >= 3.15 required for Gemini")
+end
+
+if ~isfolder(gemini_root)
+  error("build_gemini3d:file_not_found", "gemini_root source directory not found: " + gemini_root)
+end
 
 cfg_cmd = "cmake -B" + build_dir + " -S" + gemini_root;
 ret = system(cfg_cmd);
