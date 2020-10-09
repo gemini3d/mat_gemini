@@ -25,10 +25,12 @@ urls = gemini3d.vendor.ini2struct.ini2struct(url_ini);
 
 zipfile = fullfile(data_dir, "test" + test_name + ".zip");
 
-if ~isfile(zipfile) || dir(zipfile).bytes < 10000  % missing or empty zip
-  web_opts = weboptions('Timeout', 15, ...  % 5 seconds has nuisance timeouts
-    'CertificateFilename', '' ...  % HPC tend to have outdated or missing SSL certs
-    );
+if ~isfile(zipfile) || ...
+    dir(zipfile).bytes < 10000  % missing or empty zip
+
+  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
+    % 'CertificateFilename', '' ...  % HPC tend to have outdated or missing SSL certs
+
   k = "url";
   url = urls.("x" + test_name).(k);
   websave(zipfile, url, web_opts);
