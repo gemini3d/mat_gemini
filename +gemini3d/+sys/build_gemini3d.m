@@ -9,6 +9,9 @@ if isempty(gemini_root)
   error("build_gemini3d:environment_error", "please run mat_gemini/setup.m to setup your environment")
 end
 
+exe = gemini3d.posix(exe);
+gemini_root = gemini3d.posix(gemini_root);
+
 build_dir = fileparts(exe);
 
 assert(gemini3d.sys.cmake_atleast("3.15"), "CMake >= 3.15 required for Gemini")
