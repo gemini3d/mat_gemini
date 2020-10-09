@@ -10,7 +10,8 @@ if isempty(gemini_root)
 end
 
 exe = gemini3d.posix(exe);
-gemini_root = gemini3d.posix(gemini_root);
+% must be absolute path for Unix-like, where cannot traverse upwards from non-existent dir
+gemini_root = gemini3d.posix(gemini3d.fileio.absolute_path(gemini_root));
 
 build_dir = fileparts(exe);
 
