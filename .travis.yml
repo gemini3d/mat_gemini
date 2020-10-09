@@ -6,6 +6,9 @@ language: matlab
 matlab:
 - latest
 
+os:
+- linux
+
 git:
 - depth: 3
 - quiet: true
@@ -24,3 +27,7 @@ addons:
 
 before_script:
 - export PATH=/snap/bin:$PATH
+
+script:
+- pwd
+- matlab -batch "r = runtests('gemini3d.tests'); assert(~isempty(r)); assertSuccess(r)"
