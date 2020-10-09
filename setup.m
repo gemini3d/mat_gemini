@@ -14,7 +14,7 @@ if isempty(gemini_root)
 
   ret = 0;
   if ~isfolder(gemini_root)
-    cmd = "git -C " + fullfile(gemini_root, "..") + " clone " + gemini3d_git + " " + gemini3d_dirname;
+    cmd = "git -C " + fullfile(cwd, "..") + " clone " + gemini3d_git + " " + gemini3d_dirname;
     ret = system(cmd);
   end
 
