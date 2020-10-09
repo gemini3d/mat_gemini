@@ -4,6 +4,10 @@ arguments
   xg (1,1) struct
 end
 
+% Set input potential/FAC boundary conditions and write these to a set of
+% files that can be used an input to GEMINI.  This ia a basic examples that
+% can make Gaussian shaped potential or FAC inputs using an input width.
+
 dir_out = p.E0_dir;
 gemini3d.fileio.makedir(dir_out);
 
@@ -99,6 +103,8 @@ end % function
 
 function E = Jcurrent_target(E, Nt)
 
+% Set the top boundary shape (current density) and potential solve type flag
+
 S = E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
 
 for i = 6:Nt
@@ -110,6 +116,8 @@ end % function
 
 
 function E = Efield_target(E, xg, lx1, lx2, lx3, Nt)
+
+% Set the top boundary shape (potential) and potential solve type flag
 
 %% create feature defined by Efield
 if lx3 == 1 % east-west
@@ -133,6 +141,8 @@ end % function
 
 
 function [wsig, xsig] = Esigma(pwidth, pmax, pmin, px)
+
+% Set width given a fraction of the coordinate an extent
 
 wsig = pwidth * (pmax - pmin);
 xsig = pwidth * (max(px) - min(px));
