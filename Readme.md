@@ -38,7 +38,7 @@ Matlab R2020a Update 5 and newer have better plot quality due to new Matlab grap
 4. To run the self-tests from Matlab in the mat_gemini/ directory:
 
     ```matlab
-    test_gemini
+    runtests(gemini3d.tests)
     ```
 
 ## Usage
