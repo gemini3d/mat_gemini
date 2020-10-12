@@ -1,7 +1,8 @@
-function runner(name, file_format)
+function runner(name, file_format, outdir)
 arguments
   name (1,1) string
   file_format (1,1) string
+  outdir (1,1) string
 end
 
 cwd = fileparts(mfilename('fullpath'));
@@ -13,7 +14,7 @@ gemini3d.fileio.download_and_extract(name, ref_dir)
 %% setup new test data
 p = gemini3d.read_config(test_dir);
 p.file_format = file_format;
-p.outdir = fullfile(tempdir, "test" + name);
+p.outdir = outdir;
 
 % patch eq_dir to use reference data
 if isfield(p, 'eq_dir')
