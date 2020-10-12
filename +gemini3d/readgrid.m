@@ -28,7 +28,7 @@ function xgf = read_hdf5(path)
 
 fn = fullfile(path, 'simgrid.h5');
 
-for v = gemini3d.fileio.h5variables(fn)
+for v = hdf5nc.h5variables(fn)
   xgf.(v) = h5read(fn, "/" + v);
 end
 
@@ -43,7 +43,7 @@ function xgf = read_nc4(path)
 
 fn = fullfile(path, 'simgrid.nc');
 
-for v = gemini3d.fileio.ncvariables(fn)
+for v = hdf5nc.ncvariables(fn)
   xgf.(v) = ncread(fn, v);
 end
 

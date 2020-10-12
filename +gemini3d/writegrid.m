@@ -58,7 +58,8 @@ end % function
 
 
 function write_hdf5(p, xg)
-import gemini3d.fileio.*
+import gemini3d.fileio.with_suffix
+import hdf5nc.h5save
 %% size
 fn = with_suffix(p.indat_size, '.h5');
 disp("write " + fn)
@@ -136,9 +137,10 @@ end % function
 
 
 function write_nc4(p, xg)
-import gemini3d.fileio.ncsave
+import gemini3d.fileio.with_suffix
+import hdf5nc.ncsave
 %% size
-fn = gemini3d.fileio.with_suffix(p.indat_size, '.nc');
+fn = with_suffix(p.indat_size, '.nc');
 disp("write " + fn)
 if isfile(fn)
   delete(fn)
@@ -153,7 +155,7 @@ lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
 %% grid
-fn = gemini3d.fileio.with_suffix(p.indat_grid, '.nc');
+fn = with_suffix(p.indat_grid, '.nc');
 disp("write " + fn)
 if isfile(fn)
   delete(fn)

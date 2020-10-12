@@ -179,7 +179,7 @@ assert(ok, 'reference grid %s has bad values', refdir)
 assert(ok, 'grid %s has bad values', outdir)
 
 errs = 0;
-for k = gemini3d.fileio.h5variables(ref.filename)
+for k = hdf5nc.h5variables(ref.filename)
   if ~isnumeric(ref.(k))
     % metadata
     continue

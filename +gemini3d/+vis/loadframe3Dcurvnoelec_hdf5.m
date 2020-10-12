@@ -6,7 +6,7 @@ end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-varnames = gemini3d.fileio.h5variables(filename);
+varnames = hdf5nc.h5variables(filename);
 
 if any(varnames == "nsall")
   i = '/nsall';

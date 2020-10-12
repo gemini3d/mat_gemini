@@ -18,7 +18,7 @@ end
 
 switch suffix
 case '.h5'
-  [vars, grps] = gemini3d.fileio.h5variables(file);
+  [vars, grps] = hdf5nc.h5variables(file);
 
   if ~(any(vars == "ymd") || any(grps == "/time"))
     return
@@ -26,7 +26,7 @@ case '.h5'
 
   if any(grps == "/time")
     i = "/time";
-    vars = gemini3d.fileio.h5variables(file, 'time');
+    vars = hdf5nc.h5variables(file, 'time');
   else
     i = "";
   end
@@ -41,7 +41,7 @@ case '.h5'
   end
 
 case '.nc'
-  vars = gemini3d.fileio.ncvariables(file);
+  vars = hdf5nc.ncvariables(file);
 
   if ~any(vars == "ymd")
     return

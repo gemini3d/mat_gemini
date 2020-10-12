@@ -5,7 +5,7 @@ arguments
 end
 
 %% SIMULATION RESULTS
-fvars = gemini3d.fileio.h5variables(fn);
+fvars = hdf5nc.h5variables(fn);
 
 dat.filename = fn;
 
