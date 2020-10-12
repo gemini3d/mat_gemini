@@ -15,31 +15,25 @@ Matlab R2020a Update 5 and newer have better plot quality due to new Matlab grap
 
 ## Quick Start
 
-1. if you don't already have [Gemini3D](https://github.com/gemini3d/gemini3d.git) installed, change to the directory where you like to keep code projects, and:
+We assume you already have a Fortran compiler and MPI library installed.
 
-    ```sh
-    git clone https://github.com/gemini3d/gemini3d
+```sh
+git clone https://github.com/gemini3d/mat_gemini
+```
 
-    ctest -S gemini3d/setup.cmake -VV
-    ```
+To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
 
-    That assumes you already have a Fortran compiler and MPI library installed. That will build and test the Gemini3D Fortran code.
-    We suggest setting operating system environment variable `GEMINI_ROOT` with value of that path (e.g. ~/gemini3d) to ensure you use that code directory.
-2. If you haven't already got a copy of this repo:
+```matlab
+setup
+```
 
-    ```sh
-    git clone https://github.com/gemini3d/mat_gemini
-    ```
-3. To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
+### Self-check (optional, but recommended)
 
-    ```matlab
-    setup
-    ```
-4. To run the self-tests from Matlab in the mat_gemini/ directory:
+Run the self-tests from Matlab in the mat_gemini/ directory:
 
-    ```matlab
-    runtests('gemini3d.tests')
-    ```
+```matlab
+runtests('gemini3d.tests')
+```
 
 If the "runtests" dryrun fails with SSL certificate errors, you may need to tell Git the locatiion of your system SSL certificates. This can be an issue in general on HPC.
 If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
