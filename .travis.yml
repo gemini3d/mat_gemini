@@ -29,4 +29,4 @@ before_script:
 - export PATH=/snap/bin:$PATH
 
 script:
-- matlab -batch "r = runtests('gemini3d.tests'); assert(~isempty(r)); assertSuccess(r)"
+- matlab -batch "r = runtests('gemini3d.tests', 'UseParallel', true); assert(~isempty(r)); assertSuccess(r)"
