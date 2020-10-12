@@ -17,4 +17,6 @@ end
 
 assert(last ~= "", 'could not find last part of %s', direc)
 
+last = string(last);
+
 end % function
