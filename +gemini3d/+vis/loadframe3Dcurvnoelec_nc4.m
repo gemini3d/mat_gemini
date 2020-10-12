@@ -6,7 +6,7 @@ end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-varnames = gemini3d.fileio.ncvariables(filename);
+varnames = hdf5nc.ncvariables(filename);
 
 if any(varnames == "nsall")
   dat.ns = ncread(filename, 'nsall');
