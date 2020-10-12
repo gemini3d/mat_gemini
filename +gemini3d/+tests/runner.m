@@ -16,7 +16,10 @@ p = gemini3d.read_config(test_dir);
 p.file_format = file_format;
 p.outdir = outdir;
 
-% patch eq_dir to use reference data
+for k = ["indat_file", "indat_size", "indat_grid"]
+  p.(k) = gemini3d.fileio.with_suffix(p.(k), "." + file_format);
+end
+%% patch eq_dir to use reference data
 if isfield(p, 'eq_dir')
   eq_dir = fullfile(fileparts(test_dir), gemini3d.fileio.path_tail(p.eq_dir));
   if isfolder(eq_dir)
@@ -25,9 +28,10 @@ if isfield(p, 'eq_dir')
   end
 end
 
-p = gemini3d.setup.model_setup(p);
+%% generate initial condition files
+cp = gemini3d.setup.model_setup(p);
 %% check generated files
 
-gemini3d.compare_all(p.outdir, test_dir, "in")
+gemini3d.compare_all(p.outdir, test_dir, "only", "in", "file_format", file_format)
 
 end  % function

@@ -1,8 +1,9 @@
-function cfg = make_valid_paths(cfg, top)
+function cfg = make_valid_paths(cfg, top, file_format)
 %% resolve all paths in the config struct
 arguments
   cfg (1,1) struct
   top string = string.empty
+  file_format string = string.empty
 end
 
 import gemini3d.fileio.expanduser
@@ -21,6 +22,9 @@ cfg.input_dir = fullfile(top, 'inputs');
 
 for n = ["indat_size", "indat_grid", "indat_file"]
   cfg.(n) = make_valid_filename(cfg.(n), top);
+  if ~isempty(file_format)
+    cfg.(n) = gemini3d.fileio.with_suffix(cfg.(n), "." + file_format);
+  end
 end
 
 for n = ["eq_dir", "eq_zip", "E0_dir", "prec_dir"]

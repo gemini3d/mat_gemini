@@ -1,4 +1,4 @@
-function compare_all(outdir, refdir, only)
+function compare_all(outdir, refdir, opts)
 % compare entire output directory data files, and input files
 %
 % absolute and relative tolerance account for slight IEEE-754 based differences,
@@ -20,7 +20,8 @@ function compare_all(outdir, refdir, only)
 arguments
   outdir (1,1) string
   refdir (1,1) string
-  only (:,1) string = string.empty
+  opts.only (:,1) string = string.empty
+  opts.file_format = string.empty
 end
 
 tol.rtol = 1e-5;
@@ -47,13 +48,13 @@ end
 
 %% check output dirs
 out_ok = 0;
-if isempty(only) || any(only == "out")
+if isempty(opts.only) || any(opts.only == "out")
   out_ok = compare_output(outdir, refdir, tol);
 end
 %% check input dirs
 in_ok = 0;
-if isempty(only) || any(only == "in")
-  in_ok = compare_input(outdir, refdir, tol);
+if isempty(opts.only) || any(opts.only == "in")
+  in_ok = compare_input(outdir, refdir, tol, opts.file_format);
 end
 %% finish up
 if out_ok ~= 0 || in_ok ~= 0
@@ -134,17 +135,18 @@ end
 
 end % function compare_output
 
-function errs = compare_input(outdir, refdir, tol)
-import gemini3d.*
+function errs = compare_input(outdir, refdir, tol, file_format)
+import gemini3d.assert_allclose
+import gemini3d.make_valid_paths
 
 %% check simulation grid
 compare_grid(outdir, refdir, tol)
 
 %% check initial condition data
-ref_params = make_valid_paths(read_config(refdir), refdir);
+ref_params = make_valid_paths(gemini3d.read_config(refdir), refdir);
 ref = gemini3d.vis.loadframe3Dcurvnoelec(ref_params.indat_file);
 
-new_params = make_valid_paths(read_config(outdir), outdir);
+new_params = make_valid_paths(gemini3d.read_config(outdir), outdir, file_format);
 new = gemini3d.vis.loadframe3Dcurvnoelec(new_params.indat_file);
 
 errs = 0;
