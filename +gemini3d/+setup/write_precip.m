@@ -22,7 +22,7 @@ end % function
 
 
 function write_hdf5(outdir, pg)
-import gemini3d.fileio.h5save
+import hdf5nc.h5save
 
 fn = fullfile(outdir, 'simsize.h5');
 if isfile(fn), delete(fn), end
@@ -49,7 +49,7 @@ end % function
 
 
 function write_nc4(outdir, pg)
-import gemini3d.fileio.ncsave
+import hdf5nc.ncsave
 
 fn = fullfile(outdir, 'simsize.nc');
 if isfile(fn), delete(fn), end

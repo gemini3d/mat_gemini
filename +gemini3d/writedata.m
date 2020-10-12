@@ -20,7 +20,7 @@ end
 
 % FIXME:  may want validate potential input
 
-assert(~isfolder(fn), '%s must be a filename, not a directory', fn)
+assert(~isfolder(fn), fn + " must be a filename, not a directory")
 
 if isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
@@ -40,7 +40,7 @@ end % function
 
 
 function write_hdf5(fn, time, ns, vsx1, Ts, Phitop)
-import gemini3d.fileio.h5save
+import hdf5nc.h5save
 
 fn = gemini3d.fileio.with_suffix(fn, ".h5");
 
@@ -62,7 +62,7 @@ end % function
 
 
 function write_nc4(fn, time, ns, vsx1, Ts, Phitop)
-import gemini3d.fileio.ncsave
+import hdf5nc.ncsave
 
 fn = gemini3d.fileio.with_suffix(fn, '.nc');
 

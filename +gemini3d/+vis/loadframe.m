@@ -86,8 +86,8 @@ end
 % to do a full read; this is a bit messy because loadframe will check
 % again below if h5 is used...
 switch lower(ext)
-  case '.h5', var_names = gemini3d.fileio.h5variables(filename);
-  case '.nc', var_names = gemini3d.fileio.ncvariables(filename);
+  case '.h5', var_names = hdf5nc.h5variables(filename);
+  case '.nc', var_names = hdf5nc.ncvariables(filename);
   case '.dat', var_names = string.empty;
   otherwise, error('loadframe:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end

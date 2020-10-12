@@ -3,11 +3,24 @@ function setup()
 
 gemini3d_git = "https://github.com/gemini3d/gemini3d.git";
 gemini3d_dirname = "gemini3d";
+
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 
-fix_macos()
+%% ensure HDF5 submodule is present
+hdf5nc_dir = fullfile(cwd, "matlab-hdf5");
+if ~isfolder(hdf5nc_dir)
+  cmd = "git submodule update --init";
+  ret = system(cmd);
+  if ret ~= 0
+    error("could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
+  end
+end
 
+addpath(hdf5nc_dir)
+%% fix MacOS PATH since ZSH isn't populated into Matlab
+fix_macos()
+%% Get Gemini3D if not present
 gemini_root = getenv("GEMINI_ROOT");
 if isempty(gemini_root)
   gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));

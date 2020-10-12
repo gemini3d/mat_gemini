@@ -21,7 +21,7 @@ function lxs = read_h5(path)
 
 fn = fullfile(path, "simsize.h5");
 
-varnames = gemini3d.fileio.h5variables(fn);
+varnames = hdf5nc.h5variables(fn);
 
 if any(varnames == "lxs")
   lxs = h5read(fn, '/lxs');
@@ -40,7 +40,7 @@ function lxs = read_nc(path)
 
 fn = fullfile(path, "simsize.nc");
 
-varnames = gemini3d.fileio.ncvariables(fn);
+varnames = hdf5nc.ncvariables(fn);
 
 if any(varnames == "lxs")
   lxs = ncread(fn, '/lxs');
