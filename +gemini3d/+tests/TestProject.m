@@ -12,6 +12,7 @@ methods(TestMethodSetup)
 function setup_env(tc)
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
+tc.TestData.refdir = fullfile(cwd, "data");
 % setup so GEMINI_ROOT is set
 run(fullfile(cwd, "../../setup.m"))
 
@@ -23,7 +24,7 @@ end
 
 methods (Test)
 function test_runner(tc, file_type, name)
-  gemini3d.tests.runner(name, file_type, tc.TestData.outdir)
+  project_runner(name, file_type, tc.TestData.outdir, tc.TestData.ref_dir)
 end
 end
 end

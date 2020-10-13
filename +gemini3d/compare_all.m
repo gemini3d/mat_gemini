@@ -90,15 +90,13 @@ for i = 1:Nt
 
   ok = ok + ~assert_allclose(out.ne,ref.ne,tol.rtolN,tol.atolN,['Ne ',st], true);
 
-  if false
-    ok = ok + ~assert_allclose(out.v1,ref.v1,tol.rtolV,tol.atolV,['V1 ', st], true);
-  end
+  % ok = ok + ~assert_allclose(out.v1,ref.v1,tol.rtolV,tol.atolV,['V1 ', st], true);
+
   ok = ok + ~assert_allclose(out.v2,ref.v2,tol.rtolV,tol.atolV,['V2 ', st], true);
   ok = ok + ~assert_allclose(out.v3,ref.v3,tol.rtolV,tol.atolV,['V3 ', st], true);
 
-  if false
-    ok = ok + ~assert_allclose(out.Ti,ref.Ti,tol.rtolT,tol.atolT,['Ti ', st], true);
-  end
+  % ok = ok + ~assert_allclose(out.Ti,ref.Ti,tol.rtolT,tol.atolT,['Ti ', st], true);
+
   ok = ok + ~assert_allclose(out.Te,ref.Te,tol.rtolT,tol.atolT,['Te ', st], true);
 
   ok = ok + ~assert_allclose(out.J1,ref.J1,tol.rtolJ,tol.atolJ,['J1 ', st], true);
@@ -123,9 +121,14 @@ for i = 1:Nt
   end
 
   Ne = out.ne;
-  v1=out.v1; v2=out.v2; v3=out.v3;
-  Ti=out.Ti; Te=out.Te;
-  J1=out.J1; J2=out.J2; J3=out.J3;
+  % v1=out.v1;
+  v2 = out.v2;
+  v3 = out.v3;
+  % Ti=out.Ti;
+  Te = out.Te;
+  J1 = out.J1;
+  J2 = out.J2;
+  J3 = out.J3;
 
 end % for
 

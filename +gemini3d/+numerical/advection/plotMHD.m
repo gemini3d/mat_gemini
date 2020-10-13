@@ -1,4 +1,4 @@
-function plotMHD(n,ux,uy,uz,Bx,By,Bz,p,z,t)
+function plotMHD(n,ux,uy,uz,Bx,By,Bz,p,z)
 
 t = tiledplot(4,1);
 nexttile(t)

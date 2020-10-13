@@ -57,7 +57,7 @@ else               %SH
   qtmp=(Re/(Re+altmin))^2*cos(thetax2max);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2min)^4/qtmp); %bottom right grid p, why mixing of max/min here???
 end
-rtmp=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
+% rtmp=fminbnd(@(x) gemini3d.setup.gridgen.qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
 
 
 
@@ -99,8 +99,8 @@ end
 
 
 %q=linspace(qmin,qmax,lq)';
-q=linspace(qmin,qmax,lqp)';
-q=sort(q);
+q = linspace(qmin,qmax,lqp);
+q = sort(q);
 
 p=p(:)';    %ensure a row vector
 pstride=p(2)-p(1);

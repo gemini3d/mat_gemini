@@ -59,9 +59,9 @@ Re=6370e3;
 if (size(parm,3)>1)
     ix3=floor(lx3/2);
 else
-    ix3=1;
+    % ix3=1;
     warning("plot3D_curv_frames_long.m --> only 3D parameters support plotting right now.  Skipping this one...")
-    return;   %this won't work anyway return for now...
+    return   % this won't work anyway return for now...
 end %if
 plotparams.altref=375;
 

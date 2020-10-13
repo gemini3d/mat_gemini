@@ -1,6 +1,13 @@
-function [alt,glon,glat]=geog2UEN(z,x,y,thetactr,phictr)
+function [alt,glon,glat] = UEN2geog(z,x,y,thetactr,phictr)
+arguments
+  z {mustBeNumeric}
+  x {mustBeNumeric}
+  y {mustBeNumeric}
+  thetactr {mustBeNumeric}
+  phictr {mustBeNumeric}
+end
 
-%This converts magnetic up, north, east coordinates into geographic
+% converts magnetic up, north, east coordinates into geographic
 %coordinates.
 
 %UPWARD DISTANCE

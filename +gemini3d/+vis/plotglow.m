@@ -93,7 +93,7 @@ end
 % arbitrary pick of which emission lines to plot lat/lon slices
 inds = [2, 4, 5, 9];
 
-t = tiledlayout(hf)
+t = tiledlayout(hf);
 
 for i=1:length(inds)
   ax = nexttile(t);

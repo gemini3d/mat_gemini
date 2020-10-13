@@ -97,7 +97,7 @@ if (flag2D)    %2D grid, don't use a map to plot and show things in polar coordi
     ha=h;
 else    %this is a 3D grid and we can plot it on a map if the user has the appropriate toolbox(es)
     if (flagmapping)    %plots are done lat,lon,alt for plot3m
-        h=plotfun(mlat(:,1,1),mlon(:,1,1),alt(:,1,1),'LineWidth',LW);
+        plotfun(mlat(:,1,1),mlon(:,1,1),alt(:,1,1),'LineWidth',LW);
         plotfun(mlat(:,1,end),mlon(:,1,end),alt(:,1,end),altlinestyle,'LineWidth',LW);
         plotfun(mlat(:,end,1),mlon(:,end,1),alt(:,end,1),'LineWidth',LW);
         h=plotfun(mlat(:,end,end),mlon(:,end,end),alt(:,end,end),altlinestyle,'LineWidth',LW);
@@ -168,7 +168,7 @@ else    %this is a 3D grid and we can plot it on a map if the user has the appro
         ylabel('magnetic latitude (deg.)');
         zlabel('altitidue (km)');
     else    %plotting is done lon,lat,alt with plot3
-        h=plotfun(mlon(:,1,1),mlat(:,1,1),alt(:,1,1),'LineWidth',LW);
+        plotfun(mlon(:,1,1),mlat(:,1,1),alt(:,1,1),'LineWidth',LW);
         plotfun(mlon(:,1,end),mlat(:,1,end),alt(:,1,end),altlinestyle,'LineWidth',LW);
         plotfun(mlon(:,end,1),mlat(:,end,1),alt(:,end,1),'LineWidth',LW);
         h=plotfun(mlon(:,end,end),mlat(:,end,end),alt(:,end,end),altlinestyle,'LineWidth',LW);
@@ -240,7 +240,7 @@ else    %this is a 3D grid and we can plot it on a map if the user has the appro
         zlabel('altitidue (km)');
     end
     h=gca;     %now go back and make all lines the same color...
-    lline=numel(h.Children);
+    % lline = numel(h.Children);
     for iline=1:16    %the last three children are the surface and text label objects
         h.Children(iline).Color=[0 0 0];
     end
@@ -316,7 +316,7 @@ else     %full 3D grid
 
             %Make all grid lines the same color
             h=gca;
-            lline=numel(h.Children);
+            % lline = numel(h.Children);
             for iline=1:6    %the line objects for each axis are added in a "stack" fashion (last in first out)
                 h.Children(iline).Color=linecolor;
             end
@@ -356,7 +356,7 @@ else     %full 3D grid
 
             %Make all grid lines the same color
             h=gca;
-            lline=numel(h.Children);
+            % lline = numel(h.Children);
             for iline=1:12    %the line objects for each axis are added in a "stack" fashion (last in first out)
                 h.Children(iline).Color=linecolor;
             end
@@ -394,7 +394,7 @@ else     %full 3D grid
 
             %Make all grid lines the same color
             h=gca;
-            lline=numel(h.Children);
+            % lline = numel(h.Children);
             for iline=1:12    %the line objects for each axis are added in a "stack" fashion (last in first out)
                 h.Children(iline).Color=linecolor;
             end
@@ -419,13 +419,13 @@ if (flag2D)    %for 2D just plot Earth's surface for reference
 else
     if (flagmapping)
         hold on;
-        ax=axis;
-        load coastlines;
+        %ax=axis;
+        %load coastlines;
         [thetacoast,phicoast]=geog2geomag(coastlat,coastlon);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 
-        if (360-sourcemlon<20)
+        if 360-sourcemlon<20
             inds=find(mloncoast>180);
             mloncoast(inds)=mloncoast(inds)-360;
         end

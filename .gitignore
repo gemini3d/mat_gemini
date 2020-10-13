@@ -6,4 +6,4 @@ resources/project/
 *.asv
 *.m~
 
-+gemini3d/+tests/data
++gemini3d/+tests/data/
