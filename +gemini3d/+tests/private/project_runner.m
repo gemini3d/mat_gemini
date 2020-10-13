@@ -1,13 +1,11 @@
-function runner(name, file_format, outdir)
+function project_runner(name, file_format, outdir, ref_dir)
 arguments
   name (1,1) string
   file_format (1,1) string
   outdir (1,1) string
+  ref_dir (1,1) string
 end
 
-cwd = fileparts(mfilename('fullpath'));
-
-ref_dir = fullfile(cwd, "data");
 test_dir = fullfile(ref_dir, "test" + name);
 %% get files if needed
 gemini3d.fileio.download_and_extract(name, ref_dir)
@@ -23,13 +21,13 @@ end
 if isfield(p, 'eq_dir')
   eq_dir = fullfile(fileparts(test_dir), gemini3d.fileio.path_tail(p.eq_dir));
   if isfolder(eq_dir)
-    fprintf('Using %s for equilibrium data \n', eq_dir)
+    disp("Using " + eq_dir + " for equilibrium data")
     p.eq_dir = eq_dir;
   end
 end
 
 %% generate initial condition files
-cp = gemini3d.setup.model_setup(p);
+gemini3d.setup.model_setup(p);
 %% check generated files
 
 gemini3d.compare_all(p.outdir, test_dir, "only", "in", "file_format", file_format)
