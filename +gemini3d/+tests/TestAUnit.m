@@ -1,6 +1,6 @@
-function tests = test_unit
-tests = functiontests(localfunctions);
-end
+classdef TestAUnit < matlab.unittest.TestCase
+
+methods (Test)
 
 function test_expanduser(tc)
 tc.assertFalse(startsWith(gemini3d.fileio.expanduser('~/foo'), "~"))
@@ -36,4 +36,8 @@ tc.assertEqual(gemini3d.sys.max_mpi([48,40,1], 8),  8)
 tc.assertEqual(gemini3d.sys.max_mpi([48,1,40], 28),  20)
 tc.assertEqual(gemini3d.sys.max_mpi([48,1,40], 28),  20)
 tc.assertEqual(gemini3d.sys.max_mpi([48,1,36], 28),  18)
+end
+
+end
+
 end
