@@ -29,17 +29,20 @@ function test_Arunner(tc, file_type, name)
 end
 
 function test_plot_2d(tc)
-project_runner('2dew_glow', 'h5', tc.TestData.outdir, fullfile(cwd, "data"))
+tname = "2dew_glow";
+project_runner(tname, 'h5', tc.TestData.outdir, fullfile(tc.TestData.cwd, "data"))
+
 % test 2D plots
 
-h = gemini3d.vis.plotframe(fullfile(tc.TestData.cwd, "data/test2dew_glow"), datetime(2013, 2, 20, 5, 5, 0));
+h = gemini3d.vis.plotframe(fullfile(tc.TestData.cwd, "data/test" + tname), datetime(2013, 2, 20, 5, 5, 0));
 close(h)
 end
 
 function test_plot_3d(tc)
-project_runner('3d_glow', 'h5', tc.TestData.outdir, fullfile(cwd, "data"))
+tname = '3d_glow';
+project_runner(tname, 'h5', tc.TestData.outdir, fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
-d3 = fullfile(tc.TestData.cwd, "data/test3d_glow");
+d3 = fullfile(tc.TestData.cwd, "data/test"+tname);
 h = gemini3d.vis.plotinit(gemini3d.readgrid(d3));
 gemini3d.vis.plotframe(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
 close(h)

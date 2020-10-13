@@ -9,11 +9,12 @@ runner.addPlugin(p);
 
 suite = TestSuite.fromPackage('gemini3d.tests');
 
-addons = matlab.addons.installedAddons();
-if any(contains(addons.Name, 'Parallel Computing Toolbox'))
-  results = runInParallel(runner, suite);
-else
+% under future consideration--need to manually start parallel pool for CI
+% addons = matlab.addons.installedAddons();
+% if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+%   results = runInParallel(runner, suite);
+% else
   results = runner.run(suite);
-end
+% end
 
 assertSuccess(results)
