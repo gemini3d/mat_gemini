@@ -32,10 +32,10 @@ setup
 Run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-runtests('gemini3d.tests')
+test_gemini
 ```
 
-If the "runtests" dryrun fails with SSL certificate errors, you may need to tell Git the locatiion of your system SSL certificates. This can be an issue in general on HPC.
+If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
 If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
 
 1. edit ~/.bashrc to have
