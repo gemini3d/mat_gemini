@@ -1,4 +1,4 @@
-classdef TestLint < matlab.unittest.TestCase
+classdef TestALint < matlab.unittest.TestCase
 
 methods (Test)
 
@@ -7,7 +7,7 @@ cwd = fileparts(mfilename('fullpath'));
 [fail, N] = checkcode_recursive(fullfile(cwd, '..'), tc, fullfile(cwd, "MLint.txt"));
 
 tc.assertGreaterThan(N, 140, "fewer than expected MatGemini3D files to test")
-tc.fatalAssertFalse(fail)
+tc.assertFalse(fail)
 end
 
 end
