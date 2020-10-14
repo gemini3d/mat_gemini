@@ -1,4 +1,4 @@
-function [ymdnew,UTsecnew] = dateinc(dt, ymd, UTsec)
+function [ymdnew, UTsecnew] = dateinc(dt, ymd, UTsec)
 arguments
   dt (1,1) {mustBeNonnegative,mustBeFinite}
   ymd (3,1) {mustBeInteger,mustBePositive,mustBeFinite}

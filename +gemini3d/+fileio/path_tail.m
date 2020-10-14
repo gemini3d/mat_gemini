@@ -1,22 +1,17 @@
-function last = path_tail(direc)
+function last = path_tail(apath)
 % get last part of directory path
 % if filename, return filename with suffix
 arguments
-  direc (1,1) string
+  apath (1,1) string
 end
 
-direc = strrep(direc, '\', '/');
-% this breaks for escaped spaces "\ "
-
-parts = strsplit(direc, '/');
-if parts{end} == ""
-  last = parts{end-1};
-else
-  last = parts{end};
+final = extractAfter(apath, strlength(apath)-1);
+if final == "/" || final == "\"
+  apath = extractBefore(apath, strlength(apath));
 end
 
-assert(last ~= "", 'could not find last part of %s', direc)
+[~, name, ext] = fileparts(apath);
 
-last = string(last);
+last = append(name, ext);
 
 end % function
