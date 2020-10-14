@@ -14,6 +14,8 @@ if ~isfolder(p.eq_dir)
           % disable SSL, better to fix your SSL certificates as arbitrary
           % code can be downloaded
           web_opt = weboptions('CertificateFilename', '');
+        elseif isfile(getenv("SSL_CERT_FILE"))
+          web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
         else
           web_opt = weboptions('CertificateFilename', 'default');
         end

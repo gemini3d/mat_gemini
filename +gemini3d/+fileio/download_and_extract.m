@@ -28,8 +28,11 @@ zipfile = fullfile(data_dir, "test" + test_name + ".zip");
 if ~isfile(zipfile) || ...
     dir(zipfile).bytes < 10000  % missing or empty zip
 
-  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
-    % 'CertificateFilename', '' ...  % HPC tend to have outdated or missing SSL certs
+  if isfile(getenv("SSL_CERT_FILE"))
+    web_opts = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"), 'Timeout', 15);
+  else
+    web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
+  end
 
   k = "url";
   url = urls.("x" + test_name).(k);
