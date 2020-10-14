@@ -1,4 +1,4 @@
-function h = gemini_plot(direc, saveplot_fmt, options)
+function h = gemini_plot(direc, saveplot_fmt, opts)
 %% Plot all quanities for all times in the simulation
 %
 % Parameters
@@ -9,14 +9,18 @@ function h = gemini_plot(direc, saveplot_fmt, options)
 arguments
   direc (1,1) string
   saveplot_fmt (1,:) string = string.empty
-  options.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
-  options.xg struct = struct.empty
-  options.plotfun string = string.empty
+  opts.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
+  opts.xg struct = struct.empty
+  opts.plotfun string = string.empty
 end
 
+%% ensure all paths are OK
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, '../setup.m'))
+%% internal plot
 h = gemini3d.vis.plotall(direc, saveplot_fmt, ...
-      "plotfun", options.plotfun, ...
-      "xg", options.xg, ...
-      "parallel", options.parallel);
+      "plotfun", opts.plotfun, ...
+      "xg", opts.xg, ...
+      "parallel", opts.parallel);
 if nargout == 0, clear('h'), end
 end % function

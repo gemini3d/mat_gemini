@@ -17,6 +17,9 @@ arguments
   opts.dryrun (1,1) logical = false
 end
 
+%% ensure all paths are OK
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, '../setup.m'))
 %% get gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 %% ensure mpiexec is available
