@@ -63,7 +63,7 @@ if opts.overwrite
   gemini3d.setup.model_setup(cfg)
 else
   for k = ["indat_size", "indat_grid", "indat_file"]
-    if ~isfile(cfg.(k))
+    if ~isfile(fullfile(cfg.outdir, cfg.(k)))
       gemini3d.setup.model_setup(cfg)
       break
     end
