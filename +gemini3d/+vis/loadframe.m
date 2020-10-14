@@ -16,7 +16,7 @@ function dat = loadframe(filename, cfg, vars)
 
 arguments
   filename (1,1) string
-  cfg = struct.empty  % don't coerce to datetime, but allow datetime
+  cfg = struct()  % don't coerce to datetime, but allow datetime. NOT struct.empty
   vars (1,:) string = string.empty
 end
 
