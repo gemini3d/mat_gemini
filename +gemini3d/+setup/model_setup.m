@@ -27,8 +27,9 @@ end
 cfg = gemini3d.make_valid_paths(cfg);
 
 gemini3d.fileio.makedir(cfg.input_dir)
-fprintf('copying config.nml to %s\n', cfg.input_dir);
-gemini3d.fileio.copy_file(cfg.nml, cfg.input_dir)
+disp("copying config.nml to " + cfg.input_dir)
+% specify filename in case it wasn't config.nml
+gemini3d.fileio.copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
 
 
 %% is this equilibrium or interpolated simulation
