@@ -51,23 +51,17 @@ If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/c
 
 ## Usage
 
-Assume you would like to run the [GDI Periodic Lowres example](https://github.com/gemini3d/gemini-examples/tree/master/init/GDI_periodic_lowres):
+Generally, one runs a simulation, then plots the outputs of that simulation.
+Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom funcdtions.
 
-1. get the examples
+### Run Simulation
 
-    ```sh
-    git clone https://github.com/gemini3d/gemini-examples
-    ```
-2. Ensure that MatGemini is on your Matlab path from Matlab run any one of {gemini3d,mat_gemini,gemini-example}/setup.m
-3. run the example from Matlab:
+The Matlab Live Scripts [Examples/ns_fang.mlx](./Examples/ns_fang.mlx) interactively demonstrates running a 2D simulation.
+Open and run this script, or simply run from Matlab:
 
-    ```matlab
-    ini = '~/gemini-examples/init/GDI_periodic_lowres'
-    out_dir = '~/sims/gdi_lowres'
-    gemini3d.gemini_run(out_dir, 'config', ini)
-    ```
-
-That will take about 1 hour on an 8-core 9th generation Intel i7 laptop CPU.
+```matlab
+gemini3d.gemini_run(out_dir, 'config', 'Examples/init/2dns_fang.nml')
+```
 
 ### Plot all simulation outputs
 
