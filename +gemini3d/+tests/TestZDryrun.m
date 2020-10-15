@@ -8,9 +8,10 @@ methods(TestMethodSetup)
 
 function setup_sim(tc)
 name = "2dew_eq";
-tc.TestData.datapath = "+gemini3d/+tests/data/test" + name;
 
 cwd = fileparts(mfilename('fullpath'));
+tc.TestData.datapath = fullfile(cwd, "data/test" + name);
+
 % setup so GEMINI_ROOT is set
 run(fullfile(cwd, "../../setup.m"))
 

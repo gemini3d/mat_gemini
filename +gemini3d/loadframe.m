@@ -21,6 +21,23 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
-dat = gemini3d.vis.loadframe(filename, "time", opts.time, "cfg", opts.cfg, "vars", opts.vars);
+filename = gemini3d.fileio.expanduser(gemini3d.posix(filename));
+
+if isfile(filename)
+  dat = gemini3d.vis.loadframe(filename, struct.empty, opts.vars);
+  return
+end
+
+if ~isfolder(filename)
+  error("loadframe:file_not_found", filename + " is not a file or folder")
+end
+
+if ~isempty(opts.time)
+  dat = gemini3d.vis.loadframe(filename, opts.time, opts.vars);
+elseif ~isempty(opts.cfg)
+  dat = gemini3d.vis.loadframe(filename, opts.cfg, opts.vars);
+else
+  error("loadframe:value_error", "please specify filename or filename, datetime")
+end
 
 end
