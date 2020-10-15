@@ -1,15 +1,15 @@
-function lxs = simsize(path)
+function lxs = simsize(apath)
 arguments
-  path (1,1) string
+  apath (1,1) string
 end
 
-[path, ext] = gemini3d.get_simsize_path(path);
+[apath, ext] = gemini3d.get_simsize_path(apath);
 
+lxs = [];
 switch ext
-  case '.h5', lxs = read_h5(path);
-  case '.nc', lxs = read_nc(path);
-  case '.dat', lxs = read_raw(path);
-  otherwise, error('simsize:value_error', 'unknown simsize file type %s', fn)
+  case '.h5', lxs = read_h5(apath);
+  case '.nc', lxs = read_nc(apath);
+  case '.dat', lxs = read_raw(apath);
 end
 
 lxs = lxs(:).';  % needed for concatenation

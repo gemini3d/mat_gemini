@@ -5,7 +5,7 @@ arguments
 end
 
 [~,~,ext] = fileparts(filename);
-assert(isfile(filename), 'not a file: %s', filename)
+assert(isfile(filename), "not a file: " + filename)
 
 if isempty(vars)
   vars = ["ne", "Ti", "Te", "J1", "J2", "J3", "v1", "v2", "v3"];
@@ -20,6 +20,7 @@ end
 
 %% squeeze is needed for 2D and OK for 3D
 for n = vars
+  dat.lxs = size(dat.(n), 1:3);
   dat.(n) = squeeze(dat.(n));
 end
 

@@ -5,7 +5,7 @@ end
 
 [~,~,ext] = fileparts(filename);
 
-assert(isfile(filename), 'not a file: %s', filename)
+assert(isfile(filename), "not a file: " + filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);
@@ -14,13 +14,12 @@ switch ext
   otherwise, error('loadframe3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
 
-dat.filename=filename;
+dat.filename = filename;
+dat.lxs = size(dat.ne, 1:3);
 
-lxs = gemini3d.simsize(filename);
+% squeeze necessary for 2D and doesn't bother 3D
+dat.ne = squeeze(dat.ne);
 
-if any(lxs(2:3) == 1)    % 2D sim
-  dat.ne = squeeze(dat.ne);
-end
 
 end % function
 

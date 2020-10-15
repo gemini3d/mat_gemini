@@ -1,9 +1,5 @@
 classdef TestAUnit < matlab.unittest.TestCase
 
-properties (TestParameter)
-
-end
-
 methods (Test)
 
 function test_expanduser(tc)

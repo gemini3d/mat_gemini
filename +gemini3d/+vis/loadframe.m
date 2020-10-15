@@ -4,7 +4,7 @@ function dat = loadframe(filename, cfg, vars)
 %
 % example use
 % dat = loadframe(filename)
-% dat = loadframe(direc, datetime)
+% dat = loadframe(folder, datetime)
 % dat = loadframe(filename, cfg)
 % dat = loadframe(filename, cfg, vars)
 %
@@ -16,17 +16,15 @@ function dat = loadframe(filename, cfg, vars)
 
 arguments
   filename (1,1) string
-  cfg = struct()  % don't coerce to datetime, but allow datetime. NOT struct.empty
+  cfg {mustBeA(cfg, ["struct", "datetime"])} = struct.empty
   vars (1,:) string = string.empty
 end
 
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
-  cfg = gemini3d.read_config(fileparts(filename));
-  % if using raw output, cfg.flagoutput is necessary
+  cfg = struct.empty;
 end
 
-lxs = gemini3d.simsize(filename);
 %% LOAD DIST. FILE
 
 switch get_flagoutput(filename, cfg)
@@ -39,6 +37,11 @@ end %switch
 dat.time = gemini3d.vis.get_time(filename);
 
 %% ensure input/simgrid matches data
+lxs = gemini3d.simsize(filename);
+if isempty(lxs)
+  % this happens for a standalone data file
+  return
+end
 % if overwrote one directory or the other, a size mismatch can result
 dat_shape = size(dat.ne);
 %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
@@ -78,7 +81,7 @@ end % function
 function flag = get_flagoutput(filename, cfg)
 arguments
   filename (1,1) string
-  cfg (1,1) struct
+  cfg struct
 end
 
 [~,~,ext] = fileparts(filename);
@@ -95,7 +98,7 @@ end
 if any(var_names == "nsall")
   disp('Full or milestone input detected.')
   flag = 1;
-elseif isfield(cfg, 'flagoutput')
+elseif ~isempty(cfg) && isfield(cfg, 'flagoutput')
   flag = cfg.flagoutput;
 elseif any(var_names == "Tavgall")
   flag = 2;

@@ -1,33 +1,30 @@
-function [simpath, ext] = get_simsize_path(din)
+function [simpath, ext] = get_simsize_path(apath)
 %% find the path (directory, even if given filename) where simsize.* is
 % also return the suffix
 % the filename MUST be simsize.{h5,nc,dat}
 arguments
-  din (1,1) string
+  apath (1,1) string
 end
 
-din = gemini3d.fileio.expanduser(din);
+apath = gemini3d.fileio.expanduser(apath);
 
-if isfile(din)
-  din = fileparts(din);
-end
-if ~isfolder(din)
-  error('get_simsize_path:file_not_found', '%s is not a folder', din)
+if isfile(apath)
+  apath = fileparts(apath);
 end
 
+simpath = string.empty;
+ext = string.empty;
 suffixes = [".h5", ".nc", ".dat"];
 % search all suffixes in case the inputs files are different from output
 for suffix = suffixes
   for stem = ["inputs", ""]
-    simsize_fn = fullfile(din, stem, "simsize") + suffix;
+    simsize_fn = fullfile(apath, stem, "simsize") + suffix;
     if isfile(simsize_fn)
-      simpath = fullfile(din, stem);
+      simpath = fullfile(apath, stem);
       ext = suffix;
       return
     end
   end
 end
-
-error('get_simsize_path:file_not_found', 'could not find %s/simsize.*', din)
 
 end % function
