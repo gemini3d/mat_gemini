@@ -26,7 +26,7 @@ case '.h5'
 
   if any(grps == "/time")
     i = "/time";
-    vars = hdf5nc.h5variables(file, 'time');
+    vars = hdf5nc.h5variables(file, '/time');
   else
     i = "";
   end
