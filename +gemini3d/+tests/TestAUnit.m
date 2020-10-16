@@ -38,18 +38,39 @@ end
 function test_absolute_path(tc)
 pabs = gemini3d.fileio.absolute_path('2foo');
 pabs2 = gemini3d.fileio.absolute_path('4foo');
-tc.verifyFalse(startsWith(pabs, "2"), 'absolute_path')
-tc.verifyTrue(strncmp(pabs, pabs2, 2), 'absolute_path 2 files')
+tc.verifyFalse(startsWith(pabs, "2"))
+tc.verifyTrue(strncmp(pabs, pabs2, 2))
+
+par1 = gemini3d.fileio.absolute_path("../2foo");
+par2 = gemini3d.fileio.absolute_path("../4foo");
+tc.verifyFalse(startsWith(par1, ".."))
+tc.verifyTrue(strncmp(par2, pabs2, 2))
+
+pt1 = gemini3d.fileio.absolute_path("bar/../2foo");
+tc.verifyFalse(contains(pt1, ".."))
+
+va = gemini3d.fileio.absolute_path(["2foo", "4foo"]);
+tc.verifyFalse(any(startsWith(va, "2")))
+vs = extractBefore(va, 2);
+tc.verifyEqual(vs(1), vs(2))
+
+tc.verifyEmpty(gemini3d.fileio.absolute_path(string.empty))
 end
 
 function test_with_suffix(tc)
 tc.verifyEqual(gemini3d.fileio.with_suffix("foo.h5", ".nc"), "foo.nc")
+tc.verifyEqual(gemini3d.fileio.with_suffix(["foo.h5", "bar.dat"], ".nc"), ["foo.nc", "bar.nc"])
+tc.verifyEmpty(gemini3d.fileio.with_suffix(string.empty, ".nc"))
 end
 
 function test_path_tail(tc)
 tc.verifyEqual(gemini3d.fileio.path_tail("a/b/c.h5"), "c.h5")
 tc.verifyEqual(gemini3d.fileio.path_tail("c.h5"), "c.h5")
 tc.verifyEqual(gemini3d.fileio.path_tail("a/b/c/"), "c")
+
+tc.verifyEqual(gemini3d.fileio.path_tail(["c.h5", "a/b/c/"]), ["c.h5", "c"])
+
+tc.verifyEmpty(gemini3d.fileio.path_tail(string.empty))
 end
 
 

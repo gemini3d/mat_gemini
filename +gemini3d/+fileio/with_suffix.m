@@ -3,7 +3,7 @@ function filename = with_suffix(filename, suffix)
 %
 % suffix: file extension with "." e.g. ".dat"
 arguments
-  filename (1,1) string
+  filename string
   suffix (1,1) string
 end
 

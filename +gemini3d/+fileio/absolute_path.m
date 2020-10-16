@@ -7,7 +7,7 @@ function abspath = absolute_path(p)
 %
 % Copyright (c) 2020 Michael Hirsch (MIT License)
 arguments
-  p (1,1) string
+  p (1,:) string
 end
 
 % have to expand ~ first
@@ -20,8 +20,8 @@ end
 
 abspath = p;
 
-try %#ok<TRYNC>
-  abspath = string(java.io.File(p).getCanonicalPath());
+for i = 1:length(abspath)
+  abspath(i) = string(java.io.File(abspath(i)).getCanonicalPath());
 end
 
 end % function

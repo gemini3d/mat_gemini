@@ -2,13 +2,14 @@ function last = path_tail(apath)
 % get last part of directory path
 % if filename, return filename with suffix
 arguments
-  apath (1,1) string
+  apath string
 end
 
 final = extractAfter(apath, strlength(apath)-1);
-if final == "/" || final == "\"
-  apath = extractBefore(apath, strlength(apath));
-end
+
+i = final == "/" | final == "\";
+
+apath(i) = extractBefore(apath(i), strlength(apath(i)));
 
 [~, name, ext] = fileparts(apath);
 
