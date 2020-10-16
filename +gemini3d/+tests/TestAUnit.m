@@ -60,7 +60,10 @@ end
 
 function test_with_suffix(tc)
 tc.verifyEqual(gemini3d.fileio.with_suffix("foo.h5", ".nc"), "foo.nc")
+if ~verLessThan("matlab", "9.9")
+% fileparts vectorized in R2020b
 tc.verifyEqual(gemini3d.fileio.with_suffix(["foo.h5", "bar.dat"], ".nc"), ["foo.nc", "bar.nc"])
+end
 tc.verifyEmpty(gemini3d.fileio.with_suffix(string.empty, ".nc"))
 end
 
@@ -69,7 +72,10 @@ tc.verifyEqual(gemini3d.fileio.path_tail("a/b/c.h5"), "c.h5")
 tc.verifyEqual(gemini3d.fileio.path_tail("c.h5"), "c.h5")
 tc.verifyEqual(gemini3d.fileio.path_tail("a/b/c/"), "c")
 
+if ~verLessThan("matlab", "9.9")
+% fileparts vectorized in R2020b
 tc.verifyEqual(gemini3d.fileio.path_tail(["c.h5", "a/b/c/"]), ["c.h5", "c"])
+end
 
 tc.verifyEmpty(gemini3d.fileio.path_tail(string.empty))
 end
