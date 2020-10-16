@@ -15,6 +15,7 @@ end
 function test_posix(tc)
 if ispc
   tc.verifyFalse(contains(gemini3d.posix("c:\foo"), "\"))
+  tc.verifyFalse(any(contains(gemini3d.posix(["x:\123", "d:\abc"]), "\")))
 end
 
 tc.verifyEmpty(gemini3d.posix(string.empty))

@@ -2,12 +2,12 @@ function params = read_ini(filename)
 % read config*.ini files.
 % Only for legacy use, new simulations should used config.nml Namelist format.
 %
-% returns struct() if filename not found
+% returns struct.empty if filename not found
 arguments
   filename (1,1) string
 end
 
-params = struct();
+params = struct.empty;
 if isempty(filename)
   return
 end

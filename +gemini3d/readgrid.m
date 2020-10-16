@@ -9,11 +9,16 @@ end
 
 [apath, suffix] = gemini3d.get_simsize_path(apath);
 
+xg = struct.empty;
+ok = false;
 switch suffix
   case '.h5', xg = read_hdf5(apath);
   case '.nc', xg = read_nc4(apath);
   case '.dat', xg = read_raw(apath);
-  otherwise, error('readgrid:value_error', "unknown grid file type")
+end
+
+if isempty(xg)
+  return
 end
 
 ok = gemini3d.check_grid(xg);

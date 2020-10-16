@@ -178,10 +178,10 @@ end % function compare_input
 function compare_grid(outdir, refdir, tol)
 
 [ref, ok] = gemini3d.readgrid(refdir);
-assert(ok, 'reference grid %s has bad values', refdir)
+assert(ok, "reference grid " + refdir + " has bad values")
 
 [new, ok] = gemini3d.readgrid(outdir);
-assert(ok, 'grid %s has bad values', outdir)
+assert(ok, "grid " + outdir + " has bad values")
 
 errs = 0;
 for k = hdf5nc.h5variables(ref.filename)

@@ -31,7 +31,7 @@ for ext = [".h5", ".nc", ".dat"]
   file_list = dir(aurora_dir + "/*" + ext);
   if ~isempty(file_list), break, end
 end
-assert(~isempty(file_list), 'No auroral data found in %s', aurora_dir)
+assert(~isempty(file_list), "No auroral data found in " + aurora_dir)
 
 %% make plots
 hf = [];

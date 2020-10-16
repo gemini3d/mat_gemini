@@ -1,5 +1,6 @@
 function cfg = read_config(direc)
 % reads simulation configuration into struct
+% returns struct.empty if config file doesn't exist
 arguments
   direc (1,1) string
 end
@@ -12,7 +13,7 @@ else
   cfg = gemini3d.read_nml(filename);
 end
 
-if ~isfield(cfg, "ymd")
+if isempty(cfg)
   return
 end
 
