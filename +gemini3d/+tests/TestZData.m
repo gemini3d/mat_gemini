@@ -12,6 +12,9 @@ tc.TestData.cwd = cwd;
 name = "2dew_glow";
 tc.TestData.data_path = fullfile(cwd, "data/test" + name);
 
+% setup so that hdf5nc is present
+run(fullfile(cwd, "../../setup.m"))
+
 gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))
 
 % temporary working directory
