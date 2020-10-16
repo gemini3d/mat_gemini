@@ -1,19 +1,17 @@
-function isabs = is_absolute_path(p)
+function isabs = is_absolute_path(apath)
 %% true if path is absolute. Path need not yet exist.
 arguments
-  p (1,1) string
+  apath string
 end
 
-p = gemini3d.fileio.expanduser(p);
-% Must expanduser() before Java
+apath = gemini3d.fileio.expanduser(apath);
 
-if usejava('jvm')
-  isabs = java.io.File(p).isAbsolute();
-elseif ispc
-  p = char(p);
-  isabs = isletter(p(1)) && strcmp(p(2), ':') && any(strcmp(p(3), ["/", "\"]));
+if ispc
+  hasDrive = cell2mat(isstrprop(extractBefore(apath, 2), "alpha", "ForceCellOutput", true));
+  isabs = hasDrive & extractBetween(apath,2,2) == ":" & ...
+                   (extractBetween(apath,3,3) == "/" | extractBetween(apath,3,3) == "\");
 else
-  isabs = startsWith(p, "/");
+  isabs = startsWith(apath, "/");
 end
 
 end % function

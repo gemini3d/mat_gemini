@@ -5,11 +5,11 @@ import gemini3d.fileio.*
 %simname_control='tohoku20113D_lowres_control/';
 simname='mooreOK3D_hemis_medres_corrected/';
 simname_control='mooreOK3D_hemis_medres_corrected_control/';
-basedir='../../../simulations/';
-direc=[basedir,simname];
-direc_control=[basedir,simname_control];
+basedir='~/simulations/';
+direc = fullfile(basedir, simname);
+direc_control = fullfile(basedir, simname_control);
 
-gemini3d.fileio.makedir([direc, '/TECplots']);    %store output plots with the simulation data
+gemini3d.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION
@@ -19,7 +19,7 @@ cfg = gemini3d.read_config(direc);
 %WE ALSO NEED TO LOAD THE GRID FILE (UNLESS IT ALREADY EXISTS IN THE WORKSPACE)
 if (~exist('xg','var'))
   disp('Reading dist. grid...')
-  xg = gemini3d.readgrid([direc,'/inputs']);
+  xg = gemini3d.readgrid(direc);
   lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
   lh=lx1;   %possibly obviated in this version - need to check
   if (lx3==1)
@@ -33,7 +33,7 @@ end
 %ON THE OFF CHANCE THE CONTROL GRID IS DIFFERENT, LOAD IT TOO
 if (~exist('xgc','var'))
   disp('Reading control grid...')
-  xgc=gemini3d.readgrid([direc_control,'/inputs']);
+  xgc=gemini3d.readgrid(direc_control);
   lx1c=xgc.lx(1); lx2c=xgc.lx(2); lx3c=xgc.lx(3);
   lhc=lx1c;   %possibly obviated in this version - need to check
 end
@@ -123,7 +123,7 @@ dvTEC=[];
 
 for it=1:length(cfg.times)
     %LOAD DIST. FILE
-    dat = gemini3d.vis.loadframe(direc, cfg.times(it), {'ne'});
+    dat = gemini3d.loadframe(direc, "time", cfg.times(it), "vars", "ne");
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -151,7 +151,7 @@ for it=1:length(cfg.times)
 
 
     %LOAD CONTROL SIMULATION
-    dat = gemini3d.vis.loadframe(direc_control, cfg.times(it), {'ne'});
+    dat = gemini3d.loadframe(direc_control, "time", cfg.times(it), "vars", "ne");
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION

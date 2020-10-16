@@ -48,11 +48,11 @@ end
 %% get time index
 i = interp1(cfg.times, 1:length(cfg.times), time_req, 'nearest');
 if isnan(i)
-  error('plotframe:value_error', 'requested time %s is outside simulation time span %s %s', datestr(time_req), datestr(cfg.times(1)), datestr(cfg.times(end)))
+  error('plotframe:value_error', "requested time " + datestr(time_req) + " is outside simulation time span " + datestr(cfg.times(1)) + " " + datestr(cfg.times(end)))
 end
 time = cfg.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = gemini3d.vis.loadframe(direc, time);
+dat = gemini3d.loadframe(direc, "time", time);
 disp(dat.filename + ' => ' + func2str(plotfun))
 
 %% SET THE CAXIS LIMITS FOR THE PLOTS

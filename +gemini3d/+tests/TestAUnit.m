@@ -4,12 +4,20 @@ methods (Test)
 
 function test_expanduser(tc)
 tc.verifyFalse(startsWith(gemini3d.fileio.expanduser('~/foo'), "~"))
+tc.verifyFalse(any(startsWith(gemini3d.fileio.expanduser(["~/abc", "~/123"]), "~")))
+
+tc.verifyTrue(endsWith(gemini3d.fileio.expanduser('~/foo'), "foo"))
+tc.verifyTrue(all(endsWith(gemini3d.fileio.expanduser(["~/abc", "~/123"]), ["abc", "123"])))
+
+tc.verifyEmpty(gemini3d.fileio.expanduser(string.empty))
 end
 
 function test_posix(tc)
 if ispc
   tc.verifyFalse(contains(gemini3d.posix("c:\foo"), "\"))
 end
+
+tc.verifyEmpty(gemini3d.posix(string.empty))
 end
 
 function test_is_absolute_path(tc)
@@ -17,7 +25,14 @@ function test_is_absolute_path(tc)
 tc.verifyTrue(gemini3d.fileio.is_absolute_path('~/foo'))
 if ispc
   tc.verifyTrue(gemini3d.fileio.is_absolute_path('x:/foo'))
+  tc.verifyTrue(all(gemini3d.fileio.is_absolute_path(["x:/abc", "x:/123"])))
+  tc.verifyTrue(all(gemini3d.fileio.is_absolute_path(["x:/abc"; "x:/123"])))
+  tc.verifyFalse(gemini3d.fileio.is_absolute_path('/foo'))
+else
+  tc.verifyTrue(gemini3d.fileio.is_absolute_path('/foo'))
 end
+
+tc.verifyEmpty(gemini3d.fileio.is_absolute_path(string.empty))
 end
 
 function test_absolute_path(tc)

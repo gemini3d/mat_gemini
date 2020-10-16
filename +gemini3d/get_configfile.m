@@ -1,10 +1,13 @@
 function filename = get_configfile(direc)
 %% get configuration file
+% if not found, returns string.empty
 arguments
-  direc (1,1) string
+  direc string
 end
 
 direc = gemini3d.fileio.expanduser(direc);
+
+filename = string.empty;
 
 if isfile(direc)
   filename = direc;
@@ -23,31 +26,30 @@ elseif isfolder(direc)
     files = dir(fullfile(direc, "config*.nml"));
     filename = check_names(direc, {files.name});
   end
-else
-  error('get_configfile:file_not_found', 'could not find %s', direc)
-end
-
-if ~isfile(filename)
-  error('get_configfile:file_not_found', 'could not find config.nml under %s', direc)
 end
 
 end % function
 
 
 function filename = check_names(direc, names)
+arguments
+  direc (1,1) string
+  names (1,:) string
+end
 
 filename = string.empty;
 
 for s = names
-  filename = fullfile(direc, s);
-  if isfile(filename)
+  fn = fullfile(direc, s);
+  if isfile(fn)
+    filename = fn;
     break
   end
 end
 
 end
 
-% Copyright 2020 Michael Hirsch, Ph.D.
+% Copyright 2020 Michael Hirsch
 
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.

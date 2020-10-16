@@ -1,10 +1,9 @@
 function perturb(cfg, xg)
 % perturb plasma from initial_conditions file
-
-narginchk(2,2)
-validateattributes(cfg, {'struct'}, {'scalar'},1)
-validateattributes(xg, {'struct'}, {'scalar'},2)
-
+arguments
+  cfg (1,1) struct
+  xg (1,1) struct
+end
 
 %% READ IN THE SIMULATION INFORMATION
 x1 = xg.x1(3:end-2);    %trim ghost cells
@@ -12,7 +11,7 @@ x2 = xg.x2(3:end-2);
 
 
 %% LOAD THE FRAME OF THE SIMULATION THAT WE WANT TO PERTURB
-dat = gemini3d.vis.loadframe(cfg.indat_file);
+dat = gemini3d.loadframe(cfg.indat_file);
 lsp = size(dat.ns, 4);
 
 

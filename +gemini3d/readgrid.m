@@ -1,32 +1,32 @@
-function [xg, ok] = readgrid(path)
+function [xg, ok] = readgrid(apath)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
 % one file format while the equilibrium sim was in another file format
 arguments
-  path (1,1) string
+  apath (1,1) string
 end
 
-[path, suffix] = gemini3d.get_simsize_path(path);
+[apath, suffix] = gemini3d.get_simsize_path(apath);
 
 switch suffix
-  case '.h5', xg = read_hdf5(path);
-  case '.nc', xg = read_nc4(path);
-  case '.dat', xg = read_raw(path);
-  otherwise, error('readgrid:value_error', 'unknown file type %s', suffix)
+  case '.h5', xg = read_hdf5(apath);
+  case '.nc', xg = read_nc4(apath);
+  case '.dat', xg = read_raw(apath);
+  otherwise, error('readgrid:value_error', "unknown grid file type")
 end
 
 ok = gemini3d.check_grid(xg);
 if ~ok
-  warning('readgrid:value_error', '%s grid has unsuitable values', path)
+  warning('readgrid:value_error', "grid has unsuitable values: " + apath)
 end
 
 end % function
 
 
-function xgf = read_hdf5(path)
+function xgf = read_hdf5(apath)
 
-fn = fullfile(path, 'simgrid.h5');
+fn = fullfile(apath, 'simgrid.h5');
 
 for v = hdf5nc.h5variables(fn)
   xgf.(v) = h5read(fn, "/" + v);
@@ -34,33 +34,33 @@ end
 
 % do this last to avoid overwriting
 xgf.filename = fn;
-xgf.lx = gemini3d.simsize(path);
+xgf.lx = gemini3d.simsize(apath);
 
 end  % function read_hdf5
 
 
-function xgf = read_nc4(path)
+function xgf = read_nc4(apath)
 
-fn = fullfile(path, 'simgrid.nc');
+fn = fullfile(apath, 'simgrid.nc');
 
 for v = hdf5nc.ncvariables(fn)
   xgf.(v) = ncread(fn, v);
 end
 
 xgf.filename = fn;
-xgf.lx = gemini3d.simsize(path);
+xgf.lx = gemini3d.simsize(apath);
 
 end  % function read_nc4
 
 
-function xgf = read_raw(path)
+function xgf = read_raw(apath)
 
-filename = fullfile(path, 'simgrid.dat');
+filename = fullfile(apath, 'simgrid.dat');
 if ~isfile(filename)
   error('readgrid:read_raw:file_not_found', '%s not found', filename)
 end
 
-xgf.lx = gemini3d.simsize(path);
+xgf.lx = gemini3d.simsize(apath);
 xgf.filename = filename;
 
 lx1=xgf.lx(1); lx2=xgf.lx(2); lx3=xgf.lx(3);

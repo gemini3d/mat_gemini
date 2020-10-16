@@ -83,8 +83,8 @@ Nt = length(params.times);
 ok = 0;
 
 for i = 1:Nt
-  out = gemini3d.vis.loadframe(outdir, params.times(i));
-  ref = gemini3d.vis.loadframe(refdir, params.times(i));
+  out = gemini3d.loadframe(outdir, "time", params.times(i));
+  ref = gemini3d.loadframe(refdir, "time", params.times(i));
 
   st = datestr(params.times(i));
 
