@@ -16,7 +16,7 @@ function dat = loadframe(filename, cfg, vars)
 
 arguments
   filename (1,1) string
-  cfg {mustBeA(cfg, ["struct", "datetime"])} = struct.empty
+  cfg = struct.empty
   vars (1,:) string = string.empty
 end
 
