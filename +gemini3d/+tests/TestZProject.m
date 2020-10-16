@@ -35,6 +35,8 @@ project_runner(tname, 'h5', tc.TestData.outdir, fullfile(tc.TestData.cwd, "data"
 % test 2D plots
 
 h = gemini3d.vis.plotframe(fullfile(tc.TestData.cwd, "data/test" + tname), datetime(2013, 2, 20, 5, 5, 0));
+tc.verifySize(h, [1,10])
+tc.verifyClass(h, 'matlab.ui.Figure')
 close(h)
 end
 
@@ -44,6 +46,10 @@ project_runner(tname, 'h5', tc.TestData.outdir, fullfile(tc.TestData.cwd, "data"
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data/test"+tname);
 h = gemini3d.vis.plotinit(gemini3d.readgrid(d3));
+
+tc.verifySize(h, [1,10])
+tc.verifyClass(h, 'matlab.ui.Figure')
+
 gemini3d.vis.plotframe(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
 close(h)
 end

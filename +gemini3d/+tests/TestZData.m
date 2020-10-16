@@ -28,23 +28,23 @@ tc.applyFixture(matlab.unittest.fixtures.WorkingFolderFixture)
 copyfile(fullfile(tc.TestData.data_path, "20130220_18000.000001.h5"), pwd)
 
 dat = gemini3d.loadframe("20130220_18000.000001.h5", "vars", "ne");
-tc.assertEqual(dat.lxs, size(dat.ns, 1:3))
-tc.assertEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
-tc.assertEqual(dat.time, datetime(2013,2,20,5,0,0))
+tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
+tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 function test_loadframe_filename(tc)
 dat = gemini3d.loadframe(fullfile(tc.TestData.data_path, "20130220_18000.000001.h5"), "vars", "ne");
-tc.assertEqual(dat.lxs, size(dat.ns, 1:3))
-tc.assertEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
-tc.assertEqual(dat.time, datetime(2013,2,20,5,0,0))
+tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
+tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 function test_loadframe_folder_datetime(tc)
 dat = gemini3d.loadframe(fullfile(tc.TestData.data_path), "time", datetime(2013,2,20,5,0,0), "vars", "ne");
-tc.assertEqual(dat.lxs, size(dat.ns, 1:3))
-tc.assertEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
-tc.assertEqual(dat.time, datetime(2013,2,20,5,0,0))
+tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
+tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 end

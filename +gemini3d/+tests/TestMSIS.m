@@ -23,7 +23,7 @@ cfg = struct('times', datetime(2015, 1, 2) + seconds(43200), 'f107', 100.0, 'f10
 
 atmos = gemini3d.setup.msis_matlab3D(cfg, tc.TestData.xg);
 
-tc.assertSize(atmos, [tc.TestData.xg.lx, 7], 'MSIS setup data output shape unexpected')
+tc.verifySize(atmos, [tc.TestData.xg.lx, 7], 'MSIS setup data output shape unexpected')
 end
 end
 
