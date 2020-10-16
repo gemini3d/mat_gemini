@@ -16,25 +16,27 @@ end
 
 %% config.nml file or directory or simsize.h5?
 
+dsize = [];
+
 if isfolder(sizefn)
   dsize = gemini3d.simsize(sizefn);
 elseif isfolder(fileparts(sizefn))
   dsize = gemini3d.simsize(fileparts(sizefn));
 elseif isfile(sizefn)
   [~,~,ext] = fileparts(sizefn);
-  if any(contains(ext, [".h5", ".nc", ".dat"]))
+  if any(endsWith(ext, [".h5", ".nc", ".dat"]))
     dsize = gemini3d.simsize(sizefn);
-  elseif any(contains(ext, [".ini", ".nml"]))
+  elseif any(endsWith(ext, [".ini", ".nml"]))
     params = gemini3d.read_config(sizefn);
     % OK to use indat_size because we're going to run a sim on this machine
     dsize = gemini3d.simsize(params.indat_size);
-  else
-    error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
   end
-else
-  error('get_mpi_count:file_not_found', '%s is not a file or directory', sizefn)
 end
 
-N = gemini3d.sys.max_mpi(dsize, max_cpu);
+if isempty(dsize)
+  N = 1;
+else
+  N = gemini3d.sys.max_mpi(dsize, max_cpu);
+end
 
 end % function
