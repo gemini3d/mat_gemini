@@ -9,7 +9,7 @@ addpath(cwd)
 
 %% ensure HDF5 submodule is present
 hdf5nc_dir = fullfile(cwd, "matlab-hdf5");
-if ~isfolder(hdf5nc_dir)
+if ~isfolder(fullfile(hdf5nc_dir, "+hdf5nc"))
   cmd = "git submodule update --init";
   ret = system(cmd);
   if ret ~= 0
