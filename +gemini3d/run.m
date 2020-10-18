@@ -51,6 +51,10 @@ arguments
 end
 
 cfg = gemini3d.read_config(opts.config);
+if isempty(cfg)
+  error("run:file_not_found", "a config.nml file was not found in %s. Try specifying gemini3d.run(outdir, 'config', 'path/to/config.nml')", opts.config)
+end
+
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
 
 for k = ["ssl_verify", "file_format"]
