@@ -10,7 +10,7 @@ import gemini3d.readgrid
 import gemini3d.fileio.with_suffix
 
 %% sanity check grid
-ok = gemini3d.check_grid(xg);
+ok = check_grid(xg);
 
 if ~ok
   error('writegrid:value_error', 'problematic grid values')
@@ -52,7 +52,7 @@ if ~ok
   error('writegrid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
-gemini3d.log_meta_nml(gemini3d.git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
+log_meta_nml(git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
 
 end % function
 

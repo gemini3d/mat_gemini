@@ -7,7 +7,7 @@ arguments
   apath (1,1) string
 end
 
-[apath, suffix] = gemini3d.get_simsize_path(apath);
+[apath, suffix] = gemini3d.fileio.get_simsize_path(apath);
 
 xg = struct.empty;
 ok = false;
@@ -21,7 +21,7 @@ if isempty(xg)
   return
 end
 
-ok = gemini3d.check_grid(xg);
+ok = check_grid(xg);
 if ~ok
   warning('readgrid:value_error', "grid has unsuitable values: " + apath)
 end

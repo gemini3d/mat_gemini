@@ -1,4 +1,4 @@
-function h = gemini_plot(direc, saveplot_fmt, opts)
+function h = plot(direc, saveplot_fmt, opts)
 %% Plot all quanities for all times in the simulation
 %
 % Parameters

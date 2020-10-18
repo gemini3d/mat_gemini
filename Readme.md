@@ -60,13 +60,13 @@ The Matlab Live Scripts [Examples/ns_fang.mlx](./Examples/ns_fang.mlx) interacti
 Open and run this script, or simply run from Matlab:
 
 ```matlab
-gemini3d.gemini_run(out_dir, 'config', 'Examples/init/2dns_fang.nml')
+gemini3d.run(out_dir, 'config', 'Examples/init/2dns_fang.nml')
 ```
 
 ### Plot all simulation outputs
 
 ```matlab
-gemini3d.gemini_plot(out_dir, "png")
+gemini3d.plot(out_dir, "png")
 ```
 
 generates plots under `out_dir + "/plots"`

@@ -5,7 +5,7 @@ arguments
   direc (1,1) string
 end
 
-filename = gemini3d.get_configfile(direc);
+filename = gemini3d.fileio.get_configfile(direc);
 
 if endsWith(filename, ".ini", 'IgnoreCase', true)
   cfg = gemini3d.read_ini(filename);

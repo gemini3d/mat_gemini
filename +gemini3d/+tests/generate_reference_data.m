@@ -25,13 +25,13 @@ outdir = gemini3d.fileio.expanduser(outdir);
 assert(isfolder(topdir), '%s is not a folder', topdir)
 
 %% run each simulation
-names = gemini3d.get_testnames(topdir, only);
+names = get_testnames(topdir, only);
 assert(~isempty(names), 'No inputs under %s with %s', topdir, only)
 disp('Generating data for: ')
 disp(names)
 
 for n = names
-  gemini3d.gemini_run(fullfile(outdir, n), 'config', fullfile(topdir, n), ...
+  gemini3d.run(fullfile(outdir, n), 'config', fullfile(topdir, n), ...
     'overwrite', opts.overwrite, 'gemini_exe', opts.gemini_exe, 'file_format', opts.file_format)
 end
 

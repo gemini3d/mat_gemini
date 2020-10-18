@@ -6,7 +6,7 @@ end
 
 topdir = gemini3d.fileio.expanduser(topdir);
 
-names = gemini3d.get_testnames(topdir, only);
+names = get_testnames(topdir, only);
 
 assert(~isempty(names), "did not find any data under %s", topdir)
 

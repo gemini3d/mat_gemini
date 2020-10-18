@@ -1,7 +1,7 @@
 function isinter = isinteractive()
 %% tell if the program is being run interactively or not.
 
-if gemini3d.sys.isoctave
+if isoctave
   isinter = isguirunning;
 else
   % Matlab: this test doesn't work for Octave

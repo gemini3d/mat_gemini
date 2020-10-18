@@ -16,7 +16,7 @@ case "file"
     if gemini3d.sys.isinteractive
       error('exist_or_skip:file_not_found', 'could not find %s', filename)
     else
-      fprintf(2, [filename, ' is not a file.\n'])
+      fprintf(2, filename + " is not a file.\n")
       exit(77)
     end
   end
@@ -25,7 +25,7 @@ case "dir"
     if gemini3d.sys.isinteractive
       error('exist_or_skip:not_a_directory', 'could not find %s', filename)
     else
-      fprintf(2, [filename, ' is not a directory.\n'])
+      fprintf(2, filename + " is not a directory.\n")
       exit(77)
     end
   end
@@ -34,7 +34,7 @@ end % switch
 
 end % function
 
-% Copyright 2020 Michael Hirsch, Ph.D.
+% Copyright 2020 Michael Hirsch
 
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.

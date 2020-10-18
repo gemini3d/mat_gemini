@@ -24,7 +24,7 @@ else
   cfg.outdir = outdir;
 end
 
-cfg = gemini3d.make_valid_paths(cfg);
+cfg = gemini3d.fileio.make_valid_paths(cfg);
 
 gemini3d.fileio.makedir(cfg.input_dir)
 disp("copying config.nml to " + cfg.input_dir)

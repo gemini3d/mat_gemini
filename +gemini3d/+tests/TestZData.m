@@ -26,13 +26,14 @@ end
 methods (Test)
 
 function test_get_config_file(tc)
-tc.verifyEmpty(gemini3d.get_configfile(""))
-tc.verifyTrue(endsWith(gemini3d.get_configfile(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
+import gemini3d.fileio.get_configfile
+tc.verifyEmpty(get_configfile(""))
+tc.verifyTrue(endsWith(get_configfile(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
 end
 
 function test_get_simsize_path(tc)
-tc.verifyEmpty(gemini3d.get_simsize_path(""))
-tc.verifyTrue(endsWith(gemini3d.get_simsize_path(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
+tc.verifyEmpty(gemini3d.fileio.get_simsize_path(""))
+tc.verifyTrue(endsWith(gemini3d.fileio.get_simsize_path(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
 end
 
 function test_read_config(tc)
@@ -42,9 +43,10 @@ tc.verifyEqual(cfg.ymd, [2013,2,20])
 end
 
 function test_get_mpi_count(tc)
-tc.verifyEqual(gemini3d.get_mpi_count(""),1)
+import gemini3d.sys.get_mpi_count
+tc.verifyEqual(get_mpi_count(""),1)
 C = gemini3d.sys.get_cpu_count();
-Cm = gemini3d.get_mpi_count(tc.TestData.data_path);
+Cm = get_mpi_count(tc.TestData.data_path);
 tc.verifyTrue(Cm >= 1 && Cm <= C)
 end
 

@@ -38,8 +38,8 @@ tol.atolV = 50;
 outdir = gemini3d.fileio.absolute_path(outdir);
 refdir = gemini3d.fileio.absolute_path(refdir);
 
-gemini3d.exist_or_skip(outdir, 'dir')
-gemini3d.exist_or_skip(refdir, 'dir')
+gemini3d.tests.exist_or_skip(outdir, 'dir')
+gemini3d.tests.exist_or_skip(refdir, 'dir')
 %% check that paths not the same
 if outdir == refdir
   error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir)
@@ -140,7 +140,7 @@ end % function compare_output
 
 function errs = compare_input(outdir, refdir, tol, file_format)
 import gemini3d.assert_allclose
-import gemini3d.make_valid_paths
+import gemini3d.fileio.make_valid_paths
 
 %% check simulation grid
 compare_grid(outdir, refdir, tol)

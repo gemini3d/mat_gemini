@@ -1,10 +1,10 @@
-function gemini_run(outdir, opts)
+function run(outdir, opts)
 %% setup and run Gemini simulation
 %
 % Examples:
 %
-% gemini3d.gemini_run(output_dir),
-% gemini3d.gemini_run(output_dir, "config", nml_path)
+% gemini3d.run(output_dir),
+% gemini3d.run(output_dir, "config", nml_path)
 
 arguments
   outdir (1,1) string
@@ -33,12 +33,12 @@ if opts.dryrun
   return
 end
 %% run simulation
-gemini3d.log_meta_nml(gemini3d.git_revision(fileparts(gemini_exe)), ...
+log_meta_nml(git_revision(fileparts(gemini_exe)), ...
                       fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
 
 ret = system(cmd);
 if ret ~= 0
-  error('gemini_run:runtime_error', 'Gemini run failed, error code %d', ret)
+  error('run:runtime_error', 'Gemini run failed, error code %d', ret)
 end
 
 end % function
@@ -91,7 +91,7 @@ arguments
   gemini_exe (1,1) string
 end
 
-np = gemini3d.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
+np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = gemini3d.sys.modify_path();
 cmd = mpiexec + " -n " + int2str(np) + " " + gemini_exe + " " +cfg.outdir;
 disp(cmd)
@@ -100,7 +100,7 @@ cmd = prepend + " " + cmd;
 %% dry run
 ret = system(cmd + " -dryrun");
 if ret~=0
-  error('gemini_run:runtime_error', 'Gemini dryrun failed')
+  error('run:runtime_error', 'Gemini dryrun failed')
 end
 
 end % function

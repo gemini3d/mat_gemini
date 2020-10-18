@@ -7,7 +7,7 @@ arguments
   apath string
 end
 
-filename = gemini3d.get_configfile(apath);
+filename = gemini3d.fileio.get_configfile(apath);
 
 p = struct.empty;
 if isempty(filename)
@@ -15,10 +15,10 @@ if isempty(filename)
 end
 
 %% required namelists
-p = gemini3d.read_namelist(filename, 'base');
+p = read_namelist(filename, 'base');
 
-p = gemini3d.merge_struct(p, gemini3d.read_namelist(filename, 'flags'));
-p = gemini3d.merge_struct(p, gemini3d.read_namelist(filename, 'files'));
+p = merge_struct(p, read_namelist(filename, 'flags'));
+p = merge_struct(p, read_namelist(filename, 'files'));
 
 %% optional namelists
 if ~isfield(p, 'nml')
@@ -56,7 +56,6 @@ end % function
 
 function p = read_if_present(p, filename, namelist)
 % read a namelist, if it exists, otherwise don't modify the input struct
-import gemini3d.*
 
 try
   p = merge_struct(p, read_namelist(filename, namelist));
@@ -68,7 +67,7 @@ end
 
 end
 
-% Copyright 2020 Michael Hirsch, Ph.D.
+% Copyright 2020 Michael Hirsch
 
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.

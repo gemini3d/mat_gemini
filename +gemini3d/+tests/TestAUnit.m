@@ -81,15 +81,10 @@ tc.verifyEmpty(gemini3d.fileio.path_tail(string.empty))
 end
 end
 
-
 function test_dateinc(tc)
 [ymd3, utsec] = gemini3d.dateinc(1.5, [2020, 1, 1], 86399);
 tc.verifyEqual(ymd3, [2020,1,2])
 tc.verifyEqual(utsec, 0.5, 'Abstol', 1e-6)
-end
-
-function test_git_revision(tc)
-tc.verifyClass(gemini3d.git_revision(), "struct")
 end
 
 function test_version(tc)

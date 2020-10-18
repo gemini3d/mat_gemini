@@ -6,14 +6,14 @@ end
 
 [ret, msg] = system(mpiexec + " -help");
 if ret ~= 0
-  error('gemini_run:file_not_found', 'mpiexec not found')
+  error('run:file_not_found', 'mpiexec not found')
 end
 
 % get gemini.bin compiler ID
 [~, vendor] = system(exe + " -compiler");
 
 if ispc && contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
-  error('gemini_run:runtime_error', 'MinGW is not compatible with Intel MPI')
+  error('run:runtime_error', 'MinGW is not compatible with Intel MPI')
 end
 
 end % function

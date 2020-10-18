@@ -4,7 +4,7 @@ arguments
   fn (1,1) string
 end
 
-gemini3d.exist_or_skip(fn, 'file')
+gemini3d.tests.exist_or_skip(fn, 'file')
 
 x2 = h5read(fn, '/x2');
 x3 = h5read(fn, '/x3');

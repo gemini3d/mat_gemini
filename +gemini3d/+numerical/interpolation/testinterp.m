@@ -2,7 +2,7 @@ function testinterp(fn)
 arguments
   fn (1,1) string
 end
-gemini3d.exist_or_skip(fn, 'file')
+gemini3d.tests.exist_or_skip(fn, 'file')
 
 lx1 = h5read(fn, '/lx1');
 lx2 = h5read(fn, '/lx2');
