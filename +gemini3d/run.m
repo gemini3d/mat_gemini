@@ -23,11 +23,11 @@ run(fullfile(cwd, '../setup.m'))
 %% get gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 %% ensure mpiexec is available
-gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe)
+mpiexec_ok = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir);
 %% assemble run command
-cmd = create_run(cfg, opts.mpiexec, gemini_exe);
+cmd = create_run(cfg, opts.mpiexec, gemini_exe, mpiexec_ok);
 
 if opts.dryrun
   return
@@ -88,16 +88,24 @@ end
 end % function
 
 
-function cmd = create_run(cfg, mpiexec, gemini_exe)
+function cmd = create_run(cfg, mpiexec, gemini_exe, mpiexec_ok)
 arguments
   cfg (1,1) struct
   mpiexec (1,1) string
   gemini_exe (1,1) string
+  mpiexec_ok (1,1) logical
 end
 
 np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 prepend = gemini3d.sys.modify_path();
-cmd = mpiexec + " -n " + int2str(np) + " " + gemini_exe + " " +cfg.outdir;
+
+%% mpiexec if available
+cmd = gemini_exe + " " +cfg.outdir;
+if mpiexec_ok
+  cmd = mpiexec + " -n " + int2str(np) + " " + cmd;
+else
+  warning("MPIexec not available, falling back to single CPU core execution.")
+end
 disp(cmd)
 cmd = prepend + " " + cmd;
 
