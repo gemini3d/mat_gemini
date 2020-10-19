@@ -34,9 +34,7 @@ end
 
 
 function test_dry_run(tc)
-gemini3d.run(tc.TestData.outdir, ...
-  'config', tc.TestData.datapath, ...
-  'dryrun', true)
+gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, 'dryrun', true)
 end
 end
 

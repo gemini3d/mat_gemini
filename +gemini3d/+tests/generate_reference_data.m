@@ -31,7 +31,7 @@ disp('Generating data for: ')
 disp(names)
 
 for n = names
-  gemini3d.run(fullfile(outdir, n), 'config', fullfile(topdir, n), ...
+  gemini3d.run(fullfile(outdir, n), fullfile(topdir, n), ...
     'overwrite', opts.overwrite, 'gemini_exe', opts.gemini_exe, 'file_format', opts.file_format)
 end
 

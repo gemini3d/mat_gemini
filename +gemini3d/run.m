@@ -1,14 +1,13 @@
-function run(outdir, opts)
+function run(outdir, config_path, opts)
 %% setup and run Gemini simulation
 %
-% Examples:
+% Example:
 %
-% gemini3d.run(output_dir),
-% gemini3d.run(output_dir, "config", nml_path)
+% gemini3d.run(output_dir, nml_path)
 
 arguments
   outdir (1,1) string
-  opts.config (1,1) string = pwd
+  config_path (1,1) string
   opts.overwrite (1,1) logical = true
   opts.mpiexec (1,1) string = "mpiexec"
   opts.gemini_exe (1,1) string = gemini3d.sys.gemini_exe_name()
@@ -25,7 +24,7 @@ gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 %% ensure mpiexec is available
 mpiexec_ok = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 %% check if model needs to be setup
-cfg = setup_if_needed(opts, outdir);
+cfg = setup_if_needed(opts, outdir, config_path);
 %% assemble run command
 cmd = create_run(cfg, opts.mpiexec, gemini_exe, mpiexec_ok);
 
@@ -44,15 +43,16 @@ end
 end % function
 
 
-function cfg = setup_if_needed(opts, outdir)
+function cfg = setup_if_needed(opts, outdir, config_path)
 arguments
   opts
   outdir (1,1) string
+  config_path (1,1) string
 end
 
-cfg = gemini3d.read_config(opts.config);
+cfg = gemini3d.read_config(config_path);
 if isempty(cfg)
-  error("run:file_not_found", "a config.nml file was not found in %s. Try specifying gemini3d.run(outdir, 'config', 'path/to/config.nml')", opts.config)
+  error("run:file_not_found", "a config.nml file was not found in %s. Try specifying gemini3d.run(outdir, 'path/to/config.nml')", config_path)
 end
 
 cfg.outdir = gemini3d.fileio.expanduser(outdir);
