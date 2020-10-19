@@ -64,7 +64,7 @@ for k = ["ssl_verify", "file_format"]
 end
 
 if opts.overwrite
-  % note, if an old, incompatible shape exists this will fail
+  % note, if an old, incompatible shape exists this will fail.
   % we didn't want to automatically recursively delete directories,
   % so it's best to manually ensure all the old directories are removed first.
   gemini3d.setup.model_setup(cfg)
@@ -75,14 +75,6 @@ else
       break
     end
   end
-end
-
-%% close parallel pool
-% in case Matlab PCT was invoked for model_setup, shut it down, otherwise too much RAM can
-% be wasted while PCT is idle--like several gigabytes.
-addons = matlab.addons.installedAddons();
-if any(contains(addons.Name, 'Parallel Computing Toolbox'))
-  delete(gcp('nocreate'))
 end
 
 end % function
@@ -97,7 +89,6 @@ arguments
 end
 
 np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
-prepend = gemini3d.sys.modify_path();
 
 %% mpiexec if available
 cmd = gemini_exe + " " +cfg.outdir;
@@ -106,8 +97,12 @@ if mpiexec_ok
 else
   warning("MPIexec not available, falling back to single CPU core execution.")
 end
+
 disp(cmd)
-cmd = prepend + " " + cmd;
+
+if mpiexec_ok
+  cmd = gemini3d.sys.modify_path() + " " + cmd;
+end
 
 %% dry run
 ret = system(cmd + " -dryrun");

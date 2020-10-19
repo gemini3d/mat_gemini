@@ -8,9 +8,9 @@ end
 filename = gemini3d.fileio.get_configfile(direc);
 
 if endsWith(filename, ".ini", 'IgnoreCase', true)
-  cfg = gemini3d.read_ini(filename);
+  cfg = read_ini(filename);
 else
-  cfg = gemini3d.read_nml(filename);
+  cfg = read_nml(filename);
 end
 
 if isempty(cfg)
