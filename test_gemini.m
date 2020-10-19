@@ -33,4 +33,4 @@ else
   results = runner.run(suite);
 end
 
-assertSuccess(results)
+gemini3d.assertSuccess(results)
