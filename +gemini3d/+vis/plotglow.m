@@ -31,13 +31,15 @@ for ext = [".h5", ".nc", ".dat"]
   file_list = dir(aurora_dir + "/*" + ext);
   if ~isempty(file_list), break, end
 end
-assert(~isempty(file_list), "No auroral data found in " + aurora_dir)
 
+if isempty(file_list)
+  error("plotglow:file_not_found", "No auroral data found in %s", aurora_dir)
+end
 %% make plots
 hf = [];
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
-  bFrame = gemini3d.vis.loadglow_aurmap(filename, lx2, lx3, lwave);
+  bFrame = loadglow_aurmap(filename, lx2, lx3, lwave);
   t_str = datestr(params.times(i)) + " UT";
 
 if lx2 > 1 && lx3 > 1

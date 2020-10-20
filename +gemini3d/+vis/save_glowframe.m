@@ -11,12 +11,10 @@ dpi = 150;
 [outdir, outname] = fileparts(filename);
 outdir = fullfile(outdir, "../plots");
 
-saveplot_fmt(~strlength(saveplot_fmt)) = [];
-
 for suffix = saveplot_fmt
   outfile = fullfile(outdir, "aurora-" + outname + "." + suffix);
   disp("write " + outfile)
-  gemini3d.vis.export_graphics(h, outfile, 'resolution', dpi)
+  export_graphics(h, outfile, 'resolution', dpi)
 end
 
 end % function

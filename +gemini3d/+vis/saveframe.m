@@ -8,8 +8,6 @@ arguments
   h (1,:) matlab.ui.Figure
 end
 
-import gemini3d.vis.export_graphics
-
 dpi = 150;
 % filename has the suffix, let's ditch the suffix.
 [~, stem] = fileparts(filename);

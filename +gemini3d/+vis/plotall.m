@@ -42,7 +42,7 @@ else
   xg = options.xg;
 end
 
-plotfun = gemini3d.vis.grid2plotfun(options.plotfun, xg);
+plotfun = grid2plotfun(options.plotfun, xg);
 
 %% MAIN FIGURE LOOP
 Nt = length(params.times);

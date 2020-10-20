@@ -40,9 +40,9 @@ else
 end
 
 if isfield(options, "plotfun")
-  plotfun = gemini3d.vis.grid2plotfun(options.plotfun, xg);
+  plotfun = grid2plotfun(options.plotfun, xg);
 else
-  plotfun = gemini3d.vis.grid2plotfun(string.empty, xg);
+  plotfun = grid2plotfun(string.empty, xg);
 end
 
 %% get time index
