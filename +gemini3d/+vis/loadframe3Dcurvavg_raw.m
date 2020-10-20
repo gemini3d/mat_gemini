@@ -15,21 +15,21 @@ fid = fopen(filename,'r');
 
 dat.time = gemini3d.vis.get_time(fid);
 %% Number densities
-dat.ne = gemini3d.vis.read3D(fid, lxs);
+dat.ne = read3D(fid, lxs);
 %% Parallel Velocities
-dat.v1 = gemini3d.vis.read3D(fid, lxs);
+dat.v1 = read3D(fid, lxs);
 %% Temperatures
-dat.Ti = gemini3d.vis.read3D(fid, lxs);
-dat.Te = gemini3d.vis.read3D(fid, lxs);
+dat.Ti = read3D(fid, lxs);
+dat.Te = read3D(fid, lxs);
 %% Current densities
-dat.J1 = gemini3d.vis.read3D(fid, lxs);
-dat.J2 = gemini3d.vis.read3D(fid, lxs);
-dat.J3 = gemini3d.vis.read3D(fid, lxs);
+dat.J1 = read3D(fid, lxs);
+dat.J2 = read3D(fid, lxs);
+dat.J3 = read3D(fid, lxs);
 %% Perpendicular drifts
-dat.v2 = gemini3d.vis.read3D(fid, lxs);
-dat.v3 = gemini3d.vis.read3D(fid, lxs);
+dat.v2 = read3D(fid, lxs);
+dat.v3 = read3D(fid, lxs);
 %% Topside potential
-dat.Phitop = gemini3d.vis.read2D(fid, lxs);
+dat.Phitop = read2D(fid, lxs);
 
 fclose(fid);
 

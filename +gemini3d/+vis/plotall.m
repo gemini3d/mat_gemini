@@ -22,6 +22,9 @@ end
 
 visible = isempty(saveplot_fmt);
 direc = gemini3d.fileio.expanduser(direc);
+if ~isfolder(direc)
+  error("plotall:file_not_found", '%s is not a folder', direc)
+end
 
 lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
@@ -32,6 +35,9 @@ params = gemini3d.read_config(direc);
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(options.xg)
   xg = gemini3d.readgrid(direc);
+  if isempty(xg)
+    error("plotall:file_not_found", "grid not found under %s", direc)
+  end
 else
   xg = options.xg;
 end

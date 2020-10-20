@@ -4,8 +4,6 @@ arguments
   filename (1,1) string
 end
 
-import gemini3d.vis.read4D
-
 %% SIMULATION SIZE
 lsp=7;
 lxs = gemini3d.simsize(filename);

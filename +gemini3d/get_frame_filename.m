@@ -30,7 +30,7 @@ for ext = suffix
 end
 
 if ~isfile(filename)
-  error('get_frame_filename:file_not_found', 'could not find %s in %s', filename, direc)
+  error('get_frame_filename:file_not_found', 'could not find %s.* in %s', stem0, direc)
 end
 
 end % function
