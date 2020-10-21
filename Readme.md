@@ -18,7 +18,7 @@ Matlab R2020a Update 5 and newer have better plot quality due to new Matlab grap
 We assume you already have a Fortran compiler and MPI library installed.
 
 ```sh
-git clone https://github.com/gemini3d/mat_gemini
+git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
 ```
 
 To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
