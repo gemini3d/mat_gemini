@@ -13,7 +13,7 @@ prepend = gemini3d.sys.modify_path();
 [ret, msg] = system(prepend + " " + exe);
 
 if ret ~= 0
-  error("get_gemini_exe:runtime_error", "problem with Gemini.bin executable: " + exe + " error: " + msg)
+  error("get_gemini_exe:runtime_error", "problem with Gemini.bin executable: %s  error: %s", exe, msg)
 end
 
 end % function
