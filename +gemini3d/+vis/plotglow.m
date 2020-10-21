@@ -6,7 +6,9 @@ arguments
   visible (1,1) logical
 end
 
-assert(isfolder(direc), 'not a directory: %s', direc)
+if ~isfolder(direc)
+  error("plotglow:file_not_found", 'not a directory: %s', direc)
+end
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -36,10 +38,10 @@ if isempty(file_list)
   error("plotglow:file_not_found", "No auroral data found in %s", aurora_dir)
 end
 %% make plots
-hf = [];
+hf = matlab.ui.Figure.empty;
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
-  bFrame = loadglow_aurmap(filename, lx2, lx3, lwave);
+  bFrame = squeeze(loadglow_aurmap(filename, lx2, lx3, lwave));
   t_str = datestr(params.times(i)) + " UT";
 
 if lx2 > 1 && lx3 > 1
@@ -64,7 +66,15 @@ end % function
 
 
 function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible, txt)
-
+arguments
+  x (:,1) {mustBeNumeric}
+  wavelengths (1,:) string
+  bFrame (:,:) {mustBeNumeric}
+  time_str (1,1) string
+  hf matlab.ui.Figure
+  visible (1,1) logical
+  txt (1,1) string
+end
 if isempty(hf)
   hf = make_glowfig(visible);
 else
@@ -72,7 +82,7 @@ else
 end
 
 ax = axes('parent', hf);
-imagesc(1:length(wavelengths), x / 1e3,squeeze(bFrame))    % singleton dimension since 2D simulation
+imagesc(1:length(wavelengths), x / 1e3, bFrame)    % singleton dimension since 2D simulation
 set(ax, 'xtick', 1:length(wavelengths), 'xticklabel', wavelengths)
 
 ylabel(ax, txt + "Distance (km)")
@@ -115,12 +125,5 @@ end
 end % function
 
 
-function hf = make_glowfig(visible)
-
-hf = figure('toolbar', 'none', 'name', 'aurora', 'unit', 'pixels',  'VIsible', visible);
-pos = get(hf, 'position');
-set(hf, 'position', [pos(1), pos(2), 800, 500])
-
-end
 %ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libxvid -r 30 -q:v 0 isinglass_geminiglow_4278.avi
 %ffmpeg -framerate 10 -pattern_type glob -i '*.png' -c:v libx264 -r 30 -pix_fmt yuv420p out.mp4

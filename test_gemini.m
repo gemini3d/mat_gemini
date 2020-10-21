@@ -23,7 +23,7 @@ else
 % runner.addPlugin(CodeCoveragePlugin.forPackage('gemini3d'))
 end
 
-suite = TestSuite.fromPackage('gemini3d.tests');
+suite = TestSuite.fromPackage('gemini3d', 'IncludingSubpackages', true);
 
 % need to manually start parallel pool for CI
 addons = matlab.addons.installedAddons();
