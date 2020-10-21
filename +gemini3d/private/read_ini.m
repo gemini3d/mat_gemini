@@ -19,7 +19,7 @@ datatrim = strtok(fgetl(fid),' ');
 [day,remainder]=strtok(datatrim,',');
 [month,remainder]=strtok(remainder,',');
 year =strtok(remainder,',');    %should not find delimiter..
-params.ymd=[str2double(year),str2double(month),str2double(day)];
+params(1).ymd=[str2double(year),str2double(month),str2double(day)];     %this is so stupid but matlab 2020a wants an index here...
 
 %UT seconds
 datatrim =strtok(fgetl(fid),' ');
