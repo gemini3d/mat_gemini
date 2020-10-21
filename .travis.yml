@@ -30,3 +30,4 @@ before_script:
 
 script:
 - matlab -batch "test_gemini"
+- matlab -batch "test_project"
