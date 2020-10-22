@@ -35,7 +35,7 @@ end
 log_meta_nml(git_revision(fileparts(gemini_exe)), ...
                       fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
 
-ret = system(cmd);
+ret = exe_run(cmd, mpiexec_ok);
 if ret ~= 0
   error('run:runtime_error', 'Gemini run failed, error code %d', ret)
 end
@@ -100,14 +100,34 @@ end
 
 disp(cmd)
 
-if mpiexec_ok
-  cmd = gemini3d.sys.modify_path() + " " + cmd;
-end
-
 %% dry run
-ret = system(cmd + " -dryrun");
+ret = exe_run(cmd + " -dryrun", mpiexec_ok);
 if ret~=0
   error('run:runtime_error', 'Gemini dryrun failed')
 end
 
 end % function
+
+
+function ret = exe_run(cmd, mpiexec_ok)
+% intended to give option to run from py.subprocess if needed
+arguments
+  cmd (1,1) string
+  mpiexec_ok (1,1) logical
+end
+
+% p = pyenv;
+%
+% if ~isempty(p) && gemini3d.version_atleast(p.Version, "3.7")
+%   env = py.os.environ;
+%   env{"PATH"} = gemini3d.sys.mpi_path();
+%   ret =py.subprocess.check_call(cellstr(split(cmd)).', pyargs("env", env));
+%
+% else
+  if mpiexec_ok
+    cmd = gemini3d.sys.modify_path() + " " + cmd;
+  end
+  ret = system(cmd);
+% end
+
+ end
