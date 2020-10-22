@@ -23,7 +23,7 @@ if ~ispc, return, end
 path_new = gemini3d.sys.mpi_path();
 
 % setenv('PATH', path_new{1}) % does not help
-prepend = "set PATH=" + path_new{1} + " && ";
+prepend = "set PATH=" + path_new + " && ";
 
 
 end % function

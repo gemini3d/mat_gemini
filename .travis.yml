@@ -29,5 +29,4 @@ before_script:
 - export PATH=/snap/bin:$PATH
 
 script:
-- matlab -batch "test_gemini"
-- matlab -batch "test_project"
+- matlab -batch "test_all"

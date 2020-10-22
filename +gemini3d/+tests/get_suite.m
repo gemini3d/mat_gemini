@@ -1,6 +1,6 @@
-function [runner, suite] = get_suite(isCI)
+function [runner, suite] = get_suite(do_coverage)
 arguments
-  isCI (1,1) logical
+  do_coverage (1,1) logical = false
 end
 
 import matlab.unittest.TestSuite
@@ -12,7 +12,9 @@ p = LoggingPlugin.withVerbosity(matlab.unittest.Verbosity.Detailed,...
     'HideLevel',true,'HideTimestamp',true, 'Description', "");
 runner.addPlugin(p);
 
-addCoverage(runner, isCI)
+if do_coverage
+  addCoverage(runner)
+end
 
 suite = TestSuite.fromPackage('gemini3d', 'IncludingSubpackages', true);
 

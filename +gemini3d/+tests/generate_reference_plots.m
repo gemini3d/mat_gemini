@@ -11,7 +11,7 @@ names = get_testnames(topdir, only);
 assert(~isempty(names), "did not find any data under %s", topdir)
 
 for n = names
-  gemini3d.vis.plotall(fullfile(topdir, n), "png")
+  gemini3d.plot(fullfile(topdir, n), "png")
 end
 
 end % function

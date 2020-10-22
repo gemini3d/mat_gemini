@@ -1,39 +1,31 @@
-function [lat,lon]=geomag2geog(thetat,phit)
+function [lat,lon] = geomag2geog(thetat,phit)
 arguments
   thetat {mustBeNumeric}
   phit {mustBeNumeric}
 end
 
-thetan=11*pi/180;
-phin=289*pi/180;
-
+thetan = deg2rad(11);
+phin = deg2rad(289);
 
 %enforce phit = [0,2pi]
-inds=find(phit>2*pi);
-phitcorrected=phit;
-phitcorrected(inds)=phit(inds)-2*pi;
-inds=find(phit<0);
-phitcorrected(inds)=phit(inds)+2*pi;
+phit = mod(phit, 2*pi);
 
-%  thetag2p=acos(cos(thetat).*cos(thetan)-sin(thetat).*sin(thetan).*cos(phit));
-thetag2p=acos(cos(thetat).*cos(thetan)-sin(thetat).*sin(thetan).*cos(phitcorrected));
+thetag2p=acos(cos(thetat).*cos(thetan)-sin(thetat).*sin(thetan).*cos(phit));
 
 beta=acos( (cos(thetat)-cos(thetag2p).*cos(thetan))./(sin(thetag2p).*sin(thetan)) );
-%  phig2=zeros(size(phit));
-phig2=zeros(size(phitcorrected));
-%  inds=find(phit>pi);
-inds=find(phitcorrected>pi);
-phig2(inds)=phin-beta(inds);
-%  inds=find(phit<=pi);
-inds=find(phitcorrected<=pi);
-phig2(inds)=phin+beta(inds);
-inds=find(phig2<0);
-phig2(inds)=phig2(inds)+2*pi;
-inds=find(phig2>=2*pi);
-phig2(inds)=phig2(inds)-2*pi;
+
+phig2 = zeros(size(phit));
+
+i = phit > pi;
+phig2(i)=phin-beta(i);
+
+i = phit <= pi;
+phig2(i)=phin+beta(i);
+
+phig2 = mod(phig2, 2*pi);
 
 thetag2=pi/2-thetag2p;
-lat=thetag2*180/pi;
-lon=phig2*180/pi;
+lat = rad2deg(thetag2);
+lon = rad2deg(phig2);
 
 end

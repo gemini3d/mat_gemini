@@ -1,12 +1,11 @@
 function [thetat,phit] = geog2geomag(lat,lon)
 arguments
   lat {mustBeNumeric}
-  lon {mustBeNumeric}    %map data can be NaN
+  lon {mustBeNumeric}
 end
 
 thetan = deg2rad(11);
 phin = deg2rad(289);
-
 
 %enforce [0,360] longitude
 loncorrected = mod(lon, 360);
