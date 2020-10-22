@@ -1,9 +1,9 @@
-function [t,ns,Ts,vs1,J1,J2,J3,v2,v3,Phitop]=readdata(lxs,filename)
+function [t,ns,Ts,vs1,J1,J2,J3,v2,v3,Phitop] = readdata(lxs,filename)
+%% READDATA is for deprecated raw binary files and is not typically used.
 arguments
   lxs (3,1) {mustBeInteger,mustBePositive}
   filename (1,1) string
 end
-% this is for raw binary files, not typically used.
 
 lsp = 7;
 

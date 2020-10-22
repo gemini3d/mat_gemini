@@ -32,10 +32,18 @@ function test_plot_2d(tc)
 tname = "2dew_glow";
 project_runner(tname, 'h5', tc.TestData.outdir, fullfile(tc.TestData.cwd, "data"))
 
+data_dir = fullfile(tc.TestData.cwd, "data/test" + tname);
 % test 2D plots
 
-h = gemini3d.vis.plotframe(fullfile(tc.TestData.cwd, "data/test" + tname), datetime(2013, 2, 20, 5, 5, 0));
+h = gemini3d.vis.plotframe(data_dir, datetime(2013, 2, 20, 5, 5, 0));
 tc.verifySize(h, [1,10])
+tc.verifyClass(h, 'matlab.ui.Figure')
+close(h)
+
+% test grid plot
+
+h = gemini3d.plot_grid(data_dir);
+tc.verifySize(h, [1, 2])
 tc.verifyClass(h, 'matlab.ui.Figure')
 close(h)
 end

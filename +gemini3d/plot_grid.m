@@ -1,4 +1,4 @@
-function plot_grid(path)
+function h = plot_grid(path)
 %% plot 3D grid
 %
 % path: path to simgrid.{dat,h5,nc}
@@ -9,8 +9,8 @@ end
 
 xg = gemini3d.readgrid(path);
 
-fig = figure();
-t = tiledlayout(fig, 1, 3);
+fig1 = figure();
+t = tiledlayout(fig1, 1, 3);
 
 %% x1
 lx1 = length(xg.x1);
@@ -36,8 +36,9 @@ ylabel(ax, 'x3 [km]')
 xlabel(ax, 'index (dimensionless)')
 title(ax, {"x3 (northward)", "lx3 = " + int2str(lx3)})
 
-sgtitle(fig, path, 'interpreter', 'none')
+sgtitle(fig1, path, 'interpreter', 'none')
 %% duplicate but detailed altitude plot
-gemini3d.vis.plot_altitude_grid(xg)
+fig2 = gemini3d.vis.plot_altitude_grid(xg);
 
+h = [fig1, fig2];
 end % function
