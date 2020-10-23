@@ -18,12 +18,21 @@ if ~isfolder(src_dir)
   error("cmake:file_not_found", "source directory not found: " + src_dir)
 end
 
+%% configure
 % don't use ctest -S as it will infinite loop with MSIS build/test
 ret = system("cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off");
+if ret ~=0
+  % try reconfiguring
+  if isfile(fullfile(build_dir, "CMakeCache.txt"))
+    rmdir(build_dir, 's')
+  end
+  ret = system("cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off");
+end
 if ret ~= 0
   error('cmake:runtime_error', 'error configuring with CMake')
 end
 
+%% build
 ret = system("cmake --build " + build_dir + " --parallel");
 if ret ~= 0
   error('cmake:runtime_error', 'error building with CMake')
