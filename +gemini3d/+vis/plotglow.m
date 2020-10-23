@@ -1,14 +1,11 @@
-function plotglow(direc, saveplot_fmt, visible)
+function plotglow(direc, saveplot_fmt)
 % plots Gemini-Glow auroral emissions
 arguments
   direc (1,1) string
-  saveplot_fmt (1,:) string
-  visible (1,1) logical
+  saveplot_fmt (1,:) string = string.empty
 end
 
-if ~isfolder(direc)
-  error("plotglow:file_not_found", 'not a directory: %s', direc)
-end
+visible = isempty(saveplot_fmt);
 aurora_dir = fullfile(direc, 'aurmaps');
 
 %array of volume emission rates at each altitude; cm-3 s-1:
@@ -22,7 +19,7 @@ params = gemini3d.read_config(direc);
 xg = gemini3d.readgrid(direc);
 
 %% GET THE SYSTEM SIZE
-lwave=length(wavelengths);
+Lw = length(wavelengths);
 lx2=xg.lx(2);
 lx3=xg.lx(3);
 x2=xg.x2(3:end-2);
@@ -35,13 +32,13 @@ for ext = [".h5", ".nc", ".dat"]
 end
 
 if isempty(file_list)
-  error("plotglow:file_not_found", "No auroral data found in %s", aurora_dir)
+  error("gemini3d:plotglow:fileNotFound", "No auroral data found in %s", aurora_dir)
 end
 %% make plots
 hf = matlab.ui.Figure.empty;
 for i = 1:length(file_list)
   filename = fullfile(aurora_dir, file_list(i).name);
-  bFrame = squeeze(loadglow_aurmap(filename, lx2, lx3, lwave));
+  bFrame = squeeze(loadglow_aurmap(filename, lx2, lx3, Lw));
   t_str = datestr(params.times(i)) + " UT";
 
 if lx2 > 1 && lx3 > 1
@@ -54,7 +51,7 @@ elseif lx3 > 1
   % 2D north-south
   hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible, "Northward");
 else
-  error('impossible configuration')
+  error("gemini3d:plotglow:value", 'impossible configuration')
 end
 
   if params.flagoutput ~= 3

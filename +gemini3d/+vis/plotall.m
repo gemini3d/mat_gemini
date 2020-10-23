@@ -22,33 +22,29 @@ end
 
 visible = isempty(saveplot_fmt);
 direc = gemini3d.fileio.expanduser(direc);
-if ~isfolder(direc)
-  error("plotall:file_not_found", '%s is not a folder', direc)
-end
 
 lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
 params = gemini3d.read_config(direc);
-
+if isempty(params)
+  error("gemini3d:plotall:fileNotFound", "%s does not contain Gemini3D data", direc)
+end
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(options.xg)
   xg = gemini3d.readgrid(direc);
-  if isempty(xg)
-    error("plotall:file_not_found", "grid not found under %s", direc)
-  end
 else
   xg = options.xg;
+end
+if isempty(xg)
+  error("gemini3d:plotall:value", "Gemini3D grid not found")
 end
 
 plotfun = grid2plotfun(options.plotfun, xg);
 
 %% MAIN FIGURE LOOP
-Nt = length(params.times);
-
 h = gemini3d.vis.plotinit(xg, visible);
-times = params.times;
 
 if ~visible
   if options.parallel > 0
@@ -66,21 +62,21 @@ if ~visible
         end
       end
     end
-    parfor i = 1:Nt
-      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+    parfor t = params.times
+      gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   else
-    for i = 1:Nt
-      gemini3d.vis.plotframe(direc, times(i), saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+    for t = params.times
+      gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   end
 else
   % displaying, not saving
-  for t = times
+  for t = params.times
     gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
 
     drawnow % need this here to ensure plots update (race condition)
-    if gemini3d.sys.isinteractive && times(end) ~= t
+    if gemini3d.sys.isinteractive && params.times(end) ~= t
       q = input('\n *** press Enter to plot next time step, or "q" Enter to stop ***\n', 's');
       if ~isempty(q), break, end
     end
@@ -88,7 +84,7 @@ else
 end % if saveplots
 
 if isfolder(fullfile(direc, "aurmaps")) % glow sim
-  gemini3d.vis.plotglow(direc, saveplot_fmt, visible)
+  gemini3d.vis.plotglow(direc, saveplot_fmt)
 end
 
 %% Don't print
