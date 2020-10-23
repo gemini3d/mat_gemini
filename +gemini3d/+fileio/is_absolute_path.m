@@ -11,9 +11,12 @@ end
 apath = gemini3d.fileio.expanduser(apath);
 
 if ispc
-  hasDrive = cell2mat(isstrprop(extractBefore(apath, 2), "alpha", "ForceCellOutput", true));
-  isabs = hasDrive & extractBetween(apath,2,2) == ":" & ...
-                   (extractBetween(apath,3,3) == "/" | extractBetween(apath,3,3) == "\");
+  i = strlength(apath) < 2;
+  isabs(i) = false;
+
+  hasDrive = cell2mat(isstrprop(extractBefore(apath(~i), 2), "alpha", "ForceCellOutput", true));
+  isabs(~i) = hasDrive & extractBetween(apath(~i), 2,2) == ":" & ...
+                   (extractBetween(apath(~i), 3,3) == "/" | extractBetween(apath(~i), 3,3) == "\");
 else
   isabs = startsWith(apath, "/");
 end

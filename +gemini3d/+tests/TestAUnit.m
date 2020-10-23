@@ -10,6 +10,7 @@ tc.verifyTrue(endsWith(gemini3d.fileio.expanduser('~/foo'), "foo"))
 tc.verifyTrue(all(endsWith(gemini3d.fileio.expanduser(["~/abc", "~/123"]), ["abc", "123"])))
 
 tc.verifyEmpty(gemini3d.fileio.expanduser(string.empty))
+tc.verifyEqual(gemini3d.fileio.expanduser(""), "")
 end
 
 function test_posix(tc)
@@ -26,7 +27,7 @@ function test_is_absolute_path(tc)
 tc.verifyTrue(gemini3d.fileio.is_absolute_path('~/foo'))
 if ispc
   tc.verifyTrue(gemini3d.fileio.is_absolute_path('x:/foo'))
-  tc.verifyTrue(all(gemini3d.fileio.is_absolute_path(["x:/abc", "x:/123"])))
+  tc.verifyEqual(gemini3d.fileio.is_absolute_path(["x:/abc", "x:/123", "", "c"]), [true, true, false, false])
   tc.verifyTrue(all(gemini3d.fileio.is_absolute_path(["x:/abc"; "x:/123"])))
   tc.verifyFalse(gemini3d.fileio.is_absolute_path('/foo'))
 else
@@ -34,9 +35,12 @@ else
 end
 
 tc.verifyEmpty(gemini3d.fileio.is_absolute_path(string.empty))
+tc.verifyFalse(gemini3d.fileio.is_absolute_path(""))
+tc.verifyFalse(gemini3d.fileio.is_absolute_path("c"))
 end
 
 function test_absolute_path(tc)
+  import matlab.unittest.constraints.StartsWithSubstring
 pabs = gemini3d.fileio.absolute_path('2foo');
 pabs2 = gemini3d.fileio.absolute_path('4foo');
 tc.verifyFalse(startsWith(pabs, "2"))
@@ -44,7 +48,7 @@ tc.verifyTrue(strncmp(pabs, pabs2, 2))
 
 par1 = gemini3d.fileio.absolute_path("../2foo");
 par2 = gemini3d.fileio.absolute_path("../4foo");
-tc.verifyFalse(startsWith(par1, ".."))
+tc.verifyThat(par1, ~StartsWithSubstring(".."))
 tc.verifyTrue(strncmp(par2, pabs2, 2))
 
 pt1 = gemini3d.fileio.absolute_path("bar/../2foo");
@@ -56,6 +60,7 @@ vs = extractBefore(va, 2);
 tc.verifyEqual(vs(1), vs(2))
 
 tc.verifyEmpty(gemini3d.fileio.absolute_path(string.empty))
+tc.verifyEqual(gemini3d.fileio.absolute_path(""), string(pwd))
 end
 
 function test_with_suffix(tc)
@@ -65,6 +70,10 @@ if ~verLessThan("matlab", "9.9")
 tc.verifyEqual(gemini3d.fileio.with_suffix(["foo.h5", "bar.dat"], ".nc"), ["foo.nc", "bar.nc"])
 
 tc.verifyEmpty(gemini3d.fileio.with_suffix(string.empty, ".nc"))
+tc.verifyEqual(gemini3d.fileio.with_suffix("", ""), "")
+tc.verifyEqual(gemini3d.fileio.with_suffix("c", ""), "c")
+tc.verifyEqual(gemini3d.fileio.with_suffix("c.nc", ""), "c")
+tc.verifyEqual(gemini3d.fileio.with_suffix("", ".nc"), ".nc")
 end
 end
 
@@ -78,6 +87,10 @@ if ~verLessThan("matlab", "9.9")
 tc.verifyEqual(gemini3d.fileio.path_tail(["c.h5", "a/b/c/"]), ["c.h5", "c"])
 
 tc.verifyEmpty(gemini3d.fileio.path_tail(string.empty))
+tc.verifyEqual(strlength(gemini3d.fileio.path_tail("")), 0)
+
+tc.verifyEqual(gemini3d.fileio.path_tail(["", "a/b"]), ["", "b"])
+tc.verifyEqual(gemini3d.fileio.path_tail("c"), "c")
 end
 end
 

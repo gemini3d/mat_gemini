@@ -5,7 +5,10 @@ arguments
   apath string
 end
 
-final = extractAfter(apath, strlength(apath)-1);
+k = strlength(apath) == 0;
+final(k) = "";
+
+final(~k) = extractAfter(apath(~k), strlength(apath(~k))-1);
 
 i = final == "/" | final == "\";
 
