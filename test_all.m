@@ -3,7 +3,8 @@
 
 isCI = getenv("CI") == "true";
 isTravisCI = getenv("TRAVIS") == "true";
+parallel = true;
 
 [runner, suite] = gemini3d.tests.get_suite(~isTravisCI);
 
-gemini3d.tests.run(runner, suite, isCI)
+gemini3d.tests.run(runner, suite, isCI, parallel)
