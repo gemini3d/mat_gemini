@@ -13,7 +13,7 @@ if ~isfolder(fullfile(hdf5nc_dir, "+hdf5nc"))
   cmd = "git submodule update --init";
   ret = system(cmd);
   if ret ~= 0
-    error("could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
+    error("mat_gemini:setup:runtimeError", "could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
   end
 end
 

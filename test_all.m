@@ -1,5 +1,9 @@
 % This tests everything, including the test_gemini subset
+% Travis-CI doesn't have any easy artifact upload
 
-[runner, suite] = gemini3d.tests.get_suite(true);
+isCI = getenv("CI") == "true";
+isTravisCI = getenv("TRAVIS") == "true";
 
-gemini3d.tests.run(runner, suite, getenv("CI") == "true")
+[runner, suite] = gemini3d.tests.get_suite(~isTravisCI);
+
+gemini3d.tests.run(runner, suite, isCI)
