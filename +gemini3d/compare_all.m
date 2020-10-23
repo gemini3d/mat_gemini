@@ -20,7 +20,7 @@ function compare_all(outdir, refdir, opts)
 arguments
   outdir (1,1) string
   refdir (1,1) string
-  opts.only (:,1) string = string.empty
+  opts.only (1,:) string = string.empty
   opts.file_format = string.empty
 end
 
@@ -38,8 +38,6 @@ tol.atolV = 50;
 outdir = gemini3d.fileio.absolute_path(outdir);
 refdir = gemini3d.fileio.absolute_path(refdir);
 
-gemini3d.tests.exist_or_skip(outdir, 'dir')
-gemini3d.tests.exist_or_skip(refdir, 'dir')
 %% check that paths not the same
 if outdir == refdir
   error('compare_all:value_error', '%s and %s directories are the same', outdir, refdir)
@@ -72,6 +70,14 @@ params = gemini3d.read_config(outdir);
 
 lxs = gemini3d.simsize(outdir);
 lxs_ref = gemini3d.simsize(refdir);
+
+if isempty(lxs)
+  error("compare_all:file_not_found", "%s does not contain Gemini3D simulation data", outdir)
+end
+if isempty(lxs_ref)
+  error("compare_all:file_not_found", "%s does not contain Gemini3D simulation data", refdir)
+end
+
 if any(lxs ~= lxs_ref)
   error('compare_all:value_error', ['ref dims ', int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
 end
@@ -178,9 +184,15 @@ end % function compare_input
 function compare_grid(outdir, refdir, tol)
 
 [ref, ok] = gemini3d.readgrid(refdir);
+if isempty(ref)
+  error("gemini3d:compare_all:compare_grid", "%s does not have a Gemini3D grid", refdir)
+end
 assert(ok, "reference grid " + refdir + " has bad values")
 
 [new, ok] = gemini3d.readgrid(outdir);
+if isempty(new)
+  error("gemini3d:compare_all:compare_grid", "%s does not have a Gemini3D grid", outdir)
+end
 assert(ok, "grid " + outdir + " has bad values")
 
 errs = 0;

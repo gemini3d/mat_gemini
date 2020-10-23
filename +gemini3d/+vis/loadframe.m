@@ -36,7 +36,7 @@ switch get_flagoutput(filename, cfg)
   case 1, dat = gemini3d.vis.loadframe3Dcurv(filename, vars);
   case 2, dat = gemini3d.vis.loadframe3Dcurvavg(filename, vars);
   case 3, dat = gemini3d.vis.loadframe3Dcurvne(filename);
-  otherwise, error('Problem with file input selection. Please specify flagoutput in config file.')
+  otherwise, error('gemini3d:loadframe:value_error', 'Problem with flagoutput=%d. Please specify flagoutput in config file.', flagoutput)
 end %switch
 
 dat.time = gemini3d.vis.get_time(filename);
