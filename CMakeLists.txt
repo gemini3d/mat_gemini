@@ -1,13 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-  message(FATAL_ERROR "use cmake -B build or similar to avoid building in-source, which is messy")
-endif()
-
-set(CMAKE_CONFIGURATION_TYPES "Release;RelWithDebInfo;Debug" CACHE STRING "Build type selections" FORCE)
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "default build type")
-endif()
+include(cmake/policy.cmake)
+include(cmake/compiler_find.cmake)
 
 project(MSIS LANGUAGES Fortran)
 
