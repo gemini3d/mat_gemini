@@ -61,10 +61,4 @@ end
 
 setenv('PATH', sys_path)
 
-% MacOS defaults to AppleClang, which is not compatible with GCC.
-% Matlab doesn't pickup MacOS environtment variables, so set it here.
-% FIXME: make it work with Intel oneAPI
-setenv('CC', 'gcc')
-setenv('FC', 'gfortran')
-
 end % function
