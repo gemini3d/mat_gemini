@@ -35,12 +35,12 @@ end % function
 function zipfile = download_data(test_name, data_dir, url_ini)
 
 if isempty(url_ini)
-  url_ini = fullfile(fileparts(mfilename('fullpath')), "../+tests/gemini3d_url.ini");
+  url_ini = fullfile(fileparts(mfilename('fullpath')), "../+tests/gemini3d_url.json");
 end
 
 gemini3d.fileio.makedir(data_dir)
 
-urls = gemini3d.vendor.ini2struct.ini2struct(url_ini);
+urls = jsondecode(fileread(url_ini));
 
 zipfile = fullfile(data_dir, "test" + test_name + ".zip");
 
