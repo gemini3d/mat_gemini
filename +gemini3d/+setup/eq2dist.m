@@ -64,26 +64,26 @@ end % function eq2dist
 
 
 function check_density(n)
-n = n(:);
+
 mustBeFinite(n)
 mustBeNonnegative(n)
-assert(max(n > 1e6), 'too small maximum density')
+mustBeGreaterThan(max(n), 1e5)
+
 end
+
 
 function check_drift(v)
 
-v = v(:);
-
 mustBeFinite(v)
-assert(all(abs(v) < 10e3), 'excessive drift velocity')
+mustBeLessThan(abs(v), 10e3)
+
 end
+
 
 function check_temperature(T)
 
-T = T(:);
-
 mustBeFinite(T)
 mustBeNonnegative(T)
-assert(max(T) > 500, 'too cold maximum temperature')
+mustBeGreaterThan(max(T), 500)
 
 end

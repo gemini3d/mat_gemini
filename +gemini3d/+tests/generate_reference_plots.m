@@ -8,7 +8,7 @@ topdir = gemini3d.fileio.expanduser(topdir);
 
 names = get_testnames(topdir, only);
 
-assert(~isempty(names), "did not find any data under %s", topdir)
+mustBeNonempty(names)
 
 for n = names
   gemini3d.plot(fullfile(topdir, n), "png")
