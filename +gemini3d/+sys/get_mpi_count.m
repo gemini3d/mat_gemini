@@ -16,22 +16,7 @@ end
 
 %% config.nml file or directory or simsize.h5?
 
-dsize = [];
-
-if isfolder(sizefn)
-  dsize = gemini3d.simsize(sizefn);
-elseif isfolder(fileparts(sizefn))
-  dsize = gemini3d.simsize(fileparts(sizefn));
-elseif isfile(sizefn)
-  [~,~,ext] = fileparts(sizefn);
-  if any(endsWith(ext, [".h5", ".nc", ".dat"]))
-    dsize = gemini3d.simsize(sizefn);
-  elseif any(endsWith(ext, [".ini", ".nml"]))
-    params = gemini3d.read_config(sizefn);
-    % OK to use indat_size because we're going to run a sim on this machine
-    dsize = gemini3d.simsize(params.indat_size);
-  end
-end
+dsize = gemini3d.simsize(sizefn);
 
 if isempty(dsize)
   N = 1;
