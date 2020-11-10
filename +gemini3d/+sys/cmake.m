@@ -8,34 +8,23 @@ end
 
 % must be absolute path for Unix-like, where cannot traverse upwards from non-existent dir
 src_dir = gemini3d.posix(gemini3d.fileio.absolute_path(src_dir));
+assert(isfolder(src_dir), "source directory not found: %s", src_dir)
 
-ret = system('cmake --version');
-if ret ~= 0
-  error('cmake:environment_error', 'CMake not found')
-end
-
-if ~isfolder(src_dir)
-  error("cmake:file_not_found", "source directory not found: " + src_dir)
-end
+assert(system("cmake --version") == 0, 'CMake not found')
 
 %% configure
 % don't use ctest -S as it will infinite loop with MSIS build/test
-ret = system("cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off");
-if ret ~=0
+cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off";
+if system(cmd) ~=0
   % try reconfiguring
   if isfile(fullfile(build_dir, "CMakeCache.txt"))
     rmdir(build_dir, 's')
   end
-  ret = system("cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off");
-end
-if ret ~= 0
-  error('cmake:runtime_error', 'error configuring with CMake')
+  assert(system(cmd) == 0, "error configuring %s with CMake", src_dir)
 end
 
 %% build
 ret = system("cmake --build " + build_dir + " --parallel");
-if ret ~= 0
-  error('cmake:runtime_error', 'error building with CMake')
-end
+assert(ret == 0, 'error building with CMake in %s', build_dir)
 
 end % function
