@@ -7,3 +7,6 @@ resources/project/
 *.m~
 
 +gemini3d/+tests/data/
+
+code-coverage/
+test-results/

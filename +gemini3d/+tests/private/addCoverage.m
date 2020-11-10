@@ -9,8 +9,7 @@ import matlab.unittest.plugins.codecoverage.CoberturaFormat
 
 if getenv("CI") == "true"
   reportFile = 'CoverageResults.xml';
-  reportFormat = CoberturaFormat(reportFile);
-  plugin = CodeCoveragePlugin.forPackage('gemini3d','Producing',reportFormat);
+  plugin = CodeCoveragePlugin.forPackage('gemini3d','Producing', CoberturaFormat(reportFile));
   runner.addPlugin(plugin);
 else
   runner.addPlugin(CodeCoveragePlugin.forPackage('gemini3d'))

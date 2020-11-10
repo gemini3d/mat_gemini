@@ -3,7 +3,7 @@
 ![ci](https://github.com/gemini3d/mat_gemini/workflows/ci/badge.svg)
 [![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
 [![View MatGemini on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/78676-matgemini)
-[![Build Status](https://travis-ci.com/gemini3d/mat_gemini.svg?branch=master)](https://travis-ci.com/gemini3d/mat_gemini)
+[![Build Status](https://dev.azure.com/mhirsch0512/Gemini3D/_apis/build/status/gemini3d.mat_gemini?branchName=master)](https://dev.azure.com/mhirsch0512/Gemini3D/_build/latest?definitionId=20&branchName=master)
 
 These scripts form the basic core needed to work with Gemini3D ionospheric model to:
 
@@ -32,7 +32,7 @@ setup
 Run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-test_gemini
+TestGemini
 ```
 
 If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
