@@ -37,6 +37,7 @@ precip.Qit = zeros(precip.llon, precip.llat, Nt);
 precip.E0it = nan(precip.llon, precip.llat, Nt);
 
 % did user specify on/off time? if not, assume always on.
+% because of one-based Matlab indexing, i_on and i_off have a "+1"
 if isfield(p, 'precip_startsec')
   i_on = round(p.precip_startsec / p.dtprec) + 1;
 else
@@ -44,9 +45,9 @@ else
 end
 
 if isfield(p, 'precip_endsec')
-  i_off = round(min(p.tdur, p.precip_endsec) / p.dtprec);
+  i_off = round(min(p.tdur, p.precip_endsec) / p.dtprec) + 1;
 else
-  i_off = Nt;
+  i_off = Nt;  % not +1
 end
 
 precip = gemini3d.setup.precip_grid(xg, p, precip);
