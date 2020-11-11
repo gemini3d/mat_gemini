@@ -1,11 +1,11 @@
 % this script is run on Azure (or local)
 import matlab.unittest.constraints.ContainsSubstring
 import matlab.unittest.selectors.HasName
-import matlab.unittest.TestRunner;
-import matlab.unittest.Verbosity;
-import matlab.unittest.plugins.CodeCoveragePlugin;
-import matlab.unittest.plugins.XMLPlugin;
-import matlab.unittest.plugins.codecoverage.CoberturaFormat;
+import matlab.unittest.TestRunner
+import matlab.unittest.Verbosity
+import matlab.unittest.plugins.CodeCoveragePlugin
+import matlab.unittest.plugins.XMLPlugin
+import matlab.unittest.plugins.codecoverage.CoberturaFormat
 
 name = "gemini3d.tests";
 

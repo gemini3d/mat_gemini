@@ -57,12 +57,12 @@ arguments
   config_path (1,1) string
 end
 
-cfg = gemini3d.read_config(config_path);
-if isempty(cfg)
-  error("run:file_not_found", "a config.nml file was not found in %s. Try specifying gemini3d.run(outdir, 'path/to/config.nml')", config_path)
-end
+config_path = gemini3d.fileio.expanduser(config_path);
+outdir = gemini3d.fileio.expanduser(outdir);
 
-cfg.outdir = gemini3d.fileio.expanduser(outdir);
+cfg = gemini3d.read_config(config_path);
+assert(~isempty(cfg), "a config.nml file was not found in " + config_path)
+cfg.outdir = outdir;
 
 for k = ["ssl_verify", "file_format"]
   if ~isempty(opts.(k))
@@ -98,11 +98,11 @@ end
 np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
 
 %% mpiexec if available
-cmd = gemini_exe + " " +cfg.outdir;
+cmd = gemini_exe + " " + cfg.outdir;
 if mpiexec_ok
-  cmd = mpiexec + " -n " + int2str(np) + " " + cmd;
+  cmd = sprintf("%s -n %d %s", mpiexec, np, cmd);
 else
-  warning("MPIexec not available, falling back to single CPU core execution.")
+  disp("MPIexec not available, falling back to single CPU core execution.")
 end
 
 disp(cmd)
