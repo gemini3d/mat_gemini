@@ -25,6 +25,13 @@ gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 mpiexec_ok = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
+%% check that no existing simulation is in output directory
+% unless this is a milestone restart
+if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
+  exist_file = gemini3d.get_frame_filename(outdir, cfg.times(1));
+  assert(isempty(exist_file), "a fresh simulation should not have data in output directory: " + outdir)
+end
+
 %% assemble run command
 cmd = create_run(cfg, opts.mpiexec, gemini_exe, mpiexec_ok);
 

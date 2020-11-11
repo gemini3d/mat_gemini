@@ -28,9 +28,7 @@ if isfile(filename)
   return
 end
 
-if ~isfolder(filename)
-  error("loadframe:file_not_found", filename + " is not a file or folder")
-end
+assert(isfolder(filename), filename + " is not a file or folder")
 
 if ~isempty(opts.time)
   dat = gemini3d.vis.loadframe(filename, opts.time, opts.vars);

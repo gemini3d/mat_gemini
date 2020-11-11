@@ -12,7 +12,9 @@ filename = string.empty;
 if isfile(direc)
   filename = direc;
   return
-elseif isfolder(direc)
+end
+
+if isfolder(direc)
   names = ["config.nml", "inputs/config.nml", "config.ini", "inputs/config.ini"];
   filename = check_names(direc, names);
   if isfile(filename)
