@@ -6,29 +6,7 @@ arguments
   xg (1,1) struct
 end
 
-%% READ Equilibrium SIMULATION INFO
-if ~isfolder(p.eq_dir)
-  if isfield(p, 'eq_url')
-    if ~isfile(p.eq_zip)
-        if isfield(p, 'ssl_verify') && ~p.ssl_verify
-          % disable SSL, better to fix your SSL certificates as arbitrary
-          % code can be downloaded
-          web_opt = weboptions('CertificateFilename', '');
-        elseif isfile(getenv("SSL_CERT_FILE"))
-          web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
-        else
-          web_opt = weboptions('CertificateFilename', 'default');
-        end
-      gemini3d.fileio.makedir(p.eq_dir)
-      websave(p.eq_zip, p.eq_url, web_opt);
-    end
-    unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
-  else
-    error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?  Or specify eq_url and eq_zip to download.', p.eq_dir)
-  end
-end
-
-peq = gemini3d.read_config(p.eq_dir);
+peq = read_equilibrium(p);
 %% read equilibrium grid
 [xgin, ok] = gemini3d.readgrid(p.eq_dir);
 
@@ -63,27 +41,29 @@ gemini3d.writedata(peq.times(end), nsi, vs1i, Tsi, p.indat_file, p.file_format);
 end % function eq2dist
 
 
-function check_density(n)
+function peq = read_equilibrium(p)
 
-mustBeFinite(n)
-mustBeNonnegative(n)
-mustBeGreaterThan(max(n), 1e5)
-
+if ~isfolder(p.eq_dir)
+  if isfield(p, 'eq_url')
+    if ~isfile(p.eq_zip)
+      if isfield(p, 'ssl_verify') && ~p.ssl_verify
+        % disable SSL, better to fix your SSL certificates as arbitrary
+        % code can be downloaded
+        web_opt = weboptions('CertificateFilename', '');
+      elseif isfile(getenv("SSL_CERT_FILE"))
+        web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
+      else
+        web_opt = weboptions('CertificateFilename', 'default');
+      end
+      gemini3d.fileio.makedir(p.eq_dir)
+      websave(p.eq_zip, p.eq_url, web_opt);
+    end
+    unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
+  else
+    error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?  Or specify eq_url and eq_zip to download.', p.eq_dir)
+  end
 end
 
-
-function check_drift(v)
-
-mustBeFinite(v)
-mustBeLessThan(abs(v), 10e3)
-
-end
-
-
-function check_temperature(T)
-
-mustBeFinite(T)
-mustBeNonnegative(T)
-mustBeGreaterThan(max(T), 500)
+peq = gemini3d.read_config(p.eq_dir);
 
 end
