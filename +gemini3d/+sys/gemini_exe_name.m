@@ -7,4 +7,7 @@ if ispc && ~endsWith(exe, ".exe")
   exe = exe + ".exe";
 end
 
+% use expanduser here to avoid bugs across platforms
+exe = gemini3d.fileio.expanduser(exe);
+
 end

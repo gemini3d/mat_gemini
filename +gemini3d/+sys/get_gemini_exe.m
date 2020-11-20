@@ -8,6 +8,7 @@ exe = gemini3d.sys.gemini_exe_name(exe);
 if ~isfile(exe)
   gemini3d.sys.build_gemini3d(fullfile(fileparts(exe), ".."), exe);
 end
+assert(isfile(exe), 'failed to build ' + exe)
 %% sanity check gemini.bin executable
 prepend = gemini3d.sys.modify_path();
 [ret, msg] = system(prepend + " " + exe);
