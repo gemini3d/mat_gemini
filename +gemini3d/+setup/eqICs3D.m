@@ -53,7 +53,7 @@ ns=zeros(lx1,lx2,lx3,7);
 for ix3=1:lx3
   for ix2=1:lx2
     Hf = kb * Tn(:,ix2,ix3) / amu /16 ./ g(:,ix2,ix3);
-    z0f=325e3;
+    z0f = 325e3;
     He = 2 * kb * Tn(:,ix2,ix3) / amu / 30 ./ g(:,ix2,ix3);
     z0e = 120e3;
     ne = gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf) +  gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
@@ -86,7 +86,6 @@ for ix3=1:lx3
       end
       ne(inds) = nesort;
     end
-
 
     %% O+
     ns(:,ix2,ix3,1)= rho .* ne;
@@ -125,15 +124,13 @@ for ix3=1:lx3
       ns(inds0,ix2,ix3,1)=n1sort;
     end
 
-
-    %N+
+    %% N+
     ns(:,ix2,ix3,5)=1e-4*ns(:,ix2,ix3,1);
 
     inds2=inds;
     inds1=setdiff(1:lx1,inds2);
 
-
-    %MOLECULAR DENSITIES
+    %% MOLECULAR DENSITIES
     nmolc=zeros(lx1,1);
     nmolc(inds1)=(1- rho(inds1)).*ne(inds1);
     if ~isempty(inds2)
