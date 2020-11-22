@@ -13,8 +13,6 @@ function setup_env(tc)
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
 tc.TestData.ref_dir = fullfile(cwd, "data");
-% setup so GEMINI_ROOT is set
-run(fullfile(cwd, "../../setup.m"))
 
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;

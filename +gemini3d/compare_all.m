@@ -70,13 +70,8 @@ params = gemini3d.read_config(outdir);
 
 lxs = gemini3d.simsize(outdir);
 lxs_ref = gemini3d.simsize(refdir);
-
-if isempty(lxs)
-  error("compare_all:file_not_found", "%s does not contain Gemini3D simulation data", outdir)
-end
-if isempty(lxs_ref)
-  error("compare_all:file_not_found", "%s does not contain Gemini3D simulation data", refdir)
-end
+assert(~isempty(lxs), outdir + " does not contain Gemini3D simulation data")
+assert(~isempty(lxs_ref), refdir + " does not contain Gemini3D simulation data")
 
 if any(lxs ~= lxs_ref)
   error('compare_all:value_error', ['ref dims ', int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
