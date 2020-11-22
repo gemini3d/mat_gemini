@@ -90,6 +90,8 @@ ok = 0;
 
 for i = 1:Nt
   out = gemini3d.loadframe(outdir, "time", params.times(i));
+  assert(~isempty(out), outdir + " does not contain output data")
+
   ref = gemini3d.loadframe(refdir, "time", params.times(i));
 
   st = datestr(params.times(i));

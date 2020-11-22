@@ -20,9 +20,15 @@ arguments
   vars (1,:) string = string.empty
 end
 
+dat = struct.empty;
+
 if isdatetime(cfg)
   filename = gemini3d.get_frame_filename(filename, cfg);
   cfg = struct.empty;
+end
+
+if isempty(filename)
+  return
 end
 
 if isempty(cfg)
