@@ -92,12 +92,14 @@ delete(fin);
 %% binary output
 % using stdout becomes a problem due to 100's of MBs of output for non-trival simulation grids.
 % keep this as a binary file.
-fid=fopen(fout,'r');
-msis_dat=fread(fid,lz*11,'real*4=>real*8');
-msis_dat=reshape(msis_dat,[11 lz]);
-msis_dat=msis_dat';
+fid = fopen(fout, 'r');
+msis_dat = fread(fid,lz*11, 'float32=>float32');
 fclose(fid);
 delete(fout);
+
+msis_dat=reshape(msis_dat,[11 lz]);
+msis_dat=msis_dat';
+
 %% stdout
 % msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
 %% ORGANIZE

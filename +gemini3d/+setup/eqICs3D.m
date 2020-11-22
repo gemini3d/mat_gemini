@@ -49,7 +49,7 @@ kb=1.38e-23;
 amu=1.67e-27;
 
 
-ns=zeros(lx1,lx2,lx3,7);
+ns = zeros([lx1, lx2, lx3, 7], 'single');
 for ix3=1:lx3
   for ix2=1:lx2
     Hf = kb * Tn(:,ix2,ix3) / amu /16 ./ g(:,ix2,ix3);
@@ -182,7 +182,7 @@ end
 ns(:,:,:,1:6)=max(ns(:,:,:,1:6),mindens);
 ns(:,:,:,7)=sum(ns(:,:,:,1:6),4);
 
-vsx1=zeros(lx1,lx2,lx3,7);
+vsx1=zeros([lx1,lx2,lx3,7], 'single');
 Ts=repmat(Tn,[1,1,1,7]);
 
 if closeddip
