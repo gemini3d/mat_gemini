@@ -68,7 +68,7 @@ for it=1:length(cfg.times)
 
     %ADD A MAP OF COASTLINES
     load("coastlines", "coastlat", "coastlon")
-    [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
+    [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon,year);
     mlatcoast=90-thetacoast*180/pi;
     mloncoast=phicoast*180/pi;
 
