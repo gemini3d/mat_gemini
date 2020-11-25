@@ -1,4 +1,4 @@
-function [z,x,y] = geog2UEN(alt,glon,glat,thetactr,phictr)
+function [z,x,y] = geog2UEN(alt,glon,glat,thetactr,phictr,year)
 arguments
   alt {mustBeNumeric}
   glon {mustBeNumeric}
@@ -16,7 +16,7 @@ Re=6370e3;
 z=alt;
 
 %Convert to geomganetic coordinates
-[theta,phi] = gemini3d.geog2geomag(glat,glon);
+[theta,phi] = gemini3d.geog2geomag(glat,glon,year);
 
 
 %Convert to northward distance in meters
