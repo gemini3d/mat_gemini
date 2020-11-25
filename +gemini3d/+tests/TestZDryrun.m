@@ -30,7 +30,7 @@ tc.verifyTrue(gemini3d.sys.check_mpiexec("mpiexec", gemini_exe))
 end
 
 
-function test_dry_run(tc)
+function test_dryrun(tc)
 gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, 'dryrun', true)
 end
 end

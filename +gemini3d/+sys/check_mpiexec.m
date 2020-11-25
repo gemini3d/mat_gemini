@@ -9,10 +9,14 @@ ok = ret == 0;
 if ~ok
   return
 end
+
+if ~ispc
+  return
+end
+
 % get gemini.bin compiler ID
 [~, vendor] = system(exe + " -compiler");
-
-if ispc && contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
+if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
   ok = false;
   warning("Not using MPIexec since MinGW is not compatible with Intel MPI")
 end
