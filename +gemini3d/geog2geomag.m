@@ -1,4 +1,11 @@
 function [thetat,phit] = geog2geomag(lat,lon,year)
+
+ if ~exist('year','var')
+     % If year is not specified, set it 1985 by default
+      year = 1985;
+ end
+ 
+ 
 arguments
   lat {mustBeNumeric}
   lon {mustBeNumeric}
