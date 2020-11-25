@@ -1,8 +1,15 @@
-function xgf = makegrid_cart_3D(p)
+function xgf = makegrid_cart_3D(p,year)
 %% make 3D grid and save to disk
+
+ if ~exist('year','var')
+     % If year is not specified, set it 1985 by default
+      year = 1985;
+ end
+ 
 arguments
   p (1,1) struct
 end
+
 %% create altitude grid
 %p.alt_min = 80e3;
 %p.alt_max = 1000e3;
@@ -63,7 +70,7 @@ gz=repmat(-1*g,[1,lx2,lx3]);
 %DISTANCE EW AND NS (FROM ENU (or UEN in our case - cyclic permuted) COORD. SYSTEM) NEED TO BE CONVERTED TO DIPOLE SPHERICAL AND THEN
 %GLAT/GLONG - BASICALLY HERE WE ARE MAPPING THE CARTESIAN GRID ONTO THE
 %SURFACE OF A SPHERE THEN CONVERTING TO GEOGRAPHIC.
-[thetactr,phictr] = gemini3d.geog2geomag(p.glat, p.glon);    %get the magnetic coordinates of the grid center, based on user input
+[thetactr,phictr] = gemini3d.geog2geomag(p.glat, p.glon, year);    %get the magnetic coordinates of the grid center, based on user input
 
 %% Center of earth distance
 r=Re+z;
@@ -84,7 +91,7 @@ phi=reshape(phi,[1,lx2,1]);
 phi=repmat(phi,[lx1,1,lx3]);
 
 %% COMPUTE THE GEOGRAPHIC COORDINATES OF EACH GRID POINT
-[glatgrid,glongrid] = gemini3d.geomag2geog(theta,phi);
+[glatgrid,glongrid] = gemini3d.geomag2geog(theta,phi,year);
 
 %% COMPUTE ECEF CARTESIAN IN CASE THEY ARE NEEDED
 xECEF=r.*sin(theta).*cos(phi);
