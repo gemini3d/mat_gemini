@@ -2,6 +2,7 @@ function [lat,lon] = geomag2geog(thetat,phit,year)
 arguments
   thetat {mustBeNumeric}
   phit {mustBeNumeric}
+  year {mustBeNumeric}
 end
 
 % Schmidt semi-normalised spherical harmonic coefficients are from http://wdc.kugi.kyoto-u.ac.jp/igrf/coef/igrf13coeffs.html
