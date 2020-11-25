@@ -1,4 +1,4 @@
-function [thetat,phit] = geog2geomag(lat,lon)
+function [thetat,phit] = geog2geomag(lat,lon,year)
 arguments
   lat {mustBeNumeric}
   lon {mustBeNumeric}
