@@ -1,4 +1,4 @@
-function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
+function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag,year)
 
 %NOTE THAT INPUTS DTHETA AND DPHI ARE INTENDED TO REPRESENT THE FULL THETA
 %AND PHI EXTENTS OF
@@ -13,11 +13,13 @@ function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,gl
 %   properly.
 %(5) Terrestrial mag. moment and mass are hard-coded in.
 %(6) We assume target latitude is northern hemisphere
+%(7)
 %
 %OTHER NOTES:
 % - Fortran code will interpret this grid as including ghost cells, so
 % if you want a dimension to be size "n" adjust requested grid size so that
 % it is "n+4"
+
 arguments
     dtheta {mustBeNumeric}
     dphi {mustBeNumeric}
@@ -28,6 +30,7 @@ arguments
     glat {mustBeNumeric}
     glon {mustBeNumeric}
     gridflag {mustBeInteger}
+    year (1,1) {mustBeNumeric}
 end
 
 %% PAD GRID WITH GHOST CELLS
@@ -42,7 +45,7 @@ Re=6370e3;
 
 
 %TD SPHERICAL LOCATION OF REQUESTED CENTER POINT
-[thetatd,phid]=gemini3d.geog2geomag(glat,glon);
+[thetatd,phid]=gemini3d.geog2geomag(glat,glon,year);
 
 
 %SETS THE EDGES OF THE GRID
@@ -368,7 +371,7 @@ xg.Bmag=Bmag;
 
 %xg.glat=(pi/2-theta)*180/pi; xg.glon=phi*180/pi*ones(lx(1),lx(2));
 for iphi=1:lphi
-  [glats,glons]=gemini3d.geomag2geog(xg.theta(:,:,iphi),xg.phi(1,1,iphi)*ones(lq,lp));
+  [glats,glons]=gemini3d.geomag2geog(xg.theta(:,:,iphi),xg.phi(1,1,iphi)*ones(lq,lp),year);
   % only meant to work for one latitude at at time
   xg.glat(:,:,iphi)=glats;
   xg.glon(:,:,iphi)=glons;

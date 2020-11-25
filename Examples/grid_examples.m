@@ -55,7 +55,7 @@ glon=360-76.9;     %Jicamarca
 gridflag=1;
 flagsource=0;
 iscurv=true;
-
+year = 2020; % Adjust magnetic coordinates in accordance to the year required
 
 %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
 neuinfo.sourcelat=[];
@@ -84,28 +84,26 @@ neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
 %% FOR USERS INFO CONVERT SOURCE LOCATION TO GEOMAG
-[sourcetheta,sourcephi]=gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
-sourcemlat=90-sourcetheta*180/pi;
-sourcemlon=sourcephi*180/pi;
-
+%[sourcetheta,sourcephi]=gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong,year);
+% sourcemlat=90-sourcetheta*180/pi;
+% sourcemlon=sourcephi*180/pi;
 
 %% RUN THE GRID GENERATION CODE
-if ~exist('xg', 'var')
-  if iscurv
-    xg = gemini3d.setup.gridgen.makegrid_tilteddipole_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
+
+if iscurv
+  xg = gemini3d.setup.gridgen.makegrid_tilteddipole_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag,year);
 %    xg=makegrid_tilteddipole_nonuniform_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_oneside_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
-  else
-    p.glat = glat;
-    p.glon = glon;
-    xg = makegrid_cart_3D(p);
-  end
+else
+  p.glat = glat;
+  p.glon = glon;
+  xg = makegrid_cart_3D(p);
 end
 
 
 %% PLOT THE GRID AND NEUTRAL INPUT EXTENT
 %ha=plotgrid(xg,flagsource,sourcelat,sourcelong,neugridtype,zmin,zmax,rhomax);
-ha = gemini3d.setup.plot_mapgrid(xg,flagsource,neuinfo);
+gemini3d.setup.plot_mapgrid(xg,flagsource,neuinfo);
 end % function
 
 %% ADDITIONAL EXAMPLES OF GRIDS AND SOURCE LOCATIONS...

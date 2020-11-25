@@ -2,23 +2,23 @@ function TECplot_map(direc)
 arguments
   direc (1,1) string
 end
-gemini3d.fileio.makedir(direc + "/TECplots");    %store output plots with the simulation data
-gemini3d.fileio.makedir(direc + "/TECplots_eps");    %store output plots with the simulation data
+
+gemini3d.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
+gemini3d.fileio.makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED TEC DATA
-load(direc + "/vTEC.mat", "mlong", "mlat", "dvTEC");
-mlon=mlong;
+dat = load(fullfile(direc, "vTEC.mat"), "mlong", "mlat", "dvTEC");
 
+mlon = dat.mlong;
+mlat = dat.mlat;
 
 %SIMULATION META-DATA
 cfg = gemini3d.read_config(direc);
 
-
 %TABULATE THE SOURCE LOCATION
-thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
-phidist = deg2rad(cfg.sourcemlon);
-
+% thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+% phidist = deg2rad(cfg.sourcemlon);
 
 figure(1);
 %set(gcf,'PaperPosition',[0 0 4 8]);
@@ -39,7 +39,7 @@ for it=1:length(cfg.times)
     mlonlimplot=double([min(mlon)-0.5,max(mlon)+0.5]);
     axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
     % param=dvTEC(:,:,it);
-    param= dvTEC(:,:,it) - dvTEC(:,:,5);   %flat-field dvTEC just in case
+    param = dat.dvTEC(:,:,it) - dat.dvTEC(:,:,5);   %flat-field dvTEC just in case
     %imagesc(mlon,mlat,param);
     mlatlim=double([min(mlat),max(mlat)]);
     mlonlim=double([min(mlon),max(mlon)]);
@@ -68,7 +68,7 @@ for it=1:length(cfg.times)
 
     %ADD A MAP OF COASTLINES
     load("coastlines", "coastlat", "coastlon")
-    [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
+    [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon, year(cfg.times(1)));
     mlatcoast=90-thetacoast*180/pi;
     mloncoast=phicoast*180/pi;
 

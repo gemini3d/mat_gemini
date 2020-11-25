@@ -1,11 +1,12 @@
-function [thetat,phit] = geog2geomag(lat,lon)
+function [thetat, phit] = geog2geomag(lat, lon, year)
+
 arguments
   lat {mustBeNumeric}
   lon {mustBeNumeric}
+  year (1,1) {mustBeNumeric} = 1985
 end
 
-thetan = deg2rad(11);
-phin = deg2rad(289);
+[thetan, phin] = schmidt_coeff(year);
 
 %enforce [0,360] longitude
 loncorrected = mod(lon, 360);

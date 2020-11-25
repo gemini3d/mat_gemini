@@ -1,8 +1,8 @@
 import gemini3d.fileio.makedir
 
 %SIMULATIONS LOCAITONS
-simname='tohoku20113D_lowres_test10/'
-basedir='~/simulations/'
+simname='tohoku20113D_lowres_test10/';
+basedir='~/simulations/';
 direc=[basedir,simname];
 makedir([direc, '/Brplots'])
 makedir([direc, '/Brplots_eps'])
@@ -34,10 +34,10 @@ r=reshape(r(:),[ltheta,lphi]);
 theta=reshape(theta(:),[ltheta,lphi]);
 phi=reshape(phi(:),[ltheta,lphi]);
 mlat=90-theta*180/pi;
-[tmp,ilatsort]=sort(mlat(:,1));    %mlat runs against theta...
+[~,ilatsort]=sort(mlat(:,1));    %mlat runs against theta...
 mlat=mlat(ilatsort,1);
 mlon=phi*180/pi;
-[tmp,ilonsort]=sort(mlon(1,:));
+[~,ilonsort]=sort(mlon(1,:));
 mlon=mlon(1,ilonsort);
 
 
@@ -205,7 +205,7 @@ for it=1:lt-1
     %ADD A MAP OF COASTLINES
 %    if (license('test','Map_Toolbox'))
         load coastlines;
-        [thetacoast,phicoast]= gemini3d.geog2geomag(coastlat,coastlon);
+        [thetacoast,phicoast]= gemini3d.geog2geomag(coastlat,coastlon, year(cfg.times(1)));
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 

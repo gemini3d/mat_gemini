@@ -1,10 +1,11 @@
-function [alt,glon,glat] = UEN2geog(z,x,y,thetactr,phictr)
+function [alt,glon,glat] = UEN2geog(z,x,y,thetactr,phictr,year)
 arguments
   z {mustBeNumeric}
   x {mustBeNumeric}
   y {mustBeNumeric}
   thetactr {mustBeNumeric}
   phictr {mustBeNumeric}
+  year {mustBeNumeric}
 end
 
 % converts magnetic up, north, east coordinates into geographic
@@ -43,6 +44,6 @@ phi=phictr+gamma1;
 
 
 %Now convert the magnetic to geographic using our simple transformation
-[glat,glon] = gemini3d.geomag2geog(theta,phi);
+[glat,glon] = gemini3d.geomag2geog(theta,phi,year);
 
 end
