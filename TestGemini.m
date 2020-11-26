@@ -17,9 +17,6 @@ if getenv("CI") == "true"
   mkdir('test-results');
   runner.addPlugin(XMLPlugin.producingJUnitFormat('test-results/results.xml'));
   runner.addPlugin(CodeCoveragePlugin.forPackage(name, 'Producing', CoberturaFormat('code-coverage/coverage.xml')));
-else
-  % long-running project tests on CI
-  suite = suite.selectIf(HasName(~ContainsSubstring('Project')));
 end
 
 results = runner.run(suite);

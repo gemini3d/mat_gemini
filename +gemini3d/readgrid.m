@@ -11,6 +11,19 @@ end
 
 xg = struct.empty;
 ok = false;
+
+%% ensure HDF5/NetCDF interface is loaded
+try
+  hdf5nc.h5variables(string.empty);
+catch e
+  if e.identifier == "MATLAB:undefinedVarOrClass"
+    cwd = fileparts(mfilename('fullpath'));
+    run(fullfile(cwd, '../setup.m'))
+  else
+    rethrow(e)
+  end
+end
+%% load
 switch suffix
   case '.h5', xg = read_hdf5(apath);
   case '.nc', xg = read_nc4(apath);

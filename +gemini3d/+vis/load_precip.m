@@ -4,8 +4,14 @@ arguments
   time (1,1) datetime = datetime.empty
 end
 
+dat = struct.empty;
+
 if ~isempty(time)
   filename = gemini3d.get_frame_filename(filename, time);
+end
+
+if isempty(filename)
+  return
 end
 
 [~,~,ext] = fileparts(filename);

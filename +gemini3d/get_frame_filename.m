@@ -9,9 +9,6 @@ filename = string.empty;
 stem0 = gemini3d.datelab(time);
 
 direc = gemini3d.fileio.expanduser(direc);
-if ~isfolder(direc)
-  return
-end
 % so that we return a usable path
 
 suffix = [".h5", ".nc", ".dat"];

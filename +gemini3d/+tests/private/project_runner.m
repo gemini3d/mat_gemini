@@ -1,8 +1,8 @@
-function project_runner(name, file_format, outdir, ref_dir)
+function project_runner(tc, name, file_format, ref_dir)
 arguments
+  tc (1,1) matlab.unittest.TestCase
   name (1,1) string
   file_format (1,1) string
-  outdir (1,1) string
   ref_dir (1,1) string
 end
 
@@ -12,7 +12,7 @@ gemini3d.fileio.download_and_extract(name, ref_dir)
 %% setup new test data
 p = gemini3d.read_config(test_dir);
 p.file_format = file_format;
-p.outdir = outdir;
+p.outdir = tc.TestData.outdir;
 
 for k = ["indat_file", "indat_size", "indat_grid"]
   p.(k) = gemini3d.fileio.with_suffix(p.(k), "." + file_format);
@@ -30,6 +30,6 @@ end
 gemini3d.setup.model_setup(p);
 %% check generated files
 
-gemini3d.compare_all(p.outdir, test_dir, "only", "in", "file_format", file_format)
+gemini3d.compare_all(tc, p.outdir, test_dir, "only", "in", "file_format", file_format)
 
 end  % function
