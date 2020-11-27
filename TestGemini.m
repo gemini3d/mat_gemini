@@ -10,7 +10,13 @@ import matlab.unittest.plugins.codecoverage.CoberturaFormat
 name = "gemini3d.tests";
 
 suite = testsuite(name);
+suite = suite.selectIf(HasName(~ContainsSubstring('Compare')));
+% we omit the external parameter only Compare test, as it's for direct user
+% use only
+
 runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Detailed);
+
+
 
 if getenv("CI") == "true"
   mkdir('code-coverage');
