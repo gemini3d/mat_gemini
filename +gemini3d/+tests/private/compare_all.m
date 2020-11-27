@@ -25,8 +25,6 @@ arguments
   opts.file_format = string.empty
 end
 
-import matlab.unittest.TestSuite
-
 tol.rtol = 1e-5;
 tol.rtolN = 1e-5;
 tol.rtolT = 1e-5;
@@ -42,11 +40,11 @@ assert(~gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " 
 
 %% check output dirs
 if isempty(opts.only) || any(opts.only == "out")
-  gemini3d.tests.compare_output(tc, outdir, refdir, tol);
+  compare_output(tc, outdir, refdir, tol);
 end
 %% check input dirs
 if isempty(opts.only) || any(opts.only == "in")
-  gemini3d.tests.compare_input(tc, outdir, refdir, tol, opts.file_format);
+  compare_input(tc, outdir, refdir, tol, opts.file_format);
 end
 
 end % function
