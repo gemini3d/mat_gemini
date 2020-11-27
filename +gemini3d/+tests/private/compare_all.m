@@ -22,7 +22,7 @@ arguments
   outdir (1,1) string
   refdir (1,1) string
   opts.only (1,:) string = string.empty
-  opts.file_format = string.empty
+  opts.file_format string = string.empty
 end
 
 tol.rtol = 1e-5;
@@ -39,11 +39,11 @@ tol.atolV = 50;
 assert(~gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% check output dirs
-if isempty(opts.only) || any(opts.only == "out")
+if isempty(opts.only) || strlength(opts.only) == 0 || any(opts.only == "out")
   compare_output(tc, outdir, refdir, tol);
 end
 %% check input dirs
-if isempty(opts.only) || any(opts.only == "in")
+if isempty(opts.only) || strlength(opts.only) == 0 || any(opts.only == "in")
   compare_input(tc, outdir, refdir, tol, opts.file_format);
 end
 

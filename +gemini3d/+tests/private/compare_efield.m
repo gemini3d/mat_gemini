@@ -15,8 +15,8 @@ for i = 1:size(times)
   ref = gemini3d.vis.load_Efield(ref_E0_dir, times(i));
   new = gemini3d.vis.load_Efield(E0_dir, times(i));
 
-  tc.assumeNotEmpty(ref, "reference " + ref_E0_dir + " does not contain Efield data")
-  tc.assumeNotEmpty(new, "data " + E0_dir + " does not contain Efield data")
+  tc.assertNotEmpty(ref, "reference " + ref_E0_dir + " does not contain Efield data")
+  tc.assertNotEmpty(new, "data " + E0_dir + " does not contain Efield data")
 
   for k = ["Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
     b = ref.(k);

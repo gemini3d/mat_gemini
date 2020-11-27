@@ -4,10 +4,10 @@ arguments
   outdir (1,1) string
   refdir (1,1) string
   tol (1,1) struct
-  file_format (1,1) string
+  file_format string = string.empty
 end
 
-tc.assumeFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
+tc.assertFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% check simulation grid
 compare_grid(tc, outdir, refdir, tol)

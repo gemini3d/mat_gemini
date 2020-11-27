@@ -52,7 +52,7 @@ If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/c
 ## Usage
 
 Generally, one runs a simulation, then plots the outputs of that simulation.
-Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom funcdtions.
+Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom functions.
 
 ### Run Simulation
 
@@ -97,6 +97,33 @@ then they can be specified in the config.nml file under setup/setup_functions.
 For examples see
 [GDI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/GDI_periodic_lowres) and
 [KHI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/KHI_periodic_lowres).
+
+### compare data directories
+
+It can be useful to compare a simulation output and/or input with a "known good" reference case.
+We provide this facility within the Matlab unittest framework for robustness and clarity.
+
+```matlab
+gemini3d.compare(new_dir, reference_dir)
+```
+
+That compares simulation inputs and outputs.
+
+---
+
+To only compare simulation input:
+
+```matlab
+gemini3d.compare(new_dir, reference_dir, 'in')
+```
+
+---
+
+To only compare simulation output:
+
+```matlab
+gemini3d.compare(new_dir, reference_dir, 'out')
+```
 
 ### Regenerate self-test reference datasets
 

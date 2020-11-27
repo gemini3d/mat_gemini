@@ -7,12 +7,12 @@ arguments
 end
 
 [ref, ok] = gemini3d.readgrid(refdir);
-tc.assumeNotEmpty(ref, refdir + " does not have a Gemini3D grid")
-tc.assumeTrue(ok, "reference grid " + refdir + " has bad values")
+tc.assertNotEmpty(ref, refdir + " does not have a Gemini3D grid")
+tc.assertTrue(ok, "reference grid " + refdir + " has bad values")
 
 [new, ok] = gemini3d.readgrid(outdir);
-tc.assumeNotEmpty(new, outdir + " does not have a Gemini3D grid")
-tc.assumeTrue(ok, "grid " + outdir + " has bad values")
+tc.assertNotEmpty(new, outdir + " does not have a Gemini3D grid")
+tc.assertTrue(ok, "grid " + outdir + " has bad values")
 
 for k = hdf5nc.h5variables(ref.filename)
   if ~isnumeric(ref.(k))

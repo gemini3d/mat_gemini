@@ -13,8 +13,8 @@ for i = 1:size(times)
   ref = gemini3d.vis.load_precip(ref_prec_dir, times(i));
   new = gemini3d.vis.load_precip(prec_dir, times(i));
 
-  tc.assumeNotEmpty(ref, "reference " + ref_prec_dir + " does not contain precipitation data")
-  tc.assumeNotEmpty(new, "data " + prec_dir + " does not contain precipitation data")
+  tc.assertNotEmpty(ref, "reference " + ref_prec_dir + " does not contain precipitation data")
+  tc.assertNotEmpty(new, "data " + prec_dir + " does not contain precipitation data")
 
   for k = ["E0", "Q"]
     b = ref.(k);

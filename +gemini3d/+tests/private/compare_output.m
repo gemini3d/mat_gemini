@@ -6,15 +6,15 @@ arguments
   tol (1,1) struct
 end
 
-tc.assumeFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
+tc.assertFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% READ IN THE SIMULATION INFORMATION
 params = gemini3d.read_config(outdir);
 
 lxs = gemini3d.simsize(outdir);
 lxs_ref = gemini3d.simsize(refdir);
-tc.assumeNotEmpty(lxs, outdir + " does not contain Gemini3D simulation data")
-tc.assumeNotEmpty(lxs_ref, refdir + " does not contain Gemini3D simulation data")
+tc.assertNotEmpty(lxs, outdir + " does not contain Gemini3D simulation data")
+tc.assertNotEmpty(lxs_ref, refdir + " does not contain Gemini3D simulation data")
 
 tc.verifyEqual(lxs, lxs_ref, ['ref dims ', int2str(lxs_ref), ' != this sim dims ', int2str(lxs)])
 
@@ -24,7 +24,7 @@ Nt = length(params.times);
 
 for i = 1:Nt
   out = gemini3d.loadframe(outdir, "time", params.times(i));
-  tc.assumeNotEmpty(out, outdir + " does not contain output data")
+  tc.assertNotEmpty(out, outdir + " does not contain output data")
 
   ref = gemini3d.loadframe(refdir, "time", params.times(i));
 
