@@ -9,6 +9,8 @@ end
 
 xg = gemini3d.readgrid(path);
 
+assert(~isempty(xg), path + " does not contain a readable simulation grid e.g. inputs/simgrid.h5")
+
 fig1 = figure();
 t = tiledlayout(fig1, 1, 3);
 
@@ -41,4 +43,6 @@ sgtitle(fig1, path, 'interpreter', 'none')
 fig2 = gemini3d.vis.plot_altitude_grid(xg);
 
 h = [fig1, fig2];
+
+if nargout == 0, clear('h'), end
 end % function

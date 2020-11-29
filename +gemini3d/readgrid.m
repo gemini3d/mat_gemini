@@ -16,7 +16,7 @@ ok = false;
 try
   hdf5nc.h5variables(string.empty);
 catch e
-  if e.identifier == "MATLAB:undefinedVarOrClass"
+  if any(e.identifier == ["MATLAB:undefinedVarOrClass", "MATLAB:UndefinedFunction"])
     cwd = fileparts(mfilename('fullpath'));
     run(fullfile(cwd, '../setup.m'))
   else
