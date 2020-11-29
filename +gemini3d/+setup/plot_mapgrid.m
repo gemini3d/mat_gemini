@@ -1,4 +1,9 @@
-function ha = plot_mapgrid(xg,flagsource,neuinfo)
+function ha = plot_mapgrid(xg,flagsource,neuinfo,year)
+
+ if ~exist('year','var')
+     % If year is not specified, set it 1985 by default
+      year = 1985;
+ end
 
 arguments
   xg (1,1) struct
@@ -11,7 +16,6 @@ mlon=xg.phi*180/pi;
 mlat=90-xg.theta*180/pi;
 dmlon=max(mlon(:))-min(mlon(:));
 dmlat=max(mlat(:))-min(mlat(:));
-
 
 %% ORGANIZE INPUT STRUCTURE
 if flagsource ~= 0
@@ -29,7 +33,7 @@ if flagsource ~= 0
         rhomax=neuinfo.rhomax;
     end %if
 
-    [sourcetheta,sourcephi]=geog2geomag(sourcelat,sourcelong);
+    [sourcetheta,sourcephi]=geog2geomag(sourcelat,sourcelong,year);
     sourcemlat=90-sourcetheta*180/pi;
     sourcemlon=sourcephi*180/pi;
 
@@ -421,7 +425,7 @@ else
         hold on;
         %ax=axis;
         %load coastlines;
-        [thetacoast,phicoast]=geog2geomag(coastlat,coastlon);
+        [thetacoast,phicoast]=geog2geomag(coastlat,coastlon,year);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 

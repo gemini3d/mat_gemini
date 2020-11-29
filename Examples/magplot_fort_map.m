@@ -205,7 +205,7 @@ for it=1:lt-1
     %ADD A MAP OF COASTLINES
 %    if (license('test','Map_Toolbox'))
         load coastlines;
-        [thetacoast,phicoast]= gemini3d.geog2geomag(coastlat,coastlon);
+        [thetacoast,phicoast]= gemini3d.geog2geomag(coastlat,coastlon,year);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 
