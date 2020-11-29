@@ -23,9 +23,12 @@ for k = hdf5nc.h5variables(ref.filename)
   b = ref.(k);
   a = new.(k);
 
+  reltol = cast(tol.rtol, 'like', a);
+  abstol = cast(tol.atol, 'like', a);
+
   tc.verifySize(a, size(b), k + ": ref shape " + int2str(size(b)) + " != data shape " + int2str(size(a)))
 
-  tc.verifyEqual(a, b, 'RelTol', tol.rtol, 'AbsTol', tol.atol, "mismatch: " + k)
+  tc.verifyEqual(a, b, 'RelTol', reltol, 'AbsTol', abstol, "mismatch: " + k)
 end
 
 disp("OK: simulation input grid " + outdir)
