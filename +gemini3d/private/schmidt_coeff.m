@@ -6,7 +6,7 @@ function [thetan, phin] = schmidt_coeff(year)
 % For year < 1985, use the same coefficients as for 1985
 
 arguments
-  year (1,1) {mustBeReal,mustBeInRange(year, 1920, 2026)}
+  year (1,1) {mustBeReal}
 end
 
 
@@ -35,7 +35,7 @@ elseif 2026 > year && year >= 2018
   thetan=deg2rad(9.4105e+00);
   phin=deg2rad(2.8732e+02);
 else
-  error('geomag2geog:ValueError', "unexpected year " + num2str(year))
+  error('geomag2geog:ValueError', "unexpected year " + num2str(year) + " 1920 <= year < 2026")
 end
 
 end % function
