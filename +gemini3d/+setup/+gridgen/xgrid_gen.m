@@ -22,6 +22,11 @@ end % function
 
 
 function x = uniform_grid(xmin, xmax, lxp)
+arguments
+  xmin (1,1)
+  xmax (1,1)
+  lxp (1,1)
+end
 
 if lxp == 1  % degenerate dimension
   % add 2 ghost cells on each side
@@ -39,9 +44,9 @@ end % function
 
 
 function x = nonuniform_grid(xparms, xmax)
-
-if length(xparms) ~= 4
-  error('xgrid_gen:value_error', 'xparms must have 4 parameters')
+arguments
+  xparms (1,4)
+  xmax (1,1)
 end
 
 degdist=xparms(1);    % distance from boundary at which we start to degrade resolution

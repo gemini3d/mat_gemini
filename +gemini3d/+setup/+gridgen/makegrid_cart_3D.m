@@ -1,8 +1,12 @@
 function xgf = makegrid_cart_3D(p)
-%% make 3D grid and save to disk
+%% make 3D grid
+
 arguments
   p (1,1) struct
 end
+
+xg.time = p.times(1);
+
 %% create altitude grid
 %p.alt_min = 80e3;
 %p.alt_max = 1000e3;
@@ -10,7 +14,7 @@ end
 if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
   z = gemini3d.setup.gridgen.altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
-  fprintf('makegrid_cart_3D: using altitude (z) grid from %s\n', p.eq_dir)
+  disp("makegrid_cart_3D: using altitude (z) grid from " + p.eq_dir)
   xeq = gemini3d.readgrid(p.eq_dir);
   z = xeq.x1;
   clear('xeq')
@@ -58,7 +62,7 @@ G=6.67428e-11;
 Me=5.9722e24;
 r=z+Re;
 g=G*Me./r.^2;
-gz=repmat(-1*g,[1,lx2,lx3]);
+gz=repmat(-g, [1,lx2,lx3]);
 
 %DISTANCE EW AND NS (FROM ENU (or UEN in our case - cyclic permuted) COORD. SYSTEM) NEED TO BE CONVERTED TO DIPOLE SPHERICAL AND THEN
 %GLAT/GLONG - BASICALLY HERE WE ARE MAPPING THE CARTESIAN GRID ONTO THE
@@ -109,9 +113,13 @@ e2=ephi;    %e2 is same as ephi
 e3=-1*etheta;    %etheta is positive south, e3 is pos. north
 
 % STORE RESULTS IN GRID DATA STRUCTURE
-xg.x1=z; xg.x2=x; xg.x3=y;
-xg.x1i=zi; xg.x2i=xi; xg.x3i=yi;
-lx=[numel(xg.x1),numel(xg.x2),numel(xg.x3)];
+xg.x1=z;
+xg.x2=x;
+xg.x3=y;
+xg.x1i=zi;
+xg.x2i=xi;
+xg.x3i=yi;
+lx=[numel(xg.x1), numel(xg.x2), numel(xg.x3)];
 xg.lx=lx;
 
 dx1=xg.x1(2)-xg.x1(1);
@@ -132,42 +140,60 @@ xg.dx3f=[xg.x3(2:lx(3))-xg.x3(1:lx(3)-1), dxn];         %FWD DIFF
 xg.dx3b=[dx1, xg.x3(2:lx(3))-xg.x3(1:lx(3)-1)];         %BACK DIFF
 xg.dx3h=xg.x3i(2:lx(3)+1)-xg.x3i(1:lx(3));              %MIDPOINT DIFFS
 
-xg.h1=ones(xg.lx); xg.h2=ones(xg.lx); xg.h3=ones(xg.lx);
-xg.h1x1i=ones(lx(1)+1,lx(2),lx(3)); xg.h2x1i=ones(lx(1)+1,lx(2),lx(3)); xg.h3x1i=ones(lx(1)+1,lx(2),lx(3));
-xg.h1x2i=ones(lx(1),lx(2)+1,lx(3)); xg.h2x2i=ones(lx(1),lx(2)+1,lx(3)); xg.h3x2i=ones(lx(1),lx(2)+1,lx(3));
-xg.h1x3i=ones(lx(1),lx(2),lx(3)+1); xg.h2x3i=ones(lx(1),lx(2),lx(3)+1); xg.h3x3i=ones(lx(1),lx(2),lx(3)+1);
+xg.h1=ones(xg.lx);
+xg.h2=ones(xg.lx);
+xg.h3=ones(xg.lx);
+xg.h1x1i=ones(lx(1)+1,lx(2),lx(3));
+xg.h2x1i=ones(lx(1)+1,lx(2),lx(3));
+xg.h3x1i=ones(lx(1)+1,lx(2),lx(3));
+xg.h1x2i=ones(lx(1),lx(2)+1,lx(3));
+xg.h2x2i=ones(lx(1),lx(2)+1,lx(3));
+xg.h3x2i=ones(lx(1),lx(2)+1,lx(3));
+xg.h1x3i=ones(lx(1),lx(2),lx(3)+1);
+xg.h2x3i=ones(lx(1),lx(2),lx(3)+1);
+xg.h3x3i=ones(lx(1),lx(2),lx(3)+1);
 
-% Cartesian, ECEF representation of curvilinar coordinates
-xg.e1=e1; xg.e2=e2; xg.e3=e3;
+%% Cartesian, ECEF representation of curvilinar coordinates
+xg.e1=e1;
+xg.e2=e2;
+xg.e3=e3;
 
-% ECEF spherical coordinates
-xg.r=r; xg.theta=theta; xg.phi=phi;
-xg.rx1i=[]; xg.thetax1i=[];
-xg.rx2i=[]; xg.thetax2i=[];
+%% ECEF spherical coordinates
+xg.r=r;
+xg.theta=theta;
+xg.phi=phi;
+xg.rx1i=[];
+xg.thetax1i=[];
+xg.rx2i=[];
+xg.thetax2i=[];
 
-% These are cartesian representations of the ECEF, spherical unit vectors
-xg.er=er; xg.etheta=etheta; xg.ephi=ephi;
+%% These are cartesian representations of the ECEF, spherical unit vectors
+xg.er=er;
+xg.etheta=etheta;
+xg.ephi=ephi;
 
 xg.I = p.Bincl * ones([lx2,lx3]);
 
-%Cartesian ECEF coordinates
-xg.x=xECEF; xg.z=zECEF; xg.y=yECEF;
-xg.alt=xg.r-Re;   %since we need a 3D array use xg.r here...
+%% Cartesian ECEF coordinates
+xg.x = xECEF;
+xg.z = zECEF;
+xg.y = yECEF;
+xg.alt = xg.r - Re;   %since we need a 3D array use xg.r here...
 
-xg.gx1=gz; xg.gx2=zeros(xg.lx); xg.gx3=zeros(xg.lx);
+xg.gx1=gz;
+xg.gx2=zeros(xg.lx);
+xg.gx3=zeros(xg.lx);
 
 xg.Bmag=-50000e-9*ones(xg.lx);     %minus for northern hemisphere...
 
-%xg.glat = p.glat*ones(xg.lx);
-xg.glon = p.glon*ones(xg.lx);    %use same lat./lon. for each grid point
-xg.glat = glatgrid; xg.glon=glongrid;    %use same lat./lon. for each grid point
+xg.glat = glatgrid;
+xg.glon = glongrid;
 
 %xg.xp=x; xg.zp=z;
 
 xg.inull=[];
 %xg.nullpts=[];
 xg.nullpts=zeros(xg.lx);
-
 
 %% TRIM DATA STRUCTRE TO BE THE SIZE FORTRAN EXPECTS
 xgf=xg;
@@ -241,8 +267,8 @@ xgf.r=xgf.r(inds1,inds2,inds3);
 xgf.theta=xgf.theta(inds1,inds2,inds3);
 xgf.phi=xgf.phi(inds1,inds2,inds3);
 
-xgf.x=xgf.x(inds1,inds2,inds3);
-xgf.y=xgf.y(inds1,inds2,inds3);
-xgf.z=xgf.z(inds1,inds2,inds3);
+for k = ["x", "y", "z"]
+  xgf.(k) = xgf.(k)(inds1,inds2,inds3);
+end
 
 end

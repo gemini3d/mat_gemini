@@ -97,7 +97,7 @@ end
 function test_dateinc(tc)
 [ymd3, utsec] = gemini3d.dateinc(1.5, [2020, 1, 1], 86399);
 tc.verifyEqual(ymd3, [2020,1,2])
-tc.verifyEqual(utsec, 0.5, 'Abstol', 1e-6)
+tc.verifyEqual(utsec, 0.5, 'AbsTol', 1e-6)
 end
 
 function test_version(tc)

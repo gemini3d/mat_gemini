@@ -14,7 +14,8 @@ tc.assertTrue(ok, "reference grid " + refdir + " has bad values")
 tc.assertNotEmpty(new, outdir + " does not have a Gemini3D grid")
 tc.assertTrue(ok, "grid " + outdir + " has bad values")
 
-for k = hdf5nc.h5variables(ref.filename)
+
+for k = string(fieldnames(ref)).'
   if ~isnumeric(ref.(k))
     % metadata
     continue
@@ -23,9 +24,13 @@ for k = hdf5nc.h5variables(ref.filename)
   b = ref.(k);
   a = new.(k);
 
-  reltol = cast(tol.rtol, 'like', a);
-  abstol = cast(tol.atol, 'like', a);
-
+  if isfloat(a)
+    reltol = cast(tol.rtol, 'like', a);
+    abstol = cast(tol.atol, 'like', a);
+  else
+    reltol = tol.rtol;
+    abstol = tol.atol;
+  end
   tc.verifySize(a, size(b), k + ": ref shape " + int2str(size(b)) + " != data shape " + int2str(size(a)))
 
   tc.verifyEqual(a, b, 'RelTol', reltol, 'AbsTol', abstol, "mismatch: " + k)

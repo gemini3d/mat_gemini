@@ -14,7 +14,7 @@ thetag2p=acos(cos(thetat).*cos(thetan)-sin(thetat).*sin(thetan).*cos(phit));
 
 beta=acos( (cos(thetat)-cos(thetag2p).*cos(thetan))./(sin(thetag2p).*sin(thetan)) );
 
-phig2 = zeros(size(phit));
+phig2 = zeros(size(phit), 'like', phit);
 
 i = phit > pi;
 phig2(i)=phin-beta(i);

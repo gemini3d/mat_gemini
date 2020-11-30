@@ -1,8 +1,8 @@
 import gemini3d.fileio.makedir
 
 %SIMULATIONS LOCAITONS
-simname='tohoku20113D_lowres_test10/'
-basedir='~/simulations/'
+simname='tohoku20113D_lowres_test10/';
+basedir='~/simulations/';
 direc=[basedir,simname];
 makedir([direc, '/Brplots'])
 makedir([direc, '/Brplots_eps'])
@@ -34,10 +34,10 @@ r=reshape(r(:),[ltheta,lphi]);
 theta=reshape(theta(:),[ltheta,lphi]);
 phi=reshape(phi(:),[ltheta,lphi]);
 mlat=90-theta*180/pi;
-[tmp,ilatsort]=sort(mlat(:,1));    %mlat runs against theta...
+[~,ilatsort]=sort(mlat(:,1));    %mlat runs against theta...
 mlat=mlat(ilatsort,1);
 mlon=phi*180/pi;
-[tmp,ilonsort]=sort(mlon(1,:));
+[~,ilonsort]=sort(mlon(1,:));
 mlon=mlon(1,ilonsort);
 
 
