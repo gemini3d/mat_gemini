@@ -1,4 +1,4 @@
-function h = plot_grid(xg, extra)
+function h = plot_grid(xg, extra, save)
 %% plot 3D grid
 %
 % xg: file containing grid or struct of grid
@@ -6,6 +6,7 @@ function h = plot_grid(xg, extra)
 arguments
   xg
   extra (1,:) string = string.empty
+  save string = string.empty
 end
 
 if ~isstruct(xg)
@@ -14,7 +15,7 @@ end
 
 assert(~isempty(xg), "not contain a readable simulation grid")
 
-h = [];
+h = matlab.ui.Figure.empty;
 %% x1, x2, x3
 if isempty(extra) || any(extra == "basic")
   h(end+1) = basic(xg);
@@ -25,25 +26,38 @@ if any(extra == "alt")
 end
 %% ECEF surface
 if any(extra == "ecef")
-  fig3 = figure;
+  fig3 = figure('Name', 'ecef');
   ax = axes('parent', fig3);
   scatter3(xg.x(:), xg.y(:), xg.z(:), 'parent', ax)
-  stitle(fig3, xg, "ECEF")
+
   xlabel(ax, 'x [m]')
   ylabel(ax, 'y [m]')
   zlabel(ax, 'z [m]')
   view(ax, 0, 0)
-  h(end+1) = fig3;
+  h(end+1) = stitle(fig3, xg, "ECEF");
 end
-%%
+%% lat lon map
+if any(extra == "geog")
+  fig = figure('Name', 'geog');
+  ax = geoaxes('parent', fig);
+  geoscatter(xg.glat(:), xg.glon(:), 'parent', ax)
+  h(end+1) = stitle(fig, xg, "glat, glon");
+end
+%% save
+if ~isempty(save)
+  for f = h
+    filename = f.Name + "." + save;
+    exportgraphics(f, filename)
+  end
+end
+
 if nargout == 0, clear('h'), end
 end % function
 
 
-function fig1 = basic(xg)
-fig1 = figure();
-t = tiledlayout(fig1, 1, 3);
-h = fig1;
+function fig = basic(xg)
+fig = figure('Name', 'basic');
+t = tiledlayout(fig, 1, 3);
 %% x1
 lx1 = length(xg.x1);
 ax = nexttile(t);
@@ -68,11 +82,11 @@ ylabel(ax, 'x3 [km]')
 xlabel(ax, 'index (dimensionless)')
 title(ax, {"x3 (northward)", "lx3 = " + int2str(lx3)})
 
-stitle(fig1, xg)
+fig = stitle(fig, xg);
 end
 
 
-function stitle(fig, xg, ttxt)
+function fig = stitle(fig, xg, ttxt)
 arguments
   fig (1,1) matlab.ui.Figure
   xg (1,1) struct
@@ -80,7 +94,8 @@ arguments
 end
 %% suptitle
 if isfield(xg, 'time')
-  ttxt = ttxt + datestr(xg.time) + " ";
+  ttxt = ttxt + " " + datestr(xg.time) + " ";
+  fig.Name = append(fig.Name, int2str(year(xg.time)));
 end
 
 if isfield(xg, 'filename')

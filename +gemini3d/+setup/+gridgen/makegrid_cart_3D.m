@@ -170,9 +170,8 @@ xg.gx3=zeros(xg.lx);
 
 xg.Bmag=-50000e-9*ones(xg.lx);     %minus for northern hemisphere...
 
-%xg.glat = p.glat*ones(xg.lx);
-xg.glon = p.glon*ones(xg.lx);    %use same lat./lon. for each grid point
-xg.glat = glatgrid; xg.glon=glongrid;    %use same lat./lon. for each grid point
+xg.glat = glatgrid;
+xg.glon = glongrid;
 
 %xg.xp=x; xg.zp=z;
 

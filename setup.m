@@ -6,6 +6,7 @@ gemini3d_dirname = "gemini3d";
 
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
+setenv('MATGEMINI', cwd)
 
 %% ensure HDF5 submodule is present
 hdf5nc_dir = fullfile(cwd, "matlab-hdf5");

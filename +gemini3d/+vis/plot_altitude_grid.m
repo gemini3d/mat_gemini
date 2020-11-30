@@ -6,7 +6,7 @@ end
 
 x1_km = xg.x1 / 1e3;
 
-fig = figure;
+fig = figure('Name', 'alt');
 ax = axes('parent', fig);
 plot(x1_km, 'marker', '*', 'parent', ax);
 ylabel(ax, 'x1 [km]')
@@ -16,6 +16,10 @@ if isfield(xg, 'filename')
   file = xg.filename;
 else
   file = "";
+end
+
+if isfield(xg, 'time')
+  fig.Name = append(fig.Name, int2str(year(xg.time)));
 end
 
 title(ax, {file, ...
