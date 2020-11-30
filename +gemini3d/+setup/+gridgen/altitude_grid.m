@@ -12,29 +12,24 @@ function z = altitude_grid(alt_min, alt_max, incl_deg, d)
 
 arguments
   alt_min (1,1) {mustBePositive}
-  alt_max (1,1) {mustBePositive}
+  alt_max (1,1) {mustBePositive, mustBeGreaterThan(alt_max, alt_min)}
   incl_deg (1,1) {mustBeNonnegative}
   d (4,1) {mustBePositive}
 end
 
-assert(alt_max > alt_min, 'grid max must be greater than grid_min')
-
-ialt=1;
 alt(1) = alt_min;
 
-while alt(ialt) < alt_max
-  ialt = ialt + 1;
-  % dalt=10+9.5*tanh((alt(ialt-1)-500)/150);
-  dalt = d(1) + d(2) * tanh((alt(ialt-1) - d(3)) / d(4));
-  alt(ialt) = alt(ialt-1) + dalt;
+while alt(end) < alt_max
+  % dalt=10+9.5*tanh((alt(end)-500)/150);
+  dalt = d(1) + d(2) * tanh((alt(end) - d(3)) / d(4));
+  alt(end+1) = alt(end) + dalt;
 end
 
 assert(length(alt) > 10, 'grid too small')
 
 %% tilt for magnetic inclination
-alt = alt(:);
 z = alt * cscd(incl_deg);
-
+z = z(:);
 %% add two ghost cells each to top and bottom
 dz1 = z(2) - z(1);
 dzn = z(end) - z(end-1);

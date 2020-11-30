@@ -14,7 +14,8 @@ tc.assertTrue(ok, "reference grid " + refdir + " has bad values")
 tc.assertNotEmpty(new, outdir + " does not have a Gemini3D grid")
 tc.assertTrue(ok, "grid " + outdir + " has bad values")
 
-for k = hdf5nc.h5variables(ref.filename)
+
+for k = string(fieldnames(ref)).'
   if ~isnumeric(ref.(k))
     % metadata
     continue
