@@ -11,10 +11,10 @@ function z = altitude_grid(alt_min, alt_max, incl_deg, d)
 %
 
 arguments
-  alt_min (1,1) {mustBePositive}
-  alt_max (1,1) {mustBePositive, mustBeGreaterThan(alt_max, alt_min)}
-  incl_deg (1,1) {mustBeNonnegative}
-  d (4,1) {mustBePositive}
+  alt_min (1,1) single {mustBePositive}
+  alt_max (1,1) single {mustBePositive, mustBeGreaterThan(alt_max, alt_min)}
+  incl_deg (1,1) single {mustBeNonnegative}
+  d (4,1) single {mustBePositive}
 end
 
 alt(1) = alt_min;

@@ -4,9 +4,9 @@ function x = xgrid_gen(xdist,lxp,xparms)
 % xdist: one-way x-distance from origin (meters)
 % lxp: number of x-points
 arguments
-  xdist (1,1) {mustBePositive}
+  xdist (1,1) single {mustBePositive}
   lxp (1,1) {mustBeInteger,mustBePositive}
-  xparms (1,:) double = []
+  xparms (1,:) single = []
 end
 
 xmin = -xdist/2;
@@ -23,8 +23,8 @@ end % function
 
 function x = uniform_grid(xmin, xmax, lxp)
 arguments
-  xmin (1,1)
-  xmax (1,1)
+  xmin (1,1) single
+  xmax (1,1) single
   lxp (1,1)
 end
 
@@ -45,8 +45,8 @@ end % function
 
 function x = nonuniform_grid(xparms, xmax)
 arguments
-  xparms (1,4)
-  xmax (1,1)
+  xparms (1,4) single
+  xmax (1,1) single
 end
 
 degdist=xparms(1);    % distance from boundary at which we start to degrade resolution

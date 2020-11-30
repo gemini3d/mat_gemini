@@ -4,7 +4,7 @@ function y = ygrid_gen(ydist, lyp)
 % lyp: number of y-points
 
 arguments
-  ydist (1,1) {mustBePositive}
+  ydist (1,1) single {mustBePositive}
   lyp (1,1) {mustBeInteger,mustBePositive}
 end
 

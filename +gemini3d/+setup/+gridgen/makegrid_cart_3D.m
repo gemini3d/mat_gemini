@@ -1,5 +1,6 @@
 function xgf = makegrid_cart_3D(p)
 %% make 3D grid
+% we use single precision float32 to save memory and CPU time
 
 arguments
   p (1,1) struct
@@ -37,24 +38,24 @@ y = gemini3d.setup.gridgen.ygrid_gen(p.ydist, p.lyp);
 
 %% COMPUTE CELL WALL LOCATIONS
 lx2 = length(x);
-xi = zeros(1,lx2+1);
+xi = zeros(1, lx2+1, 'single');
 xi(2:lx2) = 1/2*(x(2:lx2) + x(1:lx2-1));
 xi(1) = x(1)-1/2 * (x(2) - x(1));
 xi(lx2+1) = x(lx2)+1/2*(x(lx2)-x(lx2-1));
 
 lx3 = length(y);
-yi = zeros(1,lx3+1);
+yi = zeros(1, lx3+1, 'single');
 yi(2:lx3) = 1/2*(y(2:lx3)+y(1:lx3-1));
 yi(1) = y(1)-1/2*(y(2)-y(1));
 yi(lx3+1) = y(lx3)+1/2*(y(lx3)-y(lx3-1));
 
 lx1 = length(z);
-zi=zeros(lx1+1,1);
+zi=zeros(lx1+1, 1, 'single');
 zi(2:lx1)=1/2*(z(2:lx1)+z(1:lx1-1));
 zi(1)=z(1)-1/2*(z(2)-z(1));
 zi(lx1+1)=z(lx1)+1/2*(z(lx1)-z(lx1-1));
 
-fprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d\n',lx1-4,lx2-4,lx3-4);
+fprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d\n', lx1-4, lx2-4, lx3-4);
 
 %% GRAVITATIONAL FIELD COMPONENTS IN DIPOLE SYSTEM
 Re=6370e3;
@@ -67,7 +68,7 @@ gz=repmat(-g, [1,lx2,lx3]);
 %DISTANCE EW AND NS (FROM ENU (or UEN in our case - cyclic permuted) COORD. SYSTEM) NEED TO BE CONVERTED TO DIPOLE SPHERICAL AND THEN
 %GLAT/GLONG - BASICALLY HERE WE ARE MAPPING THE CARTESIAN GRID ONTO THE
 %SURFACE OF A SPHERE THEN CONVERTING TO GEOGRAPHIC.
-[thetactr,phictr] = gemini3d.geog2geomag(p.glat, p.glon);    %get the magnetic coordinates of the grid center, based on user input
+[thetactr,phictr] = gemini3d.geog2geomag(single(p.glat), single(p.glon));    %get the magnetic coordinates of the grid center, based on user input
 
 %% Center of earth distance
 r=Re+z;
@@ -88,7 +89,7 @@ phi=reshape(phi,[1,lx2,1]);
 phi=repmat(phi,[lx1,1,lx3]);
 
 %% COMPUTE THE GEOGRAPHIC COORDINATES OF EACH GRID POINT
-[glatgrid,glongrid] = gemini3d.geomag2geog(theta,phi);
+[glatgrid,glongrid] = gemini3d.geomag2geog(theta, phi);
 
 %% COMPUTE ECEF CARTESIAN IN CASE THEY ARE NEEDED
 xECEF=r.*sin(theta).*cos(phi);
@@ -140,18 +141,18 @@ xg.dx3f=[xg.x3(2:lx(3))-xg.x3(1:lx(3)-1), dxn];         %FWD DIFF
 xg.dx3b=[dx1, xg.x3(2:lx(3))-xg.x3(1:lx(3)-1)];         %BACK DIFF
 xg.dx3h=xg.x3i(2:lx(3)+1)-xg.x3i(1:lx(3));              %MIDPOINT DIFFS
 
-xg.h1=ones(xg.lx);
-xg.h2=ones(xg.lx);
-xg.h3=ones(xg.lx);
-xg.h1x1i=ones(lx(1)+1,lx(2),lx(3));
-xg.h2x1i=ones(lx(1)+1,lx(2),lx(3));
-xg.h3x1i=ones(lx(1)+1,lx(2),lx(3));
-xg.h1x2i=ones(lx(1),lx(2)+1,lx(3));
-xg.h2x2i=ones(lx(1),lx(2)+1,lx(3));
-xg.h3x2i=ones(lx(1),lx(2)+1,lx(3));
-xg.h1x3i=ones(lx(1),lx(2),lx(3)+1);
-xg.h2x3i=ones(lx(1),lx(2),lx(3)+1);
-xg.h3x3i=ones(lx(1),lx(2),lx(3)+1);
+xg.h1=ones(xg.lx, 'single');
+xg.h2=ones(xg.lx, 'single');
+xg.h3=ones(xg.lx, 'single');
+xg.h1x1i=ones(lx(1)+1,lx(2), lx(3), 'single');
+xg.h2x1i=ones(lx(1)+1,lx(2), lx(3), 'single');
+xg.h3x1i=ones(lx(1)+1,lx(2), lx(3), 'single');
+xg.h1x2i=ones(lx(1),lx(2)+1, lx(3), 'single');
+xg.h2x2i=ones(lx(1),lx(2)+1, lx(3), 'single');
+xg.h3x2i=ones(lx(1),lx(2)+1, lx(3), 'single');
+xg.h1x3i=ones(lx(1),lx(2), lx(3)+1, 'single');
+xg.h2x3i=ones(lx(1),lx(2), lx(3)+1, 'single');
+xg.h3x3i=ones(lx(1),lx(2), lx(3)+1, 'single');
 
 %% Cartesian, ECEF representation of curvilinar coordinates
 xg.e1=e1;
@@ -172,7 +173,7 @@ xg.er=er;
 xg.etheta=etheta;
 xg.ephi=ephi;
 
-xg.I = p.Bincl * ones([lx2,lx3]);
+xg.I = p.Bincl * ones([lx2,lx3], 'single');
 
 %% Cartesian ECEF coordinates
 xg.x = xECEF;
@@ -180,11 +181,11 @@ xg.z = zECEF;
 xg.y = yECEF;
 xg.alt = xg.r - Re;   %since we need a 3D array use xg.r here...
 
-xg.gx1=gz;
-xg.gx2=zeros(xg.lx);
-xg.gx3=zeros(xg.lx);
+xg.gx1 = gz;
+xg.gx2 = zeros(xg.lx, 'single');
+xg.gx3 = zeros(xg.lx, 'single');
 
-xg.Bmag=-50000e-9*ones(xg.lx);     %minus for northern hemisphere...
+xg.Bmag = -50000e-9 * ones(xg.lx, 'single');     %minus for northern hemisphere...
 
 xg.glat = glatgrid;
 xg.glon = glongrid;
@@ -193,7 +194,7 @@ xg.glon = glongrid;
 
 xg.inull=[];
 %xg.nullpts=[];
-xg.nullpts=zeros(xg.lx);
+xg.nullpts=zeros(xg.lx, 'single');
 
 %% TRIM DATA STRUCTRE TO BE THE SIZE FORTRAN EXPECTS
 xgf=xg;

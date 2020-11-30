@@ -23,8 +23,8 @@ end
 methods (Test)
 
 function test_grid(tc)
-  tol.rtol = 1e-8;
-  tol.atol = 1e-5;
+  tol.rtol = 1e-5;
+  tol.atol = 1e-4;
   tname = "2dew_fang";
 
   test_dir = fullfile(tc.TestData.ref_dir, "test" + tname);
