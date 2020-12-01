@@ -33,7 +33,14 @@ else
 end
 
 % NORTH
-y = gemini3d.setup.gridgen.ygrid_gen(p.ydist, p.lyp);
+if (isfield(p, 'x3parms'))
+    disp('Nonuniform x3 grid chosen...')
+    y = gemini3d.setup.gridgen.ygrid_gen(p.xdist,p.lyp,p.x3parms);
+else
+    disp('Uniform x3 grid chosen...')
+    y = gemini3d.setup.gridgen.ygrid_gen(p.ydist, p.lyp);
+end %if
+
 
 %% COMPUTE CELL WALL LOCATIONS
 lx2 = length(x);
