@@ -13,14 +13,20 @@ ymin = -ydist/2;
 ymax = ydist/2;
 
 if isempty(yparms)
-    y=uniform_gridy(ymin,ymax,lyp);
+  y = uniform_gridy(ymin, ymax, lyp);
 else
-    y=nonunifrom_gridy(yparms,ymax)
+  y = nonuniform_gridy(yparms, ymax)
 end
 
 end % function
 
-function y=uniform_gridy(ymin,ymax,lyp)
+
+function y=uniform_gridy(ymin, ymax, lyp)
+arguments
+  ymin (1,1)
+  ymax (1,1)
+  lyp (1,1)
+end
 
 if lyp == 1  % degenerate dimension
   % add 2 ghost cells on each side
@@ -38,9 +44,9 @@ end %function
 
 
 function y = nonuniform_gridy(yparms, ymax)
-
-if length(xparms) ~= 4
-  error('xgrid_gen:value_error', 'xparms must have 4 parameters')
+arguments
+  yparms (1,4)
+  ymax (1,1)
 end
 
 degdist=yparms(1);    % distance from boundary at which we start to degrade resolution
@@ -52,14 +58,10 @@ y2=ymax-degdist;
 %x(1)=0;
 y(1)=1/2*dy0;    %start offset from zero so we can have an even number (better for mpi)
 
-iy=1;
-while (y(iy)<ymax)
-  dy = dy0 + dyincr * (1/2+1/2*tanh((y(iy)-y2)/ell));
-  y(iy+1) = y(iy)+dy;
-  iy = iy+1;
+while y(end) < ymax
+  dy = dy0 + dyincr * (1/2+1/2*tanh((y(end)-y2)/ell));
+  y(end+1) = y(end)+dy;
 end %while
 y=[-fliplr(y),y];
-
-% x=[-fliplr(x(2:end)),x];
 
 end % function

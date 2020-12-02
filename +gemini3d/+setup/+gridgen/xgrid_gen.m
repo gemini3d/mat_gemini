@@ -16,7 +16,7 @@ if isempty(xparms)
   x = uniform_grid(xmin, xmax, lxp);
 else   %nonuniform grid; assume we are degrading resolution near the edges - this will ignore lxp
   x = nonuniform_grid(xparms, xmax);
-end %if
+end
 
 end % function
 
@@ -58,11 +58,9 @@ x2=xmax-degdist;
 %x(1)=0;
 x(1)=1/2*dx0;    %start offset from zero so we can have an even number (better for mpi)
 
-ix=1;
-while (x(ix)<xmax)
-  dx = dx0 + dxincr * (1/2+1/2*tanh((x(ix)-x2)/ell));
-  x(ix+1) = x(ix)+dx;
-  ix = ix+1;
+while x(end) < xmax
+  dx = dx0 + dxincr * (1/2+1/2*tanh((x(end)-x2)/ell));
+  x(end+1) = x(end)+dx;
 end %while
 x=[-fliplr(x),x];
 
