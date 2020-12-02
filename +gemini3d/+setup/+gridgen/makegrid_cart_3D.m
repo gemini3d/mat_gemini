@@ -35,7 +35,7 @@ end
 % NORTH
 if (isfield(p, 'x3parms'))
     disp('Nonuniform x3 grid chosen...')
-    y = ygrid_gen(p.xdist,p.lyp,p.x3parms);
+    y = ygrid_gen(p.ydist,p.lyp,p.x3parms);
 else
     disp('Uniform x3 grid chosen...')
     y = ygrid_gen(p.ydist, p.lyp);

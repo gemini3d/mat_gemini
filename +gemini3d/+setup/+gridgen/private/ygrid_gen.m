@@ -15,7 +15,7 @@ ymax = ydist/2;
 if isempty(yparms)
   y = uniform_gridy(ymin, ymax, lyp);
 else
-  y = nonuniform_gridy(yparms, ymax)
+  y = nonuniform_gridy(yparms, ymax);
 end
 
 end % function
