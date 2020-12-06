@@ -21,6 +21,7 @@ tc.verifyEqual(lxs, lxs_ref, ['ref dims ', int2str(lxs_ref), ' != this sim dims 
 disp(['sim grid dimensions: ',num2str(lxs)])
 
 Nt = length(params.times);
+tc.assertGreaterThan(Nt, 0, "simulation has zero duration")
 
 for i = 1:Nt
   out = gemini3d.loadframe(outdir, "time", params.times(i));

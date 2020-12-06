@@ -19,6 +19,8 @@ ref = gemini3d.vis.loadframe3Dcurvnoelec(ref_params.indat_file);
 new_params = gemini3d.fileio.make_valid_paths(gemini3d.read_config(outdir), outdir, file_format);
 new = gemini3d.vis.loadframe3Dcurvnoelec(new_params.indat_file);
 
+tc.assertGreaterThan(length(new_params.times), 0, "simulation input has zero duration")
+
 reltol = cast(tol.rtol, 'like', new.ns);
 
 tc.verifyEqual(new.ns, ref.ns, 'RelTol', reltol, 'AbsTol', cast(tol.atolN, 'like', new.ns)/100, 'mismatch: Ns')

@@ -120,6 +120,8 @@ function E = Efield_target(E, xg, lx1, lx2, lx3, Nt)
 % Set the top boundary shape (potential) and potential solve type flag
 
 %% create feature defined by Efield
+% NOTE: h2, h3 have ghost cells, so we use lx1 instead of "end" to index
+% pk is a scalar.
 if lx3 == 1 % east-west
   S = E.Etarg * E.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
   taper = erf((E.MLON - E.mlonmean) / E.mlonsig);
