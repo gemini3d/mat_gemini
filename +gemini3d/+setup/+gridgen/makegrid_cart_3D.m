@@ -12,7 +12,7 @@ xg.time = p.times(1);
 %p.alt_max = 1000e3;
 %p.alt_scale = [10e3, 8e3, 500e3, 150e3];
 if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
-  z = altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
+  z = gemini3d.setup.gridgen.altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   disp("makegrid_cart_3D: using altitude (z) grid from " + p.eq_dir)
   xeq = gemini3d.readgrid(p.eq_dir);
@@ -25,20 +25,20 @@ end
 %% TRANSVERSE GRID (BASED ON SIZE OF CURRENT REGION SPECIFIED ABOVE)
 % EAST
 if isfield(p, 'x2parms')
-  disp('Nonuniform x2 grid chosen...')
-  x = grid1d(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
+  disp('Non-uniform x2 grid')
+  x = gemini3d.setup.gridgen.grid1d(p.xdist, p.lxp, p.x2parms);
 else
-  disp('Uniform x2 grid chosen...')
-  x = grid1d(p.xdist, p.lxp);
+  disp('Uniform x2 grid')
+  x = gemini3d.setup.gridgen.grid1d(p.xdist, p.lxp);
 end
 
 % NORTH
 if (isfield(p, 'x3parms'))
-    disp('Nonuniform x3 grid chosen...')
-    y = grid1d(p.ydist, p.lyp, p.x3parms);
+  disp('Non-uniform x3 grid')
+  y = gemini3d.setup.gridgen.grid1d(p.ydist, p.lyp, p.x3parms);
 else
-    disp('Uniform x3 grid chosen...')
-    y = grid1d(p.ydist, p.lyp);
+  disp('Uniform x3 grid')
+  y = gemini3d.setup.gridgen.grid1d(p.ydist, p.lyp);
 end %if
 
 

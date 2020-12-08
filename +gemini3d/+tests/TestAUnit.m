@@ -40,7 +40,7 @@ tc.verifyFalse(gemini3d.fileio.is_absolute_path("c"))
 end
 
 function test_absolute_path(tc)
-  import matlab.unittest.constraints.StartsWithSubstring
+
 pabs = gemini3d.fileio.absolute_path('2foo');
 pabs2 = gemini3d.fileio.absolute_path('4foo');
 tc.verifyFalse(startsWith(pabs, "2"))
@@ -48,7 +48,7 @@ tc.verifyTrue(strncmp(pabs, pabs2, 2))
 
 par1 = gemini3d.fileio.absolute_path("../2foo");
 par2 = gemini3d.fileio.absolute_path("../4foo");
-tc.verifyThat(par1, ~StartsWithSubstring(".."))
+tc.verifyFalse(startsWith(par1, ".."))
 tc.verifyTrue(strncmp(par2, pabs2, 2))
 
 pt1 = gemini3d.fileio.absolute_path("bar/../2foo");
@@ -92,6 +92,17 @@ tc.verifyEqual(strlength(gemini3d.fileio.path_tail("")), 0)
 tc.verifyEqual(gemini3d.fileio.path_tail(["", "a/b"]), ["", "b"])
 tc.verifyEqual(gemini3d.fileio.path_tail("c"), "c")
 end
+end
+
+function test_grid1d(tc)
+
+x = gemini3d.setup.gridgen.grid1d(100., 5);
+tc.verifyEqual(x, -100:25:100, 'RelTol', 1e-6, 'AbsTol', 1e-8)
+
+x = gemini3d.setup.gridgen.grid1d(100., 5, [200, 0.5, 9.5, 10]);
+tc.verifyEqual(x, [-50.25, -40.25, -30.25, -20.25, -10.25, -0.25, 0.25, 10.25, 20.25, 30.25, 40.25, 50.25], ...
+  'RelTol', 1e-6, 'AbsTol', 1e-8)
+
 end
 
 function test_dateinc(tc)
