@@ -28,7 +28,7 @@ cfg = setup_if_needed(opts, outdir, config_path);
 %% check that no existing simulation is in output directory
 % unless this is a milestone restart
 if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
-  exist_file = gemini3d.get_frame_filename(outdir, cfg.times(1));
+  exist_file = gemini3d.find.frame(outdir, cfg.times(1));
   assert(isempty(exist_file), "a fresh simulation should not have data in output directory: " + outdir)
 end
 

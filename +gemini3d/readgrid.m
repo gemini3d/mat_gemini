@@ -7,7 +7,7 @@ arguments
   apath (1,1) string
 end
 
-[apath, suffix] = gemini3d.fileio.get_simsize_path(apath);
+[apath, suffix] = gemini3d.find.simsize(apath);
 
 xg = struct.empty;
 ok = false;

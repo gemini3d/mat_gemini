@@ -1,4 +1,4 @@
-function filename = get_frame_filename(direc, time)
+function filename = frame(direc, time)
 arguments
   direc (1,1) string
   time (1,1) datetime

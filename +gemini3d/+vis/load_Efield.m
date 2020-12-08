@@ -7,7 +7,7 @@ end
 dat = struct.empty;
 
 if ~isempty(time)
-  filename = gemini3d.get_frame_filename(filename, time);
+  filename = gemini3d.find.frame(filename, time);
 end
 
 if isempty(filename)

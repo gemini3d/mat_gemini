@@ -23,7 +23,7 @@ end
 dat = struct.empty;
 
 if isdatetime(cfg)
-  filename = gemini3d.get_frame_filename(filename, cfg);
+  filename = gemini3d.find.frame(filename, cfg);
   cfg = struct.empty;
 end
 

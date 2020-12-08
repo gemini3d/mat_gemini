@@ -7,7 +7,7 @@ arguments
   apath string
 end
 
-filename = gemini3d.fileio.get_configfile(apath);
+filename = gemini3d.find.config(apath);
 
 p = struct.empty;
 if isempty(filename)

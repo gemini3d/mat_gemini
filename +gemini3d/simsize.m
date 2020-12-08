@@ -3,7 +3,7 @@ arguments
   apath (1,1) string
 end
 
-[apath, ext] = gemini3d.fileio.get_simsize_path(apath);
+[apath, ext] = gemini3d.find.simsize(apath);
 
 lxs = [];
 switch ext

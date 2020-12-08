@@ -1,4 +1,4 @@
-function filename = get_configfile(direc)
+function filename = config(direc)
 %% get configuration file
 % if not found, returns string.empty
 arguments

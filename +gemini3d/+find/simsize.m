@@ -1,4 +1,4 @@
-function [simpath, ext] = get_simsize_path(apath)
+function [simpath, ext] = simsize(apath)
 %% find the path (directory, even if given filename) where simsize.* is
 % also return the suffix
 % the filename MUST be simsize.{h5,nc,dat}

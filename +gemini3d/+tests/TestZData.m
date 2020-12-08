@@ -25,15 +25,14 @@ end
 
 methods (Test)
 
-function test_get_config_file(tc)
-import gemini3d.fileio.get_configfile
-tc.verifyEmpty(get_configfile(""))
-tc.verifyTrue(endsWith(get_configfile(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
+function test_find_config(tc)
+tc.verifyEmpty(gemini3d.find.config(""))
+tc.verifyTrue(endsWith(gemini3d.find.config(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
 end
 
-function test_get_simsize_path(tc)
-tc.verifyEmpty(gemini3d.fileio.get_simsize_path(""))
-tc.verifyTrue(endsWith(gemini3d.fileio.get_simsize_path(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
+function test_find_simsize(tc)
+tc.verifyEmpty(gemini3d.find.simsize(""))
+tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
 end
 
 function test_read_config(tc)
