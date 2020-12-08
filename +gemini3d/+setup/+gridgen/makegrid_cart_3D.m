@@ -26,19 +26,19 @@ end
 % EAST
 if isfield(p, 'x2parms')
   disp('Nonuniform x2 grid chosen...')
-  x = xgrid_gen(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
+  x = grid1d(p.xdist, p.lxp, p.x2parms);   %last argument optional for nonuniform x2 spacing
 else
   disp('Uniform x2 grid chosen...')
-  x = xgrid_gen(p.xdist, p.lxp);
+  x = grid1d(p.xdist, p.lxp);
 end
 
 % NORTH
 if (isfield(p, 'x3parms'))
     disp('Nonuniform x3 grid chosen...')
-    y = ygrid_gen(p.ydist,p.lyp,p.x3parms);
+    y = grid1d(p.ydist, p.lyp, p.x3parms);
 else
     disp('Uniform x3 grid chosen...')
-    y = ygrid_gen(p.ydist, p.lyp);
+    y = grid1d(p.ydist, p.lyp);
 end %if
 
 
