@@ -6,11 +6,11 @@ arguments
   tol (1,1) struct
 end
 
-[ref, ok] = gemini3d.readgrid(refdir);
+[ref, ok] = gemini3d.read.grid(refdir);
 tc.assertNotEmpty(ref, refdir + " does not have a Gemini3D grid")
 tc.assertTrue(ok, "reference grid " + refdir + " has bad values")
 
-[new, ok] = gemini3d.readgrid(outdir);
+[new, ok] = gemini3d.read.grid(outdir);
 tc.assertNotEmpty(new, outdir + " does not have a Gemini3D grid")
 tc.assertTrue(ok, "grid " + outdir + " has bad values")
 

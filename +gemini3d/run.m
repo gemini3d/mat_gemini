@@ -39,7 +39,7 @@ if opts.dryrun
   return
 end
 %% run simulation
-log_meta_nml(git_revision(fileparts(gemini_exe)), ...
+gemini3d.write.meta(gemini3d.git_revision(fileparts(gemini_exe)), ...
                       fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
 
 ret = exe_run(cmd, mpiexec_ok);
@@ -60,7 +60,7 @@ end
 config_path = gemini3d.fileio.expanduser(config_path);
 outdir = gemini3d.fileio.expanduser(outdir);
 
-cfg = gemini3d.read_config(config_path);
+cfg = gemini3d.read.config(config_path);
 assert(~isempty(cfg), "a config.nml file was not found in " + config_path)
 cfg.outdir = outdir;
 

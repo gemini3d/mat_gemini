@@ -12,7 +12,7 @@ makedir([direc, '/Bphiplots'])
 makedir([direc, '/Bphiplots_eps'])
 
 %SIMULATION META-DATA
-cfg = gemini3d.read_config(direc);
+cfg = gemini3d.read.config(direc);
 times=cfg.times;
 lt=numel(cfg.times);
 
@@ -93,7 +93,7 @@ fprintf('...Done interpolating...\n');
 
 
 %SIMULATION META-DATA
-cfg = gemini3d.read_config(direc);
+cfg = gemini3d.read.config(direc);
 mlatsrc=cfg.sourcemlat;
 mlonsrc=cfg.sourcemlon;
 

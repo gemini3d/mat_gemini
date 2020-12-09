@@ -5,7 +5,7 @@ direc=[basedir,simname];
 
 
 %SIMULATION META-DATA
-cfg = gemini3d.read_config(direc);
+cfg = gemini3d.read.config(direc);
 
 
 %ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)
@@ -15,7 +15,7 @@ dang=1.5;
 %WE ALSO NEED TO LOAD THE GRID FILE
 if ~exist('xg','var')
   disp('Reading grid...')
-  xg=gemini3d.readgrid(direc);
+  xg=gemini3d.read.grid(direc);
   lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
   lh=lx1;   %possibly obviated in this version - need to check
   if (lx3==1)

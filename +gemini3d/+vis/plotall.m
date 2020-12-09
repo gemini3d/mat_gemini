@@ -27,13 +27,13 @@ lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
-params = gemini3d.read_config(direc);
+params = gemini3d.read.config(direc);
 if isempty(params)
   error("gemini3d:plotall:fileNotFound", "%s does not contain Gemini3D data", direc)
 end
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(options.xg)
-  xg = gemini3d.readgrid(direc);
+  xg = gemini3d.read.grid(direc);
 else
   xg = options.xg;
 end

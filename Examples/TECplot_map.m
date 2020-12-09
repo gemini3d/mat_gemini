@@ -14,7 +14,7 @@ mlon = dat.mlong;
 mlat = dat.mlat;
 
 %SIMULATION META-DATA
-cfg = gemini3d.read_config(direc);
+cfg = gemini3d.read.config(direc);
 
 %TABULATE THE SOURCE LOCATION
 % thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location

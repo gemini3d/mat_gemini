@@ -1,4 +1,4 @@
-function write_precip(pg, outdir, file_format)
+function precip(pg, outdir, file_format)
 %% SAVE to files
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.

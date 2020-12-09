@@ -1,4 +1,4 @@
-function cfg = read_config(direc)
+function cfg = config(direc)
 % reads simulation configuration into struct
 % returns struct.empty if config file doesn't exist
 arguments

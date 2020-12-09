@@ -31,14 +31,14 @@ function test_grid(tc)
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
-  cfg = gemini3d.read_config(test_dir);
+  cfg = gemini3d.read.config(test_dir);
   xg = gemini3d.setup.gridgen.makegrid_cart_3D(cfg);
 
   % path patch
   cfg.outdir = tc.TestData.outdir;
   cfg.indat_size = fullfile(cfg.outdir, cfg.indat_size);
   cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
-  gemini3d.writegrid(cfg, xg);
+  gemini3d.write.grid(cfg, xg);
 
   compare_grid(tc, cfg.indat_grid, test_dir, tol)
 end
@@ -50,11 +50,11 @@ function test_Efield(tc)
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
-  p = gemini3d.read_config(test_dir);
+  p = gemini3d.read.config(test_dir);
   E0_dir = p.E0_dir;
   p.E0_dir = fullfile(tc.TestData.outdir, p.E0_dir);
 
-  xg = gemini3d.readgrid(test_dir);
+  xg = gemini3d.read.grid(test_dir);
 
   gemini3d.setup.Efield_BCs(p, xg);
 
@@ -72,11 +72,11 @@ function test_precip(tc)
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
-  p = gemini3d.read_config(test_dir);
+  p = gemini3d.read.config(test_dir);
   prec_dir = p.prec_dir;
   p.prec_dir = fullfile(tc.TestData.outdir, p.prec_dir);
 
-  xg = gemini3d.readgrid(test_dir);
+  xg = gemini3d.read.grid(test_dir);
 
   gemini3d.setup.particles_BCs(p, xg);
 
@@ -115,7 +115,7 @@ tname = '3d_glow';
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data/test"+tname);
-h = gemini3d.vis.plotinit(gemini3d.readgrid(d3));
+h = gemini3d.vis.plotinit(gemini3d.read.grid(d3));
 
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')

@@ -22,13 +22,13 @@ Vcmap = bwr();
 Jcmap = bwr();
 
 %% READ IN THE SIMULATION INFORMATION (this is low cost so reread no matter what)
-cfg = gemini3d.read_config(direc);
+cfg = gemini3d.read.config(direc);
 
 %% RELOAD GRID?
 % loading grid can take a long time
 if isempty(options.xg)
   disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
-  xg = gemini3d.readgrid(direc);
+  xg = gemini3d.read.grid(direc);
 else
   xg = options.xg;
 end

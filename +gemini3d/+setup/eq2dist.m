@@ -8,7 +8,7 @@ end
 
 peq = read_equilibrium(p);
 %% read equilibrium grid
-[xgin, ok] = gemini3d.readgrid(p.eq_dir);
+[xgin, ok] = gemini3d.read.grid(p.eq_dir);
 
 if ~ok
   error('eq2dist:value_error', 'problem with equilibrium input grid %s', p.eq_dir)
@@ -35,8 +35,8 @@ check_drift(vs1i)
 check_temperature(Tsi)
 
 %% write the interpolated grid and data
-gemini3d.writegrid(p, xg)
-gemini3d.writedata(peq.times(end), nsi, vs1i, Tsi, p.indat_file, p.file_format);
+gemini3d.write.grid(p, xg)
+gemini3d.write.data(peq.times(end), nsi, vs1i, Tsi, p.indat_file, p.file_format);
 
 end % function eq2dist
 
@@ -64,6 +64,6 @@ if ~isfolder(p.eq_dir)
   end
 end
 
-peq = gemini3d.read_config(p.eq_dir);
+peq = gemini3d.read.config(p.eq_dir);
 
 end

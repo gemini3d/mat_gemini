@@ -1,4 +1,4 @@
-function [xg, ok] = readgrid(apath)
+function [xg, ok] = grid(apath)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
@@ -34,9 +34,9 @@ if isempty(xg)
   return
 end
 
-ok = check_grid(xg);
+ok = gemini3d.check_grid(xg);
 if ~ok
-  warning('readgrid:value_error', "grid has unsuitable values: " + apath)
+  warning('read.grid:value_error', "grid has unsuitable values: " + apath)
 end
 
 end % function
@@ -75,7 +75,7 @@ function xgf = read_raw(apath)
 
 filename = fullfile(apath, 'simgrid.dat');
 if ~isfile(filename)
-  error('readgrid:read_raw:file_not_found', '%s not found', filename)
+  error('read.grid:raw:file_not_found', '%s not found', filename)
 end
 
 xgf.lx = gemini3d.simsize(apath);

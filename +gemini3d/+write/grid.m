@@ -1,4 +1,4 @@
-function writegrid(p, xg)
+function grid(p, xg)
 %% write grid to raw binary files
 % includes STUFF NOT NEEDED BY FORTRAN CODE BUT POSSIBLY USEFUL FOR PLOTTING
 arguments
@@ -6,14 +6,13 @@ arguments
   xg (1,1) struct
 end
 
-import gemini3d.readgrid
 import gemini3d.fileio.with_suffix
 
 %% sanity check grid
-ok = check_grid(xg);
+ok = gemini3d.check_grid(xg);
 
 if ~ok
-  error('writegrid:value_error', 'problematic grid values')
+  error('write.grid:value_error', 'problematic grid values')
 end
 %% ensure HDF5/NetCDF interface is loaded
 try
@@ -41,14 +40,14 @@ end
 switch file_format
   case 'h5'
     write_hdf5(p, xg)
-    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.h5'));
+    [xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.h5'));
   case 'nc'
     write_nc4(p, xg)
-    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.nc'));
+    [xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.nc'));
   case 'dat'
     write_raw(p, xg)
-    [xg_check, ok] = readgrid(with_suffix(p.indat_grid, '.dat'));
-  otherwise, error('writegrid:value_error', 'unknown file format %s', p.file_format)
+    [xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.dat'));
+  otherwise, error('write.grid:value_error', 'unknown file format %s', p.file_format)
 end
 
 rtol = 1e-7;  % allow for single precision
@@ -61,10 +60,10 @@ for n = names
 end
 
 if ~ok
-  error('writegrid:value_error', 'values of grid are not suitable %s', p.indat_grid)
+  error('write.grid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
-log_meta_nml(git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
+gemini3d.write.meta(gemini3d.git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
 
 end % function
 

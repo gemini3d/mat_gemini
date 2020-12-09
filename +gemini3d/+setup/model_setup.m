@@ -10,7 +10,7 @@ if isstruct(cfg)
   % pass
 elseif isstring(cfg) || ischar(cfg)
   % path to config.nml
-  cfg = gemini3d.read_config(cfg);
+  cfg = gemini3d.read.config(cfg);
 else
   error('model_setup:value_error', 'need path to config.nml')
 end

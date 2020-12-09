@@ -10,7 +10,7 @@ arguments
 end
 
 if ~isstruct(xg)
-  xg = gemini3d.readgrid(xg);
+  xg = gemini3d.read.grid(xg);
 end
 
 assert(~isempty(xg), "not contain a readable simulation grid")

@@ -1,4 +1,4 @@
-function writedata(time, ns, vsx1, Ts, fn, file_format, Phitop)
+function data(time, ns, vsx1, Ts, fn, file_format, Phitop)
 
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE

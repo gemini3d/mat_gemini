@@ -9,7 +9,7 @@ end
 tc.assertFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% READ IN THE SIMULATION INFORMATION
-params = gemini3d.read_config(outdir);
+params = gemini3d.read.config(outdir);
 
 lxs = gemini3d.simsize(outdir);
 lxs_ref = gemini3d.simsize(refdir);

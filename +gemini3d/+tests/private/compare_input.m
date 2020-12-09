@@ -13,10 +13,10 @@ tc.assertFalse(gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refd
 compare_grid(tc, outdir, refdir, tol)
 
 %% check initial condition data
-ref_params = gemini3d.fileio.make_valid_paths(gemini3d.read_config(refdir), refdir);
+ref_params = gemini3d.fileio.make_valid_paths(gemini3d.read.config(refdir), refdir);
 ref = gemini3d.vis.loadframe3Dcurvnoelec(ref_params.indat_file);
 
-new_params = gemini3d.fileio.make_valid_paths(gemini3d.read_config(outdir), outdir, file_format);
+new_params = gemini3d.fileio.make_valid_paths(gemini3d.read.config(outdir), outdir, file_format);
 new = gemini3d.vis.loadframe3Dcurvnoelec(new_params.indat_file);
 
 tc.assertGreaterThan(length(new_params.times), 0, "simulation input has zero duration")

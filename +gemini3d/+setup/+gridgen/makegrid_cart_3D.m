@@ -15,7 +15,7 @@ if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
   z = gemini3d.setup.gridgen.altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   disp("makegrid_cart_3D: using altitude (z) grid from " + p.eq_dir)
-  xeq = gemini3d.readgrid(p.eq_dir);
+  xeq = gemini3d.read.grid(p.eq_dir);
   z = xeq.x1;
   clear('xeq')
 else

@@ -13,10 +13,10 @@ wavelengths = ["3371", "4278", "5200", "5577", "6300", "7320", "10400", ...
   "3466", "7774", "8446", "3726", "LBH", "1356", "1493", "1304"];
 
 %READ IN SIMULATION INFO
-params = gemini3d.read_config(direc);
+params = gemini3d.read.config(direc);
 
 %READ IN THE GRID
-xg = gemini3d.readgrid(direc);
+xg = gemini3d.read.grid(direc);
 
 %% GET THE SYSTEM SIZE
 Lw = length(wavelengths);

@@ -32,7 +32,7 @@ if isempty(filename)
 end
 
 if isempty(cfg)
-  cfg = gemini3d.read_config(fileparts(filename));
+  cfg = gemini3d.read.config(fileparts(filename));
   % if using raw output, cfg.flagoutput is necessary
 end
 

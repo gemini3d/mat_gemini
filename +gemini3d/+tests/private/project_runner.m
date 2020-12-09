@@ -10,7 +10,7 @@ test_dir = fullfile(ref_dir, "test" + name);
 %% get files if needed
 gemini3d.fileio.download_and_extract(name, ref_dir)
 %% setup new test data
-p = gemini3d.read_config(test_dir);
+p = gemini3d.read.config(test_dir);
 p.file_format = file_format;
 p.outdir = tc.TestData.outdir;
 
