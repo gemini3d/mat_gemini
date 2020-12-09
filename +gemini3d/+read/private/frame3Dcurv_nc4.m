@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurv_nc4(fn, vars)
+function dat = frame3Dcurv_nc4(fn, vars)
 arguments
   fn (1,1) string
   vars (1,:) string

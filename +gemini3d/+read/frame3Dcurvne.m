@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvne(filename)
+function dat = frame3Dcurvne(filename)
 arguments
   filename (1,1) string
 end
@@ -11,7 +11,7 @@ switch ext
   case '.dat', dat = read_raw(filename);
   case '.h5', dat.ne = h5read(filename, '/neall');
   case '.nc', dat.ne = ncread(filename, 'neall');
-  otherwise, error('loadframe3Dcurvne:not_implemented', 'unknown file type %s',filename)
+  otherwise, error('frame3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
 
 dat.filename = filename;

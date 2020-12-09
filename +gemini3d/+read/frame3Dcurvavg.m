@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvavg(filename, vars)
+function dat = frame3Dcurvavg(filename, vars)
 arguments
   filename (1,1) string
   vars (1,:) string = string.empty
@@ -12,10 +12,10 @@ if isempty(vars)
 end
 
 switch ext
-  case '.h5', dat = gemini3d.vis.loadframe3Dcurvavg_hdf5(filename, vars);
-  case '.dat', dat = gemini3d.vis.loadframe3Dcurvavg_raw(filename);
-  case '.nc', dat = gemini3d.vis.loadframe3Dcurvavg_nc4(filename, vars);
-  otherwise, error('loadframe3Dcurvavg:value_error', 'unknown file type %s',filename)
+  case '.h5', dat = frame3Dcurvavg_hdf5(filename, vars);
+  case '.dat', dat = frame3Dcurvavg_raw(filename);
+  case '.nc', dat = frame3Dcurvavg_nc4(filename, vars);
+  otherwise, error('frame3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
 
 %% squeeze is needed for 2D and OK for 3D

@@ -35,7 +35,7 @@ if ~isempty(opts.time)
 elseif ~isempty(opts.cfg)
   dat = gemini3d.vis.loadframe(filename, opts.cfg, opts.vars);
 else
-  error("loadframe:value_error", "please specify filename or filename, datetime")
+  error("read.frame:value_error", "please specify filename or filename, datetime")
 end
 
 end

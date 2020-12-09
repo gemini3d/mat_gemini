@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurv(filename, vars)
+function dat = frame3Dcurv(filename, vars)
 arguments
   filename (1,1) string
   vars (1,:) string = string.empty
@@ -12,10 +12,10 @@ if isempty(vars)
 end
 
 switch ext
-  case '.h5', dat = gemini3d.vis.loadframe3Dcurv_hdf5(filename, vars);
-  case '.dat', dat = gemini3d.vis.loadframe3Dcurv_raw(filename);
-  case '.nc', dat = gemini3d.vis.loadframe3Dcurv_nc4(filename, vars);
-  otherwise, error('loadframe3Dcurv:value_error', 'unknown file type %s', filename)
+  case '.h5', dat = frame3Dcurv_hdf5(filename, vars);
+  case '.dat', dat = frame3Dcurv_raw(filename);
+  case '.nc', dat = frame3Dcurv_nc4(filename, vars);
+  otherwise, error('frame3Dcurv:value_error', 'unknown file type %s', filename)
 end
 
 lsp = 7;

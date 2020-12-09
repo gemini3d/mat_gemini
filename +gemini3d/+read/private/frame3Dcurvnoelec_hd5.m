@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvnoelec_hdf5(filename)
+function dat = frame3Dcurvnoelec_hdf5(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
 arguments
   filename (1,1) string

@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvavg_hdf5(filename, vars)
+function dat = frame3Dcurvavg_hdf5(filename, vars)
 arguments
   filename (1,1) string
   vars (1,:) string

@@ -39,9 +39,9 @@ end
 %% LOAD DIST. FILE
 
 switch get_flagoutput(filename, cfg)
-  case 1, dat = gemini3d.vis.loadframe3Dcurv(filename, vars);
-  case 2, dat = gemini3d.vis.loadframe3Dcurvavg(filename, vars);
-  case 3, dat = gemini3d.vis.loadframe3Dcurvne(filename);
+  case 1, dat = gemini3d.read.frame3Dcurv(filename, vars);
+  case 2, dat = gemini3d.read.frame3Dcurvavg(filename, vars);
+  case 3, dat = gemini3d.read.frame3Dcurvne(filename);
   otherwise, error('gemini3d:loadframe:value_error', 'Problem with flagoutput=%d. Please specify flagoutput in config file.', flagoutput)
 end %switch
 

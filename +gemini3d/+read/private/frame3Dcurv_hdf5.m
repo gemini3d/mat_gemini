@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurv_hdf5(fn, vars)
+function dat = frame3Dcurv_hdf5(fn, vars)
 arguments
   fn (1,1) string
   vars (1,:) string

@@ -1,34 +1,31 @@
-function dat = loadframe3Dcurvnoelec_raw(filename)
-%% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
+function dat = frame3Dcurv_raw(filename)
 arguments
   filename (1,1) string
 end
-
 %% SIMULATION SIZE
 lsp=7;
 lxs = gemini3d.simsize(filename);
 %% SIMULATION RESULTS
 dat.filename = filename;
 
-fid = fopen(filename, 'r');
+fid=fopen(filename,'r');
 
-dat.time = get_time(fid);
-
+dat.time = gemini3d.vis.get_time(fid);
+%% load densities
 dat.ns = read4D(fid, lsp, lxs);
+%% load Vparallel
 dat.vs1 = read4D(fid, lsp, lxs);
+%% load temperatures
 dat.Ts = read4D(fid, lsp, lxs);
-
-% J1 = read3D(fid, lxs);
-%
-% J2 = read3D(fid, lxs);
-%
-% J3 = read3D(fid, lxs);
-%
-% v2 = read3D(fid, lxs);
-%
-% v3 = read3D(fid, lxs);
-%
-% Phitop = read2D(fid, lxs);
+%% load current densities
+dat.J1 = read3D(fid, lxs);
+dat.J2 = read3D(fid, lxs);
+dat.J3 = read3D(fid, lxs);
+%% load Vperp
+dat.v2 = read3D(fid, lxs);
+dat.v3 = read3D(fid, lxs);
+%% load topside potential
+dat.Phitop = read2D(fid, lxs);
 
 fclose(fid);
 

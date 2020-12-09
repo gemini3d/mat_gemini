@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvnoelec(filename)
+function dat = frame3Dcurvnoelec(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
 arguments
   filename (1,1) string
@@ -8,10 +8,10 @@ end
 assert(isfile(filename), 'not a file: %s', filename)
 
 switch ext
-  case '.h5', dat = gemini3d.vis.loadframe3Dcurvnoelec_hdf5(filename);
-  case '.dat', dat = gemini3d.vis.loadframe3Dcurvnoelec_raw(filename);
-  case '.nc', dat = gemini3d.vis.loadframe3Dcurvnoelec_nc4(filename);
-  otherwise, error('loadframe3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
+  case '.h5', dat = frame3Dcurvnoelec_hdf5(filename);
+  case '.dat', dat = frame3Dcurvnoelec_raw(filename);
+  case '.nc', dat = frame3Dcurvnoelec_nc4(filename);
+  otherwise, error('frame3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
 end
 
 %% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
