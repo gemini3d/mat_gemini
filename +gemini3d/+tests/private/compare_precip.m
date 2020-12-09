@@ -10,8 +10,8 @@ end
 
 % often we reuse precipitation inputs without copying over files
 for i = 1:size(times)
-  ref = gemini3d.vis.load_precip(ref_prec_dir, times(i));
-  new = gemini3d.vis.load_precip(prec_dir, times(i));
+  ref = gemini3d.read.precip(ref_prec_dir, times(i));
+  new = gemini3d.read.precip(prec_dir, times(i));
 
   tc.assertNotEmpty(ref, "reference " + ref_prec_dir + " does not contain precipitation data")
   tc.assertNotEmpty(new, "data " + prec_dir + " does not contain precipitation data")

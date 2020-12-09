@@ -8,12 +8,10 @@ arguments
   opts.abs (1,1) {mustBePositive}
 end
 
-import gemini3d.vis.load_Efield
-
 % often we reuse Efield inputs without copying over files
 for i = 1:size(times)
-  ref = gemini3d.vis.load_Efield(ref_E0_dir, times(i));
-  new = gemini3d.vis.load_Efield(E0_dir, times(i));
+  ref = gemini3d.read.Efield(ref_E0_dir, times(i));
+  new = gemini3d.read.Efield(E0_dir, times(i));
 
   tc.assertNotEmpty(ref, "reference " + ref_E0_dir + " does not contain Efield data")
   tc.assertNotEmpty(new, "data " + E0_dir + " does not contain Efield data")

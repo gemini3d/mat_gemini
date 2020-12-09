@@ -24,10 +24,10 @@ Nt = length(params.times);
 tc.assertGreaterThan(Nt, 0, "simulation has zero duration")
 
 for i = 1:Nt
-  out = gemini3d.loadframe(outdir, "time", params.times(i));
+  out = gemini3d.read.frame(outdir, "time", params.times(i));
   tc.assertNotEmpty(out, outdir + " does not contain output data")
 
-  ref = gemini3d.loadframe(refdir, "time", params.times(i));
+  ref = gemini3d.read.frame(refdir, "time", params.times(i));
 
   st = datestr(params.times(i));
 

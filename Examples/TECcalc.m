@@ -123,7 +123,7 @@ dvTEC=[];
 
 for it=1:length(cfg.times)
     %LOAD DIST. FILE
-    dat = gemini3d.loadframe(direc, "time", cfg.times(it), "vars", "ne");
+    dat = gemini3d.read.frame(direc, "time", cfg.times(it), "vars", "ne");
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -131,7 +131,7 @@ for it=1:length(cfg.times)
       x1=xg.x1(3:end-2);
       x2=xg.x2(3:end-2);
       x3=xg.x3(3:end-2);
-      [X2,X1,X3]=meshgrid(x2(:),x1(1:lh)',x3(:));   %loadframe overwrites this (sloppy!) so redefine eeach time step
+      [X2,X1,X3]=meshgrid(x2(:),x1(1:lh)',x3(:));   %read.frame overwrites this (sloppy!) so redefine eeach time step
 
       neI=interp3(X2,X1,X3,dat.ne,pI(:),qI(:),X3I(:));
     else
@@ -151,7 +151,7 @@ for it=1:length(cfg.times)
 
 
     %LOAD CONTROL SIMULATION
-    dat = gemini3d.loadframe(direc_control, "time", cfg.times(it), "vars", "ne");
+    dat = gemini3d.read.frame(direc_control, "time", cfg.times(it), "vars", "ne");
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION
@@ -160,7 +160,7 @@ for it=1:length(cfg.times)
       x1c=xgc.x1(3:end-2);
       x2c=xgc.x2(3:end-2);
       x3c=xgc.x3(3:end-2);
-      [X2c,X1c,X3c]=meshgrid(x2c(:),x1c(1:lhc)',x3c(:));   %loadframe overwrites this (sloppy!) so redefine eeach time step
+      [X2c,X1c,X3c]=meshgrid(x2c(:),x1c(1:lhc)',x3c(:));   %read.frame overwrites this (sloppy!) so redefine eeach time step
 
       neI_control=interp3(X2c,X1c,X3c,dat.ne,pI(:),qI(:),X3I(:));
     else
