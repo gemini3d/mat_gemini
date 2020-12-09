@@ -1,4 +1,4 @@
-function plotglow(direc, saveplot_fmt)
+function glow(direc, saveplot_fmt)
 % plots Gemini-Glow auroral emissions
 arguments
   direc (1,1) string
@@ -55,7 +55,7 @@ else
 end
 
   if params.flagoutput ~= 3
-    gemini3d.vis.save_glowframe(hf, filename, saveplot_fmt)
+    gemini3d.plot.save_glowframe(hf, filename, saveplot_fmt)
   end
 end
 

@@ -1,4 +1,4 @@
-function plot2D_cart(time,xg,parm,parmlbl,caxlims,sourceloc, h, cmap)
+function cart2d(time,xg,parm,parmlbl,caxlims,sourceloc, h, cmap)
 
 arguments
   time (1,1) datetime
@@ -157,7 +157,7 @@ hold(ha, 'off')
 
 set(hi, 'alphadata', ~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
+axes_tidy(ha, plotparams)
 
 xlabel(ha, 'eastward dist. (km)')
 ylabel(ha, 'altitude (km)')
@@ -176,7 +176,7 @@ hold(ha, 'off')
 
 set(hi, 'alphadata', ~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
+axes_tidy(ha, plotparams)
 
 xlabel(ha, 'northward dist. (km)')
 ylabel(ha, 'altitude (km)')

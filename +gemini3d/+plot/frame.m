@@ -1,4 +1,4 @@
-function h = plotframe(direc, time_req, saveplot_fmt, options)
+function h = frame(direc, time_req, saveplot_fmt, options)
 %% CHECK ARGS AND SET SOME DEFAULT VALUES ON OPTIONAL ARGS
 arguments
   direc (1,1) string
@@ -12,8 +12,7 @@ arguments
   % options.vars (1,:) string = string.empty  % variables to plot (future)
 end
 
-import gemini3d.vis.bwr
-import gemini3d.vis.plotfunctions.*
+import gemini3d.plot.bwr
 
 Ncmap = parula(256);
 Tcmap = parula(256);
@@ -36,13 +35,13 @@ end
 if isfield(options, "figures") && all(isvalid(options.figures))
   h = options.figures;
 else
-  h = gemini3d.vis.plotinit(xg, options.visible);
+  h = gemini3d.plot.init(xg, options.visible);
 end
 
 if isfield(options, "plotfun")
-  plotfun = grid2plotfun(options.plotfun, xg);
+  plotfun = gemini3d.plot.grid2plotfun(options.plotfun, xg);
 else
-  plotfun = grid2plotfun(string.empty, xg);
+  plotfun = gemini3d.plot.grid2plotfun(string.empty, xg);
 end
 
 %% get time index
@@ -138,7 +137,7 @@ if cfg.flagoutput ~= 3
 %   end
 end
 
-gemini3d.vis.saveframe(cfg.flagoutput, direc, dat.filename, saveplot_fmt, h)
+gemini3d.plot.saveframe(cfg.flagoutput, direc, dat.filename, saveplot_fmt, h)
 
 if nargout == 0, clear('h'), end
 

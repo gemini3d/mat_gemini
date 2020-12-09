@@ -41,10 +41,10 @@ if isempty(xg)
   error("gemini3d:plotall:value", "Gemini3D grid not found")
 end
 
-plotfun = grid2plotfun(options.plotfun, xg);
+plotfun = gemini3d.plot.grid2plotfun(options.plotfun, xg);
 
 %% MAIN FIGURE LOOP
-h = gemini3d.vis.plotinit(xg, visible);
+h = gemini3d.plot.init(xg, visible);
 
 if ~visible
   if options.parallel > 0
@@ -63,17 +63,17 @@ if ~visible
       end
     end
     parfor t = params.times
-      gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+      gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   else
     for t = params.times
-      gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+      gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
     end
   end
 else
   % displaying, not saving
   for t = params.times
-    gemini3d.vis.plotframe(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+    gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
 
     drawnow % need this here to ensure plots update (race condition)
     if gemini3d.sys.isinteractive && params.times(end) ~= t
@@ -84,7 +84,7 @@ else
 end % if saveplots
 
 if isfolder(fullfile(direc, "aurmaps")) % glow sim
-  gemini3d.vis.plotglow(direc, saveplot_fmt)
+  gemini3d.plot.glow(direc, saveplot_fmt)
 end
 
 %% Don't print

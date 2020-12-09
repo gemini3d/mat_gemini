@@ -1,4 +1,4 @@
-function plot3D_curv_frames_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
+function curv3d_long(time, xg, parm, parmlbl, caxlims, sourceloc, hf, cmap)
 arguments
   time (1,1) datetime
   xg (1,1) struct
@@ -210,8 +210,8 @@ ax1 = nexttile(t);
 ax2 = nexttile(t);
 ax3 = nexttile(t);
 
-gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
-gemini3d.vis.plotfunctions.slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
-gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
+slice3left(ax1, xp, zp, parmp, plotparams)
+slice3mid(ax2, yp, xp, parmp2(:,:,2).', plotparams)
+slice3right(ax3, yp, zp3, squeeze(parmp3(:,2,:)).', plotparams)
 
 end % function

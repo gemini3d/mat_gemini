@@ -1,4 +1,4 @@
-function plot2D_curv(time,xg,parm,parmlbl,caxlims, sourceloc, h, cmap)
+function curv2d(time,xg,parm,parmlbl,caxlims, sourceloc, h, cmap)
 arguments
   time (1,1) datetime
   xg (1,1) struct
@@ -159,7 +159,7 @@ plot(ha,sourcemlat,0,'r^','MarkerSize',8,'LineWidth',2);
 hold(ha,'off')
 set(hi,'alphadata',~isnan(parmp))
 
-gemini3d.vis.plotfunctions.axes_tidy(ha, plotparams)
+axes_tidy(ha, plotparams)
 xlabel(ha,'magnetic latitude (deg.)')
 ylabel(ha,'altitude (km)')
 
@@ -173,7 +173,7 @@ plot(sourcemlat,sourcemlon,'r^','MarkerSize',12,'LineWidth',2);
 hold off;
 set(hi,'alphadata',~isnan(parmp2(:,:,2)));
 
-gemini3d.vis.plotfunctions.axes_tidy(gca, plotparams)
+axes_tidy(gca, plotparams)
 xlabel('magnetic latitude (deg.)')
 ylabel('magnetic longitude (deg.)')
 %}

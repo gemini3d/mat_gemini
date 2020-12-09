@@ -14,7 +14,7 @@ end
 hold(ax,'off');
 
 %% axes
-gemini3d.vis.plotfunctions.axes_tidy(ax, P)
+axes_tidy(ax, P)
 
 xlabel(ax, P.right_xlabel)
 ylabel(ax, P.right_ylabel)

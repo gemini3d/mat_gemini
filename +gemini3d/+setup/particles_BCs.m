@@ -55,7 +55,7 @@ precip = gemini3d.setup.precip_grid(xg, p, precip);
 mustBeFinite(p.E0precip)
 mustBePositive(p.E0precip)
 mustBeLessThan(p.E0precip, 100e6)
-% ionization model vis. relativistic particles 100MeV
+% ionization model vis relativistic particles 100MeV
 
 % NOTE: in future, E0 could be made time-dependent in config.nml as 1D array
 for i = i_on:i_off

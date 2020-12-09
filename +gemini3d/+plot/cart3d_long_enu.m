@@ -1,4 +1,4 @@
-function plot3D_cart_frames_long_ENU(time,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
+function cart3d_long_enu(time,xg,parm,parmlbl,caxlims,sourceloc,hf,cmap)
 arguments
   time (1,1) datetime
   xg (1,1) struct
@@ -210,11 +210,11 @@ if ndims(parm) == 3
   ax2 = nexttile(t);
   ax3 = nexttile(t);
 
-  gemini3d.vis.plotfunctions.slice3left(ax1, xp, zp, parmp, plotparams)
-  gemini3d.vis.plotfunctions.slice3mid(ax2, xp, yp, parmp2, plotparams)
-  gemini3d.vis.plotfunctions.slice3right(ax3, yp, zp, parmp3, plotparams)
+  slice3left(ax1, xp, zp, parmp, plotparams)
+  slice3mid(ax2, xp, yp, parmp2, plotparams)
+  slice3right(ax3, yp, zp, parmp3, plotparams)
 else
-  gemini3d.vis.plotfunctions.plot_phitop(xp, yp, parmp2, hf, plotparams)
+  plot_phitop(xp, yp, parmp2, hf, plotparams)
 end
 
 end

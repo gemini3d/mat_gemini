@@ -18,7 +18,7 @@ try
 catch e
   if any(e.identifier == ["MATLAB:undefinedVarOrClass", "MATLAB:UndefinedFunction"])
     cwd = fileparts(mfilename('fullpath'));
-    run(fullfile(cwd, '../setup.m'))
+    run(fullfile(cwd, '../../setup.m'))
   else
     rethrow(e)
   end

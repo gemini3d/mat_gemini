@@ -97,7 +97,7 @@ project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 data_dir = fullfile(tc.TestData.cwd, "data/test" + tname);
 % test 2D plots
 
-h = gemini3d.vis.plotframe(data_dir, datetime(2013, 2, 20, 5, 5, 0));
+h = gemini3d.plot.frame(data_dir, datetime(2013, 2, 20, 5, 5, 0));
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')
 close(h)
@@ -115,12 +115,12 @@ tname = '3d_glow';
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data/test"+tname);
-h = gemini3d.vis.plotinit(gemini3d.read.grid(d3));
+h = gemini3d.plot.init(gemini3d.read.grid(d3));
 
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')
 
-gemini3d.vis.plotframe(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
+gemini3d.plot.frame(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
 close(h)
 end
 

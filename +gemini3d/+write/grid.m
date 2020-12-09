@@ -20,7 +20,7 @@ try
 catch e
   if e.identifier == "MATLAB:undefinedVarOrClass"
     cwd = fileparts(mfilename('fullpath'));
-    run(fullfile(cwd, '../setup.m'))
+    run(fullfile(cwd, '../../setup.m'))
   else
     rethrow(e)
   end

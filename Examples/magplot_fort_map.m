@@ -134,7 +134,7 @@ for it=1:lt-1
     %cmap=lbmap(256,'redblue');
     %cmap=flipud(cmap);
     %colormap(cmap);
-    colormap(gemini3d.vis.bwr());
+    colormap(gemini3d.plot.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -159,7 +159,7 @@ for it=1:lt-1
 %     cmap=lbmap(256,'redblue');
 %     cmap=flipud(cmap);
 %     colormap(cmap);
-    colormap(gemini3d.vis.bwr());
+    colormap(gemini3d.plot.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))
@@ -185,7 +185,7 @@ for it=1:lt-1
 %     cmap=lbmap(256,'redblue');
 %     cmap=flipud(cmap);
 %     colormap(cmap);
-    colormap(gemini3d.vis.bwr());
+    colormap(gemini3d.plot.bwr());
     set(gca,'FontSize',FS);
     tightmap;
     caxlim=max(abs(param(:)))

@@ -22,7 +22,7 @@ if isempty(extra) || any(extra == "basic")
 end
 %% detailed altitude plot
 if any(extra == "alt")
-  h(end+1) = gemini3d.vis.plot_altitude_grid(xg);
+  h(end+1) = gemini3d.plot.altitude_grid(xg);
 end
 %% ECEF surface
 if any(extra == "ecef")
