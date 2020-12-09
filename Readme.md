@@ -63,6 +63,19 @@ Open and run this script, or simply run from Matlab:
 gemini3d.run(out_dir, 'Examples/init/2dns_fang.nml')
 ```
 
+### Load a data frame
+
+The data writes out to a file each time step it's commanded to by the config.nml "dtout" parameter.
+You can load these by filename, or by directory + time:
+
+```matlab
+dat = gemini3d.read.frame(filename);
+```
+
+```matlab
+dat = gemini3d.read.frame(directory, 'time', datetime(2012,1,20,12,5,3));
+```
+
 ### Plot all simulation outputs
 
 ```matlab
