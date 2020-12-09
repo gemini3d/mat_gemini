@@ -1,4 +1,4 @@
-function dat = loadframe3Dcurvavg_raw(filename)
+function dat = frame3Dcurvavg_raw(filename)
 arguments
   filename (1,1) string
 end
@@ -13,7 +13,7 @@ dat.filename = filename;
 
 fid = fopen(filename,'r');
 
-dat.time = gemini3d.vis.get_time(fid);
+dat.time = gemini3d.read.time(fid);
 %% Number densities
 dat.ne = read3D(fid, lxs);
 %% Parallel Velocities

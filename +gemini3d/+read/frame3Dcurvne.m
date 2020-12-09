@@ -30,7 +30,7 @@ lxs = gemini3d.simsize(fileparts(filename));
 %% SIMULATION RESULTS
 fid=fopen(filename,'r');
 
-dat.time = gemini3d.vis.get_time(fid);
+dat.time = gemini3d.read.time(fid);
 
 ns=fread(fid,prod(lxs),'real*8');
 ns=reshape(ns, lxs);

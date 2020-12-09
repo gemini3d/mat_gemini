@@ -21,21 +21,107 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
+dat = struct.empty;
+
 filename = gemini3d.fileio.expanduser(gemini3d.posix(filename));
 
-if isfile(filename)
-  dat = gemini3d.vis.loadframe(filename, struct.empty, opts.vars);
+if ~isfile(filename)
+  if ~isempty(opts.time)
+    filename = gemini3d.find.frame(filename, opts.time);
+  end
+end
+
+if isempty(filename)
   return
 end
 
-assert(isfolder(filename), filename + " is not a file or folder")
-
-if ~isempty(opts.time)
-  dat = gemini3d.vis.loadframe(filename, opts.time, opts.vars);
-elseif ~isempty(opts.cfg)
-  dat = gemini3d.vis.loadframe(filename, opts.cfg, opts.vars);
+if isempty(opts.cfg)
+  cfg = gemini3d.read.config(fileparts(filename));
 else
-  error("read.frame:value_error", "please specify filename or filename, datetime")
+  cfg = opts.cfg;
 end
 
+%% LOAD DIST. FILE
+
+switch get_flagoutput(filename, cfg)
+  case 1, dat = gemini3d.read.frame3Dcurv(filename, opts.vars);
+  case 2, dat = gemini3d.read.frame3Dcurvavg(filename, opts.vars);
+  case 3, dat = gemini3d.read.frame3Dcurvne(filename);
+  otherwise, error('gemini3d:read:frame:value_error', 'Problem with flagoutput=%d. Please specify flagoutput in config file.', flagoutput)
+end %switch
+
+dat.time = gemini3d.read.time(filename);
+
+%% ensure input/simgrid matches data
+lxs = gemini3d.simsize(filename);
+if isempty(lxs)
+  % this happens for a standalone data file
+  return
 end
+% if overwrote one directory or the other, a size mismatch can result
+dat_shape = size(dat.ne);
+%MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
+% we check each dimension because of possibility of 2D dimension swapping
+% x1
+
+if dat_shape(1) ~= lxs(1)
+  error('gemini3d:read:frame:value_error', 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), lxs(1))
+end
+% x2
+if dat_shape(2) ~= lxs(2)
+  if dat_shape(2) == 1 || lxs(2) == 1
+    if dat_shape(2) ~= lxs(3) % check for swap
+      error('gemini3d:read:frame:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
+    end
+  else
+    error('gemini3d:read:frame:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
+  end
+end
+% x3
+if lxs(3) > 1
+  % squeeze() added by Matt Z. inside MatGemini can remove x3
+  if dat_shape(end) ~= lxs(3)
+    if dat_shape(end) == 1 || lxs(3) == 1
+      if dat_shape(end) ~= lxs(2) % check for swap
+        error('gemini3d:read:frame:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
+      end
+    else
+      error('gemini3d:read:frame:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
+    end
+  end
+end
+
+end % function
+
+
+function flag = get_flagoutput(filename, cfg)
+arguments
+  filename (1,1) string
+  cfg struct
+end
+
+[~,~,ext] = fileparts(filename);
+% regardless of what the output type is if "nsall" exists we need
+% to do a full read; this is a bit messy because loadframe will check
+% again below if h5 is used...
+switch lower(ext)
+  case '.h5', var_names = hdf5nc.h5variables(filename);
+  case '.nc', var_names = hdf5nc.ncvariables(filename);
+  case '.dat', var_names = string.empty;
+  otherwise, error('gemini3d:read:frame:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
+end
+
+if any(var_names == "nsall")
+  disp('Full or milestone input detected.')
+  flag = 1;
+elseif ~isempty(cfg) && isfield(cfg, 'flagoutput')
+  flag = cfg.flagoutput;
+elseif any(var_names == "Tavgall")
+  flag = 2;
+elseif any(var_names == "neall")
+  flag = 3;
+else
+  error('gemini3d:read:frame:value_error', 'could not determine flagoutput for %s', filename)
+end
+
+end % function

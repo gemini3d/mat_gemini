@@ -10,7 +10,7 @@ dat.filename = filename;
 
 fid=fopen(filename,'r');
 
-dat.time = gemini3d.vis.get_time(fid);
+dat.time = gemini3d.read.time(fid);
 %% load densities
 dat.ns = read4D(fid, lsp, lxs);
 %% load Vparallel

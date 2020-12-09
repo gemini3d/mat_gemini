@@ -12,7 +12,7 @@ dat.filename = filename;
 
 fid = fopen(filename, 'r');
 
-dat.time = get_time(fid);
+dat.time = gemini3d.read.time(fid);
 
 dat.ns = read4D(fid, lsp, lxs);
 dat.vs1 = read4D(fid, lsp, lxs);

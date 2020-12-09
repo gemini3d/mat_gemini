@@ -19,7 +19,7 @@ end
 switch ext
   case '.h5', dat = load_h5(filename);
   case '.nc', dat = load_nc(filename);
-  otherwise, error('gemini3d.read.precip:value_error', 'unsupported file type %s', filename)
+  otherwise, error('gemini3d:read:precip:value_error', 'unsupported file type %s', filename)
 end
 
 end % function
