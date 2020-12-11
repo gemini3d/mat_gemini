@@ -124,8 +124,9 @@ tc.verifyEqual(gemini3d.sys.max_mpi([48,40,1], 6),  5)
 tc.verifyEqual(gemini3d.sys.max_mpi([48,1,40], 8),  8)
 tc.verifyEqual(gemini3d.sys.max_mpi([48,40,1], 8),  8)
 tc.verifyEqual(gemini3d.sys.max_mpi([48,1,40], 28),  20)
-tc.verifyEqual(gemini3d.sys.max_mpi([48,1,40], 28),  20)
-tc.verifyEqual(gemini3d.sys.max_mpi([48,1,36], 28),  18)
+tc.verifyEqual(gemini3d.sys.max_mpi([48,40,36], 28),  28)
+tc.verifyEqual(gemini3d.sys.max_mpi([48,44,54], 28),  28)
+tc.verifyEqual(gemini3d.sys.max_mpi([48,54,44], 28),  28)
 end
 
 function test_coord(tc)
