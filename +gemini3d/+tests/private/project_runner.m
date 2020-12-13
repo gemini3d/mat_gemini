@@ -27,7 +27,7 @@ if isfield(p, 'eq_dir')
 end
 
 %% generate initial condition files
-gemini3d.setup.model_setup(p);
+gemini3d.model.setup(p);
 %% check generated files
 
 compare_all(tc, p.outdir, test_dir, "only", "in", "file_format", file_format)

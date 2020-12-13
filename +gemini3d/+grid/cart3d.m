@@ -1,4 +1,4 @@
-function xgf = makegrid_cart_3D(p)
+function xgf = cart3d(p)
 %% make 3D grid
 
 arguments
@@ -12,7 +12,7 @@ xg.time = p.times(1);
 %p.alt_max = 1000e3;
 %p.alt_scale = [10e3, 8e3, 500e3, 150e3];
 if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
-  z = gemini3d.setup.gridgen.altitude_grid(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
+  z = gemini3d.grid.altitude(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   disp("makegrid_cart_3D: using altitude (z) grid from " + p.eq_dir)
   xeq = gemini3d.read.grid(p.eq_dir);
@@ -26,19 +26,19 @@ end
 % EAST
 if isfield(p, 'x2parms')
   disp('Non-uniform x2 grid')
-  x = gemini3d.setup.gridgen.grid1d(p.xdist, p.lxp, p.x2parms);
+  x = gemini3d.grid.grid1d(p.xdist, p.lxp, p.x2parms);
 else
   disp('Uniform x2 grid')
-  x = gemini3d.setup.gridgen.grid1d(p.xdist, p.lxp);
+  x = gemini3d.grid.grid1d(p.xdist, p.lxp);
 end
 
 % NORTH
 if (isfield(p, 'x3parms'))
   disp('Non-uniform x3 grid')
-  y = gemini3d.setup.gridgen.grid1d(p.ydist, p.lyp, p.x3parms);
+  y = gemini3d.grid.grid1d(p.ydist, p.lyp, p.x3parms);
 else
   disp('Uniform x3 grid')
-  y = gemini3d.setup.gridgen.grid1d(p.ydist, p.lyp);
+  y = gemini3d.grid.grid1d(p.ydist, p.lyp);
 end %if
 
 

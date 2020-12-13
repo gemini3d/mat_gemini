@@ -1,4 +1,4 @@
-function setup_post_process(cfg, xg)
+function postprocess(cfg, xg)
 % based on Namelist "setup_functions" comma-separated string array of function names, process data
 % current limitation: function arguments must be:
 %

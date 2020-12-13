@@ -1,4 +1,4 @@
-function [ns,Ts,vsx1] = eqICs3D(p, xg)
+function [ns,Ts,vsx1] = eqICs(p, xg)
 %% generate (arbitrary) initial conditions for a grid.
 % NOTE: only works on symmmetric closed grids!
 %
@@ -12,7 +12,7 @@ end
 mindens=1e-100;
 
 %% SLICE THE FIELD IN HALF IF WE ARE CLOSED
-natm = gemini3d.setup.msis_matlab3D(p, xg);
+natm = gemini3d.model.msis(p, xg);
 
 closeddip = abs(xg.r(1,1,1) - xg.r(xg.lx(1),1,1)) < 50e3;     %logical flag marking the grid as closed dipole
 if closeddip         %closed dipole grid

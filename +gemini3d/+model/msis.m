@@ -1,5 +1,5 @@
-function natm = msis_matlab3D(p, xg, time)
-%% calls MSIS Fortran exectuable from Matlab.
+function natm = msis(p, xg, time)
+%% calls MSIS Fortran executable from Matlab.
 % compiles if not present
 %
 % [f107a, f107, ap] = activ;

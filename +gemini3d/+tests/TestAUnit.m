@@ -96,10 +96,10 @@ end
 
 function test_grid1d(tc)
 
-x = gemini3d.setup.gridgen.grid1d(100., 5);
+x = gemini3d.grid.grid1d(100., 5);
 tc.verifyEqual(x, -100:25:100, 'RelTol', 1e-6, 'AbsTol', 1e-8)
 
-x = gemini3d.setup.gridgen.grid1d(100., 5, [200, 0.5, 9.5, 10]);
+x = gemini3d.grid.grid1d(100., 5, [200, 0.5, 9.5, 10]);
 tc.verifyEqual(x, [-50.25, -40.25, -30.25, -20.25, -10.25, -0.25, 0.25, 10.25, 20.25, 30.25, 40.25, 50.25], ...
   'RelTol', 1e-6, 'AbsTol', 1e-8)
 

@@ -74,11 +74,11 @@ if opts.overwrite
   % note, if an old, incompatible shape exists this will fail.
   % we didn't want to automatically recursively delete directories,
   % so it's best to manually ensure all the old directories are removed first.
-  gemini3d.setup.model_setup(cfg)
+  gemini3d.model.setup(cfg)
 else
   for k = ["indat_size", "indat_grid", "indat_file"]
     if ~isfile(fullfile(cfg.outdir, cfg.(k)))
-      gemini3d.setup.model_setup(cfg)
+      gemini3d.model.setup(cfg)
       break
     end
   end

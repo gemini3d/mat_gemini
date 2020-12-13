@@ -1,4 +1,4 @@
-function [cfg, xg] = model_setup(cfg, outdir)
+function [cfg, xg] = setup(cfg, outdir)
 %% determines what kind of setup is needed and does it.
 arguments
   cfg = pwd
@@ -12,12 +12,12 @@ elseif isstring(cfg) || ischar(cfg)
   % path to config.nml
   cfg = gemini3d.read.config(cfg);
 else
-  error('model_setup:value_error', 'need path to config.nml')
+  error('model:setup:value_error', 'need path to config.nml')
 end
 
 if isempty(outdir)
   if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
-    error('model_setup:file_not_found', 'please specify outdir or p.outdir')
+    error('model:setup:file_not_found', 'please specify outdir or p.outdir')
   end
 else
   % override with outdir regardless
@@ -34,9 +34,9 @@ gemini3d.fileio.copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
 
 %% is this equilibrium or interpolated simulation
 if isfield(cfg, 'eq_dir') && ~isempty(cfg.eq_dir)
-  xg = gemini3d.setup.model_setup_interp(cfg);
+  xg = gemini3d.model.interp(cfg);
 else
-  xg = gemini3d.setup.model_setup_equilibrium(cfg);
+  xg = gemini3d.model.equilibrium(cfg);
 end
 
 if ~nargout, clear('cfg', 'xg'), end

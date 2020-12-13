@@ -27,7 +27,7 @@ check_drift(dat.vs1)
 check_temperature(dat.Ts)
 
 %% DO THE INTERPOLATION
-[nsi,vs1i,Tsi] = gemini3d.setup.model_resample(xgin, dat.ns, dat.vs1, dat.Ts, xg);
+[nsi,vs1i,Tsi] = gemini3d.model.resample(xgin, dat.ns, dat.vs1, dat.Ts, xg);
 
 %% sanity check interpolated variables
 check_density(nsi)

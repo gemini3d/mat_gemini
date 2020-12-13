@@ -1,4 +1,4 @@
-function [nsi,vs1i,Tsi] = model_resample(xgin,ns,vs1,Ts,xg)
+function [nsi,vs1i,Tsi] = resample(xgin,ns,vs1,Ts,xg)
 arguments
   xgin (1,1) struct
   ns (:,:,:,:) {mustBeFinite,mustBePositive}

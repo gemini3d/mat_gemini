@@ -32,7 +32,7 @@ function test_grid(tc)
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
   cfg = gemini3d.read.config(test_dir);
-  xg = gemini3d.setup.gridgen.makegrid_cart_3D(cfg);
+  xg = gemini3d.grid.cart3d(cfg);
 
   % path patch
   cfg.outdir = tc.TestData.outdir;
