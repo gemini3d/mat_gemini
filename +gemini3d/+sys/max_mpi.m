@@ -72,28 +72,10 @@ end
 N = 1;
 for i = f2
   for j = f3
-    N = max_factor(i, j, M, N);
+    if M >= i * j && i * j > N
+      N = i * j;
+    end
   end
 end
 
 end % function
-
-
-function N = max_factor(i, j, M, N)
-%% 1 CPU along a dimension means don't partition in that dimension
-
-arguments
-  i (1,1) {mustBePositive,mustBeInteger}
-  j (1,1) {mustBePositive,mustBeInteger}
-  M (1,1) {mustBePositive,mustBeInteger}
-  N (1,1) {mustBePositive,mustBeInteger}
-end
-
-if i == 1, i = 0; end
-if j == 1, j = 0; end
-
-if M >= i + j && i + j > N
-  N = i + j;
-end
-
-end
