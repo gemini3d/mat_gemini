@@ -14,7 +14,8 @@ arguments
   vsx1 (:,:,:,:) {mustBeFinite}
   Ts (:,:,:,:) {mustBeFinite,mustBeNonnegative}
   fn (1,1) string
-  file_format (1,1) string = string.empty
+  %file_format (1,1) string = string.empty
+  file_format string = string.empty   %empty does not have (1,1) size so this would fail in default before???
   Phitop (:,:) {mustBeFinite} = zeros(size(ns,2),size(ns,3))
 end
 
