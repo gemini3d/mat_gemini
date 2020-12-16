@@ -49,24 +49,46 @@ Bthetat=zeros(1,ltheta,lphi,lt);
 Bphit=zeros(1,ltheta,lphi,lt);
 
 for it=2:lt-1    %starts at second time step due to weird magcalc quirk
-
-  filename= gemini3d.datelab(times(it));
-  fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
-
-  data=fread(fid,lpoints,'real*8');
-  Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
-  Brt(:,:,:,it)=Brt(:,ilatsort,:,it);
-  Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
-  data=fread(fid,lpoints,'real*8');
-  Bthetat(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
-  Bthetat(:,:,:,it)=Bthetat(:,ilatsort,:,it);
-  Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
-  data=fread(fid,lpoints,'real*8');
-  Bphit(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
-  Bphit(:,:,:,it)=Bphit(:,ilatsort,:,it);
-  Bphit(:,:,:,it)=Bphit(:,:,ilonsort,it);
-
-  fclose(fid);
+    if(cfg.file_format == 'dat')
+        filename= gemini3d.datelab(times(it));
+        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
+    end %if
+    
+    if(cfg.file_format == 'dat')
+        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
+        data=fread(fid,lpoints,'real*8');
+    elseif(cfg.file_format == 'h5')
+        data = h5read(strcat(direc,'magfields/',filename,'.h5'),'/magfields/Br');
+    end
+    
+    Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
+    Brt(:,:,:,it)=Brt(:,ilatsort,:,it);
+    Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
+    
+    if(cfg.file_format == 'dat')
+        data=fread(fid,lpoints,'real*8');
+    elseif(cfg.file_format == 'h5')
+        data = h5read(strcat(direc,'magfields/',filename,'.h5'),'/magfields/Btheta');
+    end
+    
+    Bthetat(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
+    Bthetat(:,:,:,it)=Bthetat(:,ilatsort,:,it);
+    Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
+    
+    
+    if(cfg.file_format == 'dat')
+        data=fread(fid,lpoints,'real*8');
+    elseif(cfg.file_format == 'h5')
+        data = h5read(strcat(direc,'magfields/',filename,'.h5'),'/magfields/Bphi');
+    end
+    
+    Bphit(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
+    Bphit(:,:,:,it)=Bphit(:,ilatsort,:,it);
+    Bphit(:,:,:,it)=Bphit(:,:,ilonsort,it);
+    
+    if(cfg.file_format == 'dat')
+        fclose(fid);
+    end
 end
 fprintf('...Done reading data...\n');
 
