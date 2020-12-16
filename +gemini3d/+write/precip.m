@@ -15,7 +15,7 @@ switch file_format
   case 'h5', write_hdf5(outdir, pg)
   case 'nc', write_nc4(outdir, pg)
   case 'dat', write_raw(outdir, pg)
-  otherwise, error('particles_BCs:value_error', 'unknown file format %s', file_format)
+  otherwise, error('write:precip:value_error', 'unknown file format %s', file_format)
 end
 
 end % function
