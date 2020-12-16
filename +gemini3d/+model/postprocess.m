@@ -14,14 +14,17 @@ if isfield(cfg, 'setup_functions')
     func = str2func(name);
     func(cfg, xg)
   end
-else
+
+  return
+end
 %% potential boundary conditions
-  if isfield(cfg, 'E0_dir')
-    gemini3d.setup.Efield_BCs(cfg, xg);
-  end
+if isfield(cfg, 'E0_dir')
+  gemini3d.setup.Efield_BCs(cfg, xg);
+end
 
 %% aurora
-  if isfield(cfg, 'prec_dir')
-    gemini3d.setup.particles_BCs(cfg, xg)
-  end
+if isfield(cfg, 'prec_dir')
+  gemini3d.setup.particles_BCs(cfg, xg)
 end
+
+end % function
