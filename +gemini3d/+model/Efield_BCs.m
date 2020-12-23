@@ -89,6 +89,8 @@ if isfield(p, 'Etarg')
 elseif isfield(p, 'Jtarg')
   E.Jtarg = p.Jtarg;
   E = Jcurrent_target(E, Nt);
+else
+  % background only, pass
 end
 
 %% SAVE THESE DATA TO APPROPRIATE FILES
