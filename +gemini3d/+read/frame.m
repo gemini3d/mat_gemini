@@ -23,7 +23,7 @@ end
 
 dat = struct.empty;
 
-filename = gemini3d.fileio.expanduser(gemini3d.posix(filename));
+filename = gemini3d.fileio.expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
@@ -50,8 +50,9 @@ switch get_flagoutput(filename, cfg)
   otherwise, error('gemini3d:read:frame:value_error', 'Problem with flagoutput=%d. Please specify flagoutput in config file.', flagoutput)
 end %switch
 
-dat.time = gemini3d.read.time(filename);
-
+if ~isfield(dat, 'time')
+  dat.time = gemini3d.read.time(filename);
+end
 %% ensure input/simgrid matches data
 lxs = gemini3d.simsize(filename);
 if isempty(lxs)

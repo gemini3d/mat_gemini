@@ -9,7 +9,7 @@ fvars = hdf5nc.h5variables(fn);
 
 dat.filename = fn;
 
-if any(vars == "ne")
+if any(contains(vars, ["ne", "ns"]))
 dat.ns = h5read(fn, '/nsall');
 end
 

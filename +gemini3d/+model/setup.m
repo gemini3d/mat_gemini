@@ -1,27 +1,23 @@
-function [cfg, xg] = setup(cfg, outdir)
+function [cfg, xg] = setup(cfg, out_dir)
 %% determines what kind of setup is needed and does it.
 arguments
-  cfg = pwd
-  outdir string = string.empty
+  cfg (1,1) {mustBeA(cfg, ["string", "char", "struct"])}
+  out_dir string = string.empty
 end
 
 %% parse input
-if isstruct(cfg)
-  % pass
-elseif isstring(cfg) || ischar(cfg)
+if ~isstruct(cfg)
   % path to config.nml
   cfg = gemini3d.read.config(cfg);
-else
-  error('model:setup:value_error', 'need path to config.nml')
 end
 
-if isempty(outdir)
+if isempty(out_dir)
   if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
-    error('model:setup:file_not_found', 'please specify outdir or p.outdir')
+    error('model:setup:file_not_found', 'please specify out_dir')
   end
 else
-  % override with outdir regardless
-  cfg.outdir = outdir;
+  % override with out_dir regardless
+  cfg.outdir = out_dir;
 end
 
 cfg = gemini3d.fileio.make_valid_paths(cfg);

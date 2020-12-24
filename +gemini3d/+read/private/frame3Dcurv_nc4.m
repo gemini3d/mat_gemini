@@ -6,7 +6,11 @@ end
 %% SIMULATION RESULTS
 dat.filename = fn;
 
-for k = ["ne", "J1", "J2", "J3"]
+if any(contains(vars, ["ne", "ns"]))
+dat.ns = ncread(fn, "nsall");
+end
+
+for k = ["J1", "J2", "J3"]
   if any(vars == k)
   dat.(k) = ncread(fn, k + "all");
   end
