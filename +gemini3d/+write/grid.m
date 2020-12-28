@@ -8,6 +8,10 @@ end
 
 import gemini3d.fileio.with_suffix
 
+%% check the input struct to make sure needed fields are present
+assert(isfield(p,"indat_grid"),"Field indat_grid missing...");
+assert(isfield(p,"indat_size"),"Field indat_size missing...");
+
 %% sanity check grid
 ok = gemini3d.check_grid(xg);
 
