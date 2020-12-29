@@ -1,8 +1,8 @@
 function maggrid(params,xmag)
 
 arguments
-    params struct
-    xmag struct
+  params (1,1) struct
+  xmag (1,1) struct
 end %arguments
 
 % error checking on struct fields
@@ -13,19 +13,17 @@ assert(isfield(params,"file_format"),"file_format field of params must be define
 assert(isfield(params,"indat_grid"),"indat_grid field of params must be defined");
 
 % default value for gridsize
-if (~isfield(xmag,"gridsize"))
-    warning("maggrid --> Defaulting gridsize to flat list...")
-    gridsize=[numel(R),-1,-1];
+if ~isfield(xmag, "gridsize")
+  warning("maggrid --> Defaulting gridsize to flat list...")
+  gridsize=[numel(R),-1,-1];
 else
-    gridsize=xmag.gridsize;
+  gridsize=xmag.gridsize;
 end %if
 
 % write the file
-switch(params.file_format)
-    case "dat"
-        writemagraw(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI);
-    otherwise
-        writemagh5(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI,gridsize);
+switch params.file_format
+  case "dat", writemagraw(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI);
+  otherwise, writemagh5(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI,gridsize);
 end %switch
 
 end %function
@@ -35,6 +33,7 @@ function writemagh5(filename,R,THETA,PHI,gridsize)
 
 % hdf5 files can optionally store a gridsize variable which tells readers how to
 % reshape the data into 2D or 3D arrays.
+% NOTE: the Fortran magcalc.f90 is looking for flat list.
 
 import gemini3d.fileio.with_suffix
 
