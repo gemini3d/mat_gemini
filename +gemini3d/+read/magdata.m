@@ -108,7 +108,7 @@ for it=2:lt-1    %starts at second time step due to weird magcalc quirk
     dat.Bphit(:,:,:,it)=dat.Bphit(:,:,ilonsort,it);
   end
 
-  if exist(fid, "var")
+  if exist("fid", "var")
     fclose(fid);
   end
 end
