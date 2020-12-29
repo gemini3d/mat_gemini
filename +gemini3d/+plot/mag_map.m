@@ -3,8 +3,6 @@ arguments
   direc (1,1) string
 end
 
-import gemini3d.fileio.makedir
-
 direc = gemini3d.fileio.expanduser(direc);
 
 addons = matlab.addons.installedAddons();
@@ -13,15 +11,11 @@ assert(has_map, "Mapping Toolbox is needed")
 
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
-makedir(fullfile(pdir, "Br"));
-makedir(fullfile(pdir, "Bth"));
-makedir(fullfile(pdir, "Bphi"));
-
+gemini3d.fileio.makedir(pdir)
 basemagdir = fullfile(direc, 'magfields');
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
-cfg.pdir = pdir;
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
 
@@ -167,17 +161,21 @@ for it=1:length(cfg.times)-1
   filename = gemini3d.datelab(cfg.times(it));
   ttxt = datestr(cfg.times(it));
 
-  plotBr(Brtp(:,:,:,it), cfg, ttxt, filename);
+  f1 = plotBr(Brtp(:,:,:,it), cfg, ttxt);
+  exportgraphics(f1, fullfile(pdir, "Br-" + filename + ".png"), "resolution", 300)
 
-  plotBtheta(Bthetatp(:,:,:,it), cfg, ttxt, filename)
+  f2 = plotBtheta(Bthetatp(:,:,:,it), cfg, ttxt);
+  exportgraphics(f2, fullfile(pdir,"Bth-" + filename + ".png"), "resolution", 300)
 
-  plotBphi(Bphitp(:,:,:,it), cfg, ttxt, filename)
+  f3 = plotBphi(Bphitp(:,:,:,it), cfg, ttxt);
+  exportgraphics(f3, fullfile(pdir,"Bphi-" + filename + ".png"), "resolution", 300)
+
 end % for
 
 end % function
 
 
-function plotBr(Brtp, cfg, ttxt, filename)
+function fig = plotBr(Brtp, cfg, ttxt)
 
 fig = figure(1);
 clf(fig)
@@ -207,12 +205,10 @@ plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
 setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
 gridm('on')
 
-exportgraphics(fig, fullfile(cfg.pdir,"Br", filename + ".png"), "resolution", 300)
-
 end % function
 
 
-function plotBtheta(Bthetatp, cfg, ttxt, filename)
+function fig = plotBtheta(Bthetatp, cfg, ttxt)
 
 fig=figure(2);
 clf(fig)
@@ -241,12 +237,10 @@ plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
 setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
 gridm("on")
 
-exportgraphics(fig, fullfile(cfg.pdir,"Bth", filename + ".png"), "resolution", 300)
-
 end % function
 
 
-function plotBphi(Bphitp, cfg, ttxt, filename)
+function fig = plotBphi(Bphitp, cfg, ttxt)
 fig=figure(3);
 clf(fig)
 ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5,max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
@@ -274,7 +268,5 @@ plotm(cfg.sourcemlat, cfg.sourcemlon, 'r^','MarkerSize',6,'LineWidth',2, "parent
 plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
 setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
 gridm("on")
-
-exportgraphics(fig, fullfile(cfg.pdir,"Bphi", filename + ".png"), "resolution", 300)
 
 end % function

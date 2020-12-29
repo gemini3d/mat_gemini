@@ -11,8 +11,6 @@ if isfolder(direc), return, end
 
 mkdir(direc);
 
-if ~isfolder(direc)
-  error('makedir:not_a_directory', 'not a directory %s', direc)
-end
+assert(isfolder(direc), 'not a directory %s', direc)
 
 end
