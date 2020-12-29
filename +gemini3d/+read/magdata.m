@@ -13,14 +13,20 @@ times=cfg.times;
 lt=numel(cfg.times);
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
-basemagdir= fullfile(direc,'magfields/');
-fid=fopen(fullfile(basemagdir,'input/magfieldpoints.dat'),'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
-lpoints=fread(fid,1,'integer*4');
-
-r=fread(fid,lpoints,'real*8');
-theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
-phi=fread(fid,lpoints,'real*8');
-fclose(fid);
+if (cfg.file_format =='dat')
+    basemagdir= fullfile(direc,'magfields/');
+    fid=fopen(fullfile(basemagdir,'input/magfieldpoints.dat'),'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
+    lpoints=fread(fid,1,'integer*4');
+    
+    r=fread(fid,lpoints,'real*8');
+    theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
+    phi=fread(fid,lpoints,'real*8');
+    fclose(fid);
+elseif (cfg.file_format=='h5')
+    r = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/r');
+    theta = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/theta');
+    phi = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/phi');    
+end %if
 
 % Reorganize the field points if the user has specified a grid size
 if any(gridsize < 0)
