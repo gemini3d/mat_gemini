@@ -25,7 +25,9 @@ if (cfg.file_format =='dat')
 elseif (cfg.file_format=='h5')
     r = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/r');
     theta = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/theta');
-    phi = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/phi');    
+    phi = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/phi');
+else
+    error('Unrecognized input field point file format!!!')
 end %if
 
 % Reorganize the field points if the user has specified a grid size
