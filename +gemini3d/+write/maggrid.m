@@ -1,44 +1,51 @@
-function maggrid(params,xmag)
+function maggrid(filename,xmag)
 
 arguments
-  params (1,1) struct
+  filename (1,1) string
   xmag (1,1) struct
 end %arguments
+
+filename = gemini3d.fileio.expanduser(filename);
 
 % error checking on struct fields
 assert(isfield(xmag,"R"),"R field of xmag must be defined");
 assert(isfield(xmag,"THETA"),"THETA field of xmag must be defined");
 assert(isfield(xmag,"PHI"),"PHI field of xmag must be defined");
-assert(isfield(params,"file_format"),"file_format field of params must be defined");
-assert(isfield(params,"indat_grid"),"indat_grid field of params must be defined");
 
 % default value for gridsize
 if ~isfield(xmag, "gridsize")
-  warning("maggrid --> Defaulting gridsize to flat list...")
-  gridsize=[numel(R),-1,-1];
+  if isvector(xmag.R)
+    warning("maggrid --> Defaulting gridsize to flat list...")
+    gridsize=[numel(xmag.R),-1,-1];
+  else
+    gridsize = size(xmag.R);
+  end
 else
   gridsize=xmag.gridsize;
 end %if
 
-% write the file
-switch params.file_format
-  case "dat", writemagraw(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI);
-  otherwise, writemagh5(params.indat_grid,xmag.R,xmag.THETA,xmag.PHI,gridsize);
+%% write the file
+[parent, ~, ext] = fileparts(filename);
+assert(isfolder(parent), parent + " parent directory does not exist")
+
+switch ext
+  case ".dat", writemagraw(filename, xmag.R,xmag.THETA,xmag.PHI)
+  case ".h5", writemagh5(filename, xmag.R,xmag.THETA,xmag.PHI,gridsize)
+  otherwise, error(params.file_format + " not handled yet. Please open GitHub issue.")
 end %switch
 
 end %function
 
 
-function writemagh5(filename,R,THETA,PHI,gridsize)
+function writemagh5(fn,R,THETA,PHI,gridsize)
 
 % hdf5 files can optionally store a gridsize variable which tells readers how to
 % reshape the data into 2D or 3D arrays.
 % NOTE: the Fortran magcalc.f90 is looking for flat list.
 
-import gemini3d.fileio.with_suffix
+disp("write: " + fn)
 
 freal = 'float32';      % default input files to real32
-fn = with_suffix(filename,".h5");
 
 hdf5nc.h5save(fn, "/lpoints",numel(R),"type",freal);
 hdf5nc.h5save(fn, "/r",R(:),"type",freal);
@@ -49,11 +56,12 @@ hdf5nc.h5save(fn, "/gridsize",gridsize,"type","int32");
 end %function
 
 
-function writemagraw(filename,R,THETA,PHI)
+function writemagraw(fn,R,THETA,PHI)
 
 % raw binary output for the magcalc program; note that this is just a flat
 % list and does not carry grid size information like hdf5 does.
-fn = with_suffix(filename,".dat");
+
+disp("write: " + fn)
 
 fid=fopen(fn,'w');
 fwrite(fid,numel(THETA),'integer*4');
