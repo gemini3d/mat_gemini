@@ -21,6 +21,7 @@ basemagdir = fullfile(direc, 'magfields');
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
+cfg.pdir = pdir;
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
 
@@ -31,8 +32,8 @@ case 'h5'
 
   lpoints = h5read(fn, "/lpoints");
   r = h5read(fn, "/r");
-  theta = h5read(fn, "/theta");
-  phi = h5read(fn, "/phi");
+  theta = double(h5read(fn, "/theta"));
+  phi = double(h5read(fn, "/phi"));
 case 'dat'
   fn = fullfile(direc,'inputs/magfieldpoints.dat');
   assert(isfile(fn), fn + " not found")
@@ -54,10 +55,10 @@ theta=reshape(theta(:),[ltheta,lphi]);
 phi=reshape(phi(:),[ltheta,lphi]);
 mlat=90-theta*180/pi;
 [~,ilatsort]=sort(mlat(:,1));    %mlat runs against theta...
-mlat=mlat(ilatsort,1);
+cfg.mlat=mlat(ilatsort,1);
 mlon=phi*180/pi;
 [~,ilonsort]=sort(mlon(1,:));
-mlon=mlon(1,ilonsort);
+cfg.mlon=mlon(1,ilonsort);
 
 
 %THESE DATA ARE ALMOST CERTAINLY NOT LARGE SO LOAD THEM ALL AT ONCE (CAN
@@ -120,11 +121,11 @@ mlonp=linspace(min(mlon(:)),max(mlon(:)),llonp);
 mlatp=linspace(min(mlat(:)),max(mlat(:)),llatp);
 [MLONP,MLATP]=meshgrid(mlonp,mlatp);
 for it=1:length(cfg.times)
-  param=interp2(mlon,mlat,squeeze(Brt(:,:,:,it)),MLONP,MLATP);
+  param=interp2(cfg.mlon, cfg.mlat,squeeze(Brt(:,:,:,it)),MLONP,MLATP);
   Brtp(:,:,:,it)=reshape(param,[1, llonp, llatp]);
-  param=interp2(mlon,mlat,squeeze(Bthetat(:,:,:,it)),MLONP,MLATP);
+  param=interp2(cfg.mlon, cfg.mlat,squeeze(Bthetat(:,:,:,it)),MLONP,MLATP);
   Bthetatp(:,:,:,it)=reshape(param,[1, llonp, llatp]);
-  param=interp2(mlon,mlat,squeeze(Bphit(:,:,:,it)),MLONP,MLATP);
+  param=interp2(cfg.mlon, cfg.mlat,squeeze(Bphit(:,:,:,it)),MLONP,MLATP);
   Bphitp(:,:,:,it)=reshape(param,[1, llonp, llatp]);
 end
 disp('...Done interpolating')
@@ -146,136 +147,134 @@ end
 
 
 %MAKE THE PLOTS AND SAVE TO A FILE
+FS=8;
+
+coast = load('coastlines', 'coastlat', 'coastlon');
+[thetacoast,phicoast] = gemini3d.geog2geomag(coast.coastlat, coast.coastlon);
+cfg.mlatcoast=90-thetacoast*180/pi;
+cfg.mloncoast=phicoast*180/pi;
+
+if (360-mlonsrc<20)
+  inds=find(cfg.mloncoast>180);
+  cfg.mloncoast(inds)=cfg.mloncoast(inds)-360;
+end
+
+mlatlim=[min(mlatp),max(mlatp)];
+mlonlim=[min(mlonp),max(mlonp)];
+[cfg.MLAT, cfg.MLON]=meshgrat(mlatlim,mlonlim,[llonp, llatp]);
+
 for it=1:length(cfg.times)-1
-  %CREATE A MAP AXIS
-  figure(1);
-  FS=8;
-
   filename = gemini3d.datelab(cfg.times(it));
-  titlestring = datestr(cfg.times(it));
+  ttxt = datestr(cfg.times(it));
 
-%    subplot(131);
-  figure(1)
-  clf(1)
-  mlatlimplot=[min(mlat)-0.5,max(mlat)+0.5];
-  mlonlimplot=[min(mlon)-0.5,max(mlon)+0.5];
-  axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
-  param=squeeze(Brtp(:,:,:,it))*1e9;
-  mlatlim=[min(mlatp),max(mlatp)];
-  mlonlim=[min(mlonp),max(mlonp)];
-  [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
-  pcolorm(MLAT,MLON,param);
-  %cmap=lbmap(256,'redblue');
-  %cmap=flipud(cmap);
-  %colormap(cmap);
-  colormap(gemini3d.plot.bwr());
-  set(gca,'FontSize',FS);
-  tightmap;
-  caxlim=max(abs(param(:)));
-  caxlim=max(caxlim,0.001);
-  caxis([-caxlim,caxlim]);
-  c=colorbar;
-  set(c,'FontSize',FS)
-  title(sprintf(['B_r (nT)  ',titlestring,' \n\n']));
-  xlabel(sprintf('magnetic long. (deg.) \n\n'))
-  ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
-  hold on;
-  ax=axis;
-  plotm(cfg.sourcemlat, cfg.sourcemlon,'r^','MarkerSize',6,'LineWidth',2);
-  hold off;
+  plotBr(Brtp(:,:,:,it), cfg, ttxt, filename);
 
-%    subplot(132);
-  figure(2)
-  clf(2)
-  axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
-  param=squeeze(Bthetatp(:,:,:,it))*1e9;
-  pcolorm(MLAT,MLON,param);
-%     cmap=lbmap(256,'redblue');
-%     cmap=flipud(cmap);
-%     colormap(cmap);
-  colormap(gemini3d.plot.bwr());
-  set(gca,'FontSize',FS);
-  tightmap;
-  caxlim=max(abs(param(:)));
-  caxlim=max(caxlim,0.001);
-  caxis([-caxlim,caxlim]);
-  c=colorbar;
-  set(c,'FontSize',FS)
-  title(sprintf(['B_\\theta (nT)  ',titlestring,' \n\n']));
-  xlabel(sprintf('magnetic long. (deg.) \n\n'))
-  ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
-  hold on;
-  ax=axis;
-  plotm(cfg.sourcemlat, cfg.sourcemlon,'r^','MarkerSize',6,'LineWidth',2);
-  hold off;
+  plotBtheta(Bthetatp(:,:,:,it), cfg, ttxt, filename)
 
-%    subplot(133);
-  figure(3);
-  clf;
-  axesm('MapProjection','Mercator','MapLatLimit',mlatlimplot,'MapLonLimit',mlonlimplot);
-  param=squeeze(Bphitp(:,:,:,it))*1e9;
-  %imagesc(mlon,mlat,param);
-  pcolorm(MLAT,MLON,param);
-%     cmap=lbmap(256,'redblue');
-%     cmap=flipud(cmap);
-%     colormap(cmap);
-  colormap(gemini3d.plot.bwr());
-  set(gca,'FontSize',FS);
-  tightmap;
-  caxlim=max(abs(param(:)));
-  caxlim=max(caxlim,0.001);
-  caxis([-caxlim,caxlim]);
-  c=colorbar;
-  set(c,'FontSize',FS)
-  title(sprintf(['B_\\phi (nT)  ',titlestring,' \n\n']));
-  xlabel(sprintf('magnetic long. (deg.) \n\n'))
-  ylabel(sprintf('magnetic lat. (deg.)\n\n\n'))
-  hold on
-  ax=axis;
-  plotm(cfg.sourcemlat, cfg.sourcemlon, 'r^','MarkerSize',6,'LineWidth',2);
-  hold off
-
-
-  %ADD A MAP OF COASTLINES
-  load('coastlines')
-  [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
-  mlatcoast=90-thetacoast*180/pi;
-  mloncoast=phicoast*180/pi;
-
-  if (360-mlonsrc<20)
-    inds=find(mloncoast>180);
-    mloncoast(inds)=mloncoast(inds)-360;
-  end
-
-%        subplot(131);
-  figure(1);
-  hold on;
-  ax=axis;
-  plotm(mlatcoast,mloncoast,'k-','LineWidth',1);
-  setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
-  gridm on;
-  exportgraphics(fullfile(pdir,"Br", filename + ".png"), "resolution", 300)
-
-%        subplot(132);
-  figure(2);
-  hold on;
-  ax=axis;
-  plotm(mlatcoast,mloncoast,'k-','LineWidth',1);
-  setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
-  gridm on;
-  exportgraphics(fullfile(pdir,"Bth", filename + ".png"), "resolution", 300)
-
-%        subplot(133);
-  figure(3);
-  hold on;
-  ax=axis;
-  plotm(mlatcoast,mloncoast,'k-','LineWidth',1);
-  setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
-  gridm on;
-  exportgraphics(fullfile(pdir,"Bphi", filename + ".png"), "resolution", 300)
-
-  axis(ax);
+  plotBphi(Bphitp(:,:,:,it), cfg, ttxt, filename)
 end % for
 
+end % function
+
+
+function plotBr(Brtp, cfg, ttxt, filename)
+
+fig = figure(1);
+clf(fig)
+
+ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5, max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
+param=squeeze(Brtp)*1e9;
+
+pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
+
+colormap(fig, gemini3d.plot.bwr());
+% set(ax,'FontSize',FS)
+tightmap
+caxlim=max(abs(param(:)));
+caxlim=max(caxlim,0.001);
+caxis(ax, [-caxlim,caxlim]);
+c=colorbar("peer", ax);
+% set(c,'FontSize',FS)
+title(ax, "B_r (nT)  " + ttxt + sprintf('\n\n'))
+xlabel(ax, 'magnetic long. (deg.)')
+ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))
+
+plotm(cfg.sourcemlat, cfg.sourcemlon, 'r^','MarkerSize',6,'LineWidth',2, "parent", ax)
+
+%ADD A MAP OF COASTLINES
+
+plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
+setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
+gridm('on')
+
+exportgraphics(fig, fullfile(cfg.pdir,"Br", filename + ".png"), "resolution", 300)
+
+end % function
+
+
+function plotBtheta(Bthetatp, cfg, ttxt, filename)
+
+fig=figure(2);
+clf(fig)
+
+ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5,max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
+param=squeeze(Bthetatp)*1e9;
+pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
+%     cmap=lbmap(256,'redblue');
+%     cmap=flipud(cmap);
+%     colormap(cmap);
+colormap(fig, gemini3d.plot.bwr())
+%set(ax,'FontSize',FS)
+tightmap
+caxlim=max(abs(param(:)));
+caxlim=max(caxlim,0.001);
+caxis(ax, [-caxlim,caxlim]);
+c=colorbar("peer", ax);
+%set(c,'FontSize',FS)
+title(ax, "B_\theta (nT)  " + ttxt + sprintf('\n\n'))
+xlabel(ax, 'magnetic long. (deg.)')
+ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))
+
+plotm(cfg.sourcemlat, cfg.sourcemlon,'r^','MarkerSize',6,'LineWidth',2, "parent", ax)
+
+plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
+setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
+gridm("on")
+
+exportgraphics(fig, fullfile(cfg.pdir,"Bth", filename + ".png"), "resolution", 300)
+
+end % function
+
+
+function plotBphi(Bphitp, cfg, ttxt, filename)
+fig=figure(3);
+clf(fig)
+ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5,max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
+param=squeeze(Bphitp)*1e9;
+%imagesc(mlon,mlat,param);
+pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
+%     cmap=lbmap(256,'redblue');
+%     cmap=flipud(cmap);
+%     colormap(cmap);
+colormap(fig, gemini3d.plot.bwr())
+%set(ax,'FontSize',FS)
+tightmap
+caxlim=max(abs(param(:)));
+caxlim=max(caxlim,0.001);
+caxis(ax, [-caxlim,caxlim])
+
+c=colorbar("peer", ax);
+%set(c,'FontSize',FS)
+title(ax, "B_\phi (nT)  " + ttxt + sprintf('\n\n'));
+xlabel(ax, 'magnetic long. (deg.)')
+ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))
+
+plotm(cfg.sourcemlat, cfg.sourcemlon, 'r^','MarkerSize',6,'LineWidth',2, "parent", ax)
+
+plotm(cfg.mlatcoast, cfg.mloncoast,'k-','LineWidth',1, "parent", ax)
+setm(ax,'MeridianLabel','on','ParallelLabel','on','MLineLocation',2,'PLineLocation',1,'MLabelLocation',2,'PLabelLocation',1);
+gridm("on")
+
+exportgraphics(fig, fullfile(cfg.pdir,"Bphi", filename + ".png"), "resolution", 300)
 
 end % function
