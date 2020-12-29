@@ -1,34 +1,41 @@
-function [dat,times] = magdata(direc,gridsize)
+function dat = magdata(direc,gridsize)
 
 arguments
   direc (1,1) string
   gridsize (1,3) {mustBeNumeric} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
 
+direc = gemini3d.fileio.expanduser(direc);
+basemagdir = fullfile(direc, 'magfields');
+
 flatlist=false;
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
-times=cfg.times;
-lt=numel(cfg.times);
+dat.times = cfg.times;
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
-if (cfg.file_format =='dat')
-    basemagdir= fullfile(direc,'magfields/');
-    fid=fopen(fullfile(basemagdir,'input/magfieldpoints.dat'),'r');    %needs some way to know what the input file is, maybe force fortran code to use this filename...
+switch cfg.file_format
+  case 'dat'
+    fn = fullfile(direc,'inputs/magfieldpoints.dat');
+    assert(isfile(fn), fn + " not found")
+
+    fid=fopen(fn, 'r');
     lpoints=fread(fid,1,'integer*4');
-    
     r=fread(fid,lpoints,'real*8');
     theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
     phi=fread(fid,lpoints,'real*8');
     fclose(fid);
-elseif (cfg.file_format=='h5')
-    r = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/r');
-    theta = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/theta');
-    phi = h5read(strcat(direc,"/inputs/magfieldpoints.h5"),'/phi');
-else
-    error('Unrecognized input field point file format!!!')
-end %if
+  case 'h5'
+    fn = fullfile(direc,'inputs/magfieldpoints.h5');
+    assert(isfile(fn), fn + " not found")
+
+    lpoints = h5read(fn, "/lpoints");
+    r = h5read(fn, "/r");
+    theta = double(h5read(fn, "/theta"));
+    phi = double(h5read(fn, "/phi"));
+  otherwise, error('Unrecognized input field point file format %s', cfg.file_format)
+end
 
 % Reorganize the field points if the user has specified a grid size
 if any(gridsize < 0)
@@ -47,7 +54,7 @@ assert(lpoints == prod(gridsize), 'Incompatible data size and grid specification
 % have been permuted in this order...
 mlat=90-theta*180/pi;
 mlon=phi*180/pi;
-if (~flatlist)   % we have a grid of points
+if ~flatlist   % we have a grid of points
   [~,ilatsort]=sort(mlat(1,:,1));    %mlat runs against theta...
   dat.mlat=squeeze(mlat(1,ilatsort,1));
   [~,ilonsort]=sort(mlon(1,1,:));
@@ -64,12 +71,12 @@ end %if
 %THESE DATA ARE ALMOST CERTAINLY NOT LARGE SO LOAD THEM ALL AT ONCE (CAN
 %CHANGE THIS LATER).  NOTE THAT THE DATA NEED TO BE SORTED BY MLAT,MLON AS
 %WE GO
-dat.Brt=zeros(lr,ltheta,lphi,lt);
-dat.Bthetat=zeros(lr,ltheta,lphi,lt);
-dat.Bphit=zeros(lr,ltheta,lphi,lt);
+dat.Brt=zeros(lr,ltheta,lphi,length(cfg.times));
+dat.Bthetat=zeros(lr,ltheta,lphi,length(cfg.times));
+dat.Bphit=zeros(lr,ltheta,lphi,length(cfg.times));
 
-for it=2:lt-1    %starts at second time step due to weird magcalc quirk
-  filename = gemini3d.datelab(times(it));
+for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc quirk
+  filename = gemini3d.datelab(cfg.times(it));
 
   if ~isfile(fullfile(basemagdir, filename + "." + cfg.file_format))
     disp("SKIP: Could not find: " + filename)
