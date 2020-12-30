@@ -104,7 +104,7 @@ close(h)
 
 % test grid plot
 
-h = gemini3d.plot_grid(data_dir);
+h = gemini3d.plot.grid(data_dir);
 tc.verifySize(h, [1, 1])
 tc.verifyClass(h, 'matlab.ui.Figure')
 close(h)

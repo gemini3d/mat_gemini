@@ -1,4 +1,4 @@
-function h = plot_grid(xg, extra, save)
+function h = grid(xg, extra, save)
 %% plot 3D grid
 %
 % xg: file containing grid or struct of grid

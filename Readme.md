@@ -90,7 +90,7 @@ Will save all plots under the `mysim/plots/` directory. Omitting `'png'` just di
 Plots of the simulation grid can be made:
 
 ```matlab
-gemini3d.plot_grid(sim_path)
+gemini3d.plot.grid(sim_path)
 ```
 
 This can help show if something unintended happened.
