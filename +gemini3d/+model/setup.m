@@ -1,7 +1,7 @@
 function [cfg, xg] = setup(cfg, out_dir)
 %% determines what kind of setup is needed and does it.
 arguments
-  cfg
+  cfg {mustBeA(cfg, ["string", "char", "struct"])}
   out_dir string = string.empty
 end
 

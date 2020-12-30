@@ -16,6 +16,10 @@ steps:
     displayName: 'Install Linux prereqs'
   - task: InstallMATLAB@0
   - task: RunMATLABCommand@0
+    displayName: 'Matlab Version'
+    inputs:
+      command: disp(version)
+  - task: RunMATLABCommand@0
     inputs:
       command: TestGemini
   - task: PublishTestResults@2
