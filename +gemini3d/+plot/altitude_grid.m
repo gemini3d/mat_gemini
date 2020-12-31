@@ -1,4 +1,4 @@
-function fig = plot_altitude_grid(xg)
+function fig = altitude_grid(xg)
 %% plot altitude x1 grid
 arguments
   xg (1,1) struct
