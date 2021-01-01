@@ -1,31 +1,35 @@
-function h = grid(xg, extra, save)
+function h = grid(direc, only, save)
 %% plot 3D grid
 %
 % xg: file containing grid or struct of grid
 
 arguments
-  xg
-  extra (1,:) string = string.empty
+  direc (1,1) string
+  only (1,:) string = string.empty
   save string = string.empty
 end
 
-if ~isstruct(xg)
-  xg = gemini3d.read.grid(xg);
+if isempty(only)
+  only = ["basic", "alt", "ecef", "geog"];
 end
 
-assert(~isempty(xg), "not contain a readable simulation grid")
+direc = gemini3d.fileio.expanduser(direc);
+
+xg = gemini3d.read.grid(direc);
+
+assert(~isempty(xg), direc + " does not contain a simulation grid")
 
 h = matlab.ui.Figure.empty;
 %% x1, x2, x3
-if isempty(extra) || any(extra == "basic")
+if any(only == "basic")
   h(end+1) = basic(xg);
 end
 %% detailed altitude plot
-if any(extra == "alt")
+if any(only == "alt")
   h(end+1) = gemini3d.plot.altitude_grid(xg);
 end
 %% ECEF surface
-if any(extra == "ecef")
+if any(only == "ecef")
   fig3 = figure('Name', 'ecef');
   ax = axes('parent', fig3);
   scatter3(xg.x(:), xg.y(:), xg.z(:), 'parent', ax)
@@ -37,7 +41,7 @@ if any(extra == "ecef")
   h(end+1) = stitle(fig3, xg, "ECEF");
 end
 %% lat lon map
-if any(extra == "geog")
+if any(only == "geog")
   fig = figure('Name', 'geog');
   ax = geoaxes('parent', fig);
   geoscatter(xg.glat(:), xg.glon(:), 'parent', ax)
@@ -45,9 +49,13 @@ if any(extra == "geog")
 end
 %% save
 if ~isempty(save)
+  pdir = fullfile(direc, "plots");
+  gemini3d.fileio.makedir(pdir)
   for f = h
-    filename = f.Name + "." + save;
+    filename = fullfile(pdir, "grid-" + f.Name + "." + save);
+    disp("writing " + filename)
     exportgraphics(f, filename)
+    close(f)
   end
 end
 
