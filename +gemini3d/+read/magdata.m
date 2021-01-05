@@ -31,7 +31,7 @@ switch cfg.file_format
     assert(isfile(fn), fn + " not found")
 
     lpoints = h5read(fn, "/lpoints");
-    r = h5read(fn, "/r");
+    r = double(h5read(fn, "/r"));
     theta = double(h5read(fn, "/theta"));
     phi = double(h5read(fn, "/phi"));
   otherwise, error('Unrecognized input field point file format %s', cfg.file_format)
