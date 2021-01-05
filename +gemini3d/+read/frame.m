@@ -1,6 +1,6 @@
 function dat = frame(filename, opts)
-% frame(filename, cfg, vars)
-% load a single time step of data
+
+% load a single time step of plasma data from a GEMINI simulation
 %
 % example use
 % dat = gemini3d.read.frame(filename)
