@@ -25,12 +25,12 @@ dat = struct.empty;
 % make sure to add the default directory where the magnetic fields are to
 % be found
 direc=fileparts(filename);
-basemagdir = fullfile(direc, 'magfields');
+basemagdir = fullfile(direc,"magfields");
 
 % find the actual filename if only the directory was given
 if ~isfile(filename)
   if ~isempty(opts.time)
-    filename = gemini3d.find.frame(direc, opts.time);
+    filename = gemini3d.find.frame(basemagdir,opts.time);
   end
 end
 
@@ -41,7 +41,7 @@ end
 
 % read the config file if one was not provided as input
 if isempty(opts.cfg)
-  cfg = gemini3d.read.config(fileparts(filename));
+  cfg = gemini3d.read.config(direc);
 else
   cfg = opts.cfg;
 end
@@ -112,49 +112,51 @@ dat(1).Bphi=zeros(lr,ltheta,lphi);
 % present (can happen if the user only computes magnetic fields for select frames)...
 %filename = gemini3d.datelab(cfg.times(it));
 
-if ~isfile(fullfile(basemagdir, filename + "." + cfg.file_format))
+%if ~isfile(fullfile(basemagdir, filename + "." + cfg.file_format))
+if ~isfile(filename)
     disp("gemini3d.read.magframe - SKIP: Could not find: " + filename)
     return;
 end
 
 switch cfg.file_format
     case 'dat'
-        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
+%        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
+        fid=fopen(filename,'r');
         data=fread(fid,lpoints,'real*8');
     case 'h5'
-        data = h5read(fullfile(basemagdir, filename + ".h5"), '/magfields/Br');
+        data = h5read(filename, '/magfields/Br');
 end
 
-dat.Br(:,:,:,it)=reshape(data,[lr,ltheta,lphi]);
+dat.Br(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Br(:,:,:,it)=dat.Br(:,ilatsort,:);
-    dat.Br(:,:,:,it)=dat.Br(:,:,ilonsort);
+    dat.Br(:,:,:)=dat.Br(:,ilatsort,:);
+    dat.Br(:,:,:)=dat.Br(:,:,ilonsort);
 end
 
 switch cfg.file_format
     case 'dat'
         data=fread(fid,lpoints,'real*8');
     case 'h5'
-        data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Btheta');
+        data = h5read(filename, '/magfields/Btheta');
 end
 
-dat.Btheta(:,:,:,it)=reshape(data,[lr,ltheta,lphi]);
+dat.Btheta(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Btheta(:,:,:,it)=dat.Btheta(:,ilatsort,:);
-    dat.Btheta(:,:,:,it)=dat.Btheta(:,:,ilonsort);
+    dat.Btheta(:,:,:)=dat.Btheta(:,ilatsort,:);
+    dat.Btheta(:,:,:)=dat.Btheta(:,:,ilonsort);
 end %if
 
 switch cfg.file_format
     case 'dat'
         data=fread(fid, lpoints,'real*8');
     case 'h5'
-        data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
+        data = h5read(filename, '/magfields/Bphi');
 end
 
-dat.Bphit(:,:,:)=reshape(data,[lr,ltheta,lphi]);
+dat.Bphi(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Bphit(:,:,:)=dat.Bphit(:,ilatsort,:);
-    dat.Bphit(:,:,:)=dat.Bphit(:,:,ilonsort);
+    dat.Bphi(:,:,:)=dat.Bphi(:,ilatsort,:);
+    dat.Bphi(:,:,:)=dat.Bphi(:,:,ilonsort);
 end
 
 if exist("fid", "var")
