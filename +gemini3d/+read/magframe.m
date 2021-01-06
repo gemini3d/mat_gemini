@@ -46,6 +46,9 @@ else
   cfg = opts.cfg;
 end
 
+% temp grid size variable...
+gridsize=opts.gridsize;
+
 % load and construct the magnetic field point grid
 switch cfg.file_format
   case 'dat'
@@ -66,11 +69,11 @@ switch cfg.file_format
     r = double(h5read(fn, "/r"));
     theta = double(h5read(fn, "/theta"));
     phi = double(h5read(fn, "/phi"));
+    gridsize=reshape(h5read(fn,"/gridsize"),[1,3]);
   otherwise, error('Unrecognized input field point file format %s', cfg.file_format)
 end
 
 % Reorganize the field points if the user has specified a grid size
-gridsize=opts.gridsize;
 if any(gridsize < 0)
   gridsize=[lpoints,1,1];    % just return a flat list if the user has not specified
   flatlist=true;
