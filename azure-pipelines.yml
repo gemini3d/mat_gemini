@@ -1,3 +1,5 @@
+# https://marketplace.visualstudio.com/items?itemName=MathWorks.matlab-azure-devops-extension
+
 variables:
   CI: true
 
@@ -14,14 +16,13 @@ steps:
       sudo apt update -q
       sudo apt install -yq --no-install-recommends gcc gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
     displayName: 'Install Linux prereqs'
+
   - task: InstallMATLAB@0
-  - task: RunMATLABCommand@0
-    displayName: 'Matlab Version'
-    inputs:
-      command: disp(version)
+
   - task: RunMATLABCommand@0
     inputs:
-      command: TestGemini
+      command: 'disp(version), TestGemini'
+
   - task: PublishTestResults@2
     condition: succeededOrFailed()
     inputs:
