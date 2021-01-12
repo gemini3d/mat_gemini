@@ -11,7 +11,7 @@ switch file_format
   case 'h5', write_hdf5(dir_out, E)
   case 'nc', write_nc4(dir_out, E)
   case 'dat', write_raw(dir_out, E)
-  otherwise, error('write.Efield:value_error', 'unknown file format %s', file_format)
+  otherwise, error('write:Efield:value_error', 'unknown file format %s', file_format)
 end
 
 end
