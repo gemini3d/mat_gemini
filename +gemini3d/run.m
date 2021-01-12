@@ -8,7 +8,7 @@ function run(outdir, config_path, opts)
 arguments
   outdir (1,1) string
   config_path (1,1) string
-  opts.overwrite (1,1) logical = true
+  opts.overwrite (1,1) logical = false
   opts.mpiexec (1,1) string = "mpiexec"
   opts.gemini_exe (1,1) string = gemini3d.sys.gemini_exe_name()
   opts.ssl_verify string = string.empty
