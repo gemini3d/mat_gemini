@@ -8,7 +8,7 @@ end
 assert(isfile(filename), "not a file: " + filename)
 
 if isempty(vars)
-  vars = ["ne", "Ti", "Te", "J1", "J2", "J3", "v1", "v2", "v3"];
+  vars = ["ne", "Ti", "Te", "J1", "J2", "J3", "v1", "v2", "v3", "Phi"];
 end
 
 switch ext
@@ -17,6 +17,8 @@ switch ext
   case '.nc', dat = frame3Dcurvavg_nc4(filename, vars);
   otherwise, error('frame3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
+dat.filename = filename;
+
 
 %% squeeze is needed for 2D and OK for 3D
 for n = vars

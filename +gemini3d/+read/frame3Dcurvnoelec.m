@@ -7,26 +7,16 @@ end
 [~,~,ext] = fileparts(filename);
 assert(isfile(filename), 'not a file: %s', filename)
 
+vars = ["ns", "Ts", "v1"];
+
 switch ext
-  case '.h5', dat = frame3Dcurvnoelec_hdf5(filename);
+  case '.h5', dat = frame3Dcurv_hdf5(filename, vars);
+  case '.nc', dat = frame3Dcurv_nc4(filename, vars);
   case '.dat', dat = frame3Dcurvnoelec_raw(filename);
-  case '.nc', dat = frame3Dcurvnoelec_nc4(filename);
   otherwise, error('frame3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
 end
 
-%% REORGANIZE ACCORDING TO MATLABS CONCEPT OF A 2D or 3D DATA SET
-lsp = 7;
-lxs = gemini3d.simsize(filename);
+dat.filename = filename;
 
-dat.v1=sum(dat.ns(:,:,:,1:6) .* dat.vs1(:,:,:,1:6),4) ./ dat.ns(:,:,:,lsp);
-
-if any(lxs(2:3) == 1)   % 2D simulation
-  dat.ne = squeeze(dat.ns(:,:,:,lsp));
-  dat.Ti = squeeze(sum(dat.ns(:,:,:,1:6) .* dat.Ts(:,:,:,1:6),4) ./ dat.ns(:,:,:,lsp));
-  dat.Te = squeeze(dat.Ts(:,:,:,lsp));
-else    %full 3D run
-  dat.ne = dat.ns(:,:,:,lsp);
-  dat.Ti = sum(dat.ns(:,:,:,1:6) .* dat.Ts(:,:,:,1:6),4) ./ dat.ns(:,:,:,lsp);
-  dat.Te = dat.Ts(:,:,:,lsp);
-end
+dat = curv_squeeze(dat, vars);
 end

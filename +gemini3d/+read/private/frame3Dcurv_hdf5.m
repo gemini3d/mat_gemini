@@ -7,8 +7,6 @@ end
 %% SIMULATION RESULTS
 fvars = hdf5nc.h5variables(fn);
 
-dat.filename = fn;
-
 if any(contains(vars, ["ne", "ns"]))
 dat.ns = h5read(fn, '/nsall');
 end
@@ -17,7 +15,7 @@ if any(vars == "v1")
 dat.vs1 = h5read(fn, '/vs1all');
 end
 
-if any(contains(vars, ["Ti", "Te"]))
+if any(contains(vars, ["Ti", "Te", "Ts"]))
 dat.Ts = h5read(fn, '/Tsall');
 end
 
@@ -43,7 +41,9 @@ if any(fvars == "v2avgall")
 end
 
 if any(fvars == "Phiall")
-  dat.Phitop = h5read(fn, '/Phiall');
+  if any(vars == "Phi")
+    dat.Phitop = h5read(fn, '/Phiall');
+  end
 end
 
 end % function

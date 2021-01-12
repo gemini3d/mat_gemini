@@ -4,7 +4,6 @@ arguments
   vars (1,:) string
 end
 %% SIMULATION RESULTS
-dat.filename = fn;
 
 if any(contains(vars, ["ne", "ns"]))
 dat.ns = ncread(fn, "nsall");
@@ -19,7 +18,7 @@ end
 if any(vars == "v1")
 dat.vs1 = ncread(fn, 'vs1all');
 end
-if any(contains(vars, ["Te", "Ti"]))
+if any(contains(vars, ["Te", "Ti", "Ts"]))
 dat.Ts = ncread(fn, 'Tsall');
 end
 

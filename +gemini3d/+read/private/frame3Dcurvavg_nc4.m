@@ -31,6 +31,8 @@ if any(vars == "v3")
 dat.v3 = ncread(filename, 'v3avgall');
 end
 %% Topside potential
+if any(vars == "Phi")
 dat.Phitop = ncread(filename, 'Phiall');
+end
 
 end % function

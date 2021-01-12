@@ -129,8 +129,10 @@ if cfg.flagoutput ~= 3
   clf(h(8))
   plotfun(time, xg, dat.J3,'J_3 (A/m^2)', clim.J3, [cfg.sourcemlat,cfg.sourcemlon],h(8), Jcmap);
   clf(h(9))
-%   try
-  plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', clim.Phitop, [cfg.sourcemlat, cfg.sourcemlon], h(9), Phi_cmap)
+
+  if isfield(dat, 'Phitop')
+    plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', clim.Phitop, [cfg.sourcemlat, cfg.sourcemlon], h(9), Phi_cmap)
+  end
 %   catch e
 %     % casting an error to warning requires this syntax for Matlab < R2020a
 %     warning(e.identifier, '%s', e.message)
