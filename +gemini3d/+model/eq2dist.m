@@ -38,7 +38,7 @@ check_temperature(Tsi)
 
 %% write the interpolated grid and data
 gemini3d.write.grid(p, xg)
-gemini3d.write.data(peq.times(end), nsi, vs1i, Tsi, p.indat_file, p.file_format);
+gemini3d.write.state(p.indat_file, peq.times(end), nsi, vs1i, Tsi, p.file_format);
 
 end % function eq2dist
 

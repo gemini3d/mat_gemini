@@ -1,4 +1,4 @@
-function data(time, ns, vsx1, Ts, fn, file_format, Phitop)
+function state(fn, time, ns, vsx1, Ts, file_format, Phitop)
 
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE
@@ -9,11 +9,11 @@ function data(time, ns, vsx1, Ts, fn, file_format, Phitop)
 % INPUT ARRAYS SHOULD BE TRIMMED TO THE CORRECT SIZE
 % I.E. THEY SHOULD NOT INCLUDE GHOST CELLS
 arguments
+  fn (1,1) string
   time (1,1) datetime
   ns (:,:,:,:) {mustBeFinite,mustBeNonnegative}
   vsx1 (:,:,:,:) {mustBeFinite}
   Ts (:,:,:,:) {mustBeFinite,mustBeNonnegative}
-  fn (1,1) string
   file_format string = string.empty
   Phitop (:,:) {mustBeFinite} = zeros(size(ns,2),size(ns,3))
 end
