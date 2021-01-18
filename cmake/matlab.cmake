@@ -21,6 +21,6 @@ if(Matlab_VERSION AND Matlab_VERSION VERSION_LESS 9.7)
 endif()
 
 add_test(NAME matlab_suite
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch test_gemini
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch TestGemini
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 set_tests_properties(matlab_suite PROPERTIES TIMEOUT 1000)
