@@ -23,7 +23,10 @@ end
 
 %% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-src_dir = fullfile(cwd, "../..");
+src_dir = getenv("MATGEMINI");
+if isempty(src_dir)
+  src_dir = fullfile(cwd, "../..");
+end
 build_dir = fullfile(src_dir, "build");
 exe = fullfile(build_dir, "msis_setup");
 if ispc
@@ -57,21 +60,19 @@ else
 end
 
 doy = day(time, 'dayofyear');
-
-%fprintf('MSIS00 DOY %s\n', doy)
-yearshort = mod(time.Year, 100);
-iyd = yearshort*1000+doy;
-date0 = datetime(time.Year, time.Month, time.Day);
-UTsec0 = seconds(time - date0);
-%% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
+UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
+% KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
 %% temporary files for MSIS
+% we use binary files because they are MUCH faster than stdin/stdout pipes
+% for large simulations
+
 fin = tempname + "_msis_in.dat";
 fout = tempname + "_msis_out.dat";
 % need a unique input temporary filename for parallel runs
 
 fid=fopen(fin,'w');
-fwrite(fid,iyd,'integer*4');
+fwrite(fid, doy,'integer*4');
 fwrite(fid, UTsec0,'integer*4');
 fwrite(fid,f107a,'real*4');
 fwrite(fid,f107,'real*4');
@@ -84,26 +85,39 @@ fwrite(fid,alt,'real*4');
 fclose(fid);
 %% CALL MSIS AND READ IN RESULTING BINARY FILE
 cmd = exe + " " + fin + " " + fout + " " + lz;
+if isfield(p, "msis_version") && ~isempty(p.msis_version)
+  cmd = cmd + " " + int2str(p.msis_version);
+
+  if p.msis_version == 20
+    msis20_file = fullfile(build_dir, 'msis20.parm');
+    assert(isfile(msis20_file), msis20_file + "%s not found")
+  end
+end
 % disp(cmd)
-prepend = gemini3d.sys.modify_path();
-[status, msg] = system(prepend + " " + cmd);   %output written to file
+
+% limitation of Matlab system() vis pwd for msis20.parm
+old_pwd = pwd;
+cd(build_dir)
+[status, msg] = system(cmd);   %output written to file
+cd(old_pwd)
 assert(status==0, 'problem running MSIS %s', msg)
-delete(fin);
+
 %% binary output
 % using stdout becomes a problem due to 100's of MBs of output for non-trival simulation grids.
-% keep this as a binary file.
+% so keep this as a binary file.
 fid = fopen(fout, 'r');
 msis_dat = fread(fid,lz*11, 'float32=>float32');
 fclose(fid);
-delete(fout);
 
-msis_dat=reshape(msis_dat,[11 lz]);
-msis_dat=msis_dat';
-
+msis_dat = transpose(reshape(msis_dat,[11 lz]));
 %% stdout
+% (Not used, for reference)
 % msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
 %% ORGANIZE
 assert(all(size(msis_dat) == [lz, 11]), 'msis_setup did not return expected shape')
+% wait to delete until we think msis_setup worked, for debugging.
+delete(fin);
+delete(fout);
 
 nO=reshape(msis_dat(:,3), xg.lx);
 nN2=reshape(msis_dat(:,4), xg.lx);
