@@ -51,8 +51,20 @@ If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/c
 
 ## Usage
 
-Generally, one runs a simulation, then plots the outputs of that simulation.
+Generally, one sets up a simulation, runs, then plots the outputs of that simulation.
 Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom functions.
+
+The model setup creates a neutral atmosphere using MSIS.
+The default is to use MSISE00, but MSIS 2.0 is also available.
+This is user selectable in the simulation config.nml file like:
+
+```
+&neutral_BG
+msis_version = 20
+/
+```
+
+where `0` is MSISE00 (default) and `20` is MSIS 2.0.
 
 ### Run Simulation
 
