@@ -15,10 +15,11 @@ jobs:
     - uses: actions/checkout@v2
 
     - run: cmake -B build
-      timeout-minutes: 2
+      timeout-minutes: 5
+      # download transient slowdown
 
     - run: cmake --build build
-      timeout-minutes: 3
+      timeout-minutes: 5
 
     - run: ctest --output-on-failure
       timeout-minutes: 15
