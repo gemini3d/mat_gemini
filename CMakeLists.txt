@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19)
 
 include(cmake/policy.cmake)
 include(cmake/compiler_find.cmake)
@@ -11,13 +11,12 @@ if(NOT DEFINED ${PROJECT_NAME}_BUILD_TESTING)
   set(${PROJECT_NAME}_BUILD_TESTING ${BUILD_TESTING})
 endif()
 
-set(gemini_url "https://github.com/gemini3d/gemini3d.git")
-set(gemini_tag "master")
+option(msis20 "build MSIS 2.0" true)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/git.cmake)
+include(cmake/git.cmake)
+include(cmake/libraries.cmake)
 
-if(NOT gemini_root)
+if(NOT DEFINED gemini_root)
   if(DEFINED ENV{GEMINI_ROOT})
     set(gemini_root $ENV{GEMINI_ROOT})
   else()
@@ -29,7 +28,7 @@ set(msis_path ${gemini_root}/src/vendor/msis00)
 
 if(NOT IS_DIRECTORY ${msis_path})
   # we put inside if() to allow working with existing development code
-  git_download(${gemini_root} ${gemini_url} ${gemini_tag})
+  git_download(${gemini_root} ${gemini3d_url} ${gemini3d_tag})
 endif()
 
 # build msis_setup executable

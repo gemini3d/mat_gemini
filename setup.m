@@ -1,10 +1,11 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
-gemini3d_git = "https://github.com/gemini3d/gemini3d.git";
+cwd = fileparts(mfilename('fullpath'));
+meta = jsondecode(fileread(fullfile(cwd, "cmake/libraries.json")));
+
 gemini3d_dirname = "gemini3d";
 
-cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
 setenv('MATGEMINI', cwd)
 
@@ -28,8 +29,11 @@ if isempty(gemini_root)
 
   ret = 0;
   if ~isfolder(gemini_root)
-    cmd = "git -C " + fullfile(cwd, "..") + " clone " + gemini3d_git + " " + gemini3d_dirname;
+    cmd = "git -C " + fullfile(cwd, "..") + " clone " + meta.gemini3d.url + " " + gemini3d_dirname;
     ret = system(cmd);
+    if ret == 0 && ~isempty(meta.gemini3d.tag)
+      ret = system("git -C " + gemini_root + " checkout " + meta.gemini3d.tag);
+    end
   end
 
   if ret == 0 && isfolder(gemini_root)
