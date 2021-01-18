@@ -6,15 +6,20 @@ on:
     - "**/CMakeLists.txt"
     - "**.cmake"
     - ".github/workflows/ci.yml"
-  pull_request:
 
 jobs:
 
   linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
-    - run: ctest -S setup.cmake -VV
-      env:
-        FC: gfortran-9
+    - run: cmake -B build
+      timeout-minutes: 2
+
+    - run: cmake --build build
+      timeout-minutes: 3
+
+    - run: ctest --output-on-failure
+      timeout-minutes: 15
+      working-directory: build
