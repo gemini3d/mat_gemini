@@ -2,7 +2,7 @@ function setup()
 %% run this before running Gemini Matlab scripts
 
 cwd = fileparts(mfilename('fullpath'));
-meta = jsondecode(fileread(fullfile(cwd, "cmake/libraries.json")));
+meta = jsondecode(fileread(fullfile(cwd, "libraries.json")));
 
 gemini3d_dirname = "gemini3d";
 

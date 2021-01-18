@@ -12,7 +12,7 @@ end
 mindens=1e-100;
 
 %% SLICE THE FIELD IN HALF IF WE ARE CLOSED
-natm = gemini3d.model.msis(p, xg);
+atmos = gemini3d.model.msis(p, xg);
 
 closeddip = abs(xg.r(1,1,1) - xg.r(xg.lx(1),1,1)) < 50e3;     %logical flag marking the grid as closed dipole
 if closeddip         %closed dipole grid
@@ -23,7 +23,7 @@ if closeddip         %closed dipole grid
   lx1=lalt;
   lx2=xg.lx(2);
   lx3=xg.lx(3);
-  Tn=natm(1:lalt,:,:,4);
+  Tn = atmos.Tn(1:lalt, :, :);
   g=abs(xg.gx1(1:lalt,:,:));
   g=max(g,1);
   for ix3=1:lx3
@@ -39,15 +39,13 @@ else
   lx1=xg.lx(1);
   lx2=xg.lx(2);
   lx3=xg.lx(3);
-  Tn=natm(:,:,:,4);
+  Tn = atmos.Tn;
   g=abs(xg.gx1);
 end
-
 
 %CONSTANTS
 kb=1.38e-23;
 amu=1.67e-27;
-
 
 ns = zeros([lx1, lx2, lx3, 7], 'single');
 for ix3=1:lx3
@@ -59,7 +57,7 @@ for ix3=1:lx3
     ne = gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf) +  gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
     rho = 1/2*tanh((alt(:,ix2,ix3)-200e3)/45e3)-1/2*tanh((alt(:,ix2,ix3)-1000e3)/200e3);
 
-    inds=find(alt(:,ix2,ix3)>z0f);
+    inds = find(alt(:,ix2,ix3) > z0f);
     if ~isempty(inds)
       n0 = p.nmf;
       %     [n0,ix1]=max(ne);  %in case it isn't exactly z0f

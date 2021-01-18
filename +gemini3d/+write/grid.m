@@ -8,6 +8,9 @@ end
 
 import gemini3d.fileio.with_suffix
 
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, '../../setup.m'))
+
 %% check the input struct to make sure needed fields are present
 assert(isfield(p,"indat_grid"),"Field indat_grid missing...");
 assert(isfield(p,"indat_size"),"Field indat_size missing...");
@@ -16,18 +19,7 @@ assert(isfield(p,"indat_size"),"Field indat_size missing...");
 ok = gemini3d.check_grid(xg);
 
 if ~ok
-  error('write.grid:value_error', 'problematic grid values')
-end
-%% ensure HDF5/NetCDF interface is loaded
-try
-  hdf5nc.h5variables(string.empty);
-catch e
-  if e.identifier == "MATLAB:undefinedVarOrClass"
-    cwd = fileparts(mfilename('fullpath'));
-    run(fullfile(cwd, '../../setup.m'))
-  else
-    rethrow(e)
-  end
+  error('write:grid:value_error', 'problematic grid values')
 end
 %% output directory for the simulation grids may be different
 % e.g. "inputs" than the base simdir
@@ -51,7 +43,7 @@ switch file_format
   case 'dat'
     write_raw(p, xg)
     [xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.dat'));
-  otherwise, error('write.grid:value_error', 'unknown file format %s', p.file_format)
+  otherwise, error('write:grid:value_error', 'unknown file format %s', p.file_format)
 end
 
 rtol = 1e-7;  % allow for single precision
@@ -64,7 +56,7 @@ for n = names
 end
 
 if ~ok
-  error('write.grid:value_error', 'values of grid are not suitable %s', p.indat_grid)
+  error('write:grid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
 gemini3d.write.meta(gemini3d.git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
