@@ -9,25 +9,29 @@ trigger:
     - "+gemini3d/*"
     - azure-pipelines.yml
 
-pool:
-  vmImage: ubuntu-latest
-steps:
-  - script: |
-      sudo apt update -q
-      sudo apt install -yq --no-install-recommends gcc gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
-    displayName: 'Install Linux prereqs'
 
-  - task: InstallMATLAB@0
+jobs:
+- job: Matlab_Linux
+  timeoutInMinutes: 15
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - script: |
+        sudo apt update -q
+        sudo apt install -yq --no-install-recommends gcc gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
+      displayName: 'Install Linux prereqs'
 
-  - task: RunMATLABCommand@0
-    inputs:
-      command: 'disp(version), TestGemini'
+    - task: InstallMATLAB@0
 
-  - task: PublishTestResults@2
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFiles: test-results/results.xml
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: code-coverage/coverage.xml
+    - task: RunMATLABCommand@0
+      inputs:
+        command: 'disp(version), TestGemini'
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: test-results/results.xml
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: code-coverage/coverage.xml
