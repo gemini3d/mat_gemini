@@ -1,4 +1,4 @@
-function natm = msis(p, xg, time)
+function atmos = msis(p, xg, time)
 %% calls MSIS Fortran executable from Matlab.
 % compiles if not present
 %
@@ -21,76 +21,81 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
-%% path to msis executable
 cwd = fileparts(mfilename('fullpath'));
-src_dir = getenv("MATGEMINI");
-if isempty(src_dir)
-  src_dir = fullfile(cwd, "../..");
-end
+run(fullfile(cwd, '../../setup.m'))
+
+%% path to msis executable
+src_dir = getenv("GEMINI_ROOT");
 build_dir = fullfile(src_dir, "build");
-exe = fullfile(build_dir, "msis_setup");
-if ispc
-  exe = exe + ".exe";
-end
+exe = gemini3d.sys.exe_name(fullfile(build_dir, "msis_setup"));
 
 %% build exe if not present
 if ~isfile(exe)
-  gemini3d.sys.cmake(src_dir, build_dir)
+  gemini3d.sys.cmake(src_dir, build_dir, "msis_setup")
 end
 
 assert (isfile(exe), 'MSIS setup executable not found: %s', exe)
 
 %% SPECIFY SIZES ETC.
-lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
-alt=xg.alt(:)/1e3;
-glat=xg.glat(:);
-glon=xg.glon(:);
-lz=lx1*lx2*lx3;
+alt=xg.alt/1e3;
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
 if isfield(p, 'activ')
   f107a = p.activ(1);
   f107 = p.activ(2);
   ap = p.activ(3);
-  ap3 = p.activ(3);
 else
   f107a = p.f107a;
   f107 = p.f107;
   ap = p.Ap;
-  ap3 = p.Ap;
 end
 
 doy = day(time, 'dayofyear');
 UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
 % KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
 alt(alt <= 0) = 1;
-%% temporary files for MSIS
+%% MSIS file API
 % we use binary files because they are MUCH faster than stdin/stdout pipes
-% for large simulations
 
-fin = tempname + "_msis_in.dat";
-fout = tempname + "_msis_out.dat";
-% need a unique input temporary filename for parallel runs
+if isfield(p, "msis_infile")
+  msis_infile = p.msis_infile;
+else
+  msis_infile = fullfile(fileparts(p.indat_size), "msis_setup_in.h5");
+end
+if isfield(p, "msis_outfile")
+  msis_outfile = p.msis_outfile;
+else
+  msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
+end
 
-fid=fopen(fin,'w');
-fwrite(fid, doy,'integer*4');
-fwrite(fid, UTsec0,'integer*4');
-fwrite(fid,f107a,'real*4');
-fwrite(fid,f107,'real*4');
-fwrite(fid,ap,'real*4');
-fwrite(fid,ap3,'real*4');
-fwrite(fid,lz,'integer*4');
-fwrite(fid,glat,'real*4');
-fwrite(fid,glon,'real*4');
-fwrite(fid,alt,'real*4');
-fclose(fid);
-%% CALL MSIS AND READ IN RESULTING BINARY FILE
-cmd = exe + " " + fin + " " + fout + " " + lz;
+if isfile(msis_infile)
+  delete(msis_infile)
+end
+if isfile(msis_outfile)
+  delete(msis_outfile)
+end
+
+hdf5nc.h5save(msis_infile, "/doy", doy)
+hdf5nc.h5save(msis_infile, "/UTsec", UTsec0)
+hdf5nc.h5save(msis_infile, "/f107a", f107a)
+hdf5nc.h5save(msis_infile, "/f107", f107)
+hdf5nc.h5save(msis_infile, "/Ap", repmat(ap, [1, 7]))
+% float32 to save disk IO time/space
+% ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not
+% suitable for Fortran
+hdf5nc.h5save(msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
+hdf5nc.h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
+hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
+
+%% CALL MSIS
+cmd = exe + " " + msis_infile + " " + msis_outfile;
 if isfield(p, "msis_version") && ~isempty(p.msis_version)
   cmd = cmd + " " + int2str(p.msis_version);
 
   if p.msis_version == 20
     msis20_file = fullfile(build_dir, 'msis20.parm');
-    assert(isfile(msis20_file), msis20_file + "%s not found")
+    if ~isfile(msis20_file)
+      error("msis:param:fileNotFound", "%s not found", msis20_file)
+    end
   end
 end
 % disp(cmd)
@@ -102,30 +107,13 @@ cd(build_dir)
 cd(old_pwd)
 assert(status==0, 'problem running MSIS %s', msg)
 
-%% binary output
-% using stdout becomes a problem due to 100's of MBs of output for non-trival simulation grids.
-% so keep this as a binary file.
-fid = fopen(fout, 'r');
-msis_dat = fread(fid,lz*11, 'float32=>float32');
-fclose(fid);
-
-msis_dat = transpose(reshape(msis_dat,[11 lz]));
-%% stdout
-% (Not used, for reference)
-% msis_dat = cell2mat(textscan(msg, '%f %f %f %f %f %f %f %f %f %f %f', lz, 'CollectOutput', true, 'ReturnOnError', false));
-%% ORGANIZE
-assert(all(size(msis_dat) == [lz, 11]), 'msis_setup did not return expected shape')
-% wait to delete until we think msis_setup worked, for debugging.
-delete(fin);
-delete(fout);
-
-nO=reshape(msis_dat(:,3), xg.lx);
-nN2=reshape(msis_dat(:,4), xg.lx);
-nO2=reshape(msis_dat(:,5), xg.lx);
-Tn=reshape(msis_dat(:,11), xg.lx);
-nN=reshape(msis_dat(:,9), xg.lx);
-nNO=4e-1*exp(-3700./Tn).*nO2+5e-7*nO;       %Mitra, 1968
-nH=reshape(msis_dat(:,8), xg.lx);
-natm=cat(4,nO,nN2,nO2,Tn,nN,nNO,nH);
+%% load MSIS output
+atmos.nO = h5read(msis_outfile, "/nO");
+atmos.nN2 = h5read(msis_outfile, "/nN2");
+atmos.nO2 = h5read(msis_outfile, "/nO2");
+atmos.Tn = h5read(msis_outfile, "/Tn");
+atmos.nN = h5read(msis_outfile, "/nN");
+atmos.nNO = 0.4 * exp(-3700./ atmos.Tn) .* atmos.nO2 + 5e-7* atmos.nO;       %Mitra, 1968
+atmos.nH = h5read(msis_outfile, "/nH");
 
 end % function

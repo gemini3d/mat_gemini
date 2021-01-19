@@ -17,14 +17,44 @@ end
 end
 
 methods (Test)
-function test_msis_setup(tc)
 
-cfg = struct('times', datetime(2015, 1, 2) + seconds(43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4);
+function test_msis00_setup(tc)
+
+inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;
+
+cfg = struct('times', datetime(2015, 1, 2) + seconds(43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
+  'msis_version', 0, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
+
 
 atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
 
-tc.verifySize(atmos, [tc.TestData.xg.lx, 7], 'MSIS setup data output shape unexpected')
+tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
+
+tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), 'reltol', single(1e-5))
 end
+
+
+function test_msis20_setup(tc)
+
+inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;
+
+cfg = struct('times', datetime(2015, 1, 2) + seconds(43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
+  'msis_version', 20, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
+
+try
+  atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
+catch e
+  if e.identifier == "msis:param:fileNotFound"
+    tc.assumeTrue(false, "MSIS 2.0 not enabled")
+  else
+    rethrow(e)
+  end
+end
+tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
+
+tc.verifyEqual(atmos.Tn(1,2,3), single(186.54959), 'reltol', single(1e-5))
+end
+
 end
 
 end

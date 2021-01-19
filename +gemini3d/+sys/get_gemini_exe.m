@@ -1,12 +1,20 @@
 function exe = get_gemini_exe(exe)
 arguments
-  exe string = fullfile(getenv("GEMINI_ROOT"), "build/gemini.bin")
+  exe string = string.empty
 end
 
-exe = gemini3d.sys.gemini_exe_name(exe);
+exe = gemini3d.sys.exe_name(exe);
 
-if ~isfile(exe)
-  gemini3d.sys.build_gemini3d(fullfile(fileparts(exe), ".."), exe);
+if isempty(exe) || ~isfile(exe)
+  srcdir = getenv("GEMINI_ROOT");
+  if ~isfolder(srcdir)
+    cwd = fileparts(mfilename('fullpath'));
+    run(fullfile(cwd, "../../setup.m"))
+    srcdir = getenv("GEMINI_ROOT");
+  end
+  bindir = fullfile(srcdir, "build");
+  gemini3d.sys.cmake(srcdir, bindir, "gemini.bin");
+  exe = gemini3d.sys.exe_name(fullfile(bindir, "gemini.bin"));
 end
 assert(isfile(exe), 'failed to build ' + exe)
 %% sanity check gemini.bin executable

@@ -1,14 +1,16 @@
-function cmake(src_dir, build_dir)
+function cmake(src_dir, build_dir, target)
 % build program using CMake and default generator
 % to specify generator with CMake >= 3.15 set environment variable CMAKE_GENERATOR
 arguments
   src_dir (1,1) string
   build_dir (1,1) string
+  target string = string.empty
 end
 
 % must be absolute path for Unix-like, where cannot traverse upwards from non-existent dir
 src_dir = gemini3d.posix(gemini3d.fileio.absolute_path(src_dir));
 assert(isfolder(src_dir), "source directory not found: %s", src_dir)
+assert(isfile(fullfile(src_dir, "CMakeLists.txt")), "%s does not contain CMakeLists.txt", src_dir)
 
 assert(system("cmake --version") == 0, 'CMake not found')
 
@@ -24,7 +26,11 @@ if system(cmd) ~=0
 end
 
 %% build
-ret = system("cmake --build " + build_dir + " --parallel");
+cmd = "cmake --build " + build_dir + " --parallel";
+if ~isempty(target)
+  cmd = cmd + " --target " + target;
+end
+ret = system(cmd);
 assert(ret == 0, 'error building with CMake in %s', build_dir)
 
 end % function

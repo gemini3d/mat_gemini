@@ -1,0 +1,4 @@
+{
+"gemini3d": {"url": "https://github.com/gemini3d/gemini3d.git", "tag": "master"},
+"msis2": {"url": "https://map.nrl.navy.mil/map/pub/nrl/NRLMSIS/NRLMSIS2.0/NRLMSIS2.0.zip", "sha1": "fa817dfee637ec2298a6ec882345d13d0b087a85"}
+}
