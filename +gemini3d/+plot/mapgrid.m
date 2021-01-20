@@ -1,14 +1,19 @@
-function ha = plot_mapgrid(xg,flagsource,neuinfo)
-
+function ha = mapgrid(xg, flagsource, neuinfo)
 arguments
   xg (1,1) struct
-  flagsource (1,1) {mustBeInteger}
-  neuinfo (1,1) struct
+  flagsource (1,1) {mustBeInteger} = 0
+  neuinfo struct = struct.empty
 end
+
+addons = matlab.addons.installedAddons();
+has_map = any(addons.Name == "Mapping Toolbox");
 
 %% INPUT COORDS NEED TO BE CONVERTED TO MAGNETIC
 mlon=xg.phi*180/pi;
 mlat=90-xg.theta*180/pi;
+% double for plot3m
+mlon = double(mlon);
+mlat = double(mlat);
 dmlon=max(mlon(:))-min(mlon(:));
 dmlat=max(mlat(:))-min(mlat(:));
 
@@ -29,7 +34,7 @@ if flagsource ~= 0
         rhomax=neuinfo.rhomax;
     end %if
 
-    [sourcetheta,sourcephi]=geog2geomag(sourcelat,sourcelong);
+    [sourcetheta,sourcephi] = gemini3d.geog2geomag(sourcelat,sourcelong);
     sourcemlat=90-sourcetheta*180/pi;
     sourcemlon=sourcephi*180/pi;
 
@@ -46,17 +51,18 @@ end %if
 
 
 %% SET UP A MAP PLOT IF MAPPING TOOLBOX EXISTS, DETECT WHETHER WE HAVE A 2D OR 3D GRID TO PLOT
-flagmapping=license('test','Map_Toolbox');
 if (xg.lx(2)==1 || xg.lx(3)==1)    %the grid is 2D
     flag2D=true;
 else
     figure;
     hold on;
     flag2D=false;
-    if (flagmapping)
+    if has_map
         ha=gca;
 %        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+30),abs(sourcemlat)+30],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
-        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+dmlat/2+5),abs(sourcemlat)+dmlat/2+5],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
+        axesm('MapProjection','Mercator', ...
+          'MapLatLimit', double([-(abs(sourcemlat)+dmlat/2+5),abs(sourcemlat)+dmlat/2+5]), ...
+          'MapLonLimit', double([sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10]))
         plotfun=@plot3m;
     else
         ha=gca;
@@ -71,6 +77,8 @@ end
 alt=xg.alt/1e3;
 altscale=max(alt(:));
 alt=alt/altscale;
+% double for plot3m
+alt = double(alt);
 
 if (360-sourcemlon<20)    %shift coords. too close to edge
    inds=find(mlon>180);
@@ -96,7 +104,7 @@ if (flag2D)    %2D grid, don't use a map to plot and show things in polar coordi
     set(h,'LineWidth',LW,'Color',[0 0 0]);
     ha=h;
 else    %this is a 3D grid and we can plot it on a map if the user has the appropriate toolbox(es)
-    if (flagmapping)    %plots are done lat,lon,alt for plot3m
+    if has_map    %plots are done lat,lon,alt for plot3m
         plotfun(mlat(:,1,1),mlon(:,1,1),alt(:,1,1),'LineWidth',LW);
         plotfun(mlat(:,1,end),mlon(:,1,end),alt(:,1,end),altlinestyle,'LineWidth',LW);
         plotfun(mlat(:,end,1),mlon(:,end,1),alt(:,end,1),'LineWidth',LW);
@@ -417,11 +425,11 @@ if (flag2D)    %for 2D just plot Earth's surface for reference
     h=polarplot(terr_theta,terr_r,'c:');
     set(h,'LineWidth',LW);
 else
-    if (flagmapping)
+    if has_map
         hold on;
         %ax=axis;
-        %load coastlines;
-        [thetacoast,phicoast]=geog2geomag(coastlat,coastlon);
+        load('coastlines');
+        [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
 
