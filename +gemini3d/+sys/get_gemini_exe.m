@@ -6,11 +6,11 @@ end
 exe = gemini3d.sys.exe_name(exe);
 
 if isempty(exe) || ~isfile(exe)
-  srcdir = getenv("GEMINI_ROOT");
+  srcdir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
   if ~isfolder(srcdir)
     cwd = fileparts(mfilename('fullpath'));
     run(fullfile(cwd, "../../setup.m"))
-    srcdir = getenv("GEMINI_ROOT");
+    srcdir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
   end
   bindir = fullfile(srcdir, "build");
   gemini3d.sys.cmake(srcdir, bindir, "gemini.bin");

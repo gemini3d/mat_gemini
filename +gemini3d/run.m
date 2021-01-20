@@ -10,7 +10,7 @@ arguments
   config_path (1,1) string
   opts.overwrite (1,1) logical = false
   opts.mpiexec (1,1) string = "mpiexec"
-  opts.gemini_exe (1,1) string = fullfile(getenv("GEMINI_ROOT"), "build/gemini.bin")
+  opts.gemini_exe string = string.empty
   opts.ssl_verify string = string.empty
   opts.file_format string = string.empty
   opts.dryrun (1,1) logical = false

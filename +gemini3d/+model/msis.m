@@ -25,7 +25,7 @@ cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../../setup.m'))
 
 %% path to msis executable
-src_dir = getenv("GEMINI_ROOT");
+src_dir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
 build_dir = fullfile(src_dir, "build");
 exe = gemini3d.sys.exe_name(fullfile(build_dir, "msis_setup"));
 
