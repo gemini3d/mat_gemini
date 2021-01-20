@@ -12,6 +12,8 @@ if isfield(cfg, 'outdir')
   cfg.outdir = expanduser(cfg.outdir);
 end
 
+assert(isfield(cfg, 'outdir'), 'must specify output directory')
+
 if isempty(top)
   top = cfg.outdir;
 else
