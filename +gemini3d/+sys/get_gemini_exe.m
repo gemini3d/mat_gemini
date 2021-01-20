@@ -13,8 +13,12 @@ if isempty(exe) || ~isfile(exe)
     srcdir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
   end
   bindir = fullfile(srcdir, "build");
-  gemini3d.sys.cmake(srcdir, bindir, "gemini.bin");
   exe = gemini3d.sys.exe_name(fullfile(bindir, "gemini.bin"));
+
+  if ~isfile(exe)
+    gemini3d.sys.cmake(srcdir, bindir, "gemini.bin");
+    exe = gemini3d.sys.exe_name(fullfile(bindir, "gemini.bin"));
+  end
 end
 assert(isfile(exe), 'failed to build ' + exe)
 %% sanity check gemini.bin executable

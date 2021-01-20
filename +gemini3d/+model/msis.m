@@ -118,5 +118,6 @@ atmos.Tn = h5read(msis_outfile, "/Tn");
 atmos.nN = h5read(msis_outfile, "/nN");
 atmos.nNO = 0.4 * exp(-3700./ atmos.Tn) .* atmos.nO2 + 5e-7* atmos.nO;       %Mitra, 1968
 atmos.nH = h5read(msis_outfile, "/nH");
+atmos.time = time;
 
 end % function

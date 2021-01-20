@@ -29,16 +29,16 @@ check_drift(dat.vs1)
 check_temperature(dat.Ts)
 
 %% DO THE INTERPOLATION
-[nsi,vs1i,Tsi] = gemini3d.model.resample(xgin, dat.ns, dat.vs1, dat.Ts, xg);
+ic_interp = gemini3d.model.resample(xgin, dat, xg);
 
 %% sanity check interpolated variables
-check_density(nsi)
-check_drift(vs1i)
-check_temperature(Tsi)
+check_density(ic_interp.ns)
+check_drift(ic_interp.vs1)
+check_temperature(ic_interp.Ts)
 
 %% write the interpolated grid and data
 gemini3d.write.grid(p, xg)
-gemini3d.write.state(p.indat_file, peq.times(end), nsi, vs1i, Tsi, p.file_format);
+gemini3d.write.state(p.indat_file, ic_interp, p.file_format);
 
 end % function eq2dist
 

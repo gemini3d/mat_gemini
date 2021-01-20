@@ -1,4 +1,4 @@
-function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
+function xgf = tilted_dipole3d(cfg)
 
 %NOTE THAT INPUTS DTHETA AND DPHI ARE INTENDED TO REPRESENT THE FULL THETA
 %AND PHI EXTENTS OF
@@ -19,73 +19,61 @@ function xgf = makegrid_tilteddipole_3D(dtheta,dphi,lpp,lqp,lphip,altmin,glat,gl
 % if you want a dimension to be size "n" adjust requested grid size so that
 % it is "n+4"
 arguments
-    dtheta {mustBeNumeric}
-    dphi {mustBeNumeric}
-    lpp (1,1) {mustBeInteger,mustBePositive}
-    lqp (1,1) {mustBeInteger,mustBePositive}
-    lphip (1,1) {mustBeInteger,mustBePositive}
-    altmin (1,1) {mustBePositive}
-    glat {mustBeNumeric}
-    glon {mustBeNumeric}
-    gridflag {mustBeInteger}
+    cfg (1,1) struct
 end
 
+% (dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
 %% PAD GRID WITH GHOST CELLS
-lq=lqp+4;
-lp=lpp+4;
-lphi=lphip+4;
-
+lq = cfg.lq + 4;
+lp = cfg.lp + 4;
+lphi = cfg.lphi + 4;
 
 %% DEFINE DIPOLE GRID IN Q,P COORDS.
-fprintf('MAKEGRID_TILTEDDIPOLE_3D.M --> Setting up q,p,phi grid of size %d x %d x %d.\n',lq-4,lp-4,lphi-4);
+fprintf('tilted_dipole3d: Setting up q,p,phi grid of size %d x %d x %d.\n',lq-4,lp-4,lphi-4);
 Re=6370e3;
 
-
 %TD SPHERICAL LOCATION OF REQUESTED CENTER POINT
-[thetatd,phid]=gemini3d.geog2geomag(glat,glon);
-
+[thetatd,phid] = gemini3d.geog2geomag(cfg.glat, cfg.glon);
 
 %SETS THE EDGES OF THE GRID
-thetax2min=thetatd-dtheta/2*pi/180;
-thetax2max=thetatd+dtheta/2*pi/180;
-if(thetatd<pi/2)   %NH
-  pmax=(Re+altmin)/Re/sin(thetax2min)^2;	%bottom left grid point p
-  qtmp=(Re/(Re+altmin))^2*cos(thetax2min);	%bottom left grid q (also bottom right)
+thetax2min=thetatd - deg2rad(cfg.dtheta / 2);
+thetax2max=thetatd + deg2rad(cfg.dtheta / 2);
+if thetatd < pi/2   %NH
+  pmax=(Re+cfg.altmin)/Re/sin(thetax2min)^2;	%bottom left grid point p
+  qtmp=(Re/(Re+cfg.altmin))^2*cos(thetax2min);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2max)^4/qtmp); %bottom right grid p
 else               %SH
-  pmax=(Re+altmin)/Re/sin(thetax2max)^2;	%bottom left grid point p
-  qtmp=(Re/(Re+altmin))^2*cos(thetax2max);	%bottom left grid q (also bottom right)
+  pmax=(Re+cfg.altmin)/Re/sin(thetax2max)^2;	%bottom left grid point p
+  qtmp=(Re/(Re+cfg.altmin))^2*cos(thetax2max);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2min)^4/qtmp); %bottom right grid p, why mixing of max/min here???
 end
 % rtmp=fminbnd(@(x) gemini3d.grid.qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
 
-
-
 %pmin=(Re+rtmp)/Re/sin(thetax2max)^2;
 %p=linspace(pmin,pmax,lp);
-p=linspace(pmin,pmax,lpp);
+p=linspace(pmin,pmax, cfg.lp);
 %p=p(:)';    %ensure a row vector
 %pstride=p(2)-p(1);
 %p=[p(1)-2*pstride,p(1)-pstride,p,p(end)+pstride,p(end)+2*pstride];
 
-if gridflag==0      %open dipole grid
+if cfg.gridflag==0      %open dipole grid
 %    thetamax=thetax2min+pi/180;        %open
 %    thetamax=thetax2min+pi/75;        %open
 %     thetamax=thetamin+pi/50;        %open
 %     thetamax=thetamin+pi/30;        %open
-   if(thetatd<pi/2)   %northern hemisphere
+   if thetatd < pi/2   %northern hemisphere
      thetamax=thetax2min+pi/25;
    else
      thetamax=thetax2max-pi/25;
    end
 else                %close dipole grid
-   if(thetatd<pi/2) %NH
+   if thetatd < pi/2 %NH
      thetamax=pi-thetax2min;
    else             %SH
      thetamax=pi-thetax2max;
    end
 end
-if(thetatd<pi/2)
+if thetatd < pi/2
   rmin=p(end)*Re*sin(thetax2min)^2; %use last field line to get qmin and qmax
   rmax=p(end)*Re*sin(thetamax)^2;
   qmin=cos(thetax2min)*Re^2/rmin^2;
@@ -97,9 +85,8 @@ else
   qmax=cos(thetax2max)*Re^2/rmax^2;
 end
 
-
 %q=linspace(qmin,qmax,lq)';
-q = linspace(qmin,qmax,lqp);
+q = linspace(qmin,qmax, cfg.lq);
 q = sort(q);
 
 p=p(:)';    %ensure a row vector
@@ -112,12 +99,12 @@ q=[q(1)-2*qstride;q(1)-qstride;q,;q(end)+qstride;q(end)+2*qstride];    %add in g
 
 
 %NOW THE AZIMUTHAL COORDINATE
-phimin=phid-dphi/2*pi/180;
-phimax=phid+dphi/2*pi/180;
+phimin=phid - deg2rad(cfg.dphi/2);
+phimax=phid + deg2rad(cfg.dphi/2);
 %phi=linspace(phimin,phimax,lphi);    %note conversion to radians in  dphi calculation above
-phi=linspace(phimin,phimax,lphip);
+phi=linspace(phimin,phimax, cfg.lphi);
 phi=phi(:)';
-if (lphip>1)
+if cfg.lphi > 1
   phistride=phi(2)-phi(1);     %assume constant stride
 else
   phistride=0.1;   %just make up some junk for a 2D sim
@@ -133,7 +120,7 @@ qtol=1e-9;
 
 
 %SPHERICAL XFORMATION
-disp('MAKEGRID_TILTEDDIPOLE_3D: Converting q,p grid centers to spherical coords.')
+disp('tilted_dipole3d: Converting q,p grid centers to spherical coords.')
 for iq=1:lq
     for ip=1:lp
         [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.grid.qp2robj(x,q(iq),p(ip)),0,100*Re);
@@ -190,7 +177,7 @@ end
 
 
 %INTERFACE LOCATIONS
-disp('MAKEGRID_TILTEDDIPOLE_3D.M --> Converting q,p grid interfaces to spherical coords.');
+disp('tilted_dipole3d:  Converting q,p grid interfaces to spherical coords.');
 qi=zeros(lq+1,1);
 qi(2:lq)=1/2*(q(1:lq-1)+q(2:lq));
 qi(1)=q(1)-1/2*(q(2)-q(1));
@@ -250,7 +237,7 @@ thetapi=repmat(thetapi,[1 1 lphi]);
 
 
 %METRIC COEFFICIENTS
-disp('MAKEGRID_TILTEDDIPOLE_3D.M --> Calculating metric coeffs.');
+disp('tilted_dipole3d:  Calculating metric coeffs.');
 denom=sqrt(1+3*cos(theta).^2);
 hq=r.^3/Re^2./denom;
 hp=Re*sin(theta).^3./denom;
@@ -272,7 +259,7 @@ hphipi=rpi.*sin(thetapi);
 
 
 %SPHERICAL UNIT VECTORS IN CARTESIAN COMPONENTS (CELL-CENTERED)
-disp('MAKEGRID_TILTEDDIPOLE_3D.M --> Calculating spherical unit vectors.');
+disp('tilted_dipole3d:  Calculating spherical unit vectors.');
 er(:,:,:,1)=sin(theta).*cos(phispher);
 er(:,:,:,2)=sin(theta).*sin(phispher);
 er(:,:,:,3)=cos(theta);
@@ -285,7 +272,7 @@ ephi(:,:,:,3)=zeros(lq,lp,lphi);
 
 
 %UNIT VECTORS FOR Q,P,PHI FOR ALL GRID POINTS IN CARTESIAN COMPONENTS
-disp('MAKEGRID_TILTEDDIPOLE_3D.M --> Calculating dipole unit vectors.');
+disp('tilted_dipole3d:  Calculating dipole unit vectors.');
 denom=Re^2*(1+3*cos(theta).^2);
 dxdq(:,:,:,1)=-3*r.^3.*cos(theta).*sin(theta)./denom.*cos(phispher);
 dxdq(:,:,:,2)=-3*r.^3.*cos(theta).*sin(theta)./denom.*sin(phispher);
@@ -294,7 +281,7 @@ magdxdq=repmat(sqrt(dot(dxdq,dxdq,4)),[1,1,1,3]);
 eq=dxdq./magdxdq;
 ep=cross(ephi,eq,4);
 Imat=acos(dot(er,eq,4));
-if gridflag==0
+if cfg.gridflag==0
     I=mean(Imat,1);             %avg. inclination for each field line.
 else
     I=mean(Imat(1:floor(lq/2),:,:),1);   %avg. over only half the field line
@@ -315,7 +302,7 @@ Bmag=(4*pi*1e-7)*7.94e22/4/pi./(r.^3).*sqrt(3*(cos(theta)).^2+1);
 
 
 %STORE RESULTS IN GRID DATA STRUCTURE
-disp('MAKEGRID_TILTEDDIPOLE_3D.M --> Creating a grid structure with the results.');
+disp('tilted_dipole3d:  Creating a grid structure with the results.');
 xg.x1=q; xg.x2=p; xg.x3=reshape(phi,[1 1 lphi]);
 xg.x1i=qi; xg.x2i=pii; xg.x3i=reshape(phii,[1 1 lphi+1]);
 lx=[numel(xg.x1),numel(xg.x2),numel(xg.x3)];

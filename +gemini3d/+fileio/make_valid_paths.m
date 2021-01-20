@@ -10,9 +10,12 @@ import gemini3d.fileio.expanduser
 
 if isfield(cfg, 'outdir')
   cfg.outdir = expanduser(cfg.outdir);
+elseif ~isempty(top)
+  cfg.outdir = expanduser(top);
+else
+  error('must specify output directory')
 end
 
-assert(isfield(cfg, 'outdir'), 'must specify output directory')
 
 if isempty(top)
   top = cfg.outdir;

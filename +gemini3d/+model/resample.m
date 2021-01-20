@@ -1,15 +1,13 @@
-function [nsi,vs1i,Tsi] = resample(xgin,ns,vs1,Ts,xg)
+function dout = resample(xgin,din,xg)
 arguments
   xgin (1,1) struct
-  ns (:,:,:,:) {mustBeFinite,mustBePositive}
-  vs1 (:,:,:,:) {mustBeFinite}
-  Ts (:,:,:,:) {mustBeFinite,mustBePositive}
+  din (1,1) struct
   xg (1,1) struct
 end
 
 %% NEW GRID SIZES
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
-lsp=size(ns,4);
+lsp=size(din.ns,4);
 
 %% ALLOCATIONS
 nsi=zeros(lx1,lx2,lx3,lsp);
@@ -29,13 +27,13 @@ if lx3 > 1 && lx2 > 1 % 3-D
 
   for i=1:lsp
 %     if exist('griddedInterpolant', 'file')
-    F = griddedInterpolant(Xold, ns(:,:,:, i), 'linear', 'none');
+    F = griddedInterpolant(Xold, din.ns(:,:,:, i), 'linear', 'none');
     nsi(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(Xold, vs1(:,:,:, i), 'linear', 'none');
+    F = griddedInterpolant(Xold, din.vs1(:,:,:, i), 'linear', 'none');
     vs1i(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(Xold, Ts(:,:,:, i), 'linear', 'none');
+    F = griddedInterpolant(Xold, din.Ts(:,:,:, i), 'linear', 'none');
     Tsi(:,:,:, i) = F(Xnew);
 %     else
 %       % for old Matlab and Octave
@@ -69,13 +67,13 @@ elseif lx3 == 1 % 2-D east-west
   for i = 1:lsp
 
 %     if exist('griddedInterpolant', 'file')
-    F = griddedInterpolant(Xold, squeeze(ns(:,:,:, i)), 'linear', 'none');
+    F = griddedInterpolant(Xold, squeeze(din.ns(:,:,:, i)), 'linear', 'none');
     nsi(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(Xold, squeeze(vs1(:,:,:, i)), 'linear', 'none');
+    F = griddedInterpolant(Xold, squeeze(din.vs1(:,:,:, i)), 'linear', 'none');
     vs1i(:,:,:, i) = F(Xnew);
 
-    F = griddedInterpolant(Xold, squeeze(Ts(:,:,:, i)), 'linear', 'none');
+    F = griddedInterpolant(Xold, squeeze(din.Ts(:,:,:, i)), 'linear', 'none');
     Tsi(:,:,:, i) = F(Xnew);
 %     else
 %       tmpvar=interp2(X2,X1,squeeze(ns(:,:,:, i)),X2i,X1i);
@@ -116,9 +114,9 @@ elseif lx2 == 1 % 2-D north-south
   % [X1i, X3i] = ndgrid(x1_noghost, x3_noghost);
   Xnew = {x1_noghost, x3_noghost};
   % remove degenerate dimension
-  ns = permute(ns, [1, 3, 4, 2]);
-  vs1 = permute(vs1, [1, 3, 4, 2]);
-  Ts = permute(Ts, [1, 3, 4, 2]);
+  ns = permute(din.ns, [1, 3, 4, 2]);
+  vs1 = permute(din.vs1, [1, 3, 4, 2]);
+  Ts = permute(din.Ts, [1, 3, 4, 2]);
   % for each species
   for i = 1:lsp
     F = griddedInterpolant(Xold, ns(:,:, i), 'linear', 'none');
@@ -133,5 +131,7 @@ elseif lx2 == 1 % 2-D north-south
 else
   error('model_resample:value_error', 'Not sure if this is 2-D or 3-D')
 end %if
+
+dout = struct("ns", nsi, "Ts", Tsi, "vs1", vs1i, "time", din.time);
 
 end %function model_resample

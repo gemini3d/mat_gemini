@@ -44,17 +44,17 @@ function grid_examples()
 
 
 %% Equatorial grid
-dtheta=3.5;
-dphi=2.5;
-lp=192;
-lq=256;
-lphi=192;
-altmin=80e3;
-glat=8.35;
-glon=360-76.9;     %Jicamarca
-gridflag=1;
-flagsource=0;
-iscurv=true;
+p.dtheta=3.5;
+p.dphi=2.5;
+p.lp=192;
+p.lq=256;
+p.lphi=192;
+p.altmin=80e3;
+p.glat=8.35;
+p.glon=360-76.9;     %Jicamarca
+p.gridflag=1;
+p.flagsource=0;
+p.iscurv=true;
 
 
 %% GEOGRAPHIC COORDINATES OF NEUTRAL SOURCE (OR GRID CENTER)
@@ -84,20 +84,18 @@ neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
 %% FOR USERS INFO CONVERT SOURCE LOCATION TO GEOMAG
-[sourcetheta,sourcephi]=gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
+[sourcetheta,sourcephi] = gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
 sourcemlat=90-sourcetheta*180/pi;
 sourcemlon=sourcephi*180/pi;
 
 
 %% RUN THE GRID GENERATION CODE
 if ~exist('xg', 'var')
-  if iscurv
-    xg = gemini3d.setup.gridgen.makegrid_tilteddipole_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
+  if p.iscurv
+    xg = gemini3d.grid.tilted_dipole3d(p);
 %    xg=makegrid_tilteddipole_nonuniform_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_oneside_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
   else
-    p.glat = glat;
-    p.glon = glon;
     xg = makegrid_cart_3D(p);
   end
 end
@@ -105,7 +103,7 @@ end
 
 %% PLOT THE GRID AND NEUTRAL INPUT EXTENT
 %ha=plotgrid(xg,flagsource,sourcelat,sourcelong,neugridtype,zmin,zmax,rhomax);
-ha = gemini3d.setup.plot_mapgrid(xg,flagsource,neuinfo);
+ha = gemini3d.plot.mapgrid(xg,flagsource,neuinfo);
 end % function
 
 %% ADDITIONAL EXAMPLES OF GRIDS AND SOURCE LOCATIONS...

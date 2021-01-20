@@ -1,4 +1,4 @@
-function [ns,Ts,vsx1] = eqICs(p, xg)
+function init_cond = eqICs(p, xg)
 %% generate (arbitrary) initial conditions for a grid.
 % NOTE: only works on symmmetric closed grids!
 %
@@ -196,5 +196,7 @@ if closeddip
     vsx1=cat(1,vsx1,vsx1(lx1,:,:,:),vsx1(lx1:-1:1,:,:,:));
   end
 end
+
+init_cond = struct("ns", ns, "Ts", Ts, "vs1", vsx1, "time", atmos.time);
 
 end
