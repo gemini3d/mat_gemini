@@ -57,7 +57,7 @@ if ~ismac
 end
 
 sys_path = getenv("PATH");
-needed_paths = "/usr/local/bin";
+needed_paths = ["/usr/local/bin", "/opt/homebrew/bin"];
 for np = needed_paths
   if isfolder(np) && ~contains(sys_path, np)
     sys_path = np + pathsep + sys_path;
