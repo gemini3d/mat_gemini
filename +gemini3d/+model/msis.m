@@ -67,6 +67,9 @@ else
   msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
 end
 
+gemini3d.fileio.makedir(fileparts(msis_infile))
+gemini3d.fileio.makedir(fileparts(msis_outfile))
+
 if isfile(msis_infile)
   delete(msis_infile)
 end
