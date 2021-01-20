@@ -1,4 +1,4 @@
-function [nsi,vs1i,Tsi] = eq2dist(p, xg)
+function ic_interp = eq2dist(p, xg)
 % read and interpolate equilibrium simulation data, writing new
 % interpolated grid.
 arguments

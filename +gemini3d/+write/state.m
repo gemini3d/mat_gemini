@@ -16,7 +16,9 @@ end
 
 % FIXME:  may want validate potential input
 
-assert(~isfolder(fn), fn + " must be a filename, not a directory")
+if isfolder(fn)
+  fn = fullfile(fn, "inputs/initial_conditions.h5");
+end
 
 if isempty(file_format)
   [~, ~, suffix] = fileparts(fn);
