@@ -121,16 +121,16 @@ qtol=1e-9;
 %SPHERICAL XFORMATION
 disp('tilted_dipole3d: Converting q,p grid centers to spherical coords.')
 for iq=1:lq
-    for ip=1:lp
-        [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.grid.qp2robj(x,q(iq),p(ip)),0,100*Re);
-        if abs(q(iq))<qtol
-            theta(iq,ip)=pi/2;
-        elseif q(iq)>=0        %northern hemisphere
-            theta(iq,ip)=asin(sqrt(r(iq,ip)/Re/p(ip)));
-        else
-            theta(iq,ip)=pi-asin(sqrt(r(iq,ip)/Re/p(ip)));
-        end
+  for ip=1:lp
+    [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.grid.qp2robj(x,q(iq),p(ip)),0,100*Re);
+    if abs(q(iq))<qtol
+      theta(iq,ip)=pi/2;
+    elseif q(iq)>=0        %northern hemisphere
+      theta(iq,ip)=asin(sqrt(r(iq,ip)/Re/p(ip)));
+    else
+      theta(iq,ip)=pi-asin(sqrt(r(iq,ip)/Re/p(ip)));
     end
+  end
 end
 
 

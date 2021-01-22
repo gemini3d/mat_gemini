@@ -36,6 +36,12 @@ tol.atolT = 100;
 tol.atolJ = 1e-7;
 tol.atolV = 50;
 
+% need this for real32 data
+k = fieldnames(tol);
+for i = 1:length(k)
+  tol.(k{i}) = single(tol.(k{i}));
+end
+
 assert(~gemini3d.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% check output dirs
