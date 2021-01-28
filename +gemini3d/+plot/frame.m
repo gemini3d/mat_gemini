@@ -112,27 +112,44 @@ end
 %% MAKE THE PLOTS
 
 clf(h(10))
-plotfun(time, xg, dat.ne, 'n_e (m^{-3})', clim.ne, [cfg.sourcemlat,cfg.sourcemlon], h(10), Ncmap);
+if isfield(dat, 'ne')
+  plotfun(time, xg, dat.ne, 'n_e (m^{-3})', clim.ne, [cfg.sourcemlat,cfg.sourcemlon], h(10), Ncmap);
+end
 
 if cfg.flagoutput ~= 3
   clf(h(1))
-  plotfun(time, xg, dat.v1, 'v_1 (m/s)', clim.v1, [cfg.sourcemlat,cfg.sourcemlon], h(1), Vcmap);
-  clf(h(2))
-  plotfun(time, xg, dat.Ti,'T_i (K)', clim.Ti, [cfg.sourcemlat,cfg.sourcemlon], h(2), Tcmap);
-  clf(h(3))
-  plotfun(time, xg, dat.Te,'T_e (K)', clim.Te, [cfg.sourcemlat,cfg.sourcemlon], h(3), Tcmap);
-  clf(h(4))
-  plotfun(time, xg, dat.J1,'J_1 (A/m^2)', clim.J1, [cfg.sourcemlat,cfg.sourcemlon],h(4), Jcmap);
-  clf(h(5))
-  plotfun(time, xg, dat.v2,'v_2 (m/s)', clim.v2, [cfg.sourcemlat,cfg.sourcemlon],h(5), Vcmap);
-  clf(h(6))
-  plotfun(time, xg, dat.v3,'v_3 (m/s)', clim.v3, [cfg.sourcemlat,cfg.sourcemlon],h(6), Vcmap);
-  clf(h(7))
-  plotfun(time, xg, dat.J2,'J_2 (A/m^2)', clim.J2, [cfg.sourcemlat,cfg.sourcemlon],h(7), Jcmap);
-  clf(h(8))
-  plotfun(time, xg, dat.J3,'J_3 (A/m^2)', clim.J3, [cfg.sourcemlat,cfg.sourcemlon],h(8), Jcmap);
-  clf(h(9))
-
+  if isfield(dat, 'v1')
+    plotfun(time, xg, dat.v1, 'v_1 (m/s)', clim.v1, [cfg.sourcemlat,cfg.sourcemlon], h(1), Vcmap);
+    clf(h(2))
+  end
+  if isfield(dat, 'Ti')
+    plotfun(time, xg, dat.Ti,'T_i (K)', clim.Ti, [cfg.sourcemlat,cfg.sourcemlon], h(2), Tcmap);
+    clf(h(3))
+  end
+  if isfield(dat, 'Te')
+    plotfun(time, xg, dat.Te,'T_e (K)', clim.Te, [cfg.sourcemlat,cfg.sourcemlon], h(3), Tcmap);
+    clf(h(4))
+  end
+  if isfield(dat, 'J1')
+    plotfun(time, xg, dat.J1, 'J_1 (A/m^2)', clim.J1, [cfg.sourcemlat,cfg.sourcemlon],h(4), Jcmap);
+    clf(h(5))
+  end
+  if isfield(dat, 'v2')
+    plotfun(time, xg, dat.v2,'v_2 (m/s)', clim.v2, [cfg.sourcemlat,cfg.sourcemlon],h(5), Vcmap);
+    clf(h(6))
+  end
+  if isfield(dat, 'v3')
+    plotfun(time, xg, dat.v3,'v_3 (m/s)', clim.v3, [cfg.sourcemlat,cfg.sourcemlon],h(6), Vcmap);
+    clf(h(7))
+  end
+  if isfield(dat, 'J2')
+    plotfun(time, xg, dat.J2,'J_2 (A/m^2)', clim.J2, [cfg.sourcemlat,cfg.sourcemlon],h(7), Jcmap);
+    clf(h(8))
+  end
+  if isfield(dat, 'J3')
+    plotfun(time, xg, dat.J3,'J_3 (A/m^2)', clim.J3, [cfg.sourcemlat,cfg.sourcemlon],h(8), Jcmap);
+    clf(h(9))
+  end
   if isfield(dat, 'Phitop')
     plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', clim.Phitop, [cfg.sourcemlat, cfg.sourcemlon], h(9), Phi_cmap)
   end
