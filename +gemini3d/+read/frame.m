@@ -53,6 +53,9 @@ end %switch
 if ~isfield(dat, 'time')
   dat.time = gemini3d.read.time(filename);
 end
+if ~isfield(dat, 'filename')
+  dat.filename = filename;
+end
 %% ensure input/simgrid matches data
 lxs = gemini3d.simsize(filename);
 if isempty(lxs)

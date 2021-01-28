@@ -52,6 +52,9 @@ end
 time = cfg.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
 dat = gemini3d.read.frame(direc, "time", time);
+if isempty(dat)
+  error('could not read output data from %s', direc)
+end
 disp(dat.filename + ' => ' + func2str(plotfun))
 
 %% SET THE CAXIS LIMITS FOR THE PLOTS
