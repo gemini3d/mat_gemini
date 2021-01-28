@@ -71,41 +71,41 @@ J3lim=[-10 10];
 %}
 
 clim = options.clim;
-if ~isfield(clim, "ne")
+if ~isfield(clim, "ne") && isfield(dat, 'ne')
   clim.ne = [min(dat.ne(:)), max(dat.ne(:))];
 end
-if ~isfield(clim, "v1")
+if ~isfield(clim, "v1") && isfield(dat, 'v1')
 % v1mod=max(abs(v1(:)));
   v1mod = 80;
   clim.v1 = [-v1mod, v1mod];
 end
-if ~isfield(clim, "Ti")
+if ~isfield(clim, "Ti") && isfield(dat, 'Ti')
   clim.Ti = [0, max(dat.Ti(:))];
 end
-if ~isfield(clim, "Te")
+if ~isfield(clim, "Te") && isfield(dat, 'Te')
   clim.Te = [0, max(dat.Te(:))];
 end
-if ~isfield(clim, "J1")
+if ~isfield(clim, "J1") && isfield(dat, 'J1')
   J1mod = max(abs(dat.J1(:)));
   clim.J1 = [-J1mod, J1mod];
 end
-if ~isfield(clim, "v2")
+if ~isfield(clim, "v2") && isfield(dat, 'v2')
   v2mod = max(abs(dat.v2(:)));
   clim.v2 = [-v2mod, v2mod];
 end
-if ~isfield(clim, "v3")
+if ~isfield(clim, "v3") && isfield(dat, 'v3')
   v3mod = max(abs(dat.v3(:)));
   clim.v3 = [-v3mod, v3mod];
 end
-if ~isfield(clim, "J2")
+if ~isfield(clim, "J2") && isfield(dat, 'J2')
   J2mod = max(abs(dat.J2(:)));
   clim.J2 = [-J2mod, J2mod];
 end
-if ~isfield(clim, "J3")
+if ~isfield(clim, "J3") && isfield(dat, 'J3')
   J3mod = max(abs(dat.J3(:)));
   clim.J3 = [-J3mod, J3mod];
 end
-if ~isfield(clim, "Phitop")
+if ~isfield(clim, "Phitop") && isfield(dat, 'Phitop')
   clim.Phitop = [min(dat.Phitop(:)), max(dat.Phitop(:))];
 end
 
