@@ -7,7 +7,7 @@ end
 assert(isfile(filename), "not a file: " + filename)
 
 if isempty(vars)
-  vars = ["ne", "Ti", "Te", "v1", "v2", "v3", "J1", "J2", "J3", "Phi"];
+  vars = ["ne", "Ti", "Te", "v1", "v2", "v3", "J1", "J2", "J3", "Phitop"];
 end
 
 [~,~,ext] = fileparts(filename);

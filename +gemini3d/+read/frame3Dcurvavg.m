@@ -8,7 +8,7 @@ end
 assert(isfile(filename), "not a file: " + filename)
 
 if isempty(vars)
-  vars = ["ne", "Ti", "Te", "J1", "J2", "J3", "v1", "v2", "v3", "Phi"];
+  vars = ["ne", "Ti", "Te", "J1", "J2", "J3", "v1", "v2", "v3", "Phitop"];
 end
 
 switch ext

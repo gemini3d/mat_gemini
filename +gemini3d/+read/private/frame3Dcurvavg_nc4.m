@@ -6,6 +6,8 @@ end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
+fvars = hdf5nc.ncvariables(fn);
+
 for k = ["ne", "J1", "J2", "J3"]
   if any(vars == k)
   dat.(k) = ncread(filename, k + "all");
@@ -13,7 +15,7 @@ for k = ["ne", "J1", "J2", "J3"]
 end
 
 %% Parallel Velocities
-if any(vars == "v1")
+if any(vars == "v1") && any(fvars == "v1avgall")
 dat.v1 = ncread(filename, 'v1avgall');
 end
 %% Temperatures
@@ -24,14 +26,14 @@ if any(vars == "Te")
 dat.Te = ncread(filename, 'TEall');
 end
 %% Perpendicular drifts
-if any(vars == "v2")
+if any(vars == "v2") && any(fvars == "v2avgall")
 dat.v2 = ncread(filename, 'v2avgall');
 end
-if any(vars == "v3")
+if any(vars == "v3") && any(fvars == "v3avgall")
 dat.v3 = ncread(filename, 'v3avgall');
 end
 %% Topside potential
-if any(vars == "Phi")
+if any(vars == "Phitop") && any(fvars == "Phiall")
 dat.Phitop = ncread(filename, 'Phiall');
 end
 

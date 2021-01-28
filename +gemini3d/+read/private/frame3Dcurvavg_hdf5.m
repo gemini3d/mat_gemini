@@ -6,6 +6,8 @@ end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
+fvars = hdf5nc.h5variables(fn);
+
 for k = ["ne", "J1", "J2", "J3"]
   if any(vars == k)
   dat.(k) = h5read(filename, "/" + k + "all");
@@ -31,7 +33,7 @@ if any(vars == "v3")
 dat.v3 = h5read(filename, '/v3avgall');
 end
 %% Topside potential
-if any(vars == "Phi")
+if any(vars == "Phitop") && any(fvars == "Phiall")
 dat.Phitop = h5read(filename, '/Phiall');
 end
 end % function
