@@ -6,7 +6,7 @@ end
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-fvars = hdf5nc.ncvariables(fn);
+fvars = hdf5nc.ncvariables(filename);
 
 for k = ["ne", "J1", "J2", "J3"]
   if any(vars == k)
