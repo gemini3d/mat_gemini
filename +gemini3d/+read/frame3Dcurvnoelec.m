@@ -18,5 +18,10 @@ end
 
 dat.filename = filename;
 
+if ~isfield(dat, 'time')
+  % keep this in case this function called directly
+  dat.time = gemini3d.read.time(filename);
+end
+
 dat = curv_squeeze(dat, vars);
 end
