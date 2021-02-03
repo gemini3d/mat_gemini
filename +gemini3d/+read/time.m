@@ -57,7 +57,8 @@ time = datetime.empty;
 vars = hdf5nc.ncvariables(file);
 
 if any(vars == "ymd")
-  time = datetime(ncread(file, 'ymd'));
+  d = ncread(file, 'ymd');
+  time = datetime(d(1), d(2), d(3));
 else
   return
 end
