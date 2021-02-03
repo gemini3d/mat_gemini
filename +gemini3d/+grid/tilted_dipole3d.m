@@ -50,7 +50,7 @@ end
 % rtmp=fminbnd(@(x) gemini3d.grid.qp2robj(x,qtmp,pmin),0,100*Re);        %bottom right r
 
 %pmin=(Re+rtmp)/Re/sin(thetax2max)^2;
-p=linspace(pmin,pmax, lp);
+p=linspace(pmin,pmax, lp-4);
 %p=p(:)';    %ensure a row vector
 %pstride=p(2)-p(1);
 %p=[p(1)-2*pstride,p(1)-pstride,p,p(end)+pstride,p(end)+2*pstride];
@@ -85,7 +85,7 @@ else
 end
 
 %q=linspace(qmin,qmax,lq)';
-q = linspace(qmin,qmax, lq);
+q = linspace(qmin,qmax, lq-4);
 q = sort(q);
 
 p=p(:)';    %ensure a row vector
@@ -100,8 +100,7 @@ q=[q(1)-2*qstride;q(1)-qstride;q,;q(end)+qstride;q(end)+2*qstride];    %add in g
 %NOW THE AZIMUTHAL COORDINATE
 phimin=phid - deg2rad(cfg.dphi/2);
 phimax=phid + deg2rad(cfg.dphi/2);
-%phi=linspace(phimin,phimax,lphi);    %note conversion to radians in  dphi calculation above
-phi=linspace(phimin,phimax, lphi);
+phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
 phi=phi(:)';
 if lphi > 1
   phistride=phi(2)-phi(1);     %assume constant stride
