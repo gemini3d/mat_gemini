@@ -118,7 +118,9 @@ for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "th
 end
 
 % MZ - squeeze() for singleton dimensions
-hdf5nc.h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
+%hdf5nc.h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
+hdf5nc.h5save(fn, '/I', xg.I, "size", [lx2, lx3], "type", freal)
+
 
 for i = ["e1","e2","e3","er","etheta","ephi"]
   hdf5nc.h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)

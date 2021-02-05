@@ -286,7 +286,6 @@ else
 end
 I=90-min(I,pi-I)*180/pi;    %ignore parallel vs. anti-parallel
 
-
 %GRAVITATIONAL FIELD COMPONENTS IN DIPOLE SYSTEM
 G=6.67428e-11;
 Me=5.9722e24;
@@ -425,6 +424,7 @@ xgf.alt=xgf.alt(inds1,inds2,inds3);
 xgf.Bmag=xgf.Bmag(inds1,inds2,inds3);
 
 xgf.I=xgf.I(1,inds2,inds3);
+xgf.I=reshape(xgf.I,[cfg.lp,cfg.lphi]);   %somehow matlab is losing the shape if lphi==1
 
 xgf.nullpts=xgf.nullpts(inds1,inds2,inds3);
 
