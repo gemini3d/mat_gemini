@@ -47,12 +47,6 @@ if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
-time = ics.time;
-
-day = [time.Year, time.Month, time.Day];
-h5save(fn, '/time/ymd', day, "type", "int32")
-h5save(fn, '/time/UTsec', seconds(time - datetime(day)), "type", freal)
-
 h5save(fn, '/nsall', ics.ns, "type",  freal)
 h5save(fn, '/vs1all', ics.vs1, "type", freal)
 h5save(fn, '/Tsall', ics.Ts, "type", freal)
@@ -60,6 +54,17 @@ h5save(fn, '/Tsall', ics.Ts, "type", freal)
 if isfield(ics, 'Phitop')
   h5save(fn, '/Phiall', ics.Phitop, "type", freal)
 end
+
+if ~isfield(ics, 'time') || isempty(ics.time)
+  disp('No time information was given for \s', fn)
+  return
+end
+
+time = ics.time;
+
+day = [time.Year, time.Month, time.Day];
+h5save(fn, '/time/ymd', day, "type", "int32")
+h5save(fn, '/time/UTsec', seconds(time - datetime(day)), "type", freal)
 
 end % function
 
@@ -72,12 +77,6 @@ fn = gemini3d.fileio.with_suffix(fn, '.nc');
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
-time = ics.time;
-
-day = [time.Year, time.Month, time.Day];
-ncsave(fn, 'ymd', day, "dims", {'time', 3}, "type", "int32")
-ncsave(fn, 'UTsec', seconds(time - datetime(day)))
-
 freal = 'float32';
 dimspec = {'x1', size(ics.ns, 1), 'x2', size(ics.ns, 2), 'x3', size(ics.ns,3), 'species', 7};
 dimspec2 = {'x2', size(ics.ns, 2), 'x3', size(ics.ns,3)};
@@ -89,6 +88,17 @@ ncsave(fn, 'Tsall', ics.Ts, "dims", dimspec, "type", freal)
 if isfield(ics, 'Phitop')
   ncsave(fn, 'Phiall', ics.Phitop, "dims", dimspec2, "type", freal)
 end
+
+if ~isfield(ics, 'time') || isempty(ics.time)
+  disp('No time information was given for \s', fn)
+  return
+end
+
+time = ics.time;
+
+day = [time.Year, time.Month, time.Day];
+ncsave(fn, 'ymd', day, "dims", {'time', 3}, "type", "int32")
+ncsave(fn, 'UTsec', seconds(time - datetime(day)))
 
 end % function
 
