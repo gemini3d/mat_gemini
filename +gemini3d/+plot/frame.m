@@ -150,7 +150,7 @@ if cfg.flagoutput ~= 3
     plotfun(time, xg, dat.J3,'J_3 (A/m^2)', clim.J3, [cfg.sourcemlat,cfg.sourcemlon],h(8), Jcmap);
     clf(h(9))
   end
-  if isfield(dat, 'Phitop')
+  if isfield(dat, 'Phitop' & xg.lx(3)>1)    %problems with potential in 2D???
     plotfun(time, xg, dat.Phitop,'topside potential \Phi_{top} (V)', clim.Phitop, [cfg.sourcemlat, cfg.sourcemlon], h(9), Phi_cmap)
   end
 %   catch e

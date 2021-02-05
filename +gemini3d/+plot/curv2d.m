@@ -106,7 +106,7 @@ pplot=rxp/Re./sin(thetaxp).^2;
 
 %NOW WE CAN DO A `PLAID' INTERPOLATION - THIS ONE IS FOR THE MERIDIONAL SLICE
 parmtmp=parm(:,:,ix3);
-parmp=interp2(xg.x2(inds2),xg.x1(inds1),parmtmp,pplot,qplot);
+parmp=interp2(xg.x2(inds2)',xg.x1(inds1),parmtmp,pplot,qplot);
 parmp=reshape(parmp,lzp,lxp);    %slice expects the first dim. to be "y" ("z" in the 2D case)
 
 
