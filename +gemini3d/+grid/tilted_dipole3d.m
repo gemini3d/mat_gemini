@@ -102,7 +102,7 @@ phimin=phid - deg2rad(cfg.dphi/2);
 phimax=phid + deg2rad(cfg.dphi/2);
 phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
 phi=phi(:)';
-if lphi > 1
+if cfg.lphi > 1
   phistride=phi(2)-phi(1);     %assume constant stride
 else
   phistride=0.1;   %just make up some junk for a 2D sim
