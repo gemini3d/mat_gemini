@@ -21,6 +21,12 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
+if isfield(p, "msis_version")
+  msis_version = p.msis_version;
+else
+  msis_version = 0;
+end
+
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../../setup.m'))
 
@@ -34,8 +40,9 @@ if ~isfile(exe)
   gemini3d.sys.cmake(src_dir, build_dir, "msis_setup")
 end
 
-assert (isfile(exe), 'MSIS setup executable not found: %s', exe)
-
+if ~isfile(exe)
+  error('model:msis:FIleNotFound', 'MSIS setup executable not found: %s', exe)
+end
 %% SPECIFY SIZES ETC.
 alt=xg.alt/1e3;
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
@@ -55,20 +62,29 @@ UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
 alt(alt <= 0) = 1;
 %% MSIS file API
 % we use binary files because they are MUCH faster than stdin/stdout pipes
-
+% we need absolute paths because MSIS 2.0 requires a chdir() due to Matlab
+% system() not having cwd= like Python.
 if isfield(p, "msis_infile")
   msis_infile = p.msis_infile;
 else
   msis_infile = fullfile(fileparts(p.indat_size), "msis_setup_in.h5");
 end
+msis_infile = gemini3d.fileio.absolute_path(msis_infile);
+if ~isfolder(fileparts(msis_infile))
+  warning('model:msis:FolderNotFound', 'msis_infile not an absolute path. Falling back to tempdir')
+  msis_infile = fullfile(tempdir, 'msis_setup_in.h5');
+end
+
 if isfield(p, "msis_outfile")
   msis_outfile = p.msis_outfile;
 else
   msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
 end
-
-gemini3d.fileio.makedir(fileparts(msis_infile))
-gemini3d.fileio.makedir(fileparts(msis_outfile))
+msis_outfile = gemini3d.fileio.absolute_path(msis_outfile);
+if ~isfolder(fileparts(msis_outfile))
+  warning('model:msis:FolderNotFound', 'msis_outfile not an absolute path. Falling back to tempdir')
+  msis_outfile = fullfile(tempdir, 'msis_setup_in.h5');
+end
 
 if isfile(msis_infile)
   delete(msis_infile)
@@ -90,24 +106,25 @@ hdf5nc.h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
 hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
-cmd = exe + " " + msis_infile + " " + msis_outfile;
-if isfield(p, "msis_version") && ~isempty(p.msis_version)
-  cmd = cmd + " " + int2str(p.msis_version);
+cmd = exe + " " + msis_infile + " " + msis_outfile + " " + int2str(msis_version);
 
-  if p.msis_version == 20
-    msis20_file = fullfile(build_dir, 'msis20.parm');
-    if ~isfile(msis20_file)
-      error("msis:param:fileNotFound", "%s not found", msis20_file)
-    end
+if msis_version == 20
+  msis20_file = fullfile(build_dir, 'msis20.parm');
+  if ~isfile(msis20_file)
+    error("msis:param:fileNotFound", "%s not found", msis20_file)
   end
 end
 % disp(cmd)
 
-% limitation of Matlab system() vis pwd for msis20.parm
-old_pwd = pwd;
-cd(build_dir)
+if msis_version == 20
+  % limitation of Matlab system() vis pwd for msis20.parm
+  old_pwd = pwd;
+  cd(build_dir)
+end
 [status, msg] = system(cmd);   %output written to file
-cd(old_pwd)
+if msis_version == 20
+  cd(old_pwd)
+end
 assert(status==0, 'problem running MSIS %s', msg)
 
 %% load MSIS output
