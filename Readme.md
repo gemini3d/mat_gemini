@@ -1,6 +1,6 @@
 # Gemini Matlab scripts
 
-[![Build Status](https://dev.azure.com/mhirsch0512/Gemini3D/_apis/build/status/gemini3d.mat_gemini?branchName=master)](https://dev.azure.com/mhirsch0512/Gemini3D/_build/latest?definitionId=20&branchName=master)
+[![Build Status](https://dev.azure.com/mhirsch0512/Gemini3D/_apis/build/status/gemini3d.mat_gemini?branchName=main)](https://dev.azure.com/mhirsch0512/Gemini3D/_build/latest?definitionId=20&branchName=main)
 [![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
 [![View MatGemini on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/78676-matgemini)
 
@@ -119,8 +119,8 @@ myfunc(cfg, xg)
 
 then they can be specified in the config.nml file under setup/setup_functions.
 For examples see
-[GDI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/GDI_periodic_lowres) and
-[KHI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/master/init/KHI_periodic_lowres).
+[GDI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/GDI_periodic_lowres) and
+[KHI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/KHI_periodic_lowres).
 
 ### compare data directories
 
