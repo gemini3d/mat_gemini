@@ -8,16 +8,35 @@ end
 outdir = p.prec_dir;
 gemini3d.fileio.makedir(outdir)
 
+
+%% determine what type of grid (cartesian or dipole) we are dealing with
+if (any(xg.h1>1.01))
+    flagdip=true;
+    disp(' Efield_BCs:  Dipole grid detected...');
+else
+    flagdip=false;
+    disp(' Efield_BCs:  Cartesian grid detected...');
+end %if
+
+
 %% CREATE PRECIPITATION CHARACTERISTICS data
 % number of grid cells.
 % This will be interpolated to grid, so 100x100 is arbitrary
 precip = struct('llon', 100, 'llat', 100);
 
-if xg.lx(2) == 1    % cartesian
-  precip.llon=1;
-elseif xg.lx(3) == 1
-  precip.llat=1;
-end
+if (flagdip)
+    if xg.lx(2) == 1    % dipole
+        precip.llat=1;
+    elseif xg.lx(3) == 1
+        precip.llon=1;
+    end    
+else
+    if xg.lx(2) == 1    % cartesian
+        precip.llon=1;
+    elseif xg.lx(3) == 1
+        precip.llat=1;
+    end
+end %if
 
 %% TIME VARIABLE (seconds FROM SIMULATION BEGINNING)
 % dtprec is set in config.nml
@@ -32,7 +51,7 @@ Nt = length(precip.times);
 % after precipitation would interpolate from E0=0 to desired value, which
 % is decidely non-physical.
 % We default E0 to NaN so that it's obvious (by Gemini emitting an
-% error) that an expected input has occurred.
+% error) that an unexpected input has occurred.
 precip.Qit = zeros(precip.llon, precip.llat, Nt);
 precip.E0it = nan(precip.llon, precip.llat, Nt);
 
