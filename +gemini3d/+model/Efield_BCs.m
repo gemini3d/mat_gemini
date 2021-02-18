@@ -5,7 +5,7 @@ arguments
 end
 
 % Set input potential/FAC boundary conditions and write these to a set of
-% files that can be used an input to GEMINI.  This ia a basic examples that
+% files that can be used an input to GEMINI.  This is a basic examples that
 % can make Gaussian shaped potential or FAC inputs using an input width.
 
 dir_out = p.E0_dir;
@@ -82,13 +82,24 @@ E.Vmaxx2ist = zeros(E.llat, Nt);
 E.Vminx3ist = zeros(E.llon, Nt);
 E.Vmaxx3ist = zeros(E.llon, Nt);
 
+
+%% For current density boundary conditions we need to determin top v bottom of the grid
+if (xg.alt(1,1,1)>xg.alt(2,1,1))
+    gridflag=1;    % inverted
+    disp(" Efield_BCs:  Detected an inverted grid...");
+else
+    gridflag=2;    % non-inverted or closed
+    disp(" Efield_BCs:  Detected a non-inverted grid...");
+end %if
+
+
 %% synthesize feature
 if isfield(p, 'Etarg')
   E.Etarg = p.Etarg;
   E = Efield_target(E, xg, lx1, lx2, lx3, Nt);
 elseif isfield(p, 'Jtarg')
   E.Jtarg = p.Jtarg;
-  E = Jcurrent_target(E, Nt);
+  E = Jcurrent_target(E, Nt, gridflag);
 else
   % background only, pass
 end
@@ -103,7 +114,7 @@ gemini3d.write.Efield(E, dir_out, p.file_format)
 end % function
 
 
-function E = Jcurrent_target(E, Nt)
+function E = Jcurrent_target(E, Nt, gridflag)
 
 % Set the top boundary shape (current density) and potential solve type flag
 
@@ -111,7 +122,11 @@ S = E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/2 / E.mlonsig^2) .* exp(-(E.MLAT - E
 
 for i = 6:Nt
   E.flagdirich(i)=0;    %could have different boundary types for different times
-  E.Vmaxx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
+  if (gridflag==1)
+    E.Vminx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2); 
+  else
+    E.Vmaxx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
+  end %if
 end
 
 end % function

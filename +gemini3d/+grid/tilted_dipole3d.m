@@ -61,9 +61,9 @@ if cfg.gridflag==0      %open dipole grid
 %     thetamax=thetamin+pi/50;        %open
 %     thetamax=thetamin+pi/30;        %open
    if thetatd < pi/2   %northern hemisphere
-     thetamax=thetax2min+pi/25;
+     thetamax=thetax2min+pi/100;
    else
-     thetamax=thetax2max-pi/25;
+     thetamax=thetax2max-pi/100;
    end
 else                %close dipole grid
    if thetatd < pi/2 %NH
