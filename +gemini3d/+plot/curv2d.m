@@ -22,8 +22,12 @@ else
 end
 
 %SOURCE LOCATION (SHOULD PROBABLY BE AN INPUT)
-sourcemlat=sourceloc(1);
-%sourcemlon=sourceloc(2);
+if (~isempty(sourceloc))
+  sourcemlat=sourceloc(1);
+  %sourcemlon=sourceloc(2);
+else
+  sourcemlat=mean(90-xg.theta(:)*180/pi);   %just take avg. over the grid
+end %if
 
 
 %SIZE OF SIMULATION
