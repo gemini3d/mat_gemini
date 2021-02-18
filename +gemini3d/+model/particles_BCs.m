@@ -12,10 +12,10 @@ gemini3d.fileio.makedir(outdir)
 %% determine what type of grid (cartesian or dipole) we are dealing with
 if (any(xg.h1>1.01))
     flagdip=true;
-    disp(' Efield_BCs:  Dipole grid detected...');
+    disp(' particles_BCs:  Dipole grid detected...');
 else
     flagdip=false;
-    disp(' Efield_BCs:  Cartesian grid detected...');
+    disp(' particles_BCs:  Cartesian grid detected...');
 end %if
 
 
