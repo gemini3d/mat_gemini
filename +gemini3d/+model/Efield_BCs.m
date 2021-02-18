@@ -212,6 +212,15 @@ for i = 1:Nt
   end %if
 end
 
+% for i=1:Nt
+%   % When using dirichlet conditions the side walls need to be chosen to be
+%   % equipotential with the top corner grid points
+%   E.Vminx2it(:,i)=
+%   E.Vmaxx2it(:,i)=
+%   E.Vminx3it(:,i)=
+%   E.Vmaxx3it(:,i)=
+% end %for
+
 end % function
 
 
