@@ -56,7 +56,7 @@ if isfield(ics, 'Phitop')
 end
 
 if ~isfield(ics, 'time') || isempty(ics.time)
-  disp('No time information was given for \s', fn)
+  disp("No time information was given for " + fn)
   return
 end
 
@@ -90,7 +90,7 @@ if isfield(ics, 'Phitop')
 end
 
 if ~isfield(ics, 'time') || isempty(ics.time)
-  disp('No time information was given for \s', fn)
+  disp("No time information was given for " + fn)
   return
 end
 
