@@ -152,18 +152,29 @@ gemini3d.write.Efield(E, dir_out, p.file_format)
 end % function
 
 
-function E = Jcurrent_target(E, Nt, gridflag)
+function E = Jcurrent_target(E, Nt, gridflag,flagdip)
 
 % Set the top boundary shape (current density) and potential solve type flag
 
-S = E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
+if (E.llon>1)
+    shapelon=exp(-(E.MLON - E.mlonmean).^2/2 / E.mlonsig^2);
+else      % doing a simulation with lat/alt. slice probably
+    shapelon=1;
+end %if
 
+if (E.llat>1)
+    shapelat = exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2) - exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
+else
+    shapelat = 1;
+end %if
+    
+S = shapelon .* exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
 for i = 6:Nt
-  E.flagdirich(i)=0;    %could have different boundary types for different times
+  E.flagdirich(i)=0;    %could have different boundary types for different times if the user wanted...
   if (gridflag==1)
-    E.Vminx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2); 
+    E.Vminx1it(:,:,i) = E.Jtarg.*shapelon.*shapelat;
   else
-    E.Vmaxx1it(:,:,i) = S - E.Jtarg * exp(-(E.MLON - E.mlonmean).^2/ 2 / E.mlonsig^2) .* exp(-(E.MLAT - E.mlatmean + 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
+    E.Vmaxx1it(:,:,i) = E.Jtarg.*shapelon.*shapelat;
   end %if
 end
 
