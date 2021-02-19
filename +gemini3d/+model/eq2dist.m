@@ -30,6 +30,7 @@ check_temperature(dat.Ts)
 
 %% DO THE INTERPOLATION
 ic_interp = gemini3d.model.resample(xgin, dat, xg);
+ic_interp.time=peq.times(end);
 
 %% sanity check interpolated variables
 check_density(ic_interp.ns)
