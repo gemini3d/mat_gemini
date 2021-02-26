@@ -1,5 +1,6 @@
 function [cfg, xg] = setup(cfg, out_dir)
-%% determines what kind of setup is needed and does it.
+%% setup(cfg, out_dir)
+% sets up initial conditions for Gemini3D simulation
 arguments
   cfg {mustBeA(cfg, ["string", "char", "struct"])}
   out_dir string = string.empty
