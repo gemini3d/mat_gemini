@@ -6,7 +6,13 @@ arguments
 end
 
 %% GRID GENERATION
-xg = gemini3d.grid.cart3d(cfg);
+if all(isfield(cfg, ["lxp", "lyp"]))
+  xg = gemini3d.grid.cart3d(cfg);
+elseif all(isfield(cfg, ["lq", "lp", "lphi"]))
+  xg = gemini3d.grid.tilted_dipole3d(cfg);
+else
+  error("grid does not seems to be cartesian or curvilinear")
+end
 
 gemini3d.model.eq2dist(cfg, xg);
 
