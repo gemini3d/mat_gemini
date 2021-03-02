@@ -125,7 +125,12 @@ end
 if msis_version == 20
   cd(old_pwd)
 end
-assert(status==0, 'problem running MSIS %s', msg)
+
+switch status
+  case -1073741515, error("if on Windows, is libgfortran on PATH?")
+  case 0  % good
+  otherwise, error('problem running MSIS %s', msg)
+end
 
 %% load MSIS output
 atmos.nO = h5read(msis_outfile, "/nO");
