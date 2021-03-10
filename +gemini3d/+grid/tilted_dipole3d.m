@@ -100,7 +100,11 @@ q=[q(1)-2*qstride;q(1)-qstride;q,;q(end)+qstride;q(end)+2*qstride];    %add in g
 %NOW THE AZIMUTHAL COORDINATE
 phimin=phid - deg2rad(cfg.dphi/2);
 phimax=phid + deg2rad(cfg.dphi/2);
-phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
+if (lphi-4~=1)
+    phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
+else
+    phi=phid;
+end
 phi=phi(:)';
 if cfg.lphi > 1
   phistride=phi(2)-phi(1);     %assume constant stride
