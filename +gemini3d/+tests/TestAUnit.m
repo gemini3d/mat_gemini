@@ -94,6 +94,21 @@ tc.verifyEqual(gemini3d.fileio.path_tail("c"), "c")
 end
 end
 
+function test_nml_gemini_simroot(tc)
+old = getenv("GEMINI_SIMROOT");
+
+setenv("GEMINI_SIMROOT", "abc123")
+
+out = gemini3d.fileio.expand_simroot("@GEMINI_SIMROOT@/foo");
+
+setenv("GEMINI_SIMROOT", old)
+
+tc.verifyEqual(out, fullfile("abc123", "foo"))
+
+
+end
+
+
 function test_grid1d(tc)
 
 x = gemini3d.grid.grid1d(100., 5);
