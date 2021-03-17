@@ -46,25 +46,37 @@ end % function eq2dist
 
 function peq = read_equilibrium(p)
 
-if ~isfolder(p.eq_dir)
-  if isfield(p, 'eq_url')
-    if ~isfile(p.eq_zip)
-      if isfield(p, 'ssl_verify') && ~p.ssl_verify
-        % disable SSL, better to fix your SSL certificates as arbitrary
-        % code can be downloaded
-        web_opt = weboptions('CertificateFilename', '');
-      elseif isfile(getenv("SSL_CERT_FILE"))
-        web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
-      else
-        web_opt = weboptions('CertificateFilename', 'default');
-      end
-      gemini3d.fileio.makedir(p.eq_dir)
-      websave(p.eq_zip, p.eq_url, web_opt);
-    end
-    unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
+if isfolder(p.eq_dir)
+  peq = gemini3d.read.config(p.eq_dir);
+  return
+end
+
+if ~all(isfield(p, ["eq_url", "eq_zip"]))
+  error("gemini3d:model:eq2dist", "run equilibrium simulation in %s \n OR specify eq_url and eq_zip in %s", p.eq_dir, p.nml)
+end
+
+if ~isfile(p.eq_zip)
+  if isfield(p, 'ssl_verify') && ~p.ssl_verify
+    % disable SSL, better to fix your SSL certificates as arbitrary
+    % code can be downloaded
+    web_opt = weboptions('CertificateFilename', '');
+  elseif isfile(getenv("SSL_CERT_FILE"))
+    web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
   else
-    error('eq2dist:file_not_found', '%s not found--was the equilibrium simulation run first?  Or specify eq_url and eq_zip to download.', p.eq_dir)
+    web_opt = weboptions('CertificateFilename', 'default');
   end
+  gemini3d.fileio.makedir(p.eq_dir)
+  websave(p.eq_zip, p.eq_url, web_opt);
+end
+
+[~,~,arc_type] = fileparts(p.eq_zip);
+
+switch arc_type
+  case ".zip", unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
+  % old zip files had vestigial folder of same name instead of just files
+  case ".tar", untar(p.eq_zip, p.eq_dir)
+  case {".zst", ".zstd"}, gemini3d.fileio.extract_zstd(p.eq_zip, p.eq_dir)
+  otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)
 end
 
 peq = gemini3d.read.config(p.eq_dir);

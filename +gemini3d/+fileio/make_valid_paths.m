@@ -38,7 +38,6 @@ for n = ["eq_dir", "eq_zip", "E0_dir", "prec_dir"]
   end
 end
 
-
 end % function
 
 
