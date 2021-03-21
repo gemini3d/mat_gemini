@@ -1,4 +1,5 @@
 function extract_zstd(archive, out_dir)
+% extract a zstd file "archive" to "out_dir"
 
 if ~isfile(archive)
    error("%s is not a file", archive)
@@ -16,11 +17,7 @@ if ret ~= 0
   error("need to have Zstd installed: \n install zstd by: \n %s", msg)
 end
 
-[p, n] = fileparts(archive);
-tar_arc = fullfile(p, n + ".tar");
-if isfile(tar_arc)
-  delete(tar_arc)
-end
+tar_arc = tempfile;
 
 ret = system("zstd -d " + archive + " -o " + tar_arc);
 if ret ~= 0
@@ -28,5 +25,6 @@ if ret ~= 0
 end
 
 untar(tar_arc, out_dir)
+delete(tar_arc)
 
 end

@@ -19,7 +19,7 @@ function xgf = tilted_dipole3d(cfg)
 % if you want a dimension to be size "n" adjust requested grid size so that
 % it is "n+4"
 arguments
-    cfg (1,1) struct
+  cfg (1,1) struct
 end
 
 % (dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
@@ -101,9 +101,9 @@ q=[q(1)-2*qstride;q(1)-qstride;q,;q(end)+qstride;q(end)+2*qstride];    %add in g
 phimin=phid - deg2rad(cfg.dphi/2);
 phimax=phid + deg2rad(cfg.dphi/2);
 if (lphi-4~=1)
-    phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
+  phi=linspace(phimin,phimax,lphi-4);    %note conversion to radians in  dphi calculation above
 else
-    phi=phid;
+  phi=phid;
 end
 phi=phi(:)';
 if cfg.lphi > 1
