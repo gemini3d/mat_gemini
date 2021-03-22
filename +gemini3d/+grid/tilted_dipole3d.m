@@ -363,13 +363,10 @@ for iphi=1:lphi
   xg.glon(:,:,iphi)=glons;
 end
 
-% xg.inull=find(r<Re+30e3); %may give issues in conservative form???  NOPE not the problem
-% xg.nullpts=r<Re+30e3;
-xg.inull=find(r<Re+80e3);
-%xg.nullpts=r<Re+80e3;
-xg.nullpts=zeros(lq,lp,lphi);
-xg.nullpts(xg.inull)=1;
+% inull=r<Re+30e3; %may give issues in conservative form???  NOPE not the problem
 
+% 0 or 1, cast double just to be consistent with other variables
+xg.nullpts = double(r(3:end-2, 3:end-2, 3:end-2) < Re+80e3);
 
 %NOW ADJUST SIZES SO THAT THEY MATCH WHAT FORTRAN CODE EXPECTS.  IF NOT
 %USING THIS TO GENERATE A GRID FOR THE FORTRAN CODE YOU MAY WANT TO GET RID
@@ -429,8 +426,6 @@ xgf.alt=xgf.alt(inds1,inds2,inds3);
 xgf.Bmag=xgf.Bmag(inds1,inds2,inds3);
 
 xgf.I=reshape(xgf.I,[cfg.lp,cfg.lphi]);   %somehow matlab is losing the shape if lphi==1
-
-xgf.nullpts=xgf.nullpts(inds1,inds2,inds3);
 
 %ZZZ - NEED TO ALSO CORRECT OTHER VARIABLE SIZES!!!!
 xgf.e1=xgf.e1(inds1,inds2,inds3,:);
