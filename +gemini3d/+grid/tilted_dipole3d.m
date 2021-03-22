@@ -283,10 +283,11 @@ magdxdq=repmat(sqrt(dot(dxdq,dxdq,4)),[1,1,1,3]);
 eq=dxdq./magdxdq;
 ep=cross(ephi,eq,4);
 Imat=acos(dot(er,eq,4));
+% don't average over ghost cells
 if cfg.gridflag==0
-    I=mean(Imat,1);             %avg. inclination for each field line.
+    I=mean(Imat(3:end-2, 3:end-2, 3:end-2),1);             %avg. inclination for each field line.
 else
-    I=mean(Imat(1:floor(lq/2),:,:),1);   %avg. over only half the field line
+    I=mean(Imat(3:floor(lq/2), 3:end-2, 3:end-2),1);   %avg. over only half the field line
 end
 I=90-min(I,pi-I)*180/pi;    %ignore parallel vs. anti-parallel
 
@@ -427,7 +428,6 @@ xgf.alt=xgf.alt(inds1,inds2,inds3);
 
 xgf.Bmag=xgf.Bmag(inds1,inds2,inds3);
 
-xgf.I=xgf.I(1,inds2,inds3);
 xgf.I=reshape(xgf.I,[cfg.lp,cfg.lphi]);   %somehow matlab is losing the shape if lphi==1
 
 xgf.nullpts=xgf.nullpts(inds1,inds2,inds3);
