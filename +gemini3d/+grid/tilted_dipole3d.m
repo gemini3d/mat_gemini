@@ -366,7 +366,9 @@ end
 % inull=r<Re+30e3; %may give issues in conservative form???  NOPE not the problem
 
 % 0 or 1, cast double just to be consistent with other variables
-xg.nullpts = double(r(3:end-2, 3:end-2, 3:end-2) < Re+80e3);
+% 79.95 to avoid floating point glitches when 80 km is often used as
+% altitude minimum
+xg.nullpts = double(r(3:end-2, 3:end-2, 3:end-2) < Re+79.95e3);
 
 %NOW ADJUST SIZES SO THAT THEY MATCH WHAT FORTRAN CODE EXPECTS.  IF NOT
 %USING THIS TO GENERATE A GRID FOR THE FORTRAN CODE YOU MAY WANT TO GET RID
