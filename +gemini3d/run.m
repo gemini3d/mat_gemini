@@ -9,7 +9,7 @@ arguments
   outdir (1,1) string
   config_path (1,1) string
   opts.overwrite (1,1) logical = false
-  opts.mpiexec (1,1) string = "mpiexec"
+  opts.mpiexec string = string.empty
   opts.gemini_exe string = string.empty
   opts.ssl_verify string = string.empty
   opts.file_format string = string.empty
@@ -23,8 +23,8 @@ run(fullfile(cwd, '../setup.m'))
 %% get gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 
-%% ensure mpiexec is available
-mpiexec_ok = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
+%% find mpiexec, as it's not necessarily on PATH to avoid MPI library clashes
+opts.mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
@@ -36,7 +36,7 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
-cmd = create_run(cfg, opts.mpiexec, gemini_exe, mpiexec_ok, opts.fortran_runner);
+cmd = create_run(cfg, opts.mpiexec, gemini_exe, opts.fortran_runner);
 
 if opts.dryrun
   return
@@ -48,7 +48,7 @@ gemini3d.write.meta(gemini3d.git_revision(fileparts(gemini_exe)), ...
 if opts.fortran_runner
   ret = system(cmd);
 else
-  ret = exe_run(cmd, mpiexec_ok);
+  ret = exe_run(cmd, ~isempty(mpiexec));
 end
 if ret ~= 0
   error('run:runtime_error', 'Gemini run failed, error code %d', ret)
@@ -94,12 +94,11 @@ end
 end % function
 
 
-function cmd = create_run(cfg, mpiexec, gemini_exe, mpiexec_ok, fortran)
+function cmd = create_run(cfg, mpiexec, gemini_exe, fortran)
 arguments
   cfg (1,1) struct
-  mpiexec (1,1) string
+  mpiexec string
   gemini_exe (1,1) string
-  mpiexec_ok (1,1) logical
   fortran (1,1) logical
 end
 
@@ -114,7 +113,7 @@ if fortran
   cmd = cmd + " -gemexe " + gembin;
 else
   %% mpiexec if available
-  if mpiexec_ok
+  if ~isempty(mpiexec)
     np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
     cmd = sprintf("%s -n %d %s", mpiexec, np, cmd);
   else
@@ -126,7 +125,7 @@ end
 disp(cmd)
 
 %% dry run
-ret = exe_run(cmd + " -dryrun", mpiexec_ok);
+ret = exe_run(cmd + " -dryrun", ~isempty(mpiexec));
 if ret~=0
   error('run:runtime_error', 'Gemini dryrun failed')
 end

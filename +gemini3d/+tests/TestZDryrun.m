@@ -26,7 +26,8 @@ methods(Test)
 function test_MPIexec(tc)
 gemini_exe = gemini3d.sys.get_gemini_exe();
 tc.verifyNotEmpty(gemini_exe)
-tc.verifyTrue(gemini3d.sys.check_mpiexec("mpiexec", gemini_exe))
+
+tc.verifyNotEmpty(gemini3d.sys.check_mpiexec(string.empty, gemini_exe))
 end
 
 
