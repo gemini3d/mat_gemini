@@ -142,7 +142,7 @@ elseif isfield(p, 'Jtarg')
   if isfield(p, "Jtarg_function")
     func = str2func(p.Jtarg_function);
   else
-    func = str2func("gemini3d.model.Jcurrent_target");
+    func = str2func("gemini3d.model.Jcurrent_gaussian");
   end
 
   E = func(E, Nt, gridflag, flagdip);
