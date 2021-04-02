@@ -16,7 +16,7 @@ end
 % NOTE: h2, h3 have ghost cells, so we use lx1 instead of "end" to index
 % pk is a scalar.
 
-if (flagdip)
+if flagdip
   if lx3 == 1 % meridional slice
     S = E.Etarg * E.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
     taper = erf((E.MLAT - E.mlatmean) / E.mlatsig);

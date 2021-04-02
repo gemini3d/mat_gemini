@@ -117,7 +117,13 @@ E.Vmaxx3ist = zeros(E.llon, Nt);
 %% synthesize feature
 if isfield(p, 'Etarg')
   E.Etarg = p.Etarg;
-  E = gemini3d.model.Etarg_erf(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
+
+  if isfield(p, "Etarg_function")
+    func = str2func(p.Etarg_function);
+    E = func(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
+  else
+    E = gemini3d.model.Etarg_erf(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
+  end
 elseif isfield(p, 'Jtarg')
   E.Jtarg = p.Jtarg;
 
