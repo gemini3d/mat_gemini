@@ -38,9 +38,19 @@ end
 
 
 %% number of points for input data
-E.llon=100;
-E.llat=100;
-if (flagdip)
+if isfield(p, "Efield_llon")
+  E.llon = p.Efield_llon;
+else
+  E.llon=100;
+end
+
+if isfield(p, "Efield_llat")
+  E.llat = p.Efield_llat;
+else
+  E.llat = 100;
+end
+
+if flagdip
   if lx3 == 1
     E.llon=1;
   elseif lx2==1
