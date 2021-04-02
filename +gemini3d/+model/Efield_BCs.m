@@ -130,19 +130,23 @@ if isfield(p, 'Etarg')
 
   if isfield(p, "Etarg_function")
     func = str2func(p.Etarg_function);
-    E = func(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
   else
-    E = gemini3d.model.Etarg_erf(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
+    func = str2func("gemini3d.model.Etarg_erf");
   end
+
+  E = func(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
+
 elseif isfield(p, 'Jtarg')
   E.Jtarg = p.Jtarg;
 
   if isfield(p, "Jtarg_function")
     func = str2func(p.Jtarg_function);
-    E = func(E, Nt, gridflag, flagdip);
   else
-    E = gemini3d.model.Jcurrent_target(E, Nt, gridflag, flagdip);
+    func = str2func("gemini3d.model.Jcurrent_target");
   end
+
+  E = func(E, Nt, gridflag, flagdip);
+
 else
   % background only, pass
 end

@@ -1,5 +1,10 @@
 function Q = precip_gaussian2d(pg, Qpeak, Qbackground)
 %% makes a 2D Gaussian shape in Latitude, Longitude
+arguments
+  pg (1,1) struct
+  Qpeak (1,1) {mustBeNonnegative,mustBeFinite}
+  Qbackground (1,1) {mustBeNonnegative,mustBeFinite}
+end
 
 if all(isfield(pg, {'mlon_sigma', 'mlat_sigma'}))
   Q = Qpeak * ...
