@@ -32,15 +32,12 @@ if ret ~= 0
 end
 git.branch = strtrim(msg);
 
-[ret,msg] = system("git -C " + cwd + " remote -v");
+[ret,msg] = system("git -C " + cwd + " remote get-url origin");
 if ret ~= 0
   warning('Could not determine Git remote')
   return
 end
-mat = regexp(msg,'^origin\s+(.*)\s+\(fetch\)', 'tokens');
-if ~isempty(mat)
-  git.remote = mat{1}{1};
-end
+git.remote = strtrim(msg);
 
 [ret, msg] = system("git -C " + cwd + " rev-parse --short HEAD");
 if ret ~= 0

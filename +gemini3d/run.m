@@ -42,8 +42,7 @@ if opts.dryrun
   return
 end
 %% run simulation
-gemini3d.write.meta(gemini3d.git_revision(fileparts(gemini_exe)), ...
-                      fullfile(cfg.outdir, "setup_meta.nml"), 'setup_gemini')
+gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
 if opts.fortran_runner
   ret = system(cmd);

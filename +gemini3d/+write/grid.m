@@ -59,7 +59,7 @@ if ~ok
   error('write:grid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
-gemini3d.write.meta(gemini3d.git_revision(), fullfile(p.outdir, 'setup_meta.nml'), 'setup_matlab')
+gemini3d.write.meta(fullfile(p.outdir, 'setup_grid.json'), gemini3d.git_revision())
 
 end % function
 
@@ -139,7 +139,7 @@ end
 %       hdf5nc.h5save(fn, '/meta/git_branch', xg.git.branch)
 %     end
 %   catch excp
-%     warning('could not write metadata to HDF5, logged same metadata to setup_meta.nml')
+%     warning('could not write metadata to HDF5, logged same metadata to setup_log.json')
 %   end
 % end
 

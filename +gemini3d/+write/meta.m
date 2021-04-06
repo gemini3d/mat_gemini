@@ -1,30 +1,38 @@
-function meta(fdat, filename, namelist)
-
+function meta(filename, in1, cfg)
+% save metadata to JSON file for provenance
 arguments
-  fdat (1,1) struct
   filename (1,1) string
-  namelist (1,1) string
+  in1 (1,1) struct
+  cfg struct = struct.empty
 end
 
 filename = gemini3d.fileio.expanduser(filename);
 
-fid = fopen(filename, 'a');
-if fid < 1
-  error('write.meta:os_error', 'could not create file %s', filename)
+mat = struct("arch", computer('arch'), "version", version());
+git = struct("version", in1.git_version, "remote", in1.remote, "branch", in1.branch, ...
+"commit", in1.commit, "porcelain", in1.porcelain);
+
+js = struct("matlab", mat, "git", git);
+
+if ~isempty(cfq)
+  if isfield(cfg, "eq_dir")
+    js.eq = struct("eq_dir", cfg.eq_dir);
+    md5fn = fullfile(cfg.eq_dir, "md5sum.txt");
+    if isfile(md5fn)
+      js.eq.md5 = strtrim(fileread(md5fn));
+    end
+  end
 end
 
-fprintf(fid, '&%s\n', namelist);
+json = jsonencode(js, "PrettyPrint", true);
 
-% variable string values get quoted per NML standard
-fprintf(fid, 'matlab_version = "%s"\n', version());
+fid = fopen(filename, 'w');
+if fid < 1
+  error('write:meta:os_error', 'could not create file %s', filename)
+end
 
-fprintf(fid, 'git_version = "%s"\n', fdat.git_version);
-fprintf(fid, 'git_remote = "%s"\n', fdat.remote);
-fprintf(fid, 'git_branch = "%s"\n', fdat.branch);
-fprintf(fid, 'git_commit = "%s"\n', fdat.commit);
-fprintf(fid, 'git_porcelain = "%s"\n', fdat.porcelain);
+fprintf(fid, json);
 
-fprintf(fid, '%s\n', '/');
 fclose(fid);
 
 end %function
