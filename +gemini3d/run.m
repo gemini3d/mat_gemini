@@ -24,7 +24,7 @@ run(fullfile(cwd, '../setup.m'))
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 
 %% find mpiexec, as it's not necessarily on PATH to avoid MPI library clashes
-opts.mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
+mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
@@ -36,7 +36,7 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
-cmd = create_run(cfg, opts.mpiexec, gemini_exe, opts.fortran_runner);
+cmd = create_run(cfg, mpiexec, gemini_exe, opts.fortran_runner);
 
 if opts.dryrun
   return
