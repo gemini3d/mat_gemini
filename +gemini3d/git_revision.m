@@ -39,7 +39,10 @@ if ret ~= 0
 end
 git.remote = strtrim(msg);
 
-[ret, msg] = system("git -C " + cwd + " rev-parse --short HEAD");
+[ret, msg] = system("git -C " + cwd + " describe --tags");
+if ret ~= 0
+  [ret, msg] = system("git -C " + cwd + " rev-parse --short HEAD");
+end
 if ret ~= 0
   warning('Could not determine Git commit')
   return

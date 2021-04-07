@@ -15,7 +15,8 @@ git = struct("version", in1.git_version, "remote", in1.remote, "branch", in1.bra
 js = struct("matlab", mat, "git", git);
 
 if isfield(cfg, "eq_dir")
-  js.eq = struct("eq_dir", cfg.eq_dir);
+  % JSON does not allow unescaped backslash
+  js.eq = struct("eq_dir", gemini3d.posix(cfg.eq_dir));
   md5fn = fullfile(cfg.eq_dir, "md5sum.txt");
   if isfile(md5fn)
     js.eq.md5 = strtrim(fileread(md5fn));
