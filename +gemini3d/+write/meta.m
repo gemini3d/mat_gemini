@@ -3,7 +3,7 @@ function meta(filename, in1, cfg)
 arguments
   filename (1,1) string
   in1 (1,1) struct
-  cfg struct = struct.empty
+  cfg (1,1) struct
 end
 
 filename = gemini3d.fileio.expanduser(filename);
@@ -14,13 +14,11 @@ git = struct("version", in1.git_version, "remote", in1.remote, "branch", in1.bra
 
 js = struct("matlab", mat, "git", git);
 
-if ~isempty(cfq)
-  if isfield(cfg, "eq_dir")
-    js.eq = struct("eq_dir", cfg.eq_dir);
-    md5fn = fullfile(cfg.eq_dir, "md5sum.txt");
-    if isfile(md5fn)
-      js.eq.md5 = strtrim(fileread(md5fn));
-    end
+if isfield(cfg, "eq_dir")
+  js.eq = struct("eq_dir", cfg.eq_dir);
+  md5fn = fullfile(cfg.eq_dir, "md5sum.txt");
+  if isfile(md5fn)
+    js.eq.md5 = strtrim(fileread(md5fn));
   end
 end
 
