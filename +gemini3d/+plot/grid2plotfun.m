@@ -11,6 +11,7 @@ elseif isstring(plotfun) || ischar(plotfun)
     plotfun = str2func("gemini3d.plot" + plotfun);
     return
   end
+elseif isempty(plotfun)
 else
   error('grid2plotfun:type_error',  "plotfun must be function name or function_handle")
 end
