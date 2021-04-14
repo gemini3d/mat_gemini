@@ -57,14 +57,21 @@ if ~isfield(dat, 'filename')
   dat.filename = filename;
 end
 %% ensure input/simgrid matches data
+% if overwrote one directory or the other, a size mismatch can result
+% this is handled implicitly by xarray.Dataset in PyGemini
+
 lxs = gemini3d.simsize(filename);
 if isempty(lxs)
   % this happens for a standalone data file
   return
 end
-% if overwrote one directory or the other, a size mismatch can result
-dat_shape = size(dat.ne);
-%MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
+
+if ~isfield(opts, "vars")
+  dat_shape = size(dat.ne);
+  %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
+else
+  dat_shape = size(dat.(opts.vars(1)));
+end
 % we check each dimension because of possibility of 2D dimension swapping
 % x1
 
