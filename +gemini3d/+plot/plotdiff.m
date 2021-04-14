@@ -13,10 +13,22 @@ arguments
   time datetime = datetime.empty
 end
 
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, "../../setup.m"))
+
+ref_path = gemini3d.fileio.expanduser(ref_path);
+new_path = gemini3d.fileio.expanduser(new_path);
+
 if isempty(time)
+  assert(isfile(ref_path), "%s is not a file", ref_path)
+  assert(isfile(new_path), "%s is not a file", new_path)
   A = gemini3d.read.frame(ref_path, "vars", name);
   B = gemini3d.read.frame(new_path, "vars", name);
+  ref_path = fileparts(ref_path);
+  new_path = fileparts(new_path);
 else
+  assert(isfolder(ref_path), "%s is not a directory", ref_path)
+  assert(isfolder(new_path), "%s is not a directory", new_path)
   A = gemini3d.read.frame(ref_path, "time", time, "vars", name);
   B = gemini3d.read.frame(new_path, "time", time, "vars", name);
 end
