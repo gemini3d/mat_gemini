@@ -71,6 +71,9 @@ if ~isfield(opts, "vars")
   %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 else
   dat_shape = size(dat.(opts.vars(1)));
+  if length(dat_shape) > 3
+    dat_shape = dat_shape(1:3);
+  end
 end
 % we check each dimension because of possibility of 2D dimension swapping
 % x1

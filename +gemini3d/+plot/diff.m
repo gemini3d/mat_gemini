@@ -14,7 +14,7 @@ B = squeeze(B);
 if ndims(A) == 3
   % loop over the species, which are in the first dimension
   for i = 1:size(A, 3)
-    diff(A(:,:,i), B(:,:,i), name + " - " + int2str(i), time, outdir, refdir)
+    gemini3d.plot.diff(A(:,:,i), B(:,:,i), name + "-" + int2str(i), time, outdir, refdir)
   end
 end
 
