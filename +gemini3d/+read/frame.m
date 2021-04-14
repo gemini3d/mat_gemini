@@ -31,7 +31,7 @@ if ~isfile(filename)
   end
 end
 
-if isempty(filename)
+if isempty(filename) || ~isfile(filename)
   return
 end
 
