@@ -10,7 +10,7 @@ arguments
   new_path (1,1) string
   ref_path (1,1) string
   name (1,1) string
-  time datetime = datetime.empty
+  time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
 cwd = fileparts(mfilename('fullpath'));

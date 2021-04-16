@@ -1,27 +1,41 @@
-function diff(A, B, name, time, outdir, refdir)
+function diff(A, B, name, time, newdir, refdir)
 arguments
   A {mustBeNumeric}
   B {mustBeNumeric}
   name (1,1) string
-  time datetime
-  outdir (1,1) string
+  time (1,1) datetime
+  newdir (1,1) string
   refdir (1,1) string
 end
+
+assert(ndims(A) <= 3 && ndims(B) <= 3, "for 3D or 2D arrays only")
+
+lx = gemini3d.simsize(newdir);
+is3d = lx(2) ~= 1 && lx(3) ~= 1;
 
 A = squeeze(A);
 B = squeeze(B);
 
 if ndims(A) == 3
-  % loop over the species, which are in the first dimension
-  for i = 1:size(A, 3)
-    gemini3d.plot.diff(A(:,:,i), B(:,:,i), name + "-" + int2str(i), time, outdir, refdir)
+  if size(A,3) == 7
+    % loop over the species, which are in the last dimension
+    for i = 1:size(A, 3)
+      gemini3d.plot.diff(A(:,:,i), B(:,:,i), name + "-" + int2str(i), time, newdir, refdir)
+    end
+  elseif is3d
+    % pick x2 and x3 slice halfway
+    i = round(size(A,3) / 2);
+    gemini3d.plot.diff(A(:,:,i), B(:,:,i), name + "-x2", time, newdir, refdir)
+    i = round(size(A,2) / 2);
+    gemini3d.plot.diff(A(:,i,:), B(:,i,:), name + "-x3", time, newdir, refdir)
+  else
+    error("unexpected case, 2D data but in if-tree only for 3D")
   end
-end
 
-if ~any(ndims(A) == [1, 2])
-  warning("skipping diff plot: " + name)
   return
 end
+
+assert(ismatrix(A), name + " unexpected > 2D. Size: " + int2str(size(A)) + " " + string(time))
 
 fg = figure('Position', [10 10 1200 400]);
 t = tiledlayout(1, 3, 'parent', fg);
@@ -32,7 +46,7 @@ elseif isvector(A)
   diff1d(A, B, name, t)
 end
 
-title(nexttile(t, 1), outdir, "interpreter", "none")
+title(nexttile(t, 1), newdir, "interpreter", "none")
 title(nexttile(t, 2), refdir, "interpreter", "none")
 title(nexttile(t, 3), "diff: " + name)
 
@@ -41,7 +55,7 @@ ttxt = name + "  " + tstr;
 
 sgtitle(fg, ttxt)
 
-plot_dir = fullfile(outdir, "plot_diff");
+plot_dir = fullfile(newdir, "plot_diff");
 gemini3d.fileio.makedir(plot_dir)
 
 fn = fullfile(plot_dir, name + "-" + tstr + ".png");
@@ -90,7 +104,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-caxis(ax, [bmin, bmax])
+caxis(ax, [bmin, bmax]);
 %%
 ax = nexttile(t, 2);
 hi = pcolor(ax, B);
@@ -99,7 +113,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-caxis(ax, [bmin, bmax])
+caxis(ax, [bmin, bmax]);
 %%
 ax = nexttile(t, 3);
 dAB = A - B;
@@ -109,6 +123,6 @@ hi = pcolor(ax, A - B);
 set(hi, "EdgeColor", "none")
 colorbar(ax)
 colormap(gemini3d.plot.bwr())
-caxis(ax, [-b, b])
+caxis(ax, [-b, b]);
 
 end
