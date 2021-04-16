@@ -35,15 +35,15 @@ if ndims(A) == 3
   return
 end
 
-assert(ismatrix(A), name + " unexpected > 2D. Size: " + int2str(size(A)) + " " + string(time))
-
 fg = figure('Position', [10 10 1200 400]);
 t = tiledlayout(1, 3, 'parent', fg);
 
 if ismatrix(A)
-  diff2d(A, B, name, t)
+  maxdiff = diff2d(A, B, name, t);
 elseif isvector(A)
-  diff1d(A, B, name, t)
+  maxdiff = diff1d(A, B, name, t);
+else
+  error(name + " unexpected > 2D. Size: " + int2str(size(A)) + " " + string(time))
 end
 
 title(nexttile(t, 1), newdir, "interpreter", "none")
@@ -51,7 +51,7 @@ title(nexttile(t, 2), refdir, "interpreter", "none")
 title(nexttile(t, 3), "diff: " + name)
 
 tstr = string(time, "yyyy-MM-dd-HH-mm-ss");
-ttxt = name + "  " + tstr;
+ttxt = name + "  " + tstr + "maxDiff: " + string(maxdiff);
 
 sgtitle(fg, ttxt)
 
@@ -65,7 +65,7 @@ exportgraphics(fg, fn)
 end
 
 
-function diff1d(A, B, t)
+function maxdiff = diff1d(A, B, t)
 arguments
   A {mustBeNumeric}
   B {mustBeNumeric}
@@ -76,12 +76,15 @@ plot(nexttile(t, 1), A)
 
 plot(nexttile(t, 2), b)
 
-plot(nexttile(t, 3), A - B)
+d = A - B;
+maxdiff = abs(max(d(:)));
+
+plot(nexttile(t, 3), d)
 
 end
 
 
-function diff2d(A, B, name, t)
+function maxdiff = diff2d(A, B, name, t)
 arguments
   A {mustBeNumeric}
   B {mustBeNumeric}
@@ -119,7 +122,9 @@ ax = nexttile(t, 3);
 dAB = A - B;
 b = max(abs(min(dAB(:))), abs(max(dAB(:))));
 
-hi = pcolor(ax, A - B);
+maxdiff = abs(max(dAB(:)));
+
+hi = pcolor(ax, dAB);
 set(hi, "EdgeColor", "none")
 colorbar(ax)
 colormap(gemini3d.plot.bwr())
