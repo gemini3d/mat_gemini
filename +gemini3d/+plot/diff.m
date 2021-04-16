@@ -41,7 +41,10 @@ ttxt = name + "  " + tstr;
 
 sgtitle(fg, ttxt)
 
-fn = fullfile(outdir, name + "-diff-" + tstr + ".png");
+plot_dir = fullfile(outdir, "plot_diff");
+gemini3d.fileio.makedir(plot_dir)
+
+fn = fullfile(plot_dir, name + "-" + tstr + ".png");
 disp("write: " + fn)
 exportgraphics(fg, fn)
 
