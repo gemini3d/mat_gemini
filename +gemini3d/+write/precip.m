@@ -9,7 +9,9 @@ arguments
   file_format (1,1) string
 end
 
-disp("write to " + outdir)
+gemini3d.fileio.makedir(outdir)
+
+disp("write precip to: " + outdir)
 
 switch file_format
   case 'h5', write_hdf5(outdir, pg)

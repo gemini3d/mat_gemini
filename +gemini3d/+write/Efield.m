@@ -7,6 +7,8 @@ end
 
 nan_check(E)
 
+gemini3d.fileio.makedir(dir_out)
+
 switch file_format
   case 'h5', write_hdf5(dir_out, E)
   case 'nc', write_nc4(dir_out, E)

@@ -8,16 +8,13 @@ end
 % files that can be used an input to GEMINI.  This is a basic examples that
 % can make Gaussian shaped potential or FAC inputs using an input width.
 
-dir_out = p.E0_dir;
-gemini3d.fileio.makedir(dir_out);
-
 lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
 
 
 %% For current density boundary conditions we need to determin top v bottom of the grid
-if (xg.alt(1,1,1)>xg.alt(2,1,1))
+if xg.alt(1,1,1) > xg.alt(2,1,1)
   % inverted
   gridflag=1;
   disp(" Efield_BCs:  Detected an inverted grid...");
@@ -28,7 +25,7 @@ else
 end
 
 %% determine what type of grid (cartesian or dipole) we are dealing with
-if (any(xg.h1>1.01))
+if any(xg.h1>1.01)
   flagdip=true;
   disp(' Efield_BCs:  Dipole grid detected...');
 else
@@ -156,7 +153,7 @@ end
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT TYPICALLY NEED TO BE SMOOTHED.
-gemini3d.write.Efield(E, dir_out, p.file_format)
+gemini3d.write.Efield(E, p.E0_dir, p.file_format)
 
 end % function
 
