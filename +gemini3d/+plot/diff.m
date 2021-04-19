@@ -8,7 +8,8 @@ arguments
   refdir (1,1) string
 end
 
-assert(ndims(A) <= 3 && ndims(B) <= 3, "for 3D or 2D arrays only")
+assert(all(size(A) == size(B)), "size of new and ref arrays don't match")
+assert(ndims(A) <= 3, "for 3D or 2D arrays only")
 
 lx = gemini3d.simsize(newdir);
 is3d = lx(2) ~= 1 && lx(3) ~= 1;
