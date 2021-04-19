@@ -31,7 +31,7 @@ setup
 Run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-TestGemini
+runtests('gemini3d')
 ```
 
 If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
