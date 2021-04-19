@@ -66,7 +66,7 @@ if isempty(lxs)
   return
 end
 
-if ~isfield(opts, "vars")
+if isempty(opts.vars)
   dat_shape = size(dat.ne);
   %MZ - ne is the only variable gauranteed to be in the output files; others depend on the user selected output type...
 else
