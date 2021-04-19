@@ -22,10 +22,9 @@ jobs:
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v0
 
-
-      - name: Run script
-        uses: matlab-actions/run-command@v0
+      - name: Run tests and generate artifacts
+        uses: matlab-actions/run-tests@v0
         with:
-          command: "disp(version), TestGemini"
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
+          select-by-folder: +gemini3d/+tests
