@@ -1,4 +1,3 @@
-% this script is run on Azure (or local)
 import matlab.unittest.constraints.ContainsSubstring
 import matlab.unittest.selectors.HasName
 import matlab.unittest.TestRunner
