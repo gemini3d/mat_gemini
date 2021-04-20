@@ -128,7 +128,7 @@ if isfield(p, 'Etarg')
   if isfield(p, "Etarg_function")
     func = str2func(p.Etarg_function);
   else
-    func = str2func("gemini3d.model.Etarg_erf");
+    func = str2func("gemini3d.efield.Etarg_erf");
   end
 
   E = func(E, xg, lx1, lx2, lx3, Nt, gridflag,flagdip);
@@ -139,7 +139,7 @@ elseif isfield(p, 'Jtarg')
   if isfield(p, "Jtarg_function")
     func = str2func(p.Jtarg_function);
   else
-    func = str2func("gemini3d.model.Jcurrent_gaussian");
+    func = str2func("gemini3d.efield.Jcurrent_gaussian");
   end
 
   E = func(E, Nt, gridflag, flagdip);

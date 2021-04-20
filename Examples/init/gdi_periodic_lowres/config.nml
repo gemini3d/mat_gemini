@@ -28,7 +28,7 @@ eq_dir = '~/simulations/risr3d_eq/'
 eq_zip = '~/simulations/risr3d_eq.zip'
 eq_url = 'https://zenodo.org/record/3980312/files/risr3d_eq.zip?download=1'
 
-setup_functions = 'gemini3d.setup.Efield_BCs', 'perturb'
+setup_functions = 'gemini3d.efield.Efield_BCs', 'perturb'
 /
 
 &flags

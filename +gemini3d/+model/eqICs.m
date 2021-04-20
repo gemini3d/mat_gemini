@@ -54,7 +54,7 @@ for ix3=1:lx3
     z0f = 325e3;
     He = 2 * kb * Tn(:,ix2,ix3) / amu / 30 ./ g(:,ix2,ix3);
     z0e = 120e3;
-    ne = gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf) +  gemini3d.setup.chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
+    ne = chapmana(alt(:,ix2,ix3), p.nmf,z0f,Hf) + chapmana(alt(:,ix2,ix3), p.nme,z0e,He);
     rho = 1/2*tanh((alt(:,ix2,ix3)-200e3)/45e3)-1/2*tanh((alt(:,ix2,ix3)-1000e3)/200e3);
 
     inds = find(alt(:,ix2,ix3) > z0f);
@@ -174,7 +174,7 @@ for ix3=1:lx3
         [~,iref]=max(alt(:,ix2,ix3));
         n0=1e6;
     end
-    ns(inds1,ix2,ix3,6)= gemini3d.setup.chapmana(z,n0,alt(iref,ix2,ix3),mean(Hf));
+    ns(inds1,ix2,ix3,6) = chapmana(z,n0,alt(iref,ix2,ix3),mean(Hf));
   end
 end
 ns(:,:,:,1:6)=max(ns(:,:,:,1:6),mindens);

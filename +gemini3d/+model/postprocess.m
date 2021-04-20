@@ -19,12 +19,12 @@ if isfield(cfg, 'setup_functions')
 end
 %% potential boundary conditions
 if isfield(cfg, 'E0_dir')
-  gemini3d.model.Efield_BCs(cfg, xg);
+  gemini3d.efield.Efield_BCs(cfg, xg);
 end
 
 %% aurora
 if isfield(cfg, 'prec_dir')
-  gemini3d.model.particles_BCs(cfg, xg)
+  gemini3d.particles.particles_BCs(cfg, xg)
 end
 
 end % function

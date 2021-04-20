@@ -156,7 +156,7 @@ When a significant change is made to internal Gemini3D code, this may change the
 If determined that new reference datasets are needed:
 
 ```matlab
-gemini3d.setup.generate_reference_data('../gemini-examples/initialize', '~/sim', 'test2d')
+gemini3d.tests.generate_reference_data('../gemini-examples/init', '~/sim', 'test2d')
 ```
 
 That makes all tests with subdirectory names containing "test2d".

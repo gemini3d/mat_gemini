@@ -5,7 +5,7 @@ arguments
   xg (1,1) struct
 end
 
-precip = gemini3d.setup.precip_grid(xg, p);
+precip = gemini3d.particles.grid(xg, p);
 
 Nt = length(precip.times);
 
@@ -33,7 +33,7 @@ mustBeLessThan(p.E0precip, 100e6)
 if isfield(p, "Qprecip_function")
   Qfunc = str2func(p.Qprecip_function);
 else
-  Qfunc = str2func("gemini3d.setup.precip_gaussian2d");
+  Qfunc = str2func("gemini3d.particles.gaussian2d");
 end
 
 for i = i_on:i_off

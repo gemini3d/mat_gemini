@@ -56,7 +56,7 @@ function test_Efield(tc)
 
   xg = gemini3d.read.grid(test_dir);
 
-  gemini3d.model.Efield_BCs(p, xg);
+  gemini3d.efield.Efield_BCs(p, xg);
 
   compare_efield(tc, p.times, ...
     fullfile(tc.TestData.outdir, E0_dir), ...
@@ -78,7 +78,7 @@ function test_precip(tc)
 
   xg = gemini3d.read.grid(test_dir);
 
-  gemini3d.model.particles_BCs(p, xg);
+  gemini3d.particles.particles_BCs(p, xg);
 
   compare_precip(tc, p.times, ...
     fullfile(tc.TestData.outdir, prec_dir), ...
