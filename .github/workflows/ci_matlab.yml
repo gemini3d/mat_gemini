@@ -23,6 +23,8 @@ jobs:
         uses: matlab-actions/setup-matlab@v0
 
       - name: Run tests and generate artifacts
+        env:
+          LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libcurl.so.4
         uses: matlab-actions/run-tests@v0
         with:
           test-results-junit: test-results/results.xml
