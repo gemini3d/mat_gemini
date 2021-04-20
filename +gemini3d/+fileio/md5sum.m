@@ -14,7 +14,11 @@ if verLessThan('matlab', '9.7')
   return
 end
 
-p = pyenv();
+try
+  p = pyenv();
+catch
+  return
+end
 if p.Version == ""
   return
 end
