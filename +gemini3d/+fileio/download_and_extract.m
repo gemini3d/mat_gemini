@@ -56,7 +56,8 @@ end
 
 % matlab websave doesn't work with redirects (!!!)
 % websave(archive, urls.tests.("x" + name).url, web_opts);
-stat = system("curl -L -o " + archive + " " + urls.tests.("x" + name).url);
+cmd = "curl -L -o " + archive + " '" + urls.tests.("x" + name).url + "'";
+stat = system(cmd);
 if stat ~= 0
   error("download failed: " + urls.tests.("x" + name).url)
 end
