@@ -10,7 +10,7 @@ cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
 
 tc.TestData.name = "2dew_glow";
-tc.TestData.data_path = fullfile(cwd, "data/test" + tc.TestData.name);
+tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 
 % setup so that hdf5nc is present
 run(fullfile(cwd, "../../setup.m"))
@@ -59,25 +59,36 @@ end
 function test_read_frame_standalone_file(tc)
 tc.applyFixture(matlab.unittest.fixtures.WorkingFolderFixture)
 
-copyfile(fullfile(tc.TestData.data_path, "20130220_18000.000001.h5"), pwd)
+copyfile(fullfile(tc.TestData.data_path, "20130220_18000.000000.h5"), pwd)
 
-dat = gemini3d.read.frame("20130220_18000.000001.h5", "vars", "ne");
+lxs = gemini3d.simsize(tc.TestData.data_path);
+
+dat = gemini3d.read.frame("20130220_18000.000000.h5", "vars", "ne");
+tc.assertEqual(dat.lxs, double(lxs))
 tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
-tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual([dat.lxs(1), dat.lxs(2)], size(dat.ne))
 tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 function test_read_frame_filename(tc)
-dat = gemini3d.read.frame(fullfile(tc.TestData.data_path, "20130220_18000.000001.h5"), "vars", "ne");
+dat = gemini3d.read.frame(fullfile(tc.TestData.data_path, "20130220_18000.000000.h5"), "vars", "ne");
+
+lxs = gemini3d.simsize(tc.TestData.data_path);
+tc.assertEqual(dat.lxs, double(lxs))
+
 tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
-tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual([dat.lxs(1), dat.lxs(2)], size(dat.ne))
 tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 function test_read_frame_folder_datetime(tc)
 dat = gemini3d.read.frame(fullfile(tc.TestData.data_path), "time", datetime(2013,2,20,5,0,0), "vars", "ne");
+
+lxs = gemini3d.simsize(tc.TestData.data_path);
+tc.assertEqual(dat.lxs, double(lxs))
+
 tc.verifyEqual(dat.lxs, size(dat.ns, 1:3))
-tc.verifyEqual([dat.lxs(1), dat.lxs(3)], size(dat.ne))
+tc.verifyEqual([dat.lxs(1), dat.lxs(2)], size(dat.ne))
 tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 

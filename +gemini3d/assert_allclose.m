@@ -1,4 +1,4 @@
-function testok = assert_allclose(actual, desired, rtol, atol, err_msg,warnonly,notclose,verbose)
+function testok = assert_allclose(actual, desired, opts)
 % testok = assert_allclose(actual, desired, rtol, atol)
 %
 % Inputs
@@ -19,15 +19,14 @@ function testok = assert_allclose(actual, desired, rtol, atol, err_msg,warnonly,
 arguments
   actual {mustBeNumeric,mustBeNonempty,mustBeFinite}
   desired {mustBeNumeric,mustBeNonempty,mustBeFinite}
-  rtol (1,1) double {mustBePositive} = 1e-8
-  atol (1,1) double {mustBeNonnegative} = 1e-9
-  err_msg string = string.empty
-  warnonly (1,1) logical = false
-  notclose (1,1) logical = false
-  verbose (1,1) logical = false
+  opts.rtol (1,1) double {mustBePositive} = 1e-8
+  opts.atol (1,1) double {mustBeNonnegative} = 1e-9
+  opts.err_msg (1,1) string = ""
+  opts.warnonly (1,1) logical = false
+  opts.verbose (1,1) logical = false
 end
 
-if warnonly
+if opts.warnonly
   efunc = @warning;
 else
   efunc = @error;
@@ -41,35 +40,26 @@ if isinteger(desired)
   actual = cast(actual, 'like', desired);
 end
 measdiff = abs(actual-desired);
-tol = atol + rtol * abs(desired);
+tol = opts.atol + opts.rtol * abs(desired);
 result = measdiff <= tol;
-%% assert_allclose vs assert_not_allclose
-if notclose % more than N % of values should be changed more than tolerance (arbitrary)
-  testok = sum(~result) > 0.0001*numel(desired);
-else
-  testok = all(result);
-end
 
-if ~testok
+if ~all(result)
   Nfail = sum(~result);
   j = find(~result);
   [bigbad,i] = max(measdiff(j));
   i = j(i);
-  if verbose
+  if opts.verbose
     disp(['error mag.: ',num2str(measdiff(j)')])
     disp(['tolerance:  ',num2str(tol(j)')])
     disp(['Actual:     ',num2str(actual(i))])
     disp(['desired:    ',num2str(desired(i))])
   end
 
-  emsg = "AssertionError: ";
-  if ~isempty(err_msg)
-    emsg = emsg + err_msg;
-  end
+  emsg = "AssertionError: " + opts.err_msg;
   emsg = emsg + " " + num2str(Nfail/numel(desired)*100,'%.2f') + ...
   "% failed accuracy. maximum error magnitude " + num2str(bigbad) + " Actual: " + ...
-  num2str(actual(i)) + " Desired: " + num2str(desired(i)) + " atol: " + num2str(atol) + ...
-  " rtol: " + num2str(rtol);
+  num2str(actual(i)) + " Desired: " + num2str(desired(i)) + " atol: " + num2str(opts.atol) + ...
+  " rtol: " + num2str(opts.rtol);
 
   efunc(emsg)
 end

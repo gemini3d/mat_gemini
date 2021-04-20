@@ -10,7 +10,7 @@ function setup_sim(tc)
 name = "2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
-tc.TestData.datapath = fullfile(cwd, "data/test" + name);
+tc.TestData.datapath = fullfile(cwd, "data", name);
 
 % get files if needed
 gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))

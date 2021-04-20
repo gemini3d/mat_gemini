@@ -23,11 +23,9 @@ end
 methods (Test)
 
 function test_grid(tc)
-  tol.rtol = 1e-8;
-  tol.atol = 1e-5;
   tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, "test" + tname);
+  test_dir = fullfile(tc.TestData.ref_dir, tname);
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
@@ -40,17 +38,18 @@ function test_grid(tc)
   cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
   gemini3d.write.grid(cfg, xg);
 
-  compare_grid(tc, cfg.indat_grid, test_dir, tol)
+  gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
 end
 
 function test_Efield(tc)
   tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, "test" + tname);
+  test_dir = fullfile(tc.TestData.ref_dir, tname);
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
   p = gemini3d.read.config(test_dir);
+  tc.assumeNotEmpty(p, test_dir + " not contain config.nml")
   E0_dir = p.E0_dir;
   p.E0_dir = fullfile(tc.TestData.outdir, p.E0_dir);
 
@@ -58,17 +57,15 @@ function test_Efield(tc)
 
   gemini3d.efield.Efield_BCs(p, xg);
 
-  compare_efield(tc, p.times, ...
-    fullfile(tc.TestData.outdir, E0_dir), ...
-    fullfile(test_dir, E0_dir), ...
-    'rel', 0.001, 'abs', 0.01)
+  time = p.times(1):seconds(p.dtE0):p.times(end);
+  gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), 'only', 'efield', "time", time)
 end
 
 
 function test_precip(tc)
   tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, "test" + tname);
+  test_dir = fullfile(tc.TestData.ref_dir, tname);
   %% get files if needed
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
   %% setup new test data
@@ -80,10 +77,7 @@ function test_precip(tc)
 
   gemini3d.particles.particles_BCs(p, xg);
 
-  compare_precip(tc, p.times, ...
-    fullfile(tc.TestData.outdir, prec_dir), ...
-    fullfile(test_dir, prec_dir), ...
-    'rel', 0.001, 'abs', 0.01)
+  gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir),"only", "precip", "time", p.times)
 end
 
 function test_Arunner(tc, file_type, name)
@@ -94,7 +88,7 @@ function test_plot_2d(tc)
 tname = "2dew_glow";
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 
-data_dir = fullfile(tc.TestData.cwd, "data/test" + tname);
+data_dir = fullfile(tc.TestData.cwd, "data", tname);
 % test 2D plots
 
 h = gemini3d.plot.frame(data_dir, datetime(2013, 2, 20, 5, 5, 0));
@@ -114,7 +108,7 @@ function test_plot_3d(tc)
 tname = '3d_glow';
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
-d3 = fullfile(tc.TestData.cwd, "data/test"+tname);
+d3 = fullfile(tc.TestData.cwd, "data", tname);
 h = gemini3d.plot.init(gemini3d.read.grid(d3));
 
 tc.verifySize(h, [1,10])

@@ -6,11 +6,12 @@ arguments
   ref_dir (1,1) string
 end
 
-test_dir = fullfile(ref_dir, "test" + name);
+test_dir = fullfile(ref_dir, name);
 %% get files if needed
 gemini3d.fileio.download_and_extract(name, ref_dir)
 %% setup new test data
 p = gemini3d.read.config(test_dir);
+tc.assumeNotEmpty(p)
 p.file_format = file_format;
 p.outdir = tc.TestData.outdir;
 
@@ -30,6 +31,6 @@ end
 gemini3d.model.setup(p);
 %% check generated files
 
-compare_all(tc, p.outdir, test_dir, "only", "in", "file_format", file_format)
+gemini3d.compare(p.outdir, test_dir, "only", "in", "file_format", file_format)
 
 end  % function

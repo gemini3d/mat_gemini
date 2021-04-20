@@ -1,4 +1,4 @@
-function close_enough = allclose(actual, desired, namedargs)
+function close_enough = allclose(actual, desired, opts)
 % close_enough = allclose(actual, desired, rtol, atol)
 %
 % Inputs
@@ -16,10 +16,10 @@ function close_enough = allclose(actual, desired, namedargs)
 %
 % if "actual" is within atol OR rtol of "desired", return true
 arguments
-  actual {mustBeNumeric}
-  desired {mustBeNumeric}
-  namedargs.rtol (1,1) double {mustBePositive} = 1e-8
-  namedargs.atol (1,1) double {mustBeNonnegative} = 1e-9
+  actual {mustBeNumeric,mustBeNonempty,mustBeFinite}
+  desired {mustBeNumeric,mustBeNonempty,mustBeFinite}
+  opts.rtol (1,1) double {mustBePositive} = 1e-8
+  opts.atol (1,1) double {mustBeNonnegative} = 1e-9
 end
 
 %% compare
@@ -32,7 +32,7 @@ if isinteger(desired)
 end
 
 measdiff = abs(actual-desired);
-tol = namedargs.atol + namedargs.rtol * abs(desired);
+tol = opts.atol + opts.rtol * abs(desired);
 
 close_enough = all(measdiff <= tol);
 

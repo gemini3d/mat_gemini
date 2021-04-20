@@ -52,7 +52,7 @@ names = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h", "x3", "x3i", 
   "gx1", "gx2", "gx3", "Bmag", "I", "nullpts", "e1", "e2", "e3", "er", "etheta", "ephi", ...
   "r", "theta", "phi", "x", "y", "z"];
 for n = names
-  gemini3d.assert_allclose(xg.(n), xg_check.(n), rtol)
+  gemini3d.assert_allclose(xg.(n), xg_check.(n), 'rtol', rtol)
 end
 
 if ~ok

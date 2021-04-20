@@ -17,7 +17,7 @@ if ret ~= 0
   error("need to have Zstd installed: \n install zstd by: \n %s", msg)
 end
 
-tar_arc = tempfile;
+tar_arc = tempname;
 
 ret = system("zstd -d " + archive + " -o " + tar_arc);
 if ret ~= 0

@@ -23,9 +23,9 @@ end
 
 % reltol = 1e-5 for real32
 % this is just a random point we're comparing.
-gemini3d.assert_allclose(TsEuler(13,13), 0.770938954253086, 1e-5,[],'1-D Euler diffusion accuracy')
-gemini3d.assert_allclose(TsBDF2(13,13),  0.763236513549944, 1e-5,[],'1-D BDF2 diffusion accuracy')
-gemini3d.assert_allclose(Tstrue(13,13),  0.763014494788105, 1e-5,[],'1-D true diffusion accuracy')
+gemini3d.assert_allclose(TsEuler(13,13), 0.770938954253086, 'rtol', 1e-5, 'err_msg', '1-D Euler diffusion accuracy')
+gemini3d.assert_allclose(TsBDF2(13,13),  0.763236513549944, 'rtol', 1e-5, 'err_msg', '1-D BDF2 diffusion accuracy')
+gemini3d.assert_allclose(Tstrue(13,13),  0.763014494788105, 'rtol', 1e-5, 'err_msg', '1-D true diffusion accuracy')
 
 disp('OK: 1d diffusion')
 
