@@ -14,19 +14,22 @@ if verLessThan('matlab', '9.7')
   return
 end
 
-try
-  p = pyenv();
-catch
+if ismac
+  [stat,hash] = system("md5 -r " + file);
+elseif isunix
+  [stat,hash] = system("md5sum " + file);
+elseif ispc
+  [stat,hash] = system("CertUtil -hashfile " + file + " MD5");
+else
   return
 end
-if p.Version == ""
-  return
-end
-h = py.hashlib.md5();
-h.update(py.open(file, 'rb').read())
-hash = string(h.hexdigest());
 
-%% sanity check
+if stat ~= 0
+  return
+end
+
+hash = regexp(hash,'^\w{32}','match','once','lineanchors');
+
 assert(strlength(hash)==32, 'md5 hash is 32 characters')
 
 end % function
