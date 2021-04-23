@@ -23,7 +23,11 @@ if isfield(cfg, "eq_dir")
   end
 end
 
-json = jsonencode(js, "PrettyPrint", true);
+if verLessThan('matlab', '9.10')
+  json = jsonencode(js);
+else
+  json = jsonencode(js, "PrettyPrint", true);
+end
 
 fid = fopen(filename, 'w');
 if fid < 1
