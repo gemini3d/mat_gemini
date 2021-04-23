@@ -18,6 +18,13 @@ elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
   xeq = gemini3d.read.grid(p.eq_dir);
   z = xeq.x1;
   clear('xeq')
+elseif( all(isfield(p,["alt_min","alt_max","lzp"])))
+  disp("makegrid_cart_3D: making a uniform altitude grid.")
+  
+  z=linspace(p.alt_min,p.alt_max,p.lzp);
+  dz=z(2)-z(1);
+  z=cat(2,z(1)-2*dz,z(1)-dz,z,z(end)+dz,z(end)+2*dz);
+  z=z(:);
 else
   error('makegrid_cart_3D:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
 end
