@@ -48,19 +48,19 @@ if isfile(archive) && dir(archive).bytes > 10000
   return
 end
 
-% if isfile(getenv("SSL_CERT_FILE"))
-%   web_opts = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"), 'Timeout', 15);
-% else
-%   web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
-% end
-
-% matlab websave doesn't work with redirects (!!!)
-% websave(archive, urls.tests.("x" + name).url, web_opts);
-cmd = "curl -L -o " + archive + " '" + urls.tests.("x" + name).url + "'";
-stat = system(cmd);
-if stat ~= 0
-  error("download failed: " + urls.tests.("x" + name).url)
+if isfile(getenv("SSL_CERT_FILE"))
+  web_opts = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"), 'Timeout', 15);
+else
+  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
 end
+
+%matlab websave doesn't work with redirects (!!!)
+websave(archive, urls.tests.("x" + name).url, web_opts);
+% cmd = "curl -L -o " + archive + " '" + urls.tests.("x" + name).url + "'";
+% stat = system(cmd);
+% if stat ~= 0
+%   error("download failed: " + urls.tests.("x" + name).url)
+% end
 
 check_data(name, archive, urls.tests)
 
