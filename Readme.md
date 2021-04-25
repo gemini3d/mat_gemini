@@ -34,6 +34,17 @@ Run the self-tests from Matlab in the mat_gemini/ directory:
 runtests('gemini3d')
 ```
 
+---
+
+We use .zst ZSTD files for the reference test data.
+If you don't have "zstd" on your system, you can install this from the mat_gemini/ directory by:
+
+```sh
+cmake -P cmake/build_zstd.cmake
+```
+
+---
+
 If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
 If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
 
