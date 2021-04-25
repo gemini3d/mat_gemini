@@ -1,6 +1,8 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
+assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
+
 cwd = fileparts(mfilename('fullpath'));
 meta = jsondecode(fileread(fullfile(cwd, "libraries.json")));
 

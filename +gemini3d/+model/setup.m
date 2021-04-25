@@ -6,6 +6,8 @@ arguments
   out_dir string = string.empty
 end
 
+assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
+
 %% parse input
 if ~isstruct(cfg)
   % path to config.nml
