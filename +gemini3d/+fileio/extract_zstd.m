@@ -9,10 +9,8 @@ end
 if ret ~= 0
   if ismac
     msg = "brew install zstd";
-  elseif isunix
-    msg = "apt install zstd";
   else
-    msg = "https://github.com/facebook/zstd/releases  extract and put that directory on PATH";
+    msg = "cmake -P cmake/build_zstd.cmake";
   end
   error("need to have Zstd installed: \n install zstd by: \n %s", msg)
 end
