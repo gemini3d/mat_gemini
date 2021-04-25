@@ -54,8 +54,8 @@ else
   web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
 end
 
-%matlab websave doesn't work with redirects (!!!)
 websave(archive, urls.tests.("x" + name).url, web_opts);
+
 % cmd = "curl -L -o " + archive + " '" + urls.tests.("x" + name).url + "'";
 % stat = system(cmd);
 % if stat ~= 0
