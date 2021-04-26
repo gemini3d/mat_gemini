@@ -17,9 +17,9 @@ js = struct("matlab", mat, "git", git);
 if isfield(cfg, "eq_dir")
   % JSON does not allow unescaped backslash
   js.eq = struct("eq_dir", gemini3d.posix(cfg.eq_dir));
-  md5fn = fullfile(cfg.eq_dir, "md5sum.txt");
-  if isfile(md5fn)
-    js.eq.md5 = strtrim(fileread(md5fn));
+  hashfn = fullfile(cfg.eq_dir, "sha256sum.txt");
+  if isfile(hashfn)
+    js.eq.sha256 = strtrim(fileread(hashfn));
   end
 end
 

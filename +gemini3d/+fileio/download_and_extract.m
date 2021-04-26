@@ -67,15 +67,17 @@ check_data(name, archive, urls.tests)
 end
 
 
-function check_data(name, zipfile, urls)
+function check_data(name, archive, urls)
 
-k = "md5";
+name = matlab.lang.makeValidName(name);
 
-if isfield(urls.("x" + name), k)
-  exp_hash = urls.("x" + name).(k);
-  hash = gemini3d.fileio.md5sum(zipfile);
-  if hash ~= exp_hash
-    warning('%s md5 hash does not match, file may be corrupted or incorrect data', zipfile)
+for k = ["sha256", "md5"]
+  if isfield(urls.(name), k)
+    hash = gemini3d.fileio.filehash(archive, k);
+    if hash ~= urls.(name).(k)
+      warning('%s %s hash does not match, file may be corrupted', archive, k)
+    end
+    break
   end
 end
 
