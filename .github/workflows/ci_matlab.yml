@@ -1,4 +1,9 @@
-name: MATLAB on GitHub-Hosted Runner
+name: matlab
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+  CTEST_PARALLEL_LEVEL: 2
+
 
 on:
   push:
@@ -17,13 +22,13 @@ jobs:
       - name: Install Prereqs
         run: |
           sudo apt update -yq
-          sudo apt install -yq --no-install-recommends gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
+          sudo apt install -yq --no-install-recommends ninja-build gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
 
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v0
 
-      - name: Run tests and generate artifacts
-        uses: matlab-actions/run-tests@v0
-        with:
-          test-results-junit: test-results/results.xml
-          code-coverage-cobertura: code-coverage/coverage.xml
+      - name: Config Tests
+        run: cmake --preset default
+
+      - name: Run Tests
+        run: ctest --preset default
