@@ -1,4 +1,4 @@
-classdef TestAUnit < matlab.unittest.TestCase
+classdef TestUnit < matlab.unittest.TestCase
 
 methods (Test)
 

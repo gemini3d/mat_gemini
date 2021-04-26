@@ -1,4 +1,4 @@
-classdef TestZProject < matlab.unittest.TestCase
+classdef TestProject < matlab.unittest.TestCase
 properties (TestParameter)
   file_type = {"h5", "nc"}
   name = {"2dew_eq", "2dew_fang", "2dew_glow", "2dns_eq", "2dns_fang", "2dns_glow", "3d_eq", "3d_fang", "3d_glow"}

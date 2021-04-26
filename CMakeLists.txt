@@ -10,12 +10,37 @@ set(tmod gemini3d.tests.Test)
 
 find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 
-foreach(n ALint AUnit Grid MSIS ZData ZDryrun ZProject)
+
+add_test(NAME Lint
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}Lint'))"
+WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+set_tests_properties(${n} PROPERTIES
+TIMEOUT 90
+FIXTURES_SETUP lint_fxt)
+
+foreach(n Unit Grid MSIS)
 
   add_test(NAME ${n}
   COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}${n}'))"
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-  set_tests_properties(${n} PROPERTIES TIMEOUT 900)
+
+  set_tests_properties(${n} PROPERTIES
+  TIMEOUT 120
+  FIXTURES_REQUIRED lint_fxt
+  FIXTURES_SETUP unit_fxt)
+
+endforeach()
+
+
+foreach(n DataIO Dryrun Project)
+
+  add_test(NAME ${n}
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}${n}'))"
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+  set_tests_properties(${n} PROPERTIES
+  TIMEOUT 180
+  FIXTURES_REQUIRED unit_fxt)
 
 endforeach()
 

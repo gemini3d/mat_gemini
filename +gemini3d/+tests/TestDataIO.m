@@ -1,4 +1,4 @@
-classdef TestZData < matlab.unittest.TestCase
+classdef TestDataIO < matlab.unittest.TestCase
 
 properties
 TestData

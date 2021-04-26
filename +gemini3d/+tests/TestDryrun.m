@@ -1,4 +1,4 @@
-classdef TestZDryrun < matlab.unittest.TestCase
+classdef TestDryrun < matlab.unittest.TestCase
 
 properties
   TestData

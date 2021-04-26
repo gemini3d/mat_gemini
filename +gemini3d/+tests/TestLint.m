@@ -1,4 +1,4 @@
-classdef TestALint < matlab.unittest.TestCase
+classdef TestLint < matlab.unittest.TestCase
 
 properties
 TestData

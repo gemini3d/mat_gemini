@@ -35,7 +35,7 @@
   },
   "execution": {
     "noTestsAction": "error",
-    "stopOnFailure": true}
+    "stopOnFailure": false}
 },
 {
   "name": "regen-package", "inherits": "default",
