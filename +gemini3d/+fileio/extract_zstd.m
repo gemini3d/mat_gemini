@@ -1,9 +1,17 @@
 function extract_zstd(archive, out_dir)
 % extract a zstd file "archive" to "out_dir"
+% out_dir need not exist yet, but its parent must
+% we do this in two steps to be reliable with old tar versions
+% https://www.scivision.dev/tar-extract-zstd
 
-if ~isfile(archive)
-   error("%s is not a file", archive)
+arguments
+  archive (1,1) string
+  out_dir (1,1) string
 end
+
+archive = gemini3d.fileio.expanduser(archive);
+
+assert(isfile(archive), "%s is not a file", archive)
 
 [ret, ~] = system("zstd -h");
 if ret ~= 0
