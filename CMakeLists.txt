@@ -14,7 +14,7 @@ find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 add_test(NAME Lint
 COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}Lint'))"
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-set_tests_properties(${n} PROPERTIES
+set_tests_properties(Lint PROPERTIES
 TIMEOUT 90
 FIXTURES_SETUP lint_fxt)
 
@@ -39,7 +39,7 @@ foreach(n DataIO Dryrun Project)
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
   set_tests_properties(${n} PROPERTIES
-  TIMEOUT 180
+  TIMEOUT 240
   FIXTURES_REQUIRED unit_fxt)
 
 endforeach()

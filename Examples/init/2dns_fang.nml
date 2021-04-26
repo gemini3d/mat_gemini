@@ -39,7 +39,7 @@ E0precip = 5e3
 Etarg = 50e-3   ! V/m
 Efield_latwidth = 0.142857
 eq_dir = '~/simulations/test2dns_eq'
-eq_zip = "~/simulations/test2dns_eq.zip"
+eq_archive = "~/simulations/test2dns_eq.zip"
 eq_url = "https://zenodo.org/record/4043048/files/test2dns_eq.zip?download=1"
 /
 

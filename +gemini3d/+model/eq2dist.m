@@ -51,11 +51,11 @@ if isfolder(p.eq_dir)
   return
 end
 
-if ~all(isfield(p, ["eq_url", "eq_zip"]))
-  error("gemini3d:model:eq2dist", "run equilibrium simulation in %s \n OR specify eq_url and eq_zip in %s", p.eq_dir, p.nml)
+if ~all(isfield(p, ["eq_url", "eq_archive"]))
+  error("gemini3d:model:eq2dist", "run equilibrium simulation in %s \n OR specify eq_url and eq_archive in %s", p.eq_dir, p.nml)
 end
 
-if ~isfile(p.eq_zip)
+if ~isfile(p.eq_archive)
   if isfield(p, 'ssl_verify') && ~p.ssl_verify
     % disable SSL, better to fix your SSL certificates as arbitrary
     % code can be downloaded
@@ -66,16 +66,16 @@ if ~isfile(p.eq_zip)
     web_opt = weboptions('CertificateFilename', 'default');
   end
   gemini3d.fileio.makedir(p.eq_dir)
-  websave(p.eq_zip, p.eq_url, web_opt);
+  websave(p.eq_archive, p.eq_url, web_opt);
 end
 
-[~,~,arc_type] = fileparts(p.eq_zip);
+[~,~,arc_type] = fileparts(p.eq_archive);
 
 switch arc_type
-  case ".zip", unzip(p.eq_zip, fullfile(p.eq_dir, '..'))
+  case ".zip", unzip(p.eq_archive, fullfile(p.eq_dir, '..'))
   % old zip files had vestigial folder of same name instead of just files
-  case ".tar", untar(p.eq_zip, p.eq_dir)
-  case {".zst", ".zstd"}, gemini3d.fileio.extract_zstd(p.eq_zip, p.eq_dir)
+  case ".tar", untar(p.eq_archive, p.eq_dir)
+  case {".zst", ".zstd"}, gemini3d.fileio.extract_zstd(p.eq_archive, p.eq_dir)
   otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)
 end
 

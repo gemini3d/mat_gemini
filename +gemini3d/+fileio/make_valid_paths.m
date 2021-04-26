@@ -32,7 +32,7 @@ for n = ["indat_size", "indat_grid", "indat_file"]
   end
 end
 
-for n = ["eq_dir", "eq_zip", "E0_dir", "prec_dir"]
+for n = ["eq_dir", "eq_archive", "E0_dir", "prec_dir"]
   if isfield(cfg, n) && ~isempty(cfg.(n))
     cfg.(n) = make_valid_folder(cfg.(n), top);
   end
