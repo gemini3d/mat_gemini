@@ -1,5 +1,3 @@
-import matlab.unittest.constraints.ContainsSubstring
-import matlab.unittest.selectors.HasName
 import matlab.unittest.TestRunner
 import matlab.unittest.Verbosity
 import matlab.unittest.plugins.CodeCoveragePlugin
@@ -9,9 +7,7 @@ import matlab.unittest.plugins.codecoverage.CoberturaFormat
 name = "gemini3d.tests";
 
 suite = testsuite(name);
-suite = suite.selectIf(HasName(~ContainsSubstring('Compare')));
-% we omit the external parameter only Compare test, as it's for direct user
-% use only
+
 
 runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Detailed);
 

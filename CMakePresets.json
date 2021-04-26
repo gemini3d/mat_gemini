@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+},
+
+"configurePresets": [
+{
+  "name": "default",
+  "binaryDir": "${sourceDir}/build",
+  "generator": "Ninja",
+  "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "package": false,
+    "equil": false
+  }
+},
+{
+  "name": "regen-package", "inherits": "default",
+  "cacheVariables": {
+    "equil": true,
+    "package": true
+  }
+}
+],
+"testPresets": [
+{
+  "name": "default",
+  "configurePreset": "default",
+  "output": {
+    "outputOnFailure": true,
+    "verbosity": "default"
+  },
+  "execution": {
+    "noTestsAction": "error",
+    "stopOnFailure": true}
+},
+{
+  "name": "regen-package", "inherits": "default",
+  "configurePreset": "regen-package",
+  "description": "Regenerates .zstd reference data, by disabling compare",
+  "filter": {
+    "exclude": {"label": "(compare|download)", "fixtures": {"any": "(compare_fxt|inputOK_fxt)"}}
+  }
+}
+]
+}
