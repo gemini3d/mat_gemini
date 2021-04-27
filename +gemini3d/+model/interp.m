@@ -7,9 +7,9 @@ end
 
 %% GRID GENERATION
 if all(isfield(cfg, ["lxp", "lyp"]))
-  xg = gemini3d.grid.cart3d(cfg);
+  xg = gemini3d.grid.cartesian(cfg);
 elseif all(isfield(cfg, ["lq", "lp", "lphi"]))
-  xg = gemini3d.grid.tilted_dipole3d(cfg);
+  xg = gemini3d.grid.tilted_dipole(cfg);
 else
   error("grid does not seems to be cartesian or curvilinear")
 end

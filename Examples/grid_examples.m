@@ -92,11 +92,11 @@ sourcemlon=sourcephi*180/pi;
 %% RUN THE GRID GENERATION CODE
 if ~exist('xg', 'var')
   if p.iscurv
-    xg = gemini3d.grid.tilted_dipole3d(p);
+    xg = gemini3d.grid.tilted_dipole(p);
 %    xg=makegrid_tilteddipole_nonuniform_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
 %    xg=makegrid_tilteddipole_nonuniform_oneside_3D(dtheta,dphi,lp,lq,lphi,altmin,glat,glon,gridflag);
   else
-    xg = makegrid_cart_3D(p);
+    xg =  gemini3d.grid.cartesian(p);
   end
 end
 

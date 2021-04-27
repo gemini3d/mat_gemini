@@ -1,4 +1,4 @@
-function xgf = cart3d(p)
+function xgf = cartesian(p)
 %% make 3D grid
 
 arguments
@@ -14,19 +14,19 @@ xg.time = p.times(1);
 if all(isfield(p, ["alt_min", "alt_max", "alt_scale", "Bincl"]))
   z = gemini3d.grid.altitude(p.alt_min, p.alt_max, p.Bincl, p.alt_scale);
 elseif isfield(p, 'eq_dir') && isfile(p.eq_dir)
-  disp("makegrid_cart_3D: using altitude (z) grid from " + p.eq_dir)
+  disp("cartesian: using altitude (z) grid from " + p.eq_dir)
   xeq = gemini3d.read.grid(p.eq_dir);
   z = xeq.x1;
   clear('xeq')
 elseif( all(isfield(p,["alt_min","alt_max","lzp"])))
-  disp("makegrid_cart_3D: making a uniform altitude grid.")
-  
+  disp("cartesian: making a uniform altitude grid.")
+
   z=linspace(p.alt_min,p.alt_max,p.lzp);
   dz=z(2)-z(1);
   z=cat(2,z(1)-2*dz,z(1)-dz,z,z(end)+dz,z(end)+2*dz);
   z=z(:);
 else
-  error('makegrid_cart_3D:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
+  error('cartesian:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
 end
 
 %% TRANSVERSE GRID (BASED ON SIZE OF CURRENT REGION SPECIFIED ABOVE)
@@ -68,7 +68,7 @@ zi(2:lx1)=1/2*(z(2:lx1)+z(1:lx1-1));
 zi(1)=z(1)-1/2*(z(2)-z(1));
 zi(lx1+1)=z(lx1)+1/2*(z(lx1)-z(lx1-1));
 
-fprintf('MAKEGRID_CART_3D.M --> Grid Size:  %d x %d x %d\n',lx1-4,lx2-4,lx3-4);
+fprintf('cartesian grid:  %d x %d x %d\n',lx1-4,lx2-4,lx3-4);
 
 %% GRAVITATIONAL FIELD COMPONENTS IN DIPOLE SYSTEM
 Re=6370e3;
