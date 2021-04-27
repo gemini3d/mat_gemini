@@ -1,4 +1,4 @@
-function xgf = tilted_dipole3d(cfg)
+function xgf = tilted_dipole(cfg)
 
 %NOTE THAT INPUTS DTHETA AND DPHI ARE INTENDED TO REPRESENT THE FULL THETA
 %AND PHI EXTENTS OF
@@ -29,7 +29,7 @@ lp = cfg.lp + 4;
 lphi = cfg.lphi + 4;
 
 %% DEFINE DIPOLE GRID IN Q,P COORDS.
-fprintf('tilted_dipole3d: Setting up q,p,phi grid of size %d x %d x %d.\n',lq-4,lp-4,lphi-4);
+fprintf('tilted_dipole: Setting up q,p,phi grid of size %d x %d x %d.\n',lq-4,lp-4,lphi-4);
 Re=6370e3;
 
 %TD SPHERICAL LOCATION OF REQUESTED CENTER POINT
@@ -122,7 +122,7 @@ qtol=1e-9;
 
 
 %SPHERICAL XFORMATION
-disp('tilted_dipole3d: Converting q,p grid centers to spherical coords.')
+disp('tilted_dipole: Converting q,p grid centers to spherical coords.')
 for iq=1:lq
   for ip=1:lp
     [r(iq,ip),fval(iq,ip)]=fminbnd(@(x) gemini3d.grid.qp2robj(x,q(iq),p(ip)),0,100*Re);
@@ -179,7 +179,7 @@ end
 
 
 %INTERFACE LOCATIONS
-disp('tilted_dipole3d:  Converting q,p grid interfaces to spherical coords.');
+disp('tilted_dipole:  Converting q,p grid interfaces to spherical coords.');
 qi=zeros(lq+1,1);
 qi(2:lq)=1/2*(q(1:lq-1)+q(2:lq));
 qi(1)=q(1)-1/2*(q(2)-q(1));
@@ -239,7 +239,7 @@ thetapi=repmat(thetapi,[1 1 lphi]);
 
 
 %METRIC COEFFICIENTS
-disp('tilted_dipole3d:  Calculating metric coeffs.');
+disp('tilted_dipole:  Calculating metric coeffs.');
 denom=sqrt(1+3*cos(theta).^2);
 hq=r.^3/Re^2./denom;
 hp=Re*sin(theta).^3./denom;
@@ -261,7 +261,7 @@ hphipi=rpi.*sin(thetapi);
 
 
 %SPHERICAL UNIT VECTORS IN CARTESIAN COMPONENTS (CELL-CENTERED)
-disp('tilted_dipole3d:  Calculating spherical unit vectors.');
+disp('tilted_dipole:  Calculating spherical unit vectors.');
 er(:,:,:,1)=sin(theta).*cos(phispher);
 er(:,:,:,2)=sin(theta).*sin(phispher);
 er(:,:,:,3)=cos(theta);
@@ -274,7 +274,7 @@ ephi(:,:,:,3)=zeros(lq,lp,lphi);
 
 
 %UNIT VECTORS FOR Q,P,PHI FOR ALL GRID POINTS IN CARTESIAN COMPONENTS
-disp('tilted_dipole3d:  Calculating dipole unit vectors.');
+disp('tilted_dipole:  Calculating dipole unit vectors.');
 denom=Re^2*(1+3*cos(theta).^2);
 dxdq(:,:,:,1)=-3*r.^3.*cos(theta).*sin(theta)./denom.*cos(phispher);
 dxdq(:,:,:,2)=-3*r.^3.*cos(theta).*sin(theta)./denom.*sin(phispher);
@@ -304,7 +304,7 @@ Bmag=(4*pi*1e-7)*7.94e22/4/pi./(r.^3).*sqrt(3*(cos(theta)).^2+1);
 
 
 %STORE RESULTS IN GRID DATA STRUCTURE
-disp('tilted_dipole3d:  Creating a grid structure with the results.');
+disp('tilted_dipole:  Creating a grid structure with the results.');
 xg.x1=q; xg.x2=p; xg.x3=reshape(phi,[1 1 lphi]);
 xg.x1i=qi; xg.x2i=pii; xg.x3i=reshape(phii,[1 1 lphi+1]);
 lx=[numel(xg.x1),numel(xg.x2),numel(xg.x3)];
