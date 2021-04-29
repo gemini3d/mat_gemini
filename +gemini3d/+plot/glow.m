@@ -43,15 +43,15 @@ for i = 1:length(file_list)
 
 if lx2 > 1 && lx3 > 1
   % 3D sim
-  hf = plot_emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
+  hf = emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
 elseif lx2 > 1
    % 2D east-west
-  hf = plot_emissions(x2, wavelengths, bFrame, t_str, hf, visible, "Eastward");
+  hf = emissions(x2, wavelengths, bFrame, t_str, hf, visible, "Eastward");
 elseif lx3 > 1
   % 2D north-south
-  hf = plot_emissions(x3, wavelengths, bFrame, t_str, hf, visible, "Northward");
+  hf = emissions(x3, wavelengths, bFrame, t_str, hf, visible, "Northward");
 else
-  error("gemini3d:plotglow:value", 'impossible configuration')
+  error("gemini3d:plot:glow", 'impossible configuration')
 end
 
   if params.flagoutput ~= 3
@@ -62,7 +62,7 @@ end
 end % function
 
 
-function hf = plot_emissions(x, wavelengths, bFrame, time_str, hf, visible, txt)
+function hf = emissions(x, wavelengths, bFrame, time_str, hf, visible, txt)
 arguments
   x (:,1) {mustBeNumeric}
   wavelengths (1,:) string
@@ -91,7 +91,7 @@ ylabel(hc, 'Intensity (R)')
 end
 
 
-function hf = plot_emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible)
+function hf = emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible)
 
 if isempty(hf)
   hf = make_glowfig(visible);
