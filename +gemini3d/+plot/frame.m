@@ -1,15 +1,15 @@
-function h = frame(direc, time_req, saveplot_fmt, options)
+function h = frame(direc, time_req, saveplot_fmt, opts)
 %% CHECK ARGS AND SET SOME DEFAULT VALUES ON OPTIONAL ARGS
 arguments
   direc (1,1) string
   time_req (1,1) datetime
   saveplot_fmt (1,:) string = string.empty
-  options.plotfun (1,1)
-  options.xg struct = struct.empty
-  options.figures (1,:) matlab.ui.Figure
-  options.visible (1,1) logical = true
-  options.clim struct = struct()  % not .empty
-  % options.vars (1,:) string = string.empty  % variables to plot (future)
+  opts.plotfun (1,1)
+  opts.xg struct = struct.empty
+  opts.figures (1,:) matlab.ui.Figure
+  opts.visible (1,1) logical = true
+  opts.clim struct = struct()  % not .empty
+  % opts.vars (1,:) string = string.empty  % variables to plot (future)
 end
 
 import gemini3d.plot.bwr
@@ -25,29 +25,29 @@ cfg = gemini3d.read.config(direc);
 
 %% RELOAD GRID?
 % loading grid can take a long time
-if isempty(options.xg)
-  disp('plotframe: Reloading grid...  Provide one as input if you do not want this to happen.')
+if isempty(opts.xg)
+  disp('plot.frame: Reloading grid...  Provide one as input if you do not want this to happen.')
   xg = gemini3d.read.grid(direc);
 else
-  xg = options.xg;
+  xg = opts.xg;
 end
 
-if isfield(options, "figures") && all(isvalid(options.figures))
-  h = options.figures;
+if isfield(opts, "figures") && all(isvalid(opts.figures))
+  h = opts.figures;
 else
-  h = gemini3d.plot.init(xg, options.visible);
+  h = gemini3d.plot.init(xg, opts.visible);
 end
 
-if isfield(options, "plotfun")
-  plotfun = gemini3d.plot.grid2plotfun(options.plotfun, xg);
+if isfield(opts, "plotfun")
+  plotfun = opts.plotfun;
 else
-  plotfun = gemini3d.plot.grid2plotfun(string.empty, xg);
+  plotfun = gemini3d.plot.grid2plotfun(xg);
 end
 
 %% get time index
 i = interp1(cfg.times, 1:length(cfg.times), time_req, 'nearest');
 if isnan(i)
-  error('plotframe:value_error', "requested time " + datestr(time_req) + " is outside simulation time span " + datestr(cfg.times(1)) + " " + datestr(cfg.times(end)))
+  error('plot:frame:value_error', "requested time " + datestr(time_req) + " is outside simulation time span " + datestr(cfg.times(1)) + " " + datestr(cfg.times(end)))
 end
 time = cfg.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
@@ -70,7 +70,7 @@ J2lim = [-10 10];
 J3lim=[-10 10];
 %}
 
-clim = options.clim;
+clim = opts.clim;
 if ~isfield(clim, "ne") && isfield(dat, 'ne')
   clim.ne = [min(dat.ne(:)), max(dat.ne(:))];
 end

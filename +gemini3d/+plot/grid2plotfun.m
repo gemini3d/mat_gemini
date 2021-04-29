@@ -1,19 +1,6 @@
-function plotfun = grid2plotfun(plotfun, xg)
+function plotfun = grid2plotfun(xg)
 arguments
-  plotfun
   xg (1,1) struct
-end
-
-if isa(plotfun, "function_handle")
-  return
-elseif isstring(plotfun) || ischar(plotfun)
-  if ~isempty(plotfun)
-    plotfun = str2func("gemini3d.plot" + plotfun);
-    return
-  end
-elseif isempty(plotfun)
-else
-  error('grid2plotfun:type_error',  "plotfun must be function name or function_handle")
 end
 
 %% DEFINE THE PLOTTING FUNCTION BASED ON THE TYPE OF GRID USED

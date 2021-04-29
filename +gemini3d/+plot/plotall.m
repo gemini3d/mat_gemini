@@ -1,4 +1,4 @@
-function h = plotall(direc, saveplot_fmt, options)
+function h = plotall(direc, saveplot_fmt, opts)
 % PLOTALL plot all Gemini parameters from a simulation output
 %
 % Parameters
@@ -15,9 +15,9 @@ function h = plotall(direc, saveplot_fmt, options)
 arguments
   direc (1,1) string
   saveplot_fmt (1,:) string = string.empty
-  options.plotfun string = string.empty
-  options.xg struct = struct.empty
-  options.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
+  opts.plotfun string = string.empty
+  opts.xg struct = struct.empty
+  opts.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
 end
 
 visible = isempty(saveplot_fmt);
@@ -32,33 +32,38 @@ if isempty(params)
   error("gemini3d:plotall:fileNotFound", "%s does not contain Gemini3D data", direc)
 end
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
-if isempty(options.xg)
+if isempty(opts.xg)
   xg = gemini3d.read.grid(direc);
 else
-  xg = options.xg;
+  xg = opts.xg;
 end
 if isempty(xg)
   error("gemini3d:plotall:value", "Gemini3D grid not found")
 end
 
-plotfun = gemini3d.plot.grid2plotfun(options.plotfun, xg);
+%% determine plotting function
+if isempty(opts.plotfun)
+  plotfun = gemini3d.plot.grid2plotfun(xg);
+else
+  plotfun = str2func("gemini3d.plot." + opts.plotfun);
+end
 
 %% MAIN FIGURE LOOP
 h = gemini3d.plot.init(xg, visible);
 
 if ~visible
-  if options.parallel > 0
+  if opts.parallel > 0
     % plot and save as fast as possible.
     % NOTE: this plotting is not 'threads' pool compatible, it will crash Matlab.
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
-    if options.parallel > 1
+    if opts.parallel > 1
       % specific number of workers requested
       addons = matlab.addons.installedAddons();
       if any(contains(addons.Name, 'Parallel Computing Toolbox'))
         pool = gcp('nocreate');
-        if isempty(pool) || pool.NumWorkers ~= options.parallel
+        if isempty(pool) || pool.NumWorkers ~= optfions.parallel
           delete(pool)
-          parpool('local', options.parallel)
+          parpool('local', opts.parallel)
         end
       end
     end
