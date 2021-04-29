@@ -27,6 +27,14 @@ if ~isfield(cfg, 'file_format')
   cfg.file_format = extractAfter(ext, 1);
 end
 
+%% if a GLOW sim
+if isfield(cfg, "dtglow")
+  if ~isfield(cfg, "aurmap_dir")
+    % DEPRECATED: for old hard-coded sims
+    cfg.aurmap_dir = "aurmaps";
+  end
+end
+
 end % function
 
 % Copyright 2020 Michael Hirsch

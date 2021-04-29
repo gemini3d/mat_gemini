@@ -27,8 +27,8 @@ lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
 
 %% NEED TO READ INPUT FILE TO GET DURATION OF SIMULATION AND START TIME
-params = gemini3d.read.config(direc);
-if isempty(params)
+cfg = gemini3d.read.config(direc);
+if isempty(cfg)
   error("gemini3d:plotall:fileNotFound", "%s does not contain Gemini3D data", direc)
 end
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
@@ -46,6 +46,20 @@ if isempty(opts.plotfun)
   plotfun = gemini3d.plot.grid2plotfun(xg);
 else
   plotfun = str2func("gemini3d.plot." + opts.plotfun);
+end
+
+%% determine if GLOW
+if isfield(cfg, "aurmap_dir")
+  % glow sim
+  if gemini3d.fileio.is_absolute_path(cfg.aurmap_dir)
+    aurmap_dir = cfg.aurmap_dir;
+  else
+    aurmap_dir = fullfile(direc, cfg.aurmap_dir);
+  end
+  hglow = make_glowfig(visible);
+else
+  aurmap_dir = string.empty;
+  hglow = matlab.ui.Figure.empty;
 end
 
 %% MAIN FIGURE LOOP
@@ -67,30 +81,30 @@ if ~visible
         end
       end
     end
-    parfor t = params.times
+    parfor t = cfg.times
       gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+      gemini3d.plot.glow(aurmap_dir, t, saveplot_fmt, "xg", xg, "figure", hglow)
     end
   else
-    for t = params.times
+    for t = cfg.times
       gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+      gemini3d.plot.glow(aurmap_dir, t, saveplot_fmt, "xg", xg, "figure", hglow)
     end
   end
 else
   % displaying, not saving
-  for t = params.times
+  for t = cfg.times
     gemini3d.plot.frame(direc, t, saveplot_fmt, "plotfun", plotfun, "xg", xg, "figures", h)
+    gemini3d.plot.glow(aurmap_dir, t, saveplot_fmt, "xg", xg, "figure", hglow)
 
     drawnow % need this here to ensure plots update (race condition)
-    if gemini3d.sys.isinteractive && params.times(end) ~= t
+    if gemini3d.sys.isinteractive && cfg.times(end) ~= t
       q = input('\n *** press Enter to plot next time step, or "q" Enter to stop ***\n', 's');
       if ~isempty(q), break, end
     end
   end
 end % if saveplots
 
-if isfolder(fullfile(direc, "aurmaps")) % glow sim
-  gemini3d.plot.glow(direc, saveplot_fmt)
-end
 
 %% Don't print
 if nargout==0, clear('h'), end

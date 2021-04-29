@@ -1,7 +1,8 @@
-function filename = frame(direc, time)
+function filename = frame(direc, time, suffix)
 arguments
   direc (1,1) string
   time (1,1) datetime
+  suffix (1,:) string = [".h5", ".nc", ".dat"]
 end
 
 filename = string.empty;
@@ -10,8 +11,6 @@ stem0 = gemini3d.datelab(time);
 
 direc = gemini3d.fileio.expanduser(direc);
 % so that we return a usable path
-
-suffix = [".h5", ".nc", ".dat"];
 
 for ext = suffix
   stem = stem0;

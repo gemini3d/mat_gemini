@@ -1,22 +1,32 @@
-function glow(direc, saveplot_fmt)
+function glow(direc, time, saveplot_fmt, opts)
 % plots Gemini-Glow auroral emissions
 arguments
-  direc (1,1) string
+  direc (1,:) string
+  time (1,1) datetime
   saveplot_fmt (1,:) string = string.empty
+  opts.xg (1,1) struct
+  opts.figure (1,1) matlab.ui.Figure
 end
 
-visible = isempty(saveplot_fmt);
-aurora_dir = fullfile(direc, 'aurmaps');
+if isempty(direc)
+  return
+end
+
+parent = fileparts(direc);
 
 %array of volume emission rates at each altitude; cm-3 s-1:
 wavelengths = ["3371", "4278", "5200", "5577", "6300", "7320", "10400", ...
   "3466", "7774", "8446", "3726", "LBH", "1356", "1493", "1304"];
 
 %READ IN SIMULATION INFO
-params = gemini3d.read.config(direc);
+cfg = gemini3d.read.config(parent);
 
 %READ IN THE GRID
-xg = gemini3d.read.grid(direc);
+if isfield(opts, "xg")
+  xg = opts.xg;
+else
+  xg = gemini3d.read.grid(parent);
+end
 
 %% GET THE SYSTEM SIZE
 Lw = length(wavelengths);
@@ -25,61 +35,53 @@ lx3=xg.lx(3);
 x2=xg.x2(3:end-2);
 x3=xg.x3(3:end-2);
 
-%% get file list
-for ext = [".h5", ".nc", ".dat"]
-  file_list = dir(aurora_dir + "/*" + ext);
-  if ~isempty(file_list), break, end
+%% get filename
+fn = gemini3d.find.frame(direc, time);
+
+%% make plots
+if isfield(opts, "figure")
+  fg = opts.figure;
+else
+  fg = make_glowfig(isempty(saveplot_fmt));
 end
 
-if isempty(file_list)
-  error("gemini3d:plotglow:fileNotFound", "No auroral data found in %s", aurora_dir)
-end
-%% make plots
-hf = matlab.ui.Figure.empty;
-for i = 1:length(file_list)
-  filename = fullfile(aurora_dir, file_list(i).name);
-  bFrame = squeeze(loadglow_aurmap(filename, lx2, lx3, Lw));
-  t_str = datestr(params.times(i)) + " UT";
+bFrame = squeeze(loadglow_aurmap(fn, lx2, lx3, Lw));
+t_str = datestr(time) + " UT";
 
 if lx2 > 1 && lx3 > 1
   % 3D sim
-  hf = emission_line(x2, x3, bFrame, t_str, wavelengths, hf, visible);
+  emission_line(x2, x3, bFrame, t_str, wavelengths, fg);
 elseif lx2 > 1
    % 2D east-west
-  hf = emissions(x2, wavelengths, bFrame, t_str, hf, visible, "Eastward");
+  emissions(x2, wavelengths, bFrame, t_str, fg, "Eastward");
 elseif lx3 > 1
   % 2D north-south
-  hf = emissions(x3, wavelengths, bFrame, t_str, hf, visible, "Northward");
+  emissions(x3, wavelengths, bFrame, t_str, fg, "Northward");
 else
-  error("gemini3d:plot:glow", 'impossible configuration')
+  error("gemini3d:plot:glow", 'impossible GLOW configuration')
 end
 
-  if params.flagoutput ~= 3
-    gemini3d.plot.save_glowframe(hf, filename, saveplot_fmt)
-  end
+if cfg.flagoutput ~= 3
+  gemini3d.plot.save_glowframe(fg, fn, saveplot_fmt)
 end
 
 end % function
 
 
-function hf = emissions(x, wavelengths, bFrame, time_str, hf, visible, txt)
+function emissions(x, wavelengths, bFrame, time_str, hf, txt)
 arguments
-  x (:,1) {mustBeNumeric}
+  x (:,1) {mustBeReal}
   wavelengths (1,:) string
-  bFrame (:,:) {mustBeNumeric}
+  bFrame (:,:) {mustBeReal}
   time_str (1,1) string
-  hf matlab.ui.Figure
-  visible (1,1) logical
+  hf (1,1) matlab.ui.Figure
   txt (1,1) string
 end
-if isempty(hf)
-  hf = make_glowfig(visible);
-else
-  clf(hf)
-end
+
+clf(hf)
 
 ax = axes('parent', hf);
-imagesc(1:length(wavelengths), x / 1e3, bFrame)    % singleton dimension since 2D simulation
+imagesc(ax, 1:length(wavelengths), x / 1e3, bFrame)    % singleton dimension since 2D simulation
 set(ax, 'xtick', 1:length(wavelengths), 'xticklabel', wavelengths)
 
 ylabel(ax, txt + "Distance (km)")
@@ -91,13 +93,17 @@ ylabel(hc, 'Intensity (R)')
 end
 
 
-function hf = emission_line(x2, x3, bFrame, time_str, wavelengths, hf, visible)
-
-if isempty(hf)
-  hf = make_glowfig(visible);
-else
-  clf(hf)
+function emission_line(x2, x3, bFrame, time_str, wavelengths, hf)
+arguments
+  x2 (:,1) {mustBeReal}
+  x3 (1,:) {mustBeReal}
+  bFrame (:,:,:) {mustBeReal}
+  time_str (1,1) string
+  wavelengths (1,:) string
+  hf (1,1) matlab.ui.Figure
 end
+
+clf(hf)
 
 % arbitrary pick of which emission lines to plot lat/lon slices
 inds = [2, 4, 5, 9];
@@ -106,7 +112,7 @@ t = tiledlayout(length(inds), 1, 'parent', hf);
 
 for i=1:length(inds)
   ax = nexttile(t);
-  imagesc(x2/1e3, x3/1e3, squeeze(bFrame(:,:,inds(i)))', 'parent', ax);
+  imagesc(ax, x2/1e3, x3/1e3, squeeze(bFrame(:,:,inds(i)))');
   axis(ax, 'xy')
   axis(ax, 'tight')
   %caxis(caxlims);
