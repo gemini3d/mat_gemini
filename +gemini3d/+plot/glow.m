@@ -5,7 +5,7 @@ arguments
   time (1,1) datetime
   saveplot_fmt (1,:) string = string.empty
   opts.xg (1,1) struct
-  opts.figure (1,1) matlab.ui.Figure
+  opts.figure matlab.ui.Figure
 end
 
 if isempty(direc)
