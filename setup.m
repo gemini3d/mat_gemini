@@ -28,23 +28,29 @@ fix_macos()
 gemini_root = getenv("GEMINI_ROOT");
 if isempty(gemini_root)
   gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
+end
 
-  ret = 0;
-  if ~isfolder(gemini_root)
-    cmd = "git -C " + fullfile(cwd, "..") + " clone " + meta.gemini3d.url + " " + gemini3d_dirname;
+canary = fullfile(gemini_root, "CMakeLists.txt");
+
+if ~isfolder(gemini_root)
+  cmd = "git -C " + fullfile(cwd, "..") + " clone " + meta.gemini3d.url + " " + gemini3d_dirname;
+  disp(cmd)
+  ret = system(cmd);
+  if ret == 0 && ~isempty(meta.gemini3d.tag)
+    cmd = "git -C " + gemini_root + " checkout " + meta.gemini3d.tag;
+    disp(cmd)
     ret = system(cmd);
-    if ret == 0 && ~isempty(meta.gemini3d.tag)
-      ret = system("git -C " + gemini_root + " checkout " + meta.gemini3d.tag);
-    end
   end
-
-  if ret == 0 && isfolder(gemini_root)
-    setenv('GEMINI_ROOT', gemini_root)
-  else
-    warning("Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")
+  if ret ~= 0
+    error("problem Git clone Gemini3D")
   end
 end
 
+if isfile(canary)
+  setenv('GEMINI_ROOT', gemini_root)
+else
+  error("Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")
+end
 
 end % function
 

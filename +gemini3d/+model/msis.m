@@ -32,6 +32,7 @@ run(fullfile(cwd, '../../setup.m'))
 
 %% path to msis executable
 src_dir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
+assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
 build_dir = fullfile(src_dir, "build");
 exe = gemini3d.sys.exe_name(fullfile(build_dir, "msis_setup"));
 
