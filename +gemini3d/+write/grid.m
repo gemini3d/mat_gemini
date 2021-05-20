@@ -126,6 +126,10 @@ for i = ["e1","e2","e3","er","etheta","ephi"]
   hdf5nc.h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)
 end
 
+if (isfield(xg,"glonctr"))
+  hdf5nc.h5save(fn,"/glonctr",xg.glonctr)
+  hdf5nc.h5save(fn,"/glatctr",xg.glatctr)
+end %if
 
 %% metadata
 % seems HDF5 is too buggy for strings in Matlab

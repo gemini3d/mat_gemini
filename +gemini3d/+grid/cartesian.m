@@ -285,4 +285,7 @@ for k = ["x", "y", "z"]
   xgf.(k) = xgf.(k)(inds1,inds2,inds3);
 end
 
+xgf.glonctr=p.glon;
+xgf.glatctr=p.glat;
+
 end
