@@ -13,7 +13,7 @@ cfg = gemini3d.read.config(direc, true);
 
 %WE ALSO NEED TO LOAD THE GRID FILE
 if isempty(xg)
-  xg = gemini3d.read.grid(direc);
+  xg = gemini3d.read.grid(direc, true);
   assert(~isempty(xg), direc + " does not contain simgrid")
 %  lx1 = xg.lx(1);
   lx3 = xg.lx(3);

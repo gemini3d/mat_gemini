@@ -17,9 +17,9 @@ cfg = gemini3d.read.config(direc);
 
 
 %WE ALSO NEED TO LOAD THE GRID FILE (UNLESS IT ALREADY EXISTS IN THE WORKSPACE)
-if (~exist('xg','var'))
+if ~exist('xg','var')
   disp('Reading dist. grid...')
-  xg = gemini3d.read.grid(direc);
+  xg = gemini3d.read.grid(direc, true);
   lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
   lh=lx1;   %possibly obviated in this version - need to check
   if (lx3==1)
@@ -31,9 +31,9 @@ end
 
 
 %ON THE OFF CHANCE THE CONTROL GRID IS DIFFERENT, LOAD IT TOO
-if (~exist('xgc','var'))
+if ~exist('xgc','var')
   disp('Reading control grid...')
-  xgc=gemini3d.read.grid(direc_control);
+  xgc=gemini3d.read.grid(direc_control, true);
   lx1c=xgc.lx(1); lx2c=xgc.lx(2); lx3c=xgc.lx(3);
   lhc=lx1c;   %possibly obviated in this version - need to check
 end

@@ -33,12 +33,9 @@ if isempty(cfg)
 end
 %% CHECK WHETHER WE NEED TO RELOAD THE GRID (check if one is given because this can take a long time)
 if isempty(opts.xg)
-  xg = gemini3d.read.grid(direc);
+  xg = gemini3d.read.grid(direc, true);
 else
   xg = opts.xg;
-end
-if isempty(xg)
-  error("gemini3d:plotall:value", "Gemini3D grid not found")
 end
 
 %% determine plotting function

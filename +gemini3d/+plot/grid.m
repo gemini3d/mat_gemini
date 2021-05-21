@@ -15,9 +15,7 @@ end
 
 direc = gemini3d.fileio.expanduser(direc);
 
-xg = gemini3d.read.grid(direc);
-
-assert(~isempty(xg), direc + " does not contain a simulation grid")
+xg = gemini3d.read.grid(direc, true);
 
 h = matlab.ui.Figure.empty;
 %% x1, x2, x3
