@@ -21,7 +21,7 @@ Vcmap = bwr();
 Jcmap = bwr();
 
 %% READ IN THE SIMULATION INFORMATION (this is low cost so reread no matter what)
-cfg = gemini3d.read.config(direc);
+cfg = gemini3d.read.config(direc, true);
 
 %% RELOAD GRID?
 % loading grid can take a long time

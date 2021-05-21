@@ -66,8 +66,7 @@ end
 config_path = gemini3d.fileio.expanduser(config_path);
 outdir = gemini3d.fileio.expanduser(outdir);
 
-cfg = gemini3d.read.config(config_path);
-assert(~isempty(cfg), "a config.nml file was not found in " + config_path)
+cfg = gemini3d.read.config(config_path,true);
 cfg.outdir = outdir;
 
 for k = ["ssl_verify", "file_format"]

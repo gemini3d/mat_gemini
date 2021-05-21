@@ -8,7 +8,7 @@ end
 assert(~gemini3d.fileio.samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
 
 %% READ IN THE SIMULATION INFORMATION
-params = gemini3d.read.config(new_dir);
+params = gemini3d.read.config(new_dir, true);
 
 lxs = gemini3d.simsize(new_dir);
 lxs_ref = gemini3d.simsize(ref_dir);

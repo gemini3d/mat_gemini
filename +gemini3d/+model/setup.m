@@ -11,15 +11,10 @@ assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
 %% parse input
 if ~isstruct(cfg)
   % path to config.nml
-  cfg = gemini3d.read.config(cfg);
+  cfg = gemini3d.read.config(cfg, true);
 end
 
-if isempty(out_dir)
-  if ~isfield(cfg, 'outdir') || isempty(cfg.outdir)
-    error('model:setup:file_not_found', 'please specify out_dir')
-  end
-else
-  % override with out_dir regardless
+if ~isempty(out_dir)
   cfg.outdir = out_dir;
 end
 

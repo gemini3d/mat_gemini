@@ -1,9 +1,10 @@
-function lxs = simsize(apath)
+function lxs = simsize(apath, required)
 arguments
   apath (1,1) string
+  required (1,1) logical = false
 end
 
-[apath, ext] = gemini3d.find.simsize(apath);
+[apath, ext] = gemini3d.find.simsize(apath, required);
 
 lxs = [];
 switch ext

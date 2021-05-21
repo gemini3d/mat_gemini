@@ -1,9 +1,10 @@
-function [simpath, ext] = simsize(apath)
+function [simpath, ext] = simsize(apath, required)
 %% find the path (directory, even if given filename) where simsize.* is
 % also return the suffix
 % the filename MUST be simsize.{h5,nc,dat}
 arguments
   apath (1,1) string
+  required (1,1) logical = false
 end
 
 apath = gemini3d.fileio.expanduser(apath);
@@ -25,6 +26,10 @@ for suffix = suffixes
       return
     end
   end
+end
+
+if required
+  assert(isfile(filename), "find:simsize: could not find \s", filename)
 end
 
 end % function

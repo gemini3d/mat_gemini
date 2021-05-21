@@ -1,8 +1,9 @@
-function filename = config(direc)
+function filename = config(direc, required)
 %% get configuration file
 % if not found, returns string.empty
 arguments
   direc string
+  required (1,1) logical = false
 end
 
 direc = gemini3d.fileio.expanduser(direc);
@@ -30,6 +31,10 @@ if isfolder(direc)
   end
 end
 
+if required
+  assert(isfile(filename), "find:config: could not find config file \s", filename)
+end
+
 end % function
 
 
@@ -45,7 +50,7 @@ for s = names
   fn = fullfile(direc, s);
   if isfile(fn)
     filename = fn;
-    break
+    return
   end
 end
 

@@ -9,8 +9,7 @@ direc = gemini3d.fileio.expanduser(direc);
 assert(isfolder(direc), direc + " is not a directory")
 
 %SIMULATION META-DATA
-cfg = gemini3d.read.config(direc);
-assert(~isempty(cfg), direc + " does not contains config.nml")
+cfg = gemini3d.read.config(direc, true);
 
 %WE ALSO NEED TO LOAD THE GRID FILE
 if isempty(xg)
