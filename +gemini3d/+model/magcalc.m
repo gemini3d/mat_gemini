@@ -14,7 +14,6 @@ cfg = gemini3d.read.config(direc, true);
 %WE ALSO NEED TO LOAD THE GRID FILE
 if isempty(xg)
   xg = gemini3d.read.grid(direc, true);
-  assert(~isempty(xg), direc + " does not contain simgrid")
 %  lx1 = xg.lx(1);
   lx3 = xg.lx(3);
 %  lh=lx1;   %possibly obviated in this version - need to check
@@ -35,12 +34,12 @@ if isempty(xg)
   end
 
   %TABULATE THE SOURCE OR GRID CENTER LOCATION
-  if ~isempty(cfg.sourcemlon)
-    thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
-    phidist= deg2rad(cfg.sourcemlon);
-  else
+  if isempty(cfg.sourcemlon)
     thdist=mean(xg.theta(:));
     phidist=mean(xg.phi(:));
+  else
+    thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+    phidist= deg2rad(cfg.sourcemlon);
   end
 disp('Grid loaded')
 end
@@ -54,10 +53,10 @@ else
 end
 %lr=1;
 
-thmin=thdist-dang*pi/180;
-thmax=thdist+dang*pi/180;
-phimin=phidist-dang*pi/180;
-phimax=phidist+dang*pi/180;
+thmin=thdist - deg2rad(dang);
+thmax=thdist + deg2rad(dang);
+phimin=phidist - deg2rad(dang);
+phimax=phidist + deg2rad(dang);
 
 theta=linspace(thmin,thmax,ltheta);
 if flag2D
