@@ -3,6 +3,11 @@ arguments
   direc (1,1) string
 end
 
+addons = matlab.addons.installedAddons();
+assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
+
+freal = 'float64';
+
 direc = gemini3d.fileio.expanduser(direc);
 
 %SIMULATIONS LOCAITON
@@ -15,24 +20,21 @@ cfg = gemini3d.read.config(direc);
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
 
+fn = fullfile(direc, "inputs/magfieldpoints." + cfg.file_format);
+assert(isfile(fn), fn + " not found")
+
 switch cfg.file_format
 case 'h5'
-  fn = fullfile(direc,'inputs/magfieldpoints.h5');
-  assert(isfile(fn), fn + " not found")
-
   lpoints = h5read(fn, "/lpoints");
   r = h5read(fn, "/r");
   theta = double(h5read(fn, "/theta"));
   phi = double(h5read(fn, "/phi"));
 case 'dat'
-  fn = fullfile(direc,'inputs/magfieldpoints.dat');
-  assert(isfile(fn), fn + " not found")
-
   fid=fopen(fn, 'r');
   lpoints=fread(fid,1,'integer*4');
-  r=fread(fid,lpoints,'real*8');
-  theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
-  phi=fread(fid,lpoints,'real*8');
+  r=fread(fid,lpoints, freal);
+  theta=fread(fid,lpoints, freal);    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
+  phi=fread(fid,lpoints, freal);
   fclose(fid);
 otherwise, error("not sure how to read " + cfg.file_format + " files")
 end
@@ -63,10 +65,9 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
 
   switch cfg.file_format
   case 'dat'
-    fid=fopen(fullfile(basemagdir, filename + ".dat"), 'r');
-    data = fread(fid,lpoints,'real*8');
-  case 'h5'
-    data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
+    fid = fopen(fullfile(basemagdir, filename + ".dat"), 'r');
+    data = fread(fid,lpoints, freal);
+  case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
   end
 
   Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
@@ -74,10 +75,8 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
 
   switch cfg.file_format
-  case 'dat'
-    data = fread(fid,lpoints,'real*8');
-  case 'h5'
-    data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
+  case 'dat', data = fread(fid,lpoints, freal);
+  case 'h5', data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
   end
 
   Bthetat(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
@@ -85,10 +84,8 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
 
   switch cfg.file_format
-  case 'dat'
-    data=fread(fid,lpoints,'real*8');
-  case 'h5'
-    data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
+  case 'dat', data=fread(fid,lpoints, freal);
+  case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
   end
 
   Bphit(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
@@ -99,10 +96,6 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
     fclose(fid);
   end
 end
-
-%STORE THE DATA IN A MATLAB FILE FOR LATER USE
-% save([direc,'/magfields_fort.mat'],'times','mlat','mlon','Brt','Bthetat','Bphit');
-
 
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING
 llonp=200;
@@ -125,28 +118,27 @@ mlonsrc=cfg.sourcemlon;
 
 
 %TABULATE THE SOURCE OR GRID CENTER LOCATION
-if ~isempty(cfg.sourcemlat)
-  %thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
-  %phidist = deg2rad(cfg.sourcemlon);
-else
+if isempty(cfg.sourcemlat)
   thdist=mean(theta(:));
   phidist=mean(phi(:));
   cfg.sourcemlat = 90 - rad2deg(thdist);
   cfg.sourcemlon = rad2deg(phidist);
+else
+  %thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+  %phidist = deg2rad(cfg.sourcemlon);
 end
 
 
 %MAKE THE PLOTS AND SAVE TO A FILE
-FS=8;
 
 coast = load('coastlines', 'coastlat', 'coastlon');
 [thetacoast,phicoast] = gemini3d.geog2geomag(coast.coastlat, coast.coastlon);
 cfg.mlatcoast=90-thetacoast*180/pi;
 cfg.mloncoast=phicoast*180/pi;
 
-if (360-mlonsrc<20)
-  inds=find(cfg.mloncoast>180);
-  cfg.mloncoast(inds)=cfg.mloncoast(inds)-360;
+if 360-mlonsrc < 20
+  i = cfg.mloncoast > 180;
+  cfg.mloncoast(i) = cfg.mloncoast(i)-360;
 end
 
 mlatlim=[min(mlatp),max(mlatp)];
