@@ -145,37 +145,37 @@ mlatlim=[min(mlatp),max(mlatp)];
 mlonlim=[min(mlonp),max(mlonp)];
 [cfg.MLAT, cfg.MLON]=meshgrat(mlatlim,mlonlim,[llonp, llatp]);
 
+fig = figure('position', [10, 10, 1200, 500]);
+
 for it=1:length(cfg.times)-1
   filename = gemini3d.datelab(cfg.times(it));
   ttxt = datestr(cfg.times(it));
 
-  disp("write: B*-" + filename + ".png")
+  clf(fig)
+  subplot(1,3,1, 'parent', fig)
+  plotBr(Brtp(:,:,:,it), cfg, ttxt);
+  subplot(1,3,2, 'parent', fig)
+  plotBtheta(Bthetatp(:,:,:,it), cfg, ttxt);
+  subplot(1,3,3, 'parent', fig)
+  plotBphi(Bphitp(:,:,:,it), cfg, ttxt);
 
-  f1 = plotBr(Brtp(:,:,:,it), cfg, ttxt);
-  exportgraphics(f1, fullfile(pdir, "Br-" + filename + ".png"), "resolution", 300)
-
-  f2 = plotBtheta(Bthetatp(:,:,:,it), cfg, ttxt);
-  exportgraphics(f2, fullfile(pdir,"Bth-" + filename + ".png"), "resolution", 300)
-
-  f3 = plotBphi(Bphitp(:,:,:,it), cfg, ttxt);
-  exportgraphics(f3, fullfile(pdir,"Bphi-" + filename + ".png"), "resolution", 300)
+  pfn = fullfile(pdir, "B-" + filename + ".png");
+  disp("write: " + pfn)
+  exportgraphics(fig, pfn, "resolution", 300)
 
 end % for
 
 end % function
 
 
-function fig = plotBr(Brtp, cfg, ttxt)
-
-fig = figure(1);
-clf(fig)
+function plotBr(Brtp, cfg, ttxt)
 
 ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5, max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
 param=squeeze(Brtp)*1e9;
 
 pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 
-colormap(fig, gemini3d.plot.bwr());
+colormap(ax, gemini3d.plot.bwr());
 % set(ax,'FontSize',FS)
 tightmap
 caxlim=max(abs(param(:)));
@@ -198,10 +198,7 @@ gridm('on')
 end % function
 
 
-function fig = plotBtheta(Bthetatp, cfg, ttxt)
-
-fig=figure(2);
-clf(fig)
+function plotBtheta(Bthetatp, cfg, ttxt)
 
 ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5,max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
 param=squeeze(Bthetatp)*1e9;
@@ -209,7 +206,7 @@ pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 %     cmap=lbmap(256,'redblue');
 %     cmap=flipud(cmap);
 %     colormap(cmap);
-colormap(fig, gemini3d.plot.bwr())
+colormap(ax, gemini3d.plot.bwr())
 %set(ax,'FontSize',FS)
 tightmap
 caxlim=max(abs(param(:)));
@@ -230,9 +227,8 @@ gridm("on")
 end % function
 
 
-function fig = plotBphi(Bphitp, cfg, ttxt)
-fig=figure(3);
-clf(fig)
+function plotBphi(Bphitp, cfg, ttxt)
+
 ax=axesm('MapProjection','Mercator','MapLatLimit',[min(cfg.mlat)-0.5,max(cfg.mlat)+0.5],'MapLonLimit',[min(cfg.mlon)-0.5,max(cfg.mlon)+0.5]);
 param=squeeze(Bphitp)*1e9;
 %imagesc(mlon,mlat,param);
@@ -240,7 +236,7 @@ pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 %     cmap=lbmap(256,'redblue');
 %     cmap=flipud(cmap);
 %     colormap(cmap);
-colormap(fig, gemini3d.plot.bwr())
+colormap(ax, gemini3d.plot.bwr())
 %set(ax,'FontSize',FS)
 tightmap
 caxlim=max(abs(param(:)));
