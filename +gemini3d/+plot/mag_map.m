@@ -5,10 +5,6 @@ end
 
 direc = gemini3d.fileio.expanduser(direc);
 
-addons = matlab.addons.installedAddons();
-has_map = any(addons.Name == "Mapping Toolbox");
-assert(has_map, "Mapping Toolbox is needed")
-
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
 gemini3d.fileio.makedir(pdir)
@@ -160,6 +156,8 @@ mlonlim=[min(mlonp),max(mlonp)];
 for it=1:length(cfg.times)-1
   filename = gemini3d.datelab(cfg.times(it));
   ttxt = datestr(cfg.times(it));
+
+  disp("write: B*-" + filename + ".png")
 
   f1 = plotBr(Brtp(:,:,:,it), cfg, ttxt);
   exportgraphics(f1, fullfile(pdir, "Br-" + filename + ".png"), "resolution", 300)
