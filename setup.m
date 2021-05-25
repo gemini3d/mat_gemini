@@ -46,11 +46,9 @@ if ~isfolder(gemini_root)
   end
 end
 
-if isfile(canary)
-  setenv('GEMINI_ROOT', gemini_root)
-else
-  error("Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")
-end
+assert(isfile(canary), "Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")
+
+setenv('GEMINI_ROOT', gemini_root)
 
 end % function
 
