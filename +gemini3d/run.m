@@ -14,7 +14,6 @@ arguments
   opts.ssl_verify string = string.empty
   opts.file_format string = string.empty
   opts.dryrun (1,1) logical = false
-  opts.fortran_runner (1,1) logical = false
 end
 
 %% ensure all paths are OK
@@ -36,7 +35,7 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
-cmd = create_run(cfg, mpiexec, gemini_exe, opts.fortran_runner);
+cmd = create_run(cfg, mpiexec, gemini_exe);
 
 if opts.dryrun
   return
@@ -44,14 +43,8 @@ end
 %% run simulation
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
-if opts.fortran_runner
-  ret = system(cmd);
-else
-  ret = exe_run(cmd, ~isempty(mpiexec));
-end
-if ret ~= 0
-  error('run:runtime_error', 'Gemini run failed, error code %d', ret)
-end
+ret = system(cmd);
+assert(ret ==0, 'Gemini run failed, error code %d', ret)
 
 end % function
 
@@ -92,41 +85,19 @@ end
 end % function
 
 
-function cmd = create_run(cfg, mpiexec, gemini_exe, fortran)
+function cmd = create_run(cfg, mpiexec, gemini_exe)
 arguments
   cfg (1,1) struct
   mpiexec string
   gemini_exe (1,1) string
-  fortran (1,1) logical
 end
 
 cmd = gemini_exe + " " + cfg.outdir;
-
-if fortran
-  parent = fileparts(gemini_exe);
-  gembin = fullfile(parent, "gemini.bin");
-  if ispc
-    gembin = gembin + ".exe";
-  end
-  cmd = cmd + " -gemexe " + gembin;
-else
-  %% mpiexec if available
-  if ~isempty(mpiexec)
-    np = gemini3d.sys.get_mpi_count(fullfile(cfg.outdir, cfg.indat_size));
-    cmd = sprintf("%s -n %d %s", mpiexec, np, cmd);
-  else
-    disp("MPIexec not available, falling back to single CPU core execution.")
-  end
-end
-
-
 disp(cmd)
 
 %% dry run
 ret = exe_run(cmd + " -dryrun", ~isempty(mpiexec));
-if ret~=0
-  error('run:runtime_error', 'Gemini dryrun failed')
-end
+assert(ret == 0, 'Gemini dryrun failed')
 
 end % function
 

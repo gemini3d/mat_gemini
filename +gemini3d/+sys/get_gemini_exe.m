@@ -3,7 +3,7 @@ arguments
   exe string = string.empty
 end
 
-runner_name = "gemini.bin";
+runner_name = "gemini3d.run";
 
 exe = gemini3d.sys.exe_name(exe);
 
@@ -18,17 +18,15 @@ if isempty(exe) || ~isfile(exe)
   exe = gemini3d.sys.exe_name(fullfile(bindir, runner_name));
 
   if ~isfile(exe)
-    gemini3d.sys.cmake(srcdir, bindir, runner_name);
+    gemini3d.sys.cmake(srcdir, bindir, "gemini3d.run gemini.bin");
     exe = gemini3d.sys.exe_name(fullfile(bindir, runner_name));
   end
 end
-assert(isfile(exe), 'failed to build ' + exe)
+assert(isfile(exe), "failed to build %s", exe)
 %% sanity check Gemini executable
 prepend = gemini3d.sys.modify_path();
 [ret, msg] = system(prepend + " " + exe);
 
-if ret ~= 0
-  error("get_gemini_exe:runtime_error", "problem with Gemini executable: %s  error: %s", exe, msg)
-end
+assert(ret == 0, "problem with Gemini executable: %s  error: %s", exe, msg)
 
 end % function
