@@ -21,7 +21,6 @@ else
   shapelat = 1;
 end
 
-S = shapelon .* exp(-(E.MLAT - E.mlatmean - 1.5 * E.mlatsig).^2/ 2 / E.mlatsig^2);
 for i = 6:Nt
   %could have different boundary types for different times if the user wanted...
   E.flagdirich(i)=0;
