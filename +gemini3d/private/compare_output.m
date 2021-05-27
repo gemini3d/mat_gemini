@@ -26,7 +26,6 @@ bad = 0;
 
 for i = 1:Nt
   out = gemini3d.read.frame(new_dir, "time", params.times(i));
-  assert(~isempty(out), new_dir + " does not contain output data")
 
   ref = gemini3d.read.frame(ref_dir, "time", params.times(i));
 

@@ -33,9 +33,6 @@ else
   B = gemini3d.read.frame(new_path, "time", time, "vars", name);
 end
 
-assert(~isempty(A), "failed to read reference %s from %s", name, ref_path)
-assert(~isempty(B), "failed to read new %s from %s", name, new_path)
-
 gemini3d.plot.diff(A.(name), B.(name), name, A.time, new_path, ref_path)
 
 end

@@ -181,7 +181,7 @@ for it=1:length(cfg.times)
 
 
     %NOW INTEGRATIOPN TO GET TEC
-    if (~flag2D)
+    if ~flag2D
       fprintf('Integrating in 3D...\n');
       intne=cumtrapz(r,neI);               %the radial dimension is the first of the neI array
       TECrawnow=intne(itop,ith1:ith2,iphi1:iphi2);

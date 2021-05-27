@@ -18,7 +18,7 @@ ref = gemini3d.read.frame3Dcurvnoelec(ref_params.indat_file);
 new_params = gemini3d.fileio.make_valid_paths(gemini3d.read.config(new_dir), new_dir, file_format);
 new = gemini3d.read.frame3Dcurvnoelec(new_params.indat_file);
 
-assert(length(new_params.times) > 0, "simulation input has zero duration")
+assert(~isempty(new_params.times), "simulation input has zero duration")
 
 gemini3d.assert_allclose(new.ns, ref.ns, 'rtol', tol.rtol, 'atol', tol.atolN/100, "err_msg", 'mismatch: Ns')
 gemini3d.assert_allclose(new.Ts, ref.Ts, 'rtol', tol.rtol, 'atol', tol.atolT/100, "err_msg", 'mismatch: Ts')
