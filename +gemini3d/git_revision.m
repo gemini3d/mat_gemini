@@ -50,7 +50,8 @@ end
 git.commit = strtrim(msg);
 
 [ret, msg] = system("git -C " + cwd + " status --porcelain");
-if ret ~= 0, error('Could not determine Git status'), end
+assert(ret == 0, 'Could not determine Git status')
+
 if isempty(msg)
   git.porcelain = 'true';
 else

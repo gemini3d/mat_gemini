@@ -4,14 +4,8 @@ arguments
   time (1,1) datetime = datetime.empty
 end
 
-dat = struct.empty;
-
 if ~isempty(time)
-  filename = gemini3d.find.frame(filename, time);
-end
-
-if isempty(filename)
-  return
+  filename = gemini3d.find.frame(filename, time, "required", true);
 end
 
 [~,~,ext] = fileparts(filename);
@@ -19,7 +13,7 @@ end
 switch ext
   case '.h5', dat = load_h5(filename);
   case '.nc', dat = load_nc(filename);
-  otherwise, error("gemini3d.read.Efield:value_error", "unsupported file type " + filename)
+  otherwise, error("gemini3d:read:Efield:value_error", "unsupported file type " + filename)
 end
 
 end % function

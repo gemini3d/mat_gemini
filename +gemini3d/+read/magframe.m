@@ -1,26 +1,16 @@
 function dat = magframe(filename,opts)
 
 % example use
-% dat = gemini3d.read.frame(filename)
-% dat = gemini3d.read.frame(folder, "time", datetime)
-% dat = gemini3d.read.frame(filename, "config", cfg)
-% dat = gemini3d.read.frame(filename, "vars", vars)
-%
-% The "vars" argument allows loading a subset of variables.
-% for example:
-%
-% gemini3d.read.frame(..., "ne")
-% gemini3d.read.frame(..., ["ne", "Te"])
+% dat = gemini3d.read.magframe(filename)
+% dat = gemini3d.read.magframe(folder, "time", datetime)
+% dat = gemini3d.read.magframe(filename, "config", cfg)
 
 arguments
   filename (1,1) string
   opts.time datetime = datetime.empty
   opts.cfg struct = struct.empty
-  opts.vars (1,:) string = string.empty
   opts.gridsize (1,3) {mustBeNumeric} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
-
-dat = struct.empty;
 
 % make sure to add the default directory where the magnetic fields are to
 % be found
@@ -30,12 +20,13 @@ basemagdir = fullfile(direc,"magfields");
 % find the actual filename if only the directory was given
 if ~isfile(filename)
   if ~isempty(opts.time)
-    filename = gemini3d.find.frame(basemagdir,opts.time);
+    filename = gemini3d.find.frame(basemagdir,opts.time, "required", false);
   end
 end
 
-% do nothing if we were not provided a filename
+% some times might not have magnetic field computed
 if isempty(filename)
+  disp("SKIP: read.magframe %s", datestr(opts.time))
   return
 end
 
@@ -111,23 +102,13 @@ dat(1).Br=zeros(lr,ltheta,lphi);
 dat(1).Btheta=zeros(lr,ltheta,lphi);
 dat(1).Bphi=zeros(lr,ltheta,lphi);
 
-% read in the data for the requested time. return array of zeros if not
-% present (can happen if the user only computes magnetic fields for select frames)...
-%filename = gemini3d.datelab(cfg.times(it));
-
-%if ~isfile(fullfile(basemagdir, filename + "." + cfg.file_format))
-if ~isfile(filename)
-    disp("gemini3d.read.magframe - SKIP: Could not find: " + filename)
-    return;
-end
-
 switch cfg.file_format
-    case 'dat'
+  case 'dat'
 %        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
-        fid=fopen(filename,'r');
-        data=fread(fid,lpoints,'real*8');
-    case 'h5'
-        data = h5read(filename, '/magfields/Br');
+    fid=fopen(filename,'r');
+    data=fread(fid,lpoints,'real*8');
+  case 'h5'
+    data = h5read(filename, '/magfields/Br');
 end
 
 dat.Br(:,:,:)=reshape(data,[lr,ltheta,lphi]);

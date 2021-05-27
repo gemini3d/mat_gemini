@@ -36,7 +36,7 @@ x2=xg.x2(3:end-2);
 x3=xg.x3(3:end-2);
 
 %% get filename
-fn = gemini3d.find.frame(direc, time);
+fn = gemini3d.find.frame(direc, time, "required", true);
 
 %% make plots
 if isfield(opts, "figure")

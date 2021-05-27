@@ -15,10 +15,7 @@ setenv('MATGEMINI', cwd)
 hdf5nc_dir = fullfile(cwd, "matlab-hdf5");
 if ~isfolder(fullfile(hdf5nc_dir, "+hdf5nc"))
   cmd = "git submodule update --init";
-  ret = system(cmd);
-  if ret ~= 0
-    error("mat_gemini:setup:runtimeError", "could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
-  end
+  assert(system(cmd) == 0, "could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
 end
 
 addpath(hdf5nc_dir)
@@ -41,9 +38,7 @@ if ~isfolder(gemini_root)
     disp(cmd)
     ret = system(cmd);
   end
-  if ret ~= 0
-    error("problem Git clone Gemini3D")
-  end
+  assert(ret == 0, "problem Git clone Gemini3D")
 end
 
 assert(isfile(canary), "Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")

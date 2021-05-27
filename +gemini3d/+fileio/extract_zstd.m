@@ -26,9 +26,7 @@ end
 tar_arc = tempname;
 
 ret = system("zstd -d " + archive + " -o " + tar_arc);
-if ret ~= 0
-  error("problem extracting %s", archive)
-end
+assert(ret == 0, "problem extracting %s", archive)
 
 untar(tar_arc, out_dir)
 delete(tar_arc)

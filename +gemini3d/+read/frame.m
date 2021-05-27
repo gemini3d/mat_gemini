@@ -21,18 +21,12 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
-dat = struct.empty;
-
 filename = gemini3d.fileio.expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
-    filename = gemini3d.find.frame(filename, opts.time);
+    filename = gemini3d.find.frame(filename, opts.time, "required", true);
   end
-end
-
-if isempty(filename) || ~isfile(filename)
-  return
 end
 
 if isempty(opts.cfg)
