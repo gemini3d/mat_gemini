@@ -69,9 +69,7 @@ end  % function read_nc4
 function xgf = read_raw(apath)
 
 filename = fullfile(apath, 'simgrid.dat');
-if ~isfile(filename)
-  error('read:grid:raw:file_not_found', '%s not found', filename)
-end
+assert(isfile(filename), '%s not found', filename)
 
 xgf.lx = gemini3d.simsize(apath);
 xgf.filename = filename;

@@ -41,9 +41,8 @@ if ~isfile(exe)
   gemini3d.sys.cmake(src_dir, build_dir, "msis_setup")
 end
 
-if ~isfile(exe)
-  error('model:msis:FIleNotFound', 'MSIS setup executable not found: %s', exe)
-end
+assert(isfile(exe), 'MSIS setup executable not found: %s', exe)
+
 %% SPECIFY SIZES ETC.
 alt=xg.alt/1e3;
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
@@ -111,9 +110,7 @@ cmd = exe + " " + msis_infile + " " + msis_outfile + " " + int2str(msis_version)
 
 if msis_version == 20
   msis20_file = fullfile(build_dir, 'msis20.parm');
-  if ~isfile(msis20_file)
-    error("msis:param:fileNotFound", "%s not found", msis20_file)
-  end
+  assert(isfile(msis20_file), "%s not found", msis20_file)
 end
 % disp(cmd)
 
