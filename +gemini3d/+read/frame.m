@@ -75,34 +75,14 @@ else
     dat_shape = dat_shape(1:3);
   end
 end
-% we check each dimension because of possibility of 2D dimension swapping
-% x1
 
-if dat_shape(1) ~= lxs(1)
-  error('gemini3d:read:frame:value_error', 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), lxs(1))
-end
+% x1
+assert(dat_shape(1) == lxs(1), 'dimension x1 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(1), lxs(1))
 % x2
-if dat_shape(2) ~= lxs(2)
-  if dat_shape(2) == 1 || lxs(2) == 1
-    if dat_shape(2) ~= lxs(3) % check for swap
-      error('gemini3d:read:frame:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
-    end
-  else
-    error('gemini3d:read:frame:value_error', 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
-  end
-end
+assert(dat_shape(2) == lxs(2), 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
 % x3
 if lxs(3) > 1
-  % squeeze() added by Matt Z. inside MatGemini can remove x3
-  if dat_shape(end) ~= lxs(3)
-    if dat_shape(end) == 1 || lxs(3) == 1
-      if dat_shape(end) ~= lxs(2) % check for swap
-        error('gemini3d:read:frame:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
-      end
-    else
-      error('gemini3d:read:frame:value_error', 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
-    end
-  end
+  assert(dat_shape(end) == lxs(3), 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
 end
 
 end % function
