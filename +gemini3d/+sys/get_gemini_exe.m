@@ -5,9 +5,9 @@ end
 
 runner_name = "gemini3d.run";
 
-exe = gemini3d.sys.exe_name(exe);
+exe = gemini3d.find.which(exe);
 
-if isempty(exe) || ~isfile(exe)
+if isempty(exe)
   srcdir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
   if ~isfolder(srcdir)
     cwd = fileparts(mfilename('fullpath'));
@@ -15,14 +15,14 @@ if isempty(exe) || ~isfile(exe)
     srcdir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
   end
   bindir = fullfile(srcdir, "build");
-  exe = gemini3d.sys.exe_name(fullfile(bindir, runner_name));
+  exe = gemini3d.find.which(runner_name, bindir);
 
-  if ~isfile(exe)
+  if isempty(exe)
     gemini3d.sys.cmake(srcdir, bindir, "gemini3d.run gemini.bin");
-    exe = gemini3d.sys.exe_name(fullfile(bindir, runner_name));
+    exe = gemini3d.find.which(runner_name, bindir);
   end
 end
-assert(isfile(exe), "failed to build %s", exe)
+assert(~isempty(exe), "failed to build/find %s", exe)
 %% sanity check Gemini executable
 prepend = gemini3d.sys.modify_path();
 [ret, msg] = system(prepend + " " + exe);

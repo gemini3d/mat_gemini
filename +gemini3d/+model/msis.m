@@ -34,14 +34,14 @@ run(fullfile(cwd, '../../setup.m'))
 src_dir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
 assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
 build_dir = fullfile(src_dir, "build");
-exe = gemini3d.sys.exe_name(fullfile(build_dir, "msis_setup"));
+exe = gemini3d.fileio.which("msis_setup", build_dir);
 
 %% build exe if not present
-if ~isfile(exe)
+if isempty(exe)
   gemini3d.sys.cmake(src_dir, build_dir, "msis_setup")
 end
-
-assert(isfile(exe), 'MSIS setup executable not found: %s', exe)
+exe = gemini3d.fileio.which("msis_setup", build_dir);
+assert(~isempty(exe), 'MSIS setup executable not found: %s', exe)
 
 %% SPECIFY SIZES ETC.
 alt=xg.alt/1e3;

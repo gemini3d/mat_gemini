@@ -4,21 +4,20 @@ arguments
   exe (1,1) string
 end
 
+mpiexec = gemini3d.fileio.which(mpiexec);
 if isempty(mpiexec)
-  mpi_root = getenv("MPI_ROOT");
-  if isempty(mpi_root)
-    mpi_root = getenv("I_MPI_ROOT");
-  end
-
-  if ~isempty(mpi_root)
-    f = fullfile(mpi_root, "bin", "mpiexec");
-    if exist(f, "file")
-      mpiexec = f;
+  for p = [getenv("I_MPI_ROOT"), getenv("MPI_ROOT")]
+    mpiexec = gemini3d.fileio.which("mpiexec", fullfile(p, "bin"));
+    if ~isempty(mpiexec)
+      break
     end
   end
 end
 if isempty(mpiexec)
-  mpiexec = "mpiexec";
+  mpiexec = gemini3d.fileio.which("mpiexec");
+end
+if isempty(mpiexec)
+  return
 end
 
 [ret, msg] = system(mpiexec + " -help");

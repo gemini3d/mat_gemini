@@ -20,9 +20,7 @@ end
 % we need to pass in peq so that flagoutput works for .dat files, particularly for big old simulations
 % we don't want to spend time rerunning.
 dat = gemini3d.read.frame(p.eq_dir, "time", peq.times(end), "cfg", peq);
-if isempty(dat)
-  error('model:eq2dist:file_not_found', "%s does not contain data at %s", p.eq_dir, datestr(peq.times(end)))
-end
+
 %% sanity check equilibrium simulation input to interpolation
 check_density(dat.ns)
 check_drift(dat.vs1)

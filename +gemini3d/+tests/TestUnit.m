@@ -63,6 +63,35 @@ tc.verifyEmpty(gemini3d.fileio.absolute_path(string.empty))
 tc.verifyEqual(gemini3d.fileio.absolute_path(""), string(pwd))
 end
 
+function test_which(tc)
+
+tc.verifyEmpty(gemini3d.fileio.which(string.empty))
+
+n = "matlab";
+
+p = fullfile(matlabroot, "bin", n);
+
+% full absolute path
+exe = gemini3d.fileio.which(p);
+
+if ispc
+  tc.verifyTrue(endsWith(exe, ".exe"))
+else
+  tc.verifyFalse(endsWith(exe, ".exe"))
+end
+tc.assertTrue(isfile(exe))
+
+% assumes Matlab in environment variable PATH
+tc.assumeNotEmpty(gemini3d.fileio.which(n))
+
+tc.verifyNotEmpty(gemini3d.fileio.which(n, ''))
+tc.verifyNotEmpty(gemini3d.fileio.which(n, ""))
+tc.verifyNotEmpty(gemini3d.fileio.which(n, string.empty))
+
+tc.verifyNotEmpty(gemini3d.fileio.which([n, n]))
+
+end
+
 function test_with_suffix(tc)
 tc.verifyEqual(gemini3d.fileio.with_suffix("foo.h5", ".nc"), "foo.nc")
 if ~verLessThan("matlab", "9.9")
