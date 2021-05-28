@@ -6,7 +6,10 @@ end
 
 mpiexec = gemini3d.fileio.which(mpiexec);
 if isempty(mpiexec)
-  for p = [getenv("I_MPI_ROOT"), getenv("MPI_ROOT")]
+  for p = [string(getenv("I_MPI_ROOT")), string(getenv("MPI_ROOT"))]
+    if strlength(p) == 0
+      continue
+    end
     mpiexec = gemini3d.fileio.which("mpiexec", fullfile(p, "bin"));
     if ~isempty(mpiexec)
       break

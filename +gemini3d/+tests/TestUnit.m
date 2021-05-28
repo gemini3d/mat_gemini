@@ -88,8 +88,6 @@ tc.verifyNotEmpty(gemini3d.fileio.which(n, ''))
 tc.verifyNotEmpty(gemini3d.fileio.which(n, ""))
 tc.verifyNotEmpty(gemini3d.fileio.which(n, string.empty))
 
-tc.verifyNotEmpty(gemini3d.fileio.which([n, n]))
-
 end
 
 function test_with_suffix(tc)
