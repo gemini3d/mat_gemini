@@ -23,12 +23,9 @@ end
 
 
 methods(Test)
-function test_MPIexec(tc)
-gemini_exe = gemini3d.sys.get_gemini_exe();
-tc.verifyNotEmpty(gemini_exe)
 
-tc.assumeNotEmpty(gemini3d.fileio.which("mpiexec"), getenv("MPI_ROOT"))
-tc.verifyNotEmpty(gemini3d.sys.check_mpiexec(string.empty, gemini_exe))
+function test_get_gemini_exe(tc)
+tc.verifyNotEmpty(gemini3d.sys.get_gemini_exe())
 end
 
 
