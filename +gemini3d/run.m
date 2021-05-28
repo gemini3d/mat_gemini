@@ -23,7 +23,7 @@ run(fullfile(cwd, '../setup.m'))
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 
 %% find mpiexec, as it's not necessarily on PATH to avoid MPI library clashes
-mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
+% mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
@@ -35,7 +35,9 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
-cmd = create_run(cfg, mpiexec, gemini_exe);
+% cmd = create_run(cfg, ~isempty(mpiexec), gemini_exe);
+ret = gemini3d.sys.subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
+assert(ret == 0, 'Gemini dryrun failed')
 
 if opts.dryrun
   return
@@ -43,8 +45,8 @@ end
 %% run simulation
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
-ret = system(cmd);
-assert(ret ==0, 'Gemini run failed, error code %d', ret)
+ret = gemini3d.sys.subprocess_run([gemini_exe, cfg.outdir]);
+assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function
 
@@ -85,18 +87,24 @@ end
 end % function
 
 
-function cmd = create_run(cfg, mpiexec, gemini_exe)
+function cmd = create_run(cfg, has_mpi, gemini_exe)
 arguments
   cfg (1,1) struct
-  mpiexec string
+  has_mpi (1,1) logical
   gemini_exe (1,1) string
 end
 
-cmd = gemini_exe + " " + cfg.outdir;
-disp(cmd)
+cmd = [gemini_exe, cfg.outdir, "-dryrun"];
 
 %% dry run
-ret = exe_run(cmd + " -dryrun", ~isempty(mpiexec));
+if ispc && has_mpi
+  env = struct("PATH", gemini3d.sys.mpi_path());
+else
+  env = struct.empty;
+end
+
+ret = gemini3d.sys.subprocess_run(cmd, env);
+
 assert(ret == 0, 'Gemini dryrun failed')
 
 end % function

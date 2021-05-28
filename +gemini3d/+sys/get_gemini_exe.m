@@ -24,8 +24,7 @@ if isempty(exe)
 end
 assert(~isempty(exe), "failed to build/find %s", exe)
 %% sanity check Gemini executable
-prepend = gemini3d.sys.modify_path();
-[ret, msg] = system(prepend + " " + exe);
+[ret, msg] = gemini3d.sys.subprocess_run(exe);
 
 assert(ret == 0, "problem with Gemini executable: %s  error: %s", exe, msg)
 

@@ -106,20 +106,18 @@ hdf5nc.h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
 hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
-cmd = exe + " " + msis_infile + " " + msis_outfile + " " + int2str(msis_version);
-
 if msis_version == 20
   msis20_file = fullfile(build_dir, 'msis20.parm');
   assert(isfile(msis20_file), "%s not found", msis20_file)
 end
-% disp(cmd)
 
 if msis_version == 20
   % limitation of Matlab system() vis pwd for msis20.parm
   old_pwd = pwd;
   cd(build_dir)
 end
-[status, msg] = system(cmd);   %output written to file
+[status, msg] = gemini3d.sys.subprocess_run([exe, msis_infile, msis_outfile, int2str(msis_version)]);
+% output written to file
 if msis_version == 20
   cd(old_pwd)
 end

@@ -1,6 +1,5 @@
 function exe = which(name, fpath)
 % fileio.which Find executable with name under path
-% we return with double quotes so that paths with spaces will work
 
 arguments
   name string
@@ -15,7 +14,7 @@ fpath = fpath(strlength(fpath)>0);  % sanitize user ""
 
 if gemini3d.fileio.is_absolute_path(name)
   if isfile(name)
-    exe = space_quote(name);
+    exe = name;
     return
   end
 
@@ -47,27 +46,12 @@ for p = fpath
     if isfile(e)
       [ok1, stat] = fileattrib(e);
       if ok1 && (stat.UserExecute == 1 || stat.GroupExecute == 1)
-        exe = space_quote(e);
+        exe = e;
         return
       end
     end
   end
 
 end
-
-end
-
-
-function q = space_quote(p)
-arguments
-  p (1,1) string
-end
-
-if ~contains(p, " ")
-  q = p;
-  return
-end
-
-q = append('"', p, '"');
 
 end

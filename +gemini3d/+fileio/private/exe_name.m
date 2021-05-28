@@ -9,7 +9,4 @@ if ispc
   end
 end
 
-% use expanduser here to avoid bugs across platforms
-exe = gemini3d.fileio.expanduser(exe);
-
 end
