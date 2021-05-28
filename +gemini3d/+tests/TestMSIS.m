@@ -58,7 +58,7 @@ cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a',
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
 catch e
-  if e.identifier == "msis:param:fileNotFound"
+  if contains(e.message, "msis20.parm not found")
     tc.assumeTrue(false, "MSIS 2.0 not enabled")
   else
     rethrow(e)
