@@ -1,5 +1,5 @@
 function exe = which(name, fpath)
-%gemini3d.fileio.which Find executable with name under path
+% fileio.which Find executable with name under path
 % we return with double quotes so that paths with spaces will work
 
 arguments
