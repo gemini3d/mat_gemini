@@ -23,5 +23,5 @@ if ~isfield(dat, 'time')
   dat.time = gemini3d.read.time(filename);
 end
 
-dat = curv_squeeze(dat, vars);
+dat = curv_derived(dat, vars);
 end

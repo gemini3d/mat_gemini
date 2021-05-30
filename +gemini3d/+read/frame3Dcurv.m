@@ -20,6 +20,6 @@ end
 
 dat.filename = filename;
 
-dat = curv_squeeze(dat, vars);
+dat = curv_derived(dat, vars);
 
 end % function

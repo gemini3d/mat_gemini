@@ -17,10 +17,6 @@ end
 dat.filename = filename;
 dat.lxs = size(dat.ne, 1:3);
 
-% squeeze necessary for 2D and doesn't bother 3D
-dat.ne = squeeze(dat.ne);
-
-
 end % function
 
 

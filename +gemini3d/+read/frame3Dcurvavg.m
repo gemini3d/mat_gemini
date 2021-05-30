@@ -20,10 +20,8 @@ end
 dat.filename = filename;
 
 
-%% squeeze is needed for 2D and OK for 3D
 for n = vars
   dat.lxs = size(dat.(n), 1:3);
-  dat.(n) = squeeze(dat.(n));
 end
 
 end % function
