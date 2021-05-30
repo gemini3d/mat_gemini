@@ -63,11 +63,19 @@ tc.verifyEmpty(gemini3d.fileio.absolute_path(string.empty))
 tc.verifyEqual(gemini3d.fileio.absolute_path(""), string(pwd))
 end
 
+function test_makedir(tc)
+d = tempname;
+gemini3d.fileio.makedir(d)
+tc.assertTrue(isfolder(d))
+end
+
 function test_which(tc)
 
 tc.verifyEmpty(gemini3d.fileio.which(string.empty))
 
 n = "matlab";
+% assumes Matlab in environment variable PATH
+tc.assumeNotEmpty(gemini3d.fileio.which(n))
 
 p = fullfile(matlabroot, "bin", n);
 
@@ -80,13 +88,6 @@ else
   tc.verifyFalse(endsWith(exe, ".exe"))
 end
 tc.assertTrue(isfile(exe))
-
-% assumes Matlab in environment variable PATH
-tc.assumeNotEmpty(gemini3d.fileio.which(n))
-
-tc.verifyNotEmpty(gemini3d.fileio.which(n, ''))
-tc.verifyNotEmpty(gemini3d.fileio.which(n, ""))
-tc.verifyNotEmpty(gemini3d.fileio.which(n, string.empty))
 
 end
 
