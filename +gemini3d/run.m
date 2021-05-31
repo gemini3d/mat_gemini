@@ -16,6 +16,8 @@ arguments
   opts.dryrun (1,1) logical = false
 end
 
+import stdlib.sys.subprocess_run
+
 %% ensure all paths are OK
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../setup.m'))
@@ -36,7 +38,7 @@ end
 
 %% assemble run command
 % cmd = create_run(cfg, ~isempty(mpiexec), gemini_exe);
-ret = gemini3d.sys.subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
+ret = subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
 assert(ret == 0, 'Gemini dryrun failed')
 
 if opts.dryrun
@@ -45,7 +47,7 @@ end
 %% run simulation
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
-ret = gemini3d.sys.subprocess_run([gemini_exe, cfg.outdir]);
+ret = subprocess_run([gemini_exe, cfg.outdir]);
 assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function
@@ -58,8 +60,10 @@ arguments
   config_path (1,1) string
 end
 
-config_path = gemini3d.fileio.expanduser(config_path);
-outdir = gemini3d.fileio.expanduser(outdir);
+import stdlib.fileio.expanduser
+
+config_path = expanduser(config_path);
+outdir = expanduser(outdir);
 
 cfg = gemini3d.read.config(config_path,true);
 cfg.outdir = outdir;
@@ -94,6 +98,8 @@ arguments
   gemini_exe (1,1) string
 end
 
+import stdlib.sys.subprocess_run
+
 cmd = [gemini_exe, cfg.outdir, "-dryrun"];
 
 %% dry run
@@ -103,7 +109,7 @@ else
   env = struct.empty;
 end
 
-ret = gemini3d.sys.subprocess_run(cmd, env);
+ret = subprocess_run(cmd, env);
 
 assert(ret == 0, 'Gemini dryrun failed')
 

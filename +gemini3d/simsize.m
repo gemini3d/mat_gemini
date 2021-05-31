@@ -20,19 +20,11 @@ end % function
 
 function lxs = read_h5(path)
 
+import stdlib.hdf5nc.h5variables
+
 fn = fullfile(path, "simsize.h5");
 
-try
-  varnames = hdf5nc.h5variables(fn);
-catch e
-  if e.identifier == "MATLAB:undefinedVarOrClass"
-    cwd = fileparts(mfilename('fullpath'));
-    run(fullfile(cwd, '../setup.m'))
-    varnames = hdf5nc.h5variables(fn);
-  else
-    rethrow(e)
-  end
-end
+varnames = h5variables(fn);
 
 if any(varnames == "lxs")
   lxs = h5read(fn, '/lxs');
@@ -49,9 +41,11 @@ end % function
 
 function lxs = read_nc(path)
 
+import stdlib.hdf5nc.ncvariables
+
 fn = fullfile(path, "simsize.nc");
 
-varnames = hdf5nc.ncvariables(fn);
+varnames = ncvariables(fn);
 
 if any(varnames == "lxs")
   lxs = ncread(fn, '/lxs');

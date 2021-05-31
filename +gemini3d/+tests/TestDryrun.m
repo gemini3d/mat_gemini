@@ -7,13 +7,16 @@ end
 methods(TestMethodSetup)
 
 function setup_sim(tc)
+
+import gemini3d.fileio.download_and_extract
+
 name = "2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.datapath = fullfile(cwd, "data", name);
 
 % get files if needed
-gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))
+download_and_extract(name, fullfile(cwd, "data"))
 
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;

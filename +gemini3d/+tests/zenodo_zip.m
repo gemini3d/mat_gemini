@@ -8,7 +8,9 @@ arguments
   saveplot_fmt (1,:) string = "png"
 end
 
-path = gemini3d.fileio.expanduser(path);
+import stdlib.fileio.expanduser
+
+path = expanduser(path);
 
 if ~contains(glob, '*')
   % if given single directory, will list files in that directory instead of the directory

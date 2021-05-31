@@ -3,16 +3,19 @@ arguments
   direc (1,1) string
 end
 
+import stdlib.fileio.expanduser
+import stdlib.fileio.makedir
+
 addons = matlab.addons.installedAddons();
 assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
 
 freal = 'float64';
 
-direc = gemini3d.fileio.expanduser(direc);
+direc = expanduser(direc);
 
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
-gemini3d.fileio.makedir(pdir)
+makedir(pdir)
 basemagdir = fullfile(direc, 'magfields');
 
 %SIMULATION META-DATA

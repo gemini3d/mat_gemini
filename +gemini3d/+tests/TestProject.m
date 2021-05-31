@@ -23,61 +23,70 @@ end
 methods (Test)
 
 function test_grid(tc)
-  tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, tname);
-  %% get files if needed
-  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
-  %% setup new test data
-  cfg = gemini3d.read.config(test_dir);
-  xg = gemini3d.grid.cartesian(cfg);
+import gemini3d.fileio.download_and_extract
 
-  % path patch
-  cfg.outdir = tc.TestData.outdir;
-  cfg.indat_size = fullfile(cfg.outdir, cfg.indat_size);
-  cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
-  gemini3d.write.grid(cfg, xg);
+tname = "2dew_fang";
 
-  gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
+test_dir = fullfile(tc.TestData.ref_dir, tname);
+%% get files if needed
+download_and_extract(tname, tc.TestData.ref_dir)
+%% setup new test data
+cfg = gemini3d.read.config(test_dir);
+xg = gemini3d.grid.cartesian(cfg);
+
+% path patch
+cfg.outdir = tc.TestData.outdir;
+cfg.indat_size = fullfile(cfg.outdir, cfg.indat_size);
+cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
+gemini3d.write.grid(cfg, xg);
+
+gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
 end
 
 function test_Efield(tc)
-  tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, tname);
-  %% get files if needed
-  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
-  %% setup new test data
-  p = gemini3d.read.config(test_dir);
-  tc.assumeNotEmpty(p, test_dir + " not contain config.nml")
-  E0_dir = p.E0_dir;
-  p.E0_dir = fullfile(tc.TestData.outdir, p.E0_dir);
+import gemini3d.fileio.download_and_extract
 
-  xg = gemini3d.read.grid(test_dir);
+tname = "2dew_fang";
 
-  gemini3d.efield.Efield_BCs(p, xg);
+test_dir = fullfile(tc.TestData.ref_dir, tname);
+%% get files if needed
+download_and_extract(tname, tc.TestData.ref_dir)
+%% setup new test data
+p = gemini3d.read.config(test_dir);
+tc.assumeNotEmpty(p, test_dir + " not contain config.nml")
+E0_dir = p.E0_dir;
+p.E0_dir = fullfile(tc.TestData.outdir, p.E0_dir);
 
-  time = p.times(1):seconds(p.dtE0):p.times(end);
-  gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), 'only', 'efield', "time", time)
+xg = gemini3d.read.grid(test_dir);
+
+gemini3d.efield.Efield_BCs(p, xg);
+
+time = p.times(1):seconds(p.dtE0):p.times(end);
+gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), 'only', 'efield', "time", time)
 end
 
 
 function test_precip(tc)
-  tname = "2dew_fang";
 
-  test_dir = fullfile(tc.TestData.ref_dir, tname);
-  %% get files if needed
-  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
-  %% setup new test data
-  p = gemini3d.read.config(test_dir);
-  prec_dir = p.prec_dir;
-  p.prec_dir = fullfile(tc.TestData.outdir, p.prec_dir);
+import gemini3d.fileio.download_and_extract
 
-  xg = gemini3d.read.grid(test_dir);
+tname = "2dew_fang";
 
-  gemini3d.particles.particles_BCs(p, xg);
+test_dir = fullfile(tc.TestData.ref_dir, tname);
+%% get files if needed
+download_and_extract(tname, tc.TestData.ref_dir)
+%% setup new test data
+p = gemini3d.read.config(test_dir);
+prec_dir = p.prec_dir;
+p.prec_dir = fullfile(tc.TestData.outdir, p.prec_dir);
 
-  gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir),"only", "precip", "time", p.times)
+xg = gemini3d.read.grid(test_dir);
+
+gemini3d.particles.particles_BCs(p, xg);
+
+gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir),"only", "precip", "time", p.times)
 end
 
 function test_Arunner(tc, file_type, name)

@@ -8,7 +8,9 @@ arguments
   namedargs.resolution (1,1) {mustBeInteger,mustBePositive} = 150
 end
 
-filename = gemini3d.fileio.expanduser(filename);
+import stdlib.fileio.expanduser
+
+filename = expanduser(filename);
 
 if gemini3d.version_atleast(version, '9.8.0.1451342')
   exportgraphics(handle, filename, 'resolution', namedargs.resolution)

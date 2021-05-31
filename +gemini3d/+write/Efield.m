@@ -5,9 +5,11 @@ arguments
   file_format (1,1) string
 end
 
+import stdlib.fileio.makedir
+
 nan_check(E)
 
-gemini3d.fileio.makedir(dir_out)
+makedir(dir_out)
 
 switch file_format
   case 'h5', write_hdf5(dir_out, E)
@@ -28,7 +30,8 @@ end % function
 
 
 function write_hdf5(dir_out, E)
-import hdf5nc.h5save
+
+import stdlib.hdf5nc.h5save
 
 
 fn = fullfile(dir_out, 'simsize.h5');
@@ -71,7 +74,8 @@ end % function
 
 
 function write_nc4(dir_out, E)
-import hdf5nc.ncsave
+
+import stdlib.hdf5nc.ncsave
 
 fn = fullfile(dir_out, 'simsize.nc');
 if isfile(fn), delete(fn), end

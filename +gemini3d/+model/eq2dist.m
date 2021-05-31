@@ -6,6 +6,9 @@ arguments
   xg (1,1) struct
 end
 
+import stdlib.fileio.extract_zstd
+import stdlib.fileio.makedir
+
 peq = read_equilibrium(p);
 %% read equilibrium grid
 [xgin, ok] = gemini3d.read.grid(p.eq_dir);
@@ -63,7 +66,7 @@ if ~isfile(p.eq_archive)
   else
     web_opt = weboptions('CertificateFilename', 'default');
   end
-  gemini3d.fileio.makedir(p.eq_dir)
+  makedir(p.eq_dir)
   websave(p.eq_archive, p.eq_url, web_opt);
 end
 
@@ -73,7 +76,7 @@ switch arc_type
   case ".zip", unzip(p.eq_archive, fullfile(p.eq_dir, '..'))
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(p.eq_archive, p.eq_dir)
-  case {".zst", ".zstd"}, gemini3d.fileio.extract_zstd(p.eq_archive, p.eq_dir)
+  case {".zst", ".zstd"}, extract_zstd(p.eq_archive, p.eq_dir)
   otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)
 end
 

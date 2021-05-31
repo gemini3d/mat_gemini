@@ -8,6 +8,8 @@ arguments
   refdir (1,1) string
 end
 
+import stdlib.fileio.makedir
+
 assert(all(size(A) == size(B)), "size of new and ref arrays don't match")
 assert(ndims(A) <= 3, "for 3D or 2D arrays only")
 
@@ -57,7 +59,7 @@ ttxt = name + "  " + tstr + "maxDiff: " + string(maxdiff);
 sgtitle(fg, ttxt)
 
 plot_dir = fullfile(newdir, "plot_diff");
-gemini3d.fileio.makedir(plot_dir)
+makedir(plot_dir)
 
 fn = fullfile(plot_dir, name + "-" + tstr + ".png");
 disp("write: " + fn)

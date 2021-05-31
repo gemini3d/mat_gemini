@@ -21,7 +21,9 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
-filename = gemini3d.fileio.expanduser(filename);
+import stdlib.fileio.expanduser
+
+filename = expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
@@ -87,13 +89,16 @@ arguments
   cfg struct
 end
 
+import stdlib.hdf5nc.h5variables
+import stdlib.hdf5nc.ncvariables
+
 [~,~,ext] = fileparts(filename);
 % regardless of what the output type is if "nsall" exists we need
 % to do a full read; this is a bit messy because loadframe will check
 % again below if h5 is used...
 switch lower(ext)
-  case '.h5', var_names = hdf5nc.h5variables(filename);
-  case '.nc', var_names = hdf5nc.ncvariables(filename);
+  case '.h5', var_names = h5variables(filename);
+  case '.nc', var_names = ncvariables(filename);
   case '.dat', var_names = string.empty;
   otherwise, error('gemini3d:read:frame:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end

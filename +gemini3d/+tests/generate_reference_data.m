@@ -19,8 +19,10 @@ arguments
   opts.file_format (1,1) string = "h5"
 end
 
-topdir = gemini3d.fileio.expanduser(topdir);
-outdir = gemini3d.fileio.expanduser(outdir);
+import stdlib.fileio.expanduser
+
+topdir = expanduser(topdir);
+outdir = expanduser(outdir);
 
 assert(isfolder(topdir), '%s is not a folder', topdir)
 

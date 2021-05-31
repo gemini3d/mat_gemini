@@ -5,9 +5,11 @@ arguments
   namelist (1,1) string
 end
 
+import stdlib.fileio.expanduser
+
 params = struct();
 
-filename = gemini3d.fileio.expanduser(filename);
+filename = expanduser(filename);
 assert(isfile(filename),  '%s not found.', filename)
 
 fid = fopen(filename);

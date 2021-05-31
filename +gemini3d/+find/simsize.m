@@ -7,7 +7,9 @@ arguments
   required (1,1) logical = false
 end
 
-apath = gemini3d.fileio.expanduser(apath);
+import stdlib.fileio.expanduser
+
+apath = expanduser(apath);
 
 if isfile(apath)
   apath = fileparts(apath);

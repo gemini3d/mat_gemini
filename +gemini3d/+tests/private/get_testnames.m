@@ -10,9 +10,11 @@ arguments
   only (1,:) string = string.empty
 end
 
+import stdlib.fileio.expanduser
+
 names = string.empty;
 j = 1;
-dirs = dir(gemini3d.fileio.expanduser(topdir));
+dirs = dir(expanduser(topdir));
 for i = 1:length(dirs)
   if dirs(i).isdir && length(dirs(i).name) > 2
     [~, name] = fileparts(dirs(i).name);

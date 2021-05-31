@@ -6,11 +6,13 @@ arguments
   opt.required (1,1) logical = false
 end
 
+import stdlib.fileio.expanduser
+
 filename = string.empty;
 
 stem0 = gemini3d.datelab(time);
 
-direc = gemini3d.fileio.expanduser(direc);
+direc = expanduser(direc);
 % so that we return a usable path
 
 for ext = opt.suffix

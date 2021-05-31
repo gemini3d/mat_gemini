@@ -13,11 +13,6 @@ end
 xg = struct.empty;
 ok = false;
 
-%% ensure HDF5/NetCDF interface is loaded
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
-
-
 %% load
 switch suffix
   case '.h5', xg = read_hdf5(apath);
@@ -39,9 +34,11 @@ end % function
 
 function xgf = read_hdf5(apath)
 
+import stdlib.hdf5nc.h5variables
+
 fn = fullfile(apath, 'simgrid.h5');
 
-for v = hdf5nc.h5variables(fn)
+for v = h5variables(fn)
   xgf.(v) = h5read(fn, "/" + v);
 end
 
@@ -54,9 +51,11 @@ end  % function read_hdf5
 
 function xgf = read_nc4(apath)
 
+import stdlib.hdf5nc.ncvariables
+
 fn = fullfile(apath, 'simgrid.nc');
 
-for v = hdf5nc.ncvariables(fn)
+for v = ncvariables(fn)
   xgf.(v) = ncread(fn, v);
 end
 

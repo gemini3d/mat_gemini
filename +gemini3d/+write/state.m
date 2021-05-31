@@ -38,9 +38,11 @@ end % function
 
 
 function write_hdf5(fn, ics)
-import hdf5nc.h5save
 
-fn = gemini3d.fileio.with_suffix(fn, ".h5");
+import stdlib.hdf5nc.h5save
+import stdlib.fileio.with_suffix
+
+fn = with_suffix(fn, ".h5");
 
 disp("write " + fn)
 if isfile(fn), delete(fn), end
@@ -70,9 +72,11 @@ end % function
 
 
 function write_nc4(fn, ics)
-import hdf5nc.ncsave
 
-fn = gemini3d.fileio.with_suffix(fn, '.nc');
+import stdlib.hdf5nc.ncsave
+import stdlib.fileio.with_suffix
+
+fn = with_suffix(fn, '.nc');
 
 disp("write " + fn)
 if isfile(fn), delete(fn), end
@@ -106,7 +110,9 @@ end % function
 
 function write_raw(fn,ics)
 
-fn = gemini3d.fileio.with_suffix(fn, '.dat');
+import stdlib.fileio.with_suffix
+
+fn = with_suffix(fn, '.dat');
 
 disp("write " + fn)
 fid=fopen(fn, 'w');

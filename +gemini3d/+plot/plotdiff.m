@@ -13,11 +13,10 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, "../../setup.m"))
+import stdlib.fileio.expanduser
 
-ref_path = gemini3d.fileio.expanduser(ref_path);
-new_path = gemini3d.fileio.expanduser(new_path);
+ref_path = expanduser(ref_path);
+new_path = expanduser(new_path);
 
 if isempty(time)
   assert(isfile(ref_path), "%s is not a file", ref_path)

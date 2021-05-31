@@ -6,6 +6,13 @@ end
 
 methods(TestMethodSetup)
 
+function setup_stdlib(tc) %#ok<MANU>
+
+cwd = fileparts(mfilename('fullpath'));
+run(fullfile(cwd, '../../setup.m'))
+
+end
+
 function setup_grid(tc)
 lx = [4, 2, 3];
 [glon, alt, glat] = meshgrid(linspace(-147, -145, lx(2)), linspace(100e3, 200e3, lx(1)), linspace(65, 66, lx(3)));

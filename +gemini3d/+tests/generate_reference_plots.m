@@ -4,7 +4,9 @@ arguments
   only (1,:) string = string.empty
 end
 
-topdir = gemini3d.fileio.expanduser(topdir);
+import stdlib.fileio.expanduser
+
+topdir = expanduser(topdir);
 
 names = get_testnames(topdir, only);
 

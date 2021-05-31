@@ -3,9 +3,11 @@ arguments
   fn (1,1) string
   vars (1,:) string
 end
+
+import stdlib.hdf5nc.ncvariables
 %% SIMULATION RESULTS
 
-fvars = hdf5nc.ncvariables(fn);
+fvars = ncvariables(fn);
 
 if any(contains(vars, ["ne", "ns"]))
 dat.ns = ncread(fn, "nsall");

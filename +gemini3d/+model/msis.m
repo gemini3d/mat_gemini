@@ -21,26 +21,30 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
+import stdlib.fileio.absolute_path
+import stdlib.fileio.expanduser
+import stdlib.fileio.which
+import stdlib.sys.subprocess_run
+import gemini3d.sys.cmake
+import stdlib.hdf5nc.h5save
+
 if isfield(p, "msis_version")
   msis_version = p.msis_version;
 else
   msis_version = 0;
 end
 
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
-
 %% path to msis executable
-src_dir = gemini3d.fileio.expanduser(getenv("GEMINI_ROOT"));
+src_dir = expanduser(getenv("GEMINI_ROOT"));
 assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
 build_dir = fullfile(src_dir, "build");
-exe = gemini3d.fileio.which("msis_setup", build_dir);
+exe = which("msis_setup", build_dir);
 
 %% build exe if not present
 if isempty(exe)
-  gemini3d.sys.cmake(src_dir, build_dir, "msis_setup")
+  cmake(src_dir, build_dir, "msis_setup")
 end
-exe = gemini3d.fileio.which("msis_setup", build_dir);
+exe = which("msis_setup", build_dir);
 assert(~isempty(exe), 'MSIS setup executable not found: %s', exe)
 
 %% SPECIFY SIZES ETC.
@@ -69,7 +73,7 @@ if isfield(p, "msis_infile")
 else
   msis_infile = fullfile(fileparts(p.indat_size), "msis_setup_in.h5");
 end
-msis_infile = gemini3d.fileio.absolute_path(msis_infile);
+msis_infile = absolute_path(msis_infile);
 if ~isfolder(fileparts(msis_infile))
   warning('model:msis:FolderNotFound', 'msis_infile not an absolute path. Falling back to tempdir')
   msis_infile = fullfile(tempdir, 'msis_setup_in.h5');
@@ -80,7 +84,7 @@ if isfield(p, "msis_outfile")
 else
   msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
 end
-msis_outfile = gemini3d.fileio.absolute_path(msis_outfile);
+msis_outfile = absolute_path(msis_outfile);
 if ~isfolder(fileparts(msis_outfile))
   warning('model:msis:FolderNotFound', 'msis_outfile not an absolute path. Falling back to tempdir')
   msis_outfile = fullfile(tempdir, 'msis_setup_in.h5');
@@ -93,17 +97,17 @@ if isfile(msis_outfile)
   delete(msis_outfile)
 end
 
-hdf5nc.h5save(msis_infile, "/doy", doy)
-hdf5nc.h5save(msis_infile, "/UTsec", UTsec0)
-hdf5nc.h5save(msis_infile, "/f107a", f107a)
-hdf5nc.h5save(msis_infile, "/f107", f107)
-hdf5nc.h5save(msis_infile, "/Ap", repmat(ap, [1, 7]))
+h5save(msis_infile, "/doy", doy)
+h5save(msis_infile, "/UTsec", UTsec0)
+h5save(msis_infile, "/f107a", f107a)
+h5save(msis_infile, "/f107", f107)
+h5save(msis_infile, "/Ap", repmat(ap, [1, 7]))
 % float32 to save disk IO time/space
 % ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not
 % suitable for Fortran
-hdf5nc.h5save(msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
-hdf5nc.h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
-hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
+h5save(msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
+h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
+h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
 if msis_version == 20
@@ -116,7 +120,7 @@ if msis_version == 20
   old_pwd = pwd;
   cd(build_dir)
 end
-[status, msg] = gemini3d.sys.subprocess_run([exe, msis_infile, msis_outfile, int2str(msis_version)]);
+[status, msg] = subprocess_run([exe, msis_infile, msis_outfile, int2str(msis_version)]);
 % output written to file
 if msis_version == 20
   cd(old_pwd)
