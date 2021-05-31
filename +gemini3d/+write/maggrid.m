@@ -3,9 +3,11 @@ function maggrid(filename,xmag)
 arguments
   filename (1,1) string
   xmag (1,1) struct
-end %arguments
+end
 
-filename = gemini3d.fileio.expanduser(filename);
+import stdlib.fileio.expanduser
+
+filename = expanduser(filename);
 
 % error checking on struct fields
 assert(isfield(xmag,"R"),"R field of xmag must be defined");
@@ -39,6 +41,8 @@ end %function
 
 function writemagh5(fn,R,THETA,PHI,gridsize)
 
+import stdlib.hdf5nc.h5save
+
 % hdf5 files can optionally store a gridsize variable which tells readers how to
 % reshape the data into 2D or 3D arrays.
 % NOTE: the Fortran magcalc.f90 is looking for flat list.
@@ -47,11 +51,11 @@ disp("write: " + fn)
 
 freal = 'float32';      % default input files to real32
 
-hdf5nc.h5save(fn, "/lpoints",numel(R),"type",freal);
-hdf5nc.h5save(fn, "/r",R(:),"type",freal);
-hdf5nc.h5save(fn, "/theta",THETA(:),"type",freal);
-hdf5nc.h5save(fn, "/phi",PHI(:),"type",freal);
-hdf5nc.h5save(fn, "/gridsize",gridsize,"type","int32");
+h5save(fn, "/lpoints",numel(R),"type",freal);
+h5save(fn, "/r",R(:),"type",freal);
+h5save(fn, "/theta",THETA(:),"type",freal);
+h5save(fn, "/phi",PHI(:),"type",freal);
+h5save(fn, "/gridsize",gridsize,"type","int32");
 
 end %function
 

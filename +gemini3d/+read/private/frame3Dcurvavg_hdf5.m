@@ -3,10 +3,13 @@ arguments
   filename (1,1) string
   vars (1,:) string
 end
+
+import stdlib.hdf5nc.h5variables
+
 %% SIMULATIONS RESULTS
 dat.filename = filename;
 
-fvars = hdf5nc.h5variables(filename);
+fvars = h5variables(filename);
 
 for k = ["ne", "J1", "J2", "J3"]
   if any(vars == k)

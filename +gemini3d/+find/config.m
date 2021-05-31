@@ -6,7 +6,9 @@ arguments
   required (1,1) logical = false
 end
 
-direc = gemini3d.fileio.expanduser(direc);
+import stdlib.fileio.expanduser
+
+direc = expanduser(direc);
 
 filename = string.empty;
 

@@ -6,6 +6,10 @@ arguments
   out_dir string = string.empty
 end
 
+import gemini3d.fileio.make_valid_paths
+import stdlib.fileio.makedir
+import stdlib.fileio.copyfile
+
 assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
 
 %% parse input
@@ -18,12 +22,12 @@ if ~isempty(out_dir)
   cfg.outdir = out_dir;
 end
 
-cfg = gemini3d.fileio.make_valid_paths(cfg);
+cfg = make_valid_paths(cfg);
 
-gemini3d.fileio.makedir(cfg.input_dir)
+makedir(cfg.input_dir)
 disp("copying config.nml to " + cfg.input_dir)
 % specify filename in case it wasn't config.nml
-gemini3d.fileio.copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
+copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
 
 
 %% is this equilibrium or interpolated simulation

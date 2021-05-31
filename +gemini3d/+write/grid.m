@@ -6,7 +6,8 @@ arguments
   xg (1,1) struct
 end
 
-import gemini3d.fileio.with_suffix
+import stdlib.fileio.with_suffix
+import stdlib.fileio.makedir
 
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../../setup.m'))
@@ -26,7 +27,7 @@ end
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
 [gdir, ~, suffix] = fileparts(p.indat_grid);
-gemini3d.fileio.makedir(gdir)
+makedir(gdir)
 
 if isfield(p, 'file_format')
   file_format = p.file_format;
@@ -65,17 +66,18 @@ end % function
 
 
 function write_hdf5(p, xg)
-import gemini3d.fileio.with_suffix
-% import hdf5nc.h5save is not OK because it will always run before earlier
-% try-catch logic
+
+import stdlib.fileio.with_suffix
+import stdlib.hdf5nc.h5save
+
 %% size
 fn = with_suffix(p.indat_size, '.h5');
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
-hdf5nc.h5save(fn, '/lx1', xg.lx(1), "type", "int32")
-hdf5nc.h5save(fn, '/lx2', xg.lx(2), "type", "int32")
-hdf5nc.h5save(fn, '/lx3', xg.lx(3), "type", "int32")
+h5save(fn, '/lx1', xg.lx(1), "type", "int32")
+h5save(fn, '/lx2', xg.lx(2), "type", "int32")
+h5save(fn, '/lx3', xg.lx(3), "type", "int32")
 
 lx1 = xg.lx(1);
 lx2 = xg.lx(2);
@@ -89,58 +91,58 @@ if isfile(fn), delete(fn), end
 freal = 'float32';
 
 for i = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h"]
-  hdf5nc.h5save(fn, "/"+i, xg.(i), "type", freal)
+  h5save(fn, "/"+i, xg.(i), "type", freal)
 end
 
 %MZ - squeeze() for dipole grids
 for i = ["x3", "x3i", "dx3b", "dx3h"]
-  hdf5nc.h5save(fn, "/"+i, squeeze(xg.(i)), "type", freal)
+  h5save(fn, "/"+i, squeeze(xg.(i)), "type", freal)
 end
 
-hdf5nc.h5save(fn, '/h1', xg.h1, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
-hdf5nc.h5save(fn, '/h2', xg.h2, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
-hdf5nc.h5save(fn, '/h3', xg.h3, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
+h5save(fn, '/h1', xg.h1, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
+h5save(fn, '/h2', xg.h2, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
+h5save(fn, '/h3', xg.h3, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
 
-hdf5nc.h5save(fn, '/h1x1i', xg.h1x1i, "size", [lx1+1, lx2, lx3], "type", freal)
-hdf5nc.h5save(fn, '/h2x1i', xg.h2x1i, "size", [lx1+1, lx2, lx3], "type", freal)
-hdf5nc.h5save(fn, '/h3x1i', xg.h3x1i, "size", [lx1+1, lx2, lx3], "type", freal)
+h5save(fn, '/h1x1i', xg.h1x1i, "size", [lx1+1, lx2, lx3], "type", freal)
+h5save(fn, '/h2x1i', xg.h2x1i, "size", [lx1+1, lx2, lx3], "type", freal)
+h5save(fn, '/h3x1i', xg.h3x1i, "size", [lx1+1, lx2, lx3], "type", freal)
 
-hdf5nc.h5save(fn, '/h1x2i', xg.h1x2i, "size", [lx1, lx2+1, lx3], "type", freal)
-hdf5nc.h5save(fn, '/h2x2i', xg.h2x2i, "size", [lx1, lx2+1, lx3], "type", freal)
-hdf5nc.h5save(fn, '/h3x2i', xg.h3x2i, "size", [lx1, lx2+1, lx3], "type", freal)
+h5save(fn, '/h1x2i', xg.h1x2i, "size", [lx1, lx2+1, lx3], "type", freal)
+h5save(fn, '/h2x2i', xg.h2x2i, "size", [lx1, lx2+1, lx3], "type", freal)
+h5save(fn, '/h3x2i', xg.h3x2i, "size", [lx1, lx2+1, lx3], "type", freal)
 
-hdf5nc.h5save(fn, '/h1x3i', xg.h1x3i, "size", [lx1, lx2, lx3+1], "type", freal)
-hdf5nc.h5save(fn, '/h2x3i', xg.h2x3i, "size", [lx1, lx2, lx3+1], "type", freal)
-hdf5nc.h5save(fn, '/h3x3i', xg.h3x3i, "size", [lx1, lx2, lx3+1], "type", freal)
+h5save(fn, '/h1x3i', xg.h1x3i, "size", [lx1, lx2, lx3+1], "type", freal)
+h5save(fn, '/h2x3i', xg.h2x3i, "size", [lx1, lx2, lx3+1], "type", freal)
+h5save(fn, '/h3x3i', xg.h3x3i, "size", [lx1, lx2, lx3+1], "type", freal)
 
 for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
-  hdf5nc.h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3], "type", freal)
+  h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3], "type", freal)
 end
 
 % MZ - squeeze() for singleton dimensions
-%hdf5nc.h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
-hdf5nc.h5save(fn, '/I', xg.I, "size", [lx2, lx3], "type", freal)
+%h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
+h5save(fn, '/I', xg.I, "size", [lx2, lx3], "type", freal)
 
 
 for i = ["e1","e2","e3","er","etheta","ephi"]
-  hdf5nc.h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)
+  h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)
 end
 
 if (isfield(xg,"glonctr"))
-  hdf5nc.h5save(fn,"/glonctr",xg.glonctr)
-  hdf5nc.h5save(fn,"/glatctr",xg.glatctr)
+  h5save(fn,"/glonctr",xg.glonctr)
+  h5save(fn,"/glatctr",xg.glatctr)
 end %if
 
 %% metadata
 % seems HDF5 is too buggy for strings in Matlab
 % if ~verLessThan('matlab', '9.8')
 %   try
-%     hdf5nc.h5save(fn, '/meta/matlab_version', version())
+%     h5save(fn, '/meta/matlab_version', version())
 %     if isfield(xg, 'git')
-%       hdf5nc.h5save(fn, '/meta/git_version', xg.git.git_version)
-%       hdf5nc.h5save(fn, '/meta/git_commit', xg.git.commit)
-%       hdf5nc.h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
-%       hdf5nc.h5save(fn, '/meta/git_branch', xg.git.branch)
+%       h5save(fn, '/meta/git_version', xg.git.git_version)
+%       h5save(fn, '/meta/git_commit', xg.git.commit)
+%       h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
+%       h5save(fn, '/meta/git_branch', xg.git.branch)
 %     end
 %   catch excp
 %     warning('could not write metadata to HDF5, logged same metadata to setup_log.json')
@@ -151,9 +153,10 @@ end % function
 
 
 function write_nc4(p, xg)
-import gemini3d.fileio.with_suffix
-% import hdf5nc.ncsave is not OK because it will always run before earlier
-% try-catch logic
+
+import stdlib.fileio.with_suffix
+import stdlib.hdf5nc.ncsave
+
 %% size
 fn = with_suffix(p.indat_size, '.nc');
 disp("write " + fn)
@@ -161,9 +164,9 @@ if isfile(fn)
   delete(fn)
 end
 
-hdf5nc.ncsave(fn, 'lx1', int32(xg.lx(1)))
-hdf5nc.ncsave(fn, 'lx2', int32(xg.lx(2)))
-hdf5nc.ncsave(fn, 'lx3', int32(xg.lx(3)))
+ncsave(fn, 'lx1', int32(xg.lx(1)))
+ncsave(fn, 'lx2', int32(xg.lx(2)))
+ncsave(fn, 'lx3', int32(xg.lx(3)))
 
 lx1 = xg.lx(1);
 lx2 = xg.lx(2);
@@ -196,50 +199,50 @@ dimx2ghost = {'dimx2ghost', lx2 + Ng};
 dimx3ghost = {'dimx3ghost', lx3 + Ng};
 dimecef = {'ecef', 3};
 
-hdf5nc.ncsave(fn, 'x1', xg.x1, "dims", dimx1ghost, "type", freal)
-hdf5nc.ncsave(fn, 'x1i', xg.x1i, "dims", dimx1i, "type", freal)
-hdf5nc.ncsave(fn, 'dx1b', xg.dx1b, "dims", dimx1d, "type", freal)
-hdf5nc.ncsave(fn, 'dx1h', xg.dx1h, "dims", dimx1, "type", freal)
-hdf5nc.ncsave(fn, 'x2', xg.x2, "dims", dimx2ghost, "type", freal)
-hdf5nc.ncsave(fn, 'x2i', xg.x2i, "dims", dimx2i, "type", freal)
-hdf5nc.ncsave(fn, 'dx2b', xg.dx2b, "dims", dimx2d, "type", freal)
-hdf5nc.ncsave(fn, 'dx2h', xg.dx2h, "dims", dimx2, "type", freal)
-hdf5nc.ncsave(fn, 'x3', xg.x3, "dims", dimx3ghost, "type", freal)
-hdf5nc.ncsave(fn, 'x3i', xg.x3i, "dims", dimx3i, "type", freal)
-hdf5nc.ncsave(fn, 'dx3b', xg.dx3b, "dims", dimx3d, "type", freal)
-hdf5nc.ncsave(fn, 'dx3h', xg.dx3h, "dims", dimx3, "type", freal)
+ncsave(fn, 'x1', xg.x1, "dims", dimx1ghost, "type", freal)
+ncsave(fn, 'x1i', xg.x1i, "dims", dimx1i, "type", freal)
+ncsave(fn, 'dx1b', xg.dx1b, "dims", dimx1d, "type", freal)
+ncsave(fn, 'dx1h', xg.dx1h, "dims", dimx1, "type", freal)
+ncsave(fn, 'x2', xg.x2, "dims", dimx2ghost, "type", freal)
+ncsave(fn, 'x2i', xg.x2i, "dims", dimx2i, "type", freal)
+ncsave(fn, 'dx2b', xg.dx2b, "dims", dimx2d, "type", freal)
+ncsave(fn, 'dx2h', xg.dx2h, "dims", dimx2, "type", freal)
+ncsave(fn, 'x3', xg.x3, "dims", dimx3ghost, "type", freal)
+ncsave(fn, 'x3i', xg.x3i, "dims", dimx3i, "type", freal)
+ncsave(fn, 'dx3b', xg.dx3b, "dims", dimx3d, "type", freal)
+ncsave(fn, 'dx3h', xg.dx3h, "dims", dimx3, "type", freal)
 
-hdf5nc.ncsave(fn, 'h1', xg.h1, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
-hdf5nc.ncsave(fn, 'h2', xg.h2, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
-hdf5nc.ncsave(fn, 'h3', xg.h3, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
+ncsave(fn, 'h1', xg.h1, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
+ncsave(fn, 'h2', xg.h2, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
+ncsave(fn, 'h3', xg.h3, "dims", [dimx1ghost, dimx2ghost, dimx3ghost], "type", freal)
 
-hdf5nc.ncsave(fn, 'h1x1i', xg.h1x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
-hdf5nc.ncsave(fn, 'h2x1i', xg.h2x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
-hdf5nc.ncsave(fn, 'h3x1i', xg.h3x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
+ncsave(fn, 'h1x1i', xg.h1x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
+ncsave(fn, 'h2x1i', xg.h2x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
+ncsave(fn, 'h3x1i', xg.h3x1i, "dims", [dimx1i, dimx2, dimx3], "type", freal)
 
-hdf5nc.ncsave(fn, 'h1x2i', xg.h1x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
-hdf5nc.ncsave(fn, 'h2x2i', xg.h2x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
-hdf5nc.ncsave(fn, 'h3x2i', xg.h3x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
+ncsave(fn, 'h1x2i', xg.h1x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
+ncsave(fn, 'h2x2i', xg.h2x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
+ncsave(fn, 'h3x2i', xg.h3x2i, "dims", [dimx1, dimx2i, dimx3], "type", freal)
 
-hdf5nc.ncsave(fn, 'h1x3i', xg.h1x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
-hdf5nc.ncsave(fn, 'h2x3i', xg.h2x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
-hdf5nc.ncsave(fn, 'h3x3i', xg.h3x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
+ncsave(fn, 'h1x3i', xg.h1x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
+ncsave(fn, 'h2x3i', xg.h2x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
+ncsave(fn, 'h3x3i', xg.h3x3i, "dims", [dimx1, dimx2, dimx3i], "type", freal)
 
 for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "theta","phi","x","y","z"]
-  hdf5nc.ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3], "type", freal)
+  ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3], "type", freal)
 end
 
-hdf5nc.ncsave(fn, 'I', xg.I, "dims", [dimx2, dimx3], "type", freal)
+ncsave(fn, 'I', xg.I, "dims", [dimx2, dimx3], "type", freal)
 
 for i = ["e1","e2","e3","er","etheta","ephi"]
-  hdf5nc.ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3, dimecef], "type", freal)
+  ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3, dimecef], "type", freal)
 end
 
 end % function
 
 
 function write_raw(p, xg)
-import gemini3d.fileio.with_suffix
+import stdlib.fileio.with_suffix
 freal = 'float64';
 
 %% size

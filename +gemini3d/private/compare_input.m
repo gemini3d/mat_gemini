@@ -6,16 +6,19 @@ arguments
   file_format string = string.empty
 end
 
-assert(~gemini3d.fileio.samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
+import stdlib.fileio.samepath
+import gemini3d.fileio.make_valid_paths
+
+assert(~samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
 
 %% check simulation grid
 compare_grid(new_dir, ref_dir, tol.rtol, tol.atol)
 
 %% check initial condition data
-ref_params = gemini3d.fileio.make_valid_paths(gemini3d.read.config(ref_dir), ref_dir);
+ref_params = make_valid_paths(gemini3d.read.config(ref_dir), ref_dir);
 ref = gemini3d.read.frame3Dcurvnoelec(ref_params.indat_file);
 
-new_params = gemini3d.fileio.make_valid_paths(gemini3d.read.config(new_dir), new_dir, file_format);
+new_params = make_valid_paths(gemini3d.read.config(new_dir), new_dir, file_format);
 new = gemini3d.read.frame3Dcurvnoelec(new_params.indat_file);
 
 assert(~isempty(new_params.times), "simulation input has zero duration")

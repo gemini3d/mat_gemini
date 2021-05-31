@@ -5,7 +5,11 @@ TestData
 end
 
 methods(TestMethodSetup)
+
 function setup_env(tc)
+
+import gemini3d.fileio.download_and_extract
+
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
 
@@ -15,7 +19,7 @@ tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 % setup so that hdf5nc is present
 run(fullfile(cwd, "../../setup.m"))
 
-gemini3d.fileio.download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
+download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
 
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;

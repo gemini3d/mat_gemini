@@ -9,7 +9,7 @@ name = "gemini3d.tests";
 suite = testsuite(name);
 
 
-runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Detailed);
+runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Concise);
 
 if getenv("CI") == "true"
   mkdir('code-coverage');

@@ -11,20 +11,20 @@ gemini3d_dirname = "gemini3d";
 addpath(cwd)
 setenv('MATGEMINI', cwd)
 
-%% ensure HDF5 submodule is present
-hdf5nc_dir = fullfile(cwd, "matlab-hdf5");
-if ~isfolder(fullfile(hdf5nc_dir, "+hdf5nc"))
+%% ensure matlab-stdlib is present
+stdlib_dir = fullfile(cwd, "matlab-stdlib");
+if ~isfolder(fullfile(stdlib_dir, "+stdlib"))
   cmd = "git submodule update --init";
-  assert(system(cmd) == 0, "could not update Matlab-HDF5 submodule. Please make a GitHub Issue for this.")
+  assert(system(cmd) == 0, "could not update Matlab-stdlib submodule. Please make a GitHub Issue for this.")
 end
 
-addpath(hdf5nc_dir)
+addpath(stdlib_dir)
 %% fix MacOS PATH since ZSH isn't populated into Matlab
 fix_macos()
 %% Get Gemini3D if not present
 gemini_root = getenv("GEMINI_ROOT");
 if isempty(gemini_root)
-  gemini_root = gemini3d.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
+  gemini_root = stdlib.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
 end
 
 canary = fullfile(gemini_root, "CMakeLists.txt");

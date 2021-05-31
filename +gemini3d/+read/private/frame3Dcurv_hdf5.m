@@ -4,8 +4,10 @@ arguments
   vars (1,:) string
 end
 
+import stdlib.hdf5nc.h5variables
+
 %% SIMULATION RESULTS
-fvars = hdf5nc.h5variables(fn);
+fvars = h5variables(fn);
 
 if any(contains(vars, ["ne", "ns"]))
 dat.ns = h5read(fn, '/nsall');

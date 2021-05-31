@@ -25,8 +25,10 @@ end %function
 
 function time = time_h5(file)
 
+import stdlib.hdf5nc.h5variables
+
 time = datetime.empty;
-[vars, grps] = hdf5nc.h5variables(file);
+[vars, grps] = h5variables(file);
 
 if ~(any(vars == "ymd") || any(grps == "/time"))
   return
@@ -34,7 +36,7 @@ end
 
 if any(grps == "/time")
   i = "/time";
-  vars = hdf5nc.h5variables(file, '/time');
+  vars = h5variables(file, '/time');
 else
   i = "";
 end
@@ -53,8 +55,10 @@ end
 
 function time = time_nc(file)
 
+import stdlib.hdf5nc.ncvariables
+
 time = datetime.empty;
-vars = hdf5nc.ncvariables(file);
+vars = ncvariables(file);
 
 if any(vars == "ymd")
   d = ncread(file, 'ymd');

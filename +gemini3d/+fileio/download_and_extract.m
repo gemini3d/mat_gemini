@@ -9,7 +9,10 @@ arguments
   url_ini string = string.empty
 end
 
-data_dir = gemini3d.fileio.expanduser(data_dir);
+import stdlib.fileio.expanduser
+import stdlib.fileio.extract_zstd
+
+data_dir = expanduser(data_dir);
 test_dir = fullfile(data_dir, name);
 if isfolder(test_dir)
   return
@@ -24,7 +27,7 @@ switch arc_type
   case ".zip", unzip(archive, data_dir)
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(archive, test_dir)
-  case {".zst", ".zstd"}, gemini3d.fileio.extract_zstd(archive, test_dir)
+  case {".zst", ".zstd"}, extract_zstd(archive, test_dir)
   otherwise, error("gemini3d:fileio:download_and_extract", "unknown reference archive type: " + arc_type)
 end
 
@@ -33,11 +36,13 @@ end % function
 
 function archive = download_data(name, data_dir, url_file)
 
+import stdlib.fileio.makedir
+
 if isempty(url_file)
   url_file = fullfile(fileparts(mfilename('fullpath')), "../+tests/ref_data.json");
 end
 
-gemini3d.fileio.makedir(data_dir)
+makedir(data_dir)
 
 urls = jsondecode(fileread(url_file));
 
@@ -65,16 +70,19 @@ end
 
 
 function check_data(name, archive, urls)
+arguments
+  name (1,1) string
+  archive (1,1) string
+  urls (1,1) struct
+end
+
+import stdlib.fileio.sha256sum
 
 name = matlab.lang.makeValidName(name);
 
-for k = ["sha256", "md5"]
-  if isfield(urls.(name), k)
-    hash = gemini3d.fileio.filehash(archive, k);
-    if hash ~= urls.(name).(k)
-      warning('%s %s hash does not match, file may be corrupted', archive, k)
-    end
-    break
+if isfield(urls.(name), "sha256")
+  if sha256sum(archive) ~= urls.(name).sha256
+    warning('%s sha256 hash does not match, file may be corrupted', archive)
   end
 end
 

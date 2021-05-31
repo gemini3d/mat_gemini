@@ -6,7 +6,8 @@ arguments
   file_format string = string.empty
 end
 
-import gemini3d.fileio.expanduser
+import stdlib.fileio.expanduser
+import stdlib.fileio.with_suffix
 
 if isfield(cfg, 'outdir')
   cfg.outdir = expanduser(cfg.outdir);
@@ -28,7 +29,7 @@ cfg.input_dir = fullfile(top, 'inputs');
 for n = ["indat_size", "indat_grid", "indat_file"]
   cfg.(n) = make_valid_filename(cfg.(n), top);
   if ~isempty(file_format)
-    cfg.(n) = gemini3d.fileio.with_suffix(cfg.(n), "." + file_format);
+    cfg.(n) = with_suffix(cfg.(n), "." + file_format);
   end
 end
 
@@ -42,9 +43,11 @@ end % function
 
 
 function folder = make_valid_folder(folder, top)
-import gemini3d.fileio.*
+import gemini3d.fileio.expand_simroot
+import stdlib.fileio.expanduser
+import stdlib.fileio.is_absolute_path
 
-folder = gemini3d.fileio.expand_simroot(folder);
+folder = expand_simroot(folder);
 
 folder = expanduser(folder);
 % in case absolute path was specified
@@ -57,10 +60,12 @@ end % function
 
 
 function filename = make_valid_filename(filename, top)
+import stdlib.fileio.expanduser
+import gemini3d.fileio.expand_simroot
 
-filename = gemini3d.fileio.expand_simroot(filename);
+filename = expand_simroot(filename);
 
-filename = gemini3d.fileio.expanduser(filename);
+filename = expanduser(filename);
 % in case absolute path was specified
 
 if ~isfolder(fileparts(filename))

@@ -5,7 +5,9 @@ arguments
   type (1,1) string {mustBeMember(type, ["md5", "sha1", "sha256"])}
 end
 
-file = gemini3d.fileio.expanduser(file);
+import stdlib.fileio.expanduser
+
+file = expanduser(file);
 
 assert(isfile(file), "%s not found", file)
 

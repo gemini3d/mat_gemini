@@ -5,6 +5,8 @@ arguments
   neuinfo struct = struct.empty
 end
 
+import stdlib.fileio.makedir
+
 addons = matlab.addons.installedAddons();
 has_map = any(addons.Name == "Mapping Toolbox");
 
@@ -451,7 +453,7 @@ end %if
 %% OLD/EXTRA CODE THAT I'M LOATH TO PART WITH (MZ)
 % %MAKE A MOVIE OF THE GRID ROTATING
 % direc='~/Downloads/gridplot/';
-% gemini3d.fileio.makedir(direc)
+% makedir(direc)
 % azstart=255;
 % az=azstart:1:azstart+359;
 % el=35;

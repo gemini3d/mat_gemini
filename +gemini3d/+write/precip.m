@@ -9,7 +9,9 @@ arguments
   file_format (1,1) string
 end
 
-gemini3d.fileio.makedir(outdir)
+import stdlib.fileio.makedir
+
+makedir(outdir)
 
 disp("write precip to: " + outdir)
 
@@ -24,7 +26,7 @@ end % function
 
 
 function write_hdf5(outdir, pg)
-import hdf5nc.h5save
+import stdlib.hdf5nc.h5save
 
 fn = fullfile(outdir, 'simsize.h5');
 if isfile(fn), delete(fn), end
@@ -51,7 +53,7 @@ end % function
 
 
 function write_nc4(outdir, pg)
-import hdf5nc.ncsave
+import stdlib.hdf5nc.ncsave
 
 fn = fullfile(outdir, 'simsize.nc');
 if isfile(fn), delete(fn), end
