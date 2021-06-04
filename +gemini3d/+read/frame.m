@@ -78,7 +78,7 @@ assert(dat_shape(1) == lxs(1), 'dimension x1 length: sim_grid %d != data %d, was
 % x2
 assert(dat_shape(2) == lxs(2), 'dimension x2 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(2), lxs(2))
 % x3
-assert(dat_shape(end) == lxs(3), 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
+assert(dat_shape(3) == lxs(3), 'dimension x3 length: sim_grid %d != data %d, was input/ overwritten?', dat_shape(3), lxs(3))
 
 end % function
 
