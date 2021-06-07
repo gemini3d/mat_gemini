@@ -128,26 +128,10 @@ for i = ["e1","e2","e3","er","etheta","ephi"]
   h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3, 3], "type", freal)
 end
 
-if (isfield(xg,"glonctr"))
+if isfield(xg,"glonctr")
   h5save(fn,"/glonctr",xg.glonctr)
   h5save(fn,"/glatctr",xg.glatctr)
-end %if
-
-%% metadata
-% seems HDF5 is too buggy for strings in Matlab
-% if ~verLessThan('matlab', '9.8')
-%   try
-%     h5save(fn, '/meta/matlab_version', version())
-%     if isfield(xg, 'git')
-%       h5save(fn, '/meta/git_version', xg.git.git_version)
-%       h5save(fn, '/meta/git_commit', xg.git.commit)
-%       h5save(fn, '/meta/git_porcelain', xg.git.porcelain)
-%       h5save(fn, '/meta/git_branch', xg.git.branch)
-%     end
-%   catch excp
-%     warning('could not write metadata to HDF5, logged same metadata to setup_log.json')
-%   end
-% end
+end
 
 end % function
 
@@ -238,6 +222,11 @@ for i = ["e1","e2","e3","er","etheta","ephi"]
   ncsave(fn, i, xg.(i), "dims", [dimx1, dimx2, dimx3, dimecef], "type", freal)
 end
 
+if isfield(xg,"glonctr")
+  ncsave(fn, "glonctr", xg.glonctr)
+  ncsave(fn, "glatctr", xg.glatctr)
+end
+
 end % function
 
 
@@ -326,18 +315,3 @@ fwrite(fid,xg.z, freal);
 fclose(fid);
 
 end
-
-
-% Copyright 2020 Michael Hirsch, Ph.D.
-
-% Licensed under the Apache License, Version 2.0 (the "License");
-% you may not use this file except in compliance with the License.
-% You may obtain a copy of the License at
-
-%     http://www.apache.org/licenses/LICENSE-2.0
-
-% Unless required by applicable law or agreed to in writing, software
-% distributed under the License is distributed on an "AS IS" BASIS,
-% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-% See the License for the specific language governing permissions and
-% limitations under the License.
