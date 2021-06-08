@@ -11,7 +11,7 @@ function setup_sim(tc)
 cwd = fileparts(mfilename('fullpath'));
 run(fullfile(cwd, '../../setup.m'))
 
-name = "2dew_eq";
+name = "mini2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.datapath = fullfile(cwd, "data", name);

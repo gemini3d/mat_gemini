@@ -46,7 +46,7 @@ makedir(data_dir)
 
 urls = jsondecode(fileread(url_file));
 
-archive = fullfile(data_dir, urls.tests.("x" + name).archive);
+archive = fullfile(data_dir, urls.tests.(name).archive);
 
 if isfile(archive) && dir(archive).bytes > 10000
   check_data(name, archive, urls.tests)
@@ -59,10 +59,10 @@ else
   web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
 end
 
-websave(archive, urls.tests.("x" + name).url, web_opts);
+websave(archive, urls.tests.(name).url, web_opts);
 
-% cmd = "curl -L -o " + archive + " '" + urls.tests.("x" + name).url + "'";
-% assert(system(cmd) == 0, "download failed: " + urls.tests.("x" + name).url)
+% cmd = "curl -L -o " + archive + " '" + urls.tests.(name).url + "'";
+% assert(system(cmd) == 0, "download failed: " + urls.tests.(name).url)
 
 check_data(name, archive, urls.tests)
 
@@ -77,8 +77,6 @@ arguments
 end
 
 import stdlib.fileio.sha256sum
-
-name = matlab.lang.makeValidName(name);
 
 if isfield(urls.(name), "sha256")
   if sha256sum(archive) ~= urls.(name).sha256

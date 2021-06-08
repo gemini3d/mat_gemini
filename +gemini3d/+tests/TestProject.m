@@ -1,7 +1,9 @@
 classdef TestProject < matlab.unittest.TestCase
 properties (TestParameter)
   file_type = {"h5", "nc"}
-  name = {"2dew_eq", "2dew_fang", "2dew_glow", "2dns_eq", "2dns_fang", "2dns_glow", "3d_eq", "3d_fang", "3d_glow"}
+  name = {"mini2dew_eq", "mini2dew_fang", "mini2dew_glow", ...
+          "mini2dns_eq", "mini2dns_fang", "mini2dns_glow", ...
+          "mini3d_eq", "mini3d_fang", "mini3d_glow"}
 end
 
 properties
@@ -30,7 +32,7 @@ function test_grid(tc)
 
 import gemini3d.fileio.download_and_extract
 
-tname = "2dew_fang";
+tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
@@ -52,7 +54,7 @@ function test_Efield(tc)
 
 import gemini3d.fileio.download_and_extract
 
-tname = "2dew_fang";
+tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
@@ -76,7 +78,7 @@ function test_precip(tc)
 
 import gemini3d.fileio.download_and_extract
 
-tname = "2dew_fang";
+tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
@@ -98,7 +100,7 @@ function test_Arunner(tc, file_type, name)
 end
 
 function test_plot_2d(tc)
-tname = "2dew_glow";
+tname = "mini2dew_glow";
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 
 data_dir = fullfile(tc.TestData.cwd, "data", tname);
@@ -118,7 +120,7 @@ close(h)
 end
 
 function test_plot_3d(tc)
-tname = '3d_glow';
+tname = 'mini3d_glow';
 project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data", tname);

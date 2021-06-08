@@ -1,11 +1,15 @@
-function p = expand_simroot(p)
-
-key = "@GEMINI_SIMROOT@";
+function p = expand_simroot(p, key)
+arguments
+  p (1,1) string
+  key (1,1) string = "@GEMINI_SIMROOT@"
+end
 
 if startsWith(p, key)
   r = getenv(extractBetween(key, 2, strlength(key)-1));
-  assert(~isempty(r), p + " refers to undefined environment variable GEMINI_SIMROOT. Set it to location to store/load Gemini3D simulations.")
-
+  if isempty(r)
+    r = stdlib.fileio.expanduser("~/gemini_sims");
+    disp(p + " refers to undefined environment variable GEMINI_SIMROOT. Fallback to " + r)
+  end
   p = fullfile(r, extractAfter(p, key));
 end
 

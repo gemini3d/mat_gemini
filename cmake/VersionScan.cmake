@@ -13,11 +13,8 @@ foreach(v ${versions})
 
   execute_process(COMMAND sh -c "module avail matlab/${v}"
     TIMEOUT 5
-    RESULT_VARIABLE err
+    COMMAND_ERROR_IS_FATAL ANY
     ERROR_VARIABLE out)
-  if(NOT err EQUAL 0)
-    message(FATAL_ERROR "module not working: ${err} ${out}")
-  endif()
 
   string(FIND ${out} ${v} i)
   if(i LESS 0)

@@ -11,7 +11,7 @@ function setup_env(tc)
 cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
 
-tc.TestData.name = "2dew_glow";
+tc.TestData.name = "mini2dew_glow";
 tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 
 % setup so that hdf5nc is present
