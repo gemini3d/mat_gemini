@@ -9,9 +9,6 @@ end
 import stdlib.fileio.with_suffix
 import stdlib.fileio.makedir
 
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
-
 %% check the input struct to make sure needed fields are present
 assert(isfield(p,"indat_grid"),"Field indat_grid missing...");
 assert(isfield(p,"indat_size"),"Field indat_size missing...");
