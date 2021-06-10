@@ -16,8 +16,8 @@ function dat = frame(filename, opts)
 
 arguments
   filename (1,1) string
-  opts.time datetime = datetime.empty
-  opts.cfg struct = struct.empty
+  opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
+  opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
   opts.vars (1,:) string = string.empty
 end
 
@@ -86,7 +86,7 @@ end % function
 function flag = get_flagoutput(filename, cfg)
 arguments
   filename (1,1) string
-  cfg struct
+  cfg struct {mustBeScalarOrEmpty}
 end
 
 import stdlib.hdf5nc.h5variables

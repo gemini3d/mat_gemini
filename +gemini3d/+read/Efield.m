@@ -1,7 +1,7 @@
 function dat = Efield(filename, time)
 arguments
   filename (1,1) string
-  time (1,1) datetime = datetime.empty
+  time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
 if ~isempty(time)

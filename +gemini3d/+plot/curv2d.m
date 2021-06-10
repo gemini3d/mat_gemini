@@ -3,7 +3,7 @@ arguments
   time (1,1) datetime
   xg (1,1) struct
   parm (:,:,:) {mustBeNumeric,mustBeNonempty}
-  parmlbl (1,1) string = string.empty
+  parmlbl string {mustBeScalarOrEmpty} = string.empty
   caxlims (1,:) {mustBeNumeric} = []
   sourceloc (1,:) {mustBeNumeric} = []
   h (1,1) = figure

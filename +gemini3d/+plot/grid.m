@@ -6,7 +6,7 @@ function h = grid(direc, only, save)
 arguments
   direc (1,1) string
   only (1,:) string = string.empty
-  save string = string.empty
+  save string {mustBeScalarOrEmpty} = string.empty
 end
 
 import stdlib.fileio.expanduser

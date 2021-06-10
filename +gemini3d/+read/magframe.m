@@ -7,9 +7,9 @@ function dat = magframe(filename,opts)
 
 arguments
   filename (1,1) string
-  opts.time datetime = datetime.empty
-  opts.cfg struct = struct.empty
-  opts.gridsize (1,3) {mustBeNumeric} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
+  opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
+  opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
+  opts.gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
 
 % make sure to add the default directory where the magnetic fields are to

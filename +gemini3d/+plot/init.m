@@ -1,4 +1,4 @@
-function h = plotinit(xg, visible)
+function h = init(xg, visible)
 arguments
   xg (1,1) struct
   visible (1,1) logical = true

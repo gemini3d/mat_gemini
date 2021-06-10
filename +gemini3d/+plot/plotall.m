@@ -15,9 +15,9 @@ function h = plotall(direc, saveplot_fmt, opts)
 arguments
   direc (1,1) string
   saveplot_fmt (1,:) string = string.empty
-  opts.plotfun string = string.empty
-  opts.xg struct = struct.empty
-  opts.parallel (1,1) {mustBeInteger,mustBeFinite} = 0
+  opts.plotfun string {mustBeScalarOrEmpty} = string.empty
+  opts.xg struct {mustBeScalarOrEmpty} = struct.empty
+  opts.parallel (1,1) {mustBeInteger} = 0
 end
 
 import stdlib.fileio.expanduser

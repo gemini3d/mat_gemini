@@ -5,10 +5,10 @@ arguments
   time_req (1,1) datetime
   saveplot_fmt (1,:) string = string.empty
   opts.plotfun (1,1)
-  opts.xg struct = struct.empty
+  opts.xg struct {mustBeScalarOrEmpty} = struct.empty
   opts.figures (1,:) matlab.ui.Figure
   opts.visible (1,1) logical = true
-  opts.clim struct = struct()  % not .empty
+  opts.clim (1,1) struct = struct()  % not .empty
   % opts.vars (1,:) string = string.empty  % variables to plot (future)
 end
 
