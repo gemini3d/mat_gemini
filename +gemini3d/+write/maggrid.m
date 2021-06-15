@@ -31,15 +31,15 @@ end %if
 assert(isfolder(parent), parent + " parent directory does not exist")
 
 switch ext
-  case ".dat", writemagraw(filename, xmag.R,xmag.THETA,xmag.PHI)
-  case ".h5", writemagh5(filename, xmag.R,xmag.THETA,xmag.PHI,gridsize)
+  case ".dat", writemagraw(filename, xmag)
+  case ".h5", writemagh5(filename, xmag, gridsize)
   otherwise, error(ext + " not handled yet. Please open GitHub issue.")
 end %switch
 
 end %function
 
 
-function writemagh5(fn,R,THETA,PHI,gridsize)
+function writemagh5(fn, mag, gridsize)
 
 import stdlib.hdf5nc.h5save
 
@@ -51,16 +51,16 @@ disp("write: " + fn)
 
 freal = 'float32';      % default input files to real32
 
-h5save(fn, "/lpoints",numel(R),"type",freal);
-h5save(fn, "/r",R(:),"type",freal);
-h5save(fn, "/theta",THETA(:),"type",freal);
-h5save(fn, "/phi",PHI(:),"type",freal);
-h5save(fn, "/gridsize",gridsize,"type","int32");
+h5save(fn, "/lpoints",numel(mag.R), "type", "int32");
+h5save(fn, "/r", mag.R(:), "type", freal);
+h5save(fn, "/theta", mag.THETA(:), "type", freal);
+h5save(fn, "/phi", mag.PHI(:), "type", freal);
+h5save(fn, "/gridsize", gridsize, "type", "int32");
 
 end %function
 
 
-function writemagraw(fn,R,THETA,PHI)
+function writemagraw(fn, mag)
 
 % raw binary output for the magcalc program; note that this is just a flat
 % list and does not carry grid size information like hdf5 does.
@@ -68,10 +68,10 @@ function writemagraw(fn,R,THETA,PHI)
 disp("write: " + fn)
 
 fid=fopen(fn,'w');
-fwrite(fid,numel(THETA),'integer*4');
-fwrite(fid,R(:),'real*8');
-fwrite(fid,THETA(:),'real*8');
-fwrite(fid,PHI(:),'real*8');
+fwrite(fid, numel(mag.THETA),'integer*4');
+fwrite(fid, mag.R(:),'real*8');
+fwrite(fid, mag.THETA(:),'real*8');
+fwrite(fid, mag.PHI(:),'real*8');
 fclose(fid);
 
 end %function
