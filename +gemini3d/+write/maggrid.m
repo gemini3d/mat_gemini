@@ -33,7 +33,7 @@ assert(isfolder(parent), parent + " parent directory does not exist")
 switch ext
   case ".dat", writemagraw(filename, xmag.R,xmag.THETA,xmag.PHI)
   case ".h5", writemagh5(filename, xmag.R,xmag.THETA,xmag.PHI,gridsize)
-  otherwise, error(params.file_format + " not handled yet. Please open GitHub issue.")
+  otherwise, error(ext + " not handled yet. Please open GitHub issue.")
 end %switch
 
 end %function
