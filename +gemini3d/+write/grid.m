@@ -57,7 +57,7 @@ if ~ok
   error('write:grid:value_error', 'values of grid are not suitable %s', p.indat_grid)
 end
 
-gemini3d.write.meta(fullfile(p.outdir, 'setup_grid.json'), gemini3d.git_revision(), p)
+gemini3d.write.meta(fullfile(gdir, 'setup_grid.json'), gemini3d.git_revision(), p)
 
 end % function
 
