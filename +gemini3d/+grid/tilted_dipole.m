@@ -446,4 +446,7 @@ xgf.x=xgf.x(inds1,inds2,inds3);
 xgf.y=xgf.y(inds1,inds2,inds3);
 xgf.z=xgf.z(inds1,inds2,inds3);
 
+xgf.glonctr=cfg.glon;
+xgf.glatctr=cfg.glat;
+
 end
