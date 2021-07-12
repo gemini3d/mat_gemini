@@ -9,7 +9,8 @@ assert(isfile(filename), "not a file: " + filename)
 
 switch ext
   case '.dat', dat = read_raw(filename);
-  case '.h5', dat.ne = h5read(filename, '/neall');
+  case '.h5'
+    dat.ne = h5read(filename, '/ne');
   case '.nc', dat.ne = ncread(filename, 'neall');
   otherwise, error('frame3Dcurvne:not_implemented', 'unknown file type %s',filename)
 end
