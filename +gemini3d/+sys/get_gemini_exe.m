@@ -1,6 +1,6 @@
 function exe = get_gemini_exe(exe)
 arguments
-  exe string = string.empty
+  exe (1,1) string = "gemini3d.run"
 end
 
 import stdlib.fileio.expanduser
