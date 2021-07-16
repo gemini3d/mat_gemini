@@ -1,7 +1,7 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
-assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
+assert(~verLessThan('matlab', '9.9'), 'Matlab >= R2020b is required')
 
 cwd = fileparts(mfilename('fullpath'));
 meta = jsondecode(fileread(fullfile(cwd, "libraries.json")));
@@ -22,7 +22,7 @@ addpath(stdlib_dir)
 %% fix MacOS PATH since ZSH isn't populated into Matlab
 fix_macos()
 %% Get Gemini3D if not present
-gemini_root = getenv("GEMINI_ROOT");
+gemini_root = stdlib.fileio.expanduser(getenv("GEMINI_ROOT"));
 if isempty(gemini_root)
   gemini_root = stdlib.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
 end
