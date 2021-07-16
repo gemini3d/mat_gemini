@@ -15,7 +15,7 @@ assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
 %% parse input
 if ~isstruct(cfg)
   % path to config.nml
-  cfg = gemini3d.read.config(cfg, true);
+  cfg = gemini3d.read.config(cfg);
 end
 
 if ~isempty(out_dir)

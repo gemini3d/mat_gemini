@@ -1,9 +1,8 @@
-function filename = frame(direc, time, opt)
+function filename = frame(direc, time, suffix)
 arguments
-  direc (1,1) string
+  direc (1,1) string {mustBeNonzeroLengthText}
   time (1,1) datetime
-  opt.suffix (1,:) string = [".h5", ".nc", ".dat"]
-  opt.required (1,1) logical = false
+  suffix (1,:) string {mustBeNonzeroLengthText} = [".h5", ".nc", ".dat"]
 end
 
 import stdlib.fileio.expanduser
@@ -15,7 +14,7 @@ stem0 = gemini3d.datelab(time);
 direc = expanduser(direc);
 % so that we return a usable path
 
-for ext = opt.suffix
+for ext = suffix
   stem = stem0;
   fn = fullfile(direc, stem + ext);
   if isfile(fn)
@@ -31,7 +30,7 @@ MAX_OFFSET = seconds(1);
 
 pat = datestr(time, "yyyymmdd") + "_*";
 file_times = datetime.empty;
-for ext = opt.suffix
+for ext = suffix
     files = dir(fullfile(direc, pat + ext));
     for i = 1:length(files)
         file_times(i) = datetime(files(i).name(1:8), "InputFormat", "yyyyMMdd") + seconds(str2double(files(i).name(10:21)));
@@ -47,8 +46,8 @@ for ext = opt.suffix
     end
 end
 
-if opt.required
-  error("gemini33:find:frame", "did not find frame under %s", direc)
+if isempty(filename) || ~isfile(filename)
+  error("gemini33:find:frame:FileNotFound", "did not find frame under %s", direc)
 end
 
 

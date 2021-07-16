@@ -1,11 +1,11 @@
 function dat = precip(filename, time)
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
 if ~isempty(time)
-  filename = gemini3d.find.frame(filename, time, "required", true);
+  filename = gemini3d.find.frame(filename, time);
 end
 
 [~,~,ext] = fileparts(filename);

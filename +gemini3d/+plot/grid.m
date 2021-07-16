@@ -18,7 +18,7 @@ end
 
 direc = expanduser(direc);
 
-xg = gemini3d.read.grid(direc, true);
+xg = gemini3d.read.grid(direc);
 
 h = matlab.ui.Figure.empty;
 %% x1, x2, x3

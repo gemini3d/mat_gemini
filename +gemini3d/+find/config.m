@@ -1,9 +1,8 @@
-function filename = config(direc, required)
+function filename = config(direc)
 %% get configuration file
-% if not found, returns string.empty
+% if not found, errors
 arguments
-  direc string
-  required (1,1) logical = false
+  direc (1,1) string {mustBeNonzeroLengthText}
 end
 
 import stdlib.fileio.expanduser
@@ -33,8 +32,8 @@ if isfolder(direc)
   end
 end
 
-if required
-  assert(isfile(filename), "find:config: could not find config file \s", filename)
+if isempty(filename) || ~isfile(filename)
+  error("find:config:FileNotFound", "could not find config file under %s", direc)
 end
 
 end % function
@@ -42,8 +41,8 @@ end % function
 
 function filename = check_names(direc, names)
 arguments
-  direc (1,1) string
-  names (1,:) string
+  direc (1,1) string {mustBeNonzeroLengthText}
+  names (1,:) string {mustBeNonzeroLengthText}
 end
 
 filename = string.empty;

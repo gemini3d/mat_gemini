@@ -29,32 +29,26 @@ end
 methods (Test)
 
 function test_find_config(tc)
-tc.verifyEmpty(gemini3d.find.config(""))
 tc.verifyTrue(endsWith(gemini3d.find.config(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
 end
 
 function test_find_simsize(tc)
-tc.verifyEmpty(gemini3d.find.simsize(""))
 tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
 end
 
 function test_read_config(tc)
-tc.verifyEmpty(gemini3d.read.config(""))
 cfg = gemini3d.read.config(tc.TestData.data_path);
 tc.verifyEqual(cfg.ymd, [2013,2,20])
 end
 
 function test_get_mpi_count(tc)
 import gemini3d.sys.get_mpi_count
-tc.verifyEqual(get_mpi_count(""),1)
 C = gemini3d.sys.get_cpu_count();
 Cm = get_mpi_count(tc.TestData.data_path);
 tc.verifyTrue(Cm >= 1 && Cm <= C)
 end
 
 function test_readgrid(tc)
-tc.verifyEmpty(gemini3d.read.grid(""))
-
 xg = gemini3d.read.grid(tc.TestData.data_path);
 tc.verifySize(xg.x1, [xg.lx(1) + 4, 1])
 end

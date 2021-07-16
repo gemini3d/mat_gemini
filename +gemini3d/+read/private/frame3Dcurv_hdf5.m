@@ -1,6 +1,6 @@
 function dat = frame3Dcurv_hdf5(fn, vars)
 arguments
-  fn (1,1) string
+  fn (1,1) string {mustBeNonzeroLengthText}
   vars (1,:) string
 end
 

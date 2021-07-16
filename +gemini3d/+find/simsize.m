@@ -1,10 +1,9 @@
-function [simpath, ext] = simsize(apath, required)
+function [simpath, ext] = simsize(apath)
 %% find the path (directory, even if given filename) where simsize.* is
 % also return the suffix
 % the filename MUST be simsize.{h5,nc,dat}
 arguments
-  apath (1,1) string
-  required (1,1) logical = false
+  apath (1,1) string {mustBeNonzeroLengthText}
 end
 
 import stdlib.fileio.expanduser
@@ -30,8 +29,8 @@ for suffix = suffixes
   end
 end
 
-if required
-  assert(isfile(filename), "find:simsize: could not find \s", filename)
+if isempty(simpath) || ~isfile(simpath)
+  error("find:simsize:FileNotFound", "could not find simsize in %s", apath)
 end
 
 end % function

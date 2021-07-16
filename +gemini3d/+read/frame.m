@@ -15,7 +15,7 @@ function dat = frame(filename, opts)
 % gemini3d.read.frame(..., ["ne", "Te"])
 
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
   opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
   opts.vars (1,:) string = string.empty
@@ -27,12 +27,20 @@ filename = expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
-    filename = gemini3d.find.frame(filename, opts.time, "required", true);
+    filename = gemini3d.find.frame(filename, opts.time);
   end
 end
 
 if isempty(opts.cfg)
-  cfg = gemini3d.read.config(fileparts(filename));
+  parent = fileparts(filename);
+  if strlength(parent) == 0
+    parent = pwd;
+  end
+  try
+    cfg = gemini3d.read.config(parent);
+  catch
+    cfg = struct.empty;
+  end
 else
   cfg = opts.cfg;
 end
@@ -56,9 +64,10 @@ end
 % if overwrote one directory or the other, a size mismatch can result
 % this is handled implicitly by xarray.Dataset in PyGemini
 
-lxs = gemini3d.simsize(filename);
-if isempty(lxs)
-  % this happens for a standalone data file
+try
+  lxs = gemini3d.simsize(filename);
+catch
+  % standalone data file
   return
 end
 
@@ -85,7 +94,7 @@ end % function
 
 function flag = get_flagoutput(filename, cfg)
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   cfg struct {mustBeScalarOrEmpty}
 end
 

@@ -10,7 +10,7 @@ import stdlib.fileio.samepath
 assert(~samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
 
 %% READ IN THE SIMULATION INFORMATION
-params = gemini3d.read.config(new_dir, true);
+params = gemini3d.read.config(new_dir);
 
 lxs = gemini3d.simsize(new_dir);
 lxs_ref = gemini3d.simsize(ref_dir);

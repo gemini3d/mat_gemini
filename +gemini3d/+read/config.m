@@ -1,12 +1,10 @@
-function cfg = config(direc, required)
+function cfg = config(direc)
 % reads simulation configuration into struct
-% returns struct.empty if config file doesn't exist
 arguments
-  direc (1,1) string
-  required (1,1) logical = false
+  direc (1,1) string {mustBeNonzeroLengthText}
 end
 
-filename = gemini3d.find.config(direc, required);
+filename = gemini3d.find.config(direc);
 
 if endsWith(filename, ".ini", 'IgnoreCase', true)
   cfg = read_ini(filename);

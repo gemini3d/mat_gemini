@@ -6,7 +6,7 @@ function dat = magframe(filename,opts)
 % dat = gemini3d.read.magframe(filename, "config", cfg)
 
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
   opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
   opts.gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
@@ -20,7 +20,7 @@ basemagdir = fullfile(direc,"magfields");
 % find the actual filename if only the directory was given
 if ~isfile(filename)
   if ~isempty(opts.time)
-    filename = gemini3d.find.frame(basemagdir,opts.time, "required", false);
+    filename = gemini3d.find.frame(basemagdir, opts.time);
   end
 end
 

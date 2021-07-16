@@ -5,7 +5,7 @@ arguments
 end
 
 if ~isempty(time)
-  filename = gemini3d.find.frame(filename, time, "required", true);
+  filename = gemini3d.find.frame(filename, time);
 end
 
 [~,~,ext] = fileparts(filename);

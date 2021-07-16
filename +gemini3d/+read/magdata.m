@@ -2,7 +2,7 @@ function dat = magdata(direc,gridsize)
 % reads full set of magnetic field output data
 
 arguments
-  direc (1,1) string
+  direc (1,1) string {mustBeNonzeroLengthText}
   gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
 

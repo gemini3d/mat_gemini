@@ -11,11 +11,11 @@ direc = expanduser(direc);
 assert(isfolder(direc), direc + " is not a directory")
 
 %SIMULATION META-DATA
-cfg = gemini3d.read.config(direc, true);
+cfg = gemini3d.read.config(direc);
 
 %WE ALSO NEED TO LOAD THE GRID FILE
 if isempty(xg)
-  xg = gemini3d.read.grid(direc, true);
+  xg = gemini3d.read.grid(direc);
 %  lx1 = xg.lx(1);
   lx3 = xg.lx(3);
 %  lh=lx1;   %possibly obviated in this version - need to check

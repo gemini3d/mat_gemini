@@ -1,14 +1,13 @@
-function [xg, ok] = grid(apath, required)
+function [xg, ok] = grid(apath)
 %% READS A GRID FROM MATLAB
 % OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
 % we don't use file_format because the output / new simulation may be in
 % one file format while the equilibrium sim was in another file format
 arguments
   apath (1,1) string
-  required (1,1) logical = false
 end
 
-[apath, suffix] = gemini3d.find.simsize(apath, required);
+[apath, suffix] = gemini3d.find.simsize(apath);
 
 xg = struct.empty;
 ok = false;

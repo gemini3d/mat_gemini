@@ -1,6 +1,6 @@
 function dat = frame3Dcurvne(filename)
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
 end
 
 [~,~,ext] = fileparts(filename);

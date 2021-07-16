@@ -19,7 +19,7 @@ wavelengths = ["3371", "4278", "5200", "5577", "6300", "7320", "10400", ...
   "3466", "7774", "8446", "3726", "LBH", "1356", "1493", "1304"];
 
 %READ IN SIMULATION INFO
-cfg = gemini3d.read.config(parent, true);
+cfg = gemini3d.read.config(parent);
 
 %READ IN THE GRID
 if isfield(opts, "xg")
@@ -36,7 +36,7 @@ x2=xg.x2(3:end-2);
 x3=xg.x3(3:end-2);
 
 %% get filename
-fn = gemini3d.find.frame(direc, time, "required", true);
+fn = gemini3d.find.frame(direc, time);
 
 %% make plots
 if isfield(opts, "figure")

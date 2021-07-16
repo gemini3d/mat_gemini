@@ -1,6 +1,6 @@
 function dat = frame3Dcurvavg(filename, vars)
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   vars (1,:) string = string.empty
 end
 

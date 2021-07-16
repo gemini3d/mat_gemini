@@ -6,10 +6,10 @@ arguments
   atol (1,1) {mustBePositive}
 end
 
-[ref, ok] = gemini3d.read.grid(refdir, true);
+[ref, ok] = gemini3d.read.grid(refdir);
 assert(ok, "reference grid " + refdir + " has bad values")
 
-[new, ok] = gemini3d.read.grid(outdir, true);
+[new, ok] = gemini3d.read.grid(outdir);
 assert(ok, "grid " + outdir + " has bad values")
 
 

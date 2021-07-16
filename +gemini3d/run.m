@@ -32,8 +32,10 @@ cfg = setup_if_needed(opts, outdir, config_path);
 %% check that no existing simulation is in output directory
 % unless this is a milestone restart
 if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
-  exist_file = gemini3d.find.frame(outdir, cfg.times(1), "required", false);
-  assert(isempty(exist_file), "a fresh simulation should not have data in output directory: " + outdir)
+  try %#ok<TRYNC>
+    gemini3d.find.frame(outdir, cfg.times(1));
+    error("gemini3d:run:FileExists", "a fresh simulation should not have data in output directory: %s", outdir)
+  end
 end
 
 %% assemble run command
@@ -65,7 +67,7 @@ import stdlib.fileio.expanduser
 config_path = expanduser(config_path);
 outdir = expanduser(outdir);
 
-cfg = gemini3d.read.config(config_path,true);
+cfg = gemini3d.read.config(config_path);
 cfg.outdir = outdir;
 
 for k = ["ssl_verify", "file_format"]
