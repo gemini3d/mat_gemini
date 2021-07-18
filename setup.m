@@ -23,15 +23,16 @@ addpath(stdlib_dir)
 fix_macos()
 %% Get Gemini3D if not present
 gemini_root = stdlib.fileio.expanduser(getenv("GEMINI_ROOT"));
-if isempty(gemini_root)
+if isempty(gemini_root) || strlength(gemini_root) == 0
   gemini_root = stdlib.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
 end
 
 canary = fullfile(gemini_root, "CMakeLists.txt");
 
 if ~isfile(canary)
+  ret = -1;
   % assumption behind pause is git clone will complete << 5 seconds
-  cmd = "git -C " + fullfile(cwd, "..") + " clone " + meta.gemini3d.url + " " + gemini3d_dirname;
+  cmd = join(["git -C", fullfile(cwd, ".."), "clone", meta.gemini3d.url, gemini3d_dirname]);
   pause(5*rand)
   if ~isfile(canary)
     % may have race condition if tests run in parallel
@@ -40,12 +41,10 @@ if ~isfile(canary)
   end
 
   if ret == 0
-    if ~isempty(meta.gemini3d.tag)
-      cmd = "git -C " + gemini_root + " checkout " + meta.gemini3d.tag;
-      disp(cmd)
-      ret = system(cmd);
-      assert(ret == 0, "problem Git checkout Gemini3D")
-    end
+    cmd = join(["git -C", gemini_root, "checkout", meta.gemini3d.tag]);
+    disp(cmd)
+    ret = system(cmd);
+    assert(ret == 0, "problem Git checkout Gemini3D")
   else
     pause(5)
     % waiting to see if race condition with other workers Git clones

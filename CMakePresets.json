@@ -7,7 +7,6 @@
   "binaryDir": "${sourceDir}/build",
   "generator": "Ninja",
   "cacheVariables": {
-    "CMAKE_BUILD_TYPE": "Release",
     "package": false,
     "equil": false
   }
