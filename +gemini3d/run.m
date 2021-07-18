@@ -40,8 +40,10 @@ end
 
 %% assemble run command
 % cmd = create_run(cfg, ~isempty(mpiexec), gemini_exe);
-ret = subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
-assert(ret == 0, 'Gemini dryrun failed')
+[ret, msg] = subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
+if ret ~=0
+  error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
+end
 
 if opts.dryrun
   return

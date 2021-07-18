@@ -29,16 +29,27 @@ end
 
 canary = fullfile(gemini_root, "CMakeLists.txt");
 
-if ~isfolder(gemini_root)
+if ~isfile(canary)
+  % assumption behind pause is git clone will complete << 5 seconds
   cmd = "git -C " + fullfile(cwd, "..") + " clone " + meta.gemini3d.url + " " + gemini3d_dirname;
-  disp(cmd)
-  ret = system(cmd);
-  if ret == 0 && ~isempty(meta.gemini3d.tag)
-    cmd = "git -C " + gemini_root + " checkout " + meta.gemini3d.tag;
+  pause(5*rand)
+  if ~isfile(canary)
+    % may have race condition if tests run in parallel
     disp(cmd)
     ret = system(cmd);
   end
-  assert(ret == 0, "problem Git clone Gemini3D")
+
+  if ret == 0
+    if ~isempty(meta.gemini3d.tag)
+      cmd = "git -C " + gemini_root + " checkout " + meta.gemini3d.tag;
+      disp(cmd)
+      ret = system(cmd);
+      assert(ret == 0, "problem Git checkout Gemini3D")
+    end
+  else
+    pause(5)
+    % waiting to see if race condition with other workers Git clones
+  end
 end
 
 assert(isfile(canary), "Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")

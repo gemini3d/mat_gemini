@@ -1,10 +1,5 @@
 name: matlab
 
-env:
-  DEBIAN_FRONTEND: noninteractive
-  CTEST_PARALLEL_LEVEL: 2
-
-
 on:
   push:
     paths:

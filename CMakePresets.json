@@ -1,10 +1,5 @@
 {
   "version": 2,
-  "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 20,
-    "patch": 0
-},
 
 "configurePresets": [
 {
@@ -35,14 +30,20 @@
   },
   "execution": {
     "noTestsAction": "error",
-    "stopOnFailure": false}
+    "stopOnFailure": false
+  }
 },
 {
   "name": "regen-package", "inherits": "default",
   "configurePreset": "regen-package",
   "description": "Regenerates .zstd reference data, by disabling compare",
   "filter": {
-    "exclude": {"label": "(compare|download)", "fixtures": {"any": "(compare_fxt|inputOK_fxt)"}}
+    "exclude": {
+      "label": "(compare|download)",
+      "fixtures": {
+        "any": "(compare_fxt|inputOK_fxt)"
+        }
+      }
   }
 }
 ]
