@@ -43,11 +43,11 @@ end % function
 
 
 function folder = make_valid_folder(folder, top)
-import gemini3d.fileio.expand_simroot
+import gemini3d.fileio.expand_envvar
 import stdlib.fileio.expanduser
 import stdlib.fileio.is_absolute_path
 
-folder = expand_simroot(folder);
+folder = expand_envvar(folder);
 
 folder = expanduser(folder);
 % in case absolute path was specified
@@ -61,9 +61,9 @@ end % function
 
 function filename = make_valid_filename(filename, top)
 import stdlib.fileio.expanduser
-import gemini3d.fileio.expand_simroot
+import gemini3d.fileio.expand_envvar
 
-filename = expand_simroot(filename);
+filename = expand_envvar(filename);
 
 filename = expanduser(filename);
 % in case absolute path was specified

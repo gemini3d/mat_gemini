@@ -16,13 +16,13 @@ methods (Test)
 
 function test_nml_gemini_simroot(tc)
 
-import gemini3d.fileio.expand_simroot
+import gemini3d.fileio.expand_envvar
 
 old = getenv("GEMINI_SIMROOT");
 
 setenv("GEMINI_SIMROOT", "abc123")
 
-out = expand_simroot("@GEMINI_SIMROOT@/foo");
+out = expand_envvar("@GEMINI_SIMROOT@/foo");
 
 setenv("GEMINI_SIMROOT", old)
 
