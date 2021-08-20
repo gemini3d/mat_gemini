@@ -23,6 +23,10 @@ tc.TestData.ref_dir = fullfile(cwd, "data");
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;
 
+if isempty(getenv("GEMINI_SIMROOT"))
+  setenv("GEMINI_SIMROOT", tc.TestData.outdir)
+end
+
 end
 end
 
