@@ -97,6 +97,7 @@ if isfile(msis_outfile)
   delete(msis_outfile)
 end
 
+h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
 h5save(msis_infile, "/doy", doy)
 h5save(msis_infile, "/UTsec", UTsec0)
 h5save(msis_infile, "/f107a", f107a)
@@ -120,7 +121,7 @@ if msis_version == 20
   old_pwd = pwd;
   cd(build_dir)
 end
-[status, msg] = subprocess_run([exe, msis_infile, msis_outfile, int2str(msis_version)]);
+[status, msg] = subprocess_run([exe, msis_infile, msis_outfile]);
 % output written to file
 if msis_version == 20
   cd(old_pwd)
