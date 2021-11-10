@@ -20,7 +20,7 @@ jobs:
           sudo apt install -yq --no-install-recommends ninja-build gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
 
       - name: Install MATLAB
-        uses: matlab-actions/setup-matlab@v0
+        uses: matlab-actions/setup-matlab@v1
 
       - name: Config Tests
         run: cmake --preset default

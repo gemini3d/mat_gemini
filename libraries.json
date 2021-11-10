@@ -1,3 +1,6 @@
 {
-"gemini3d": {"url": "https://github.com/gemini3d/gemini3d.git", "tag": "v1.0.3"}
+"gemini3d": {
+  "url": "https://github.com/gemini3d/gemini3d.git",
+  "tag": "v1.1.2"
+}
 }

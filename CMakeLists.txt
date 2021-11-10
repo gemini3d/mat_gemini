@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.14...3.21)
+# Matlab (and Python) don't have an easy way to specify test dependencies between files.
+# Hence, we use a CMake project to specify depedencies and run tests in parallel.
+
+cmake_minimum_required(VERSION 3.14...3.22)
 
 project(MatGemini LANGUAGES NONE)
 

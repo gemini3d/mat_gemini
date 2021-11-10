@@ -34,7 +34,7 @@
 {
   "name": "regen-package", "inherits": "default",
   "configurePreset": "regen-package",
-  "description": "Regenerates .zstd reference data, by disabling compare",
+  "description": "Regenerates .zst reference data, by disabling compare",
   "filter": {
     "exclude": {
       "label": "(compare|download)",
