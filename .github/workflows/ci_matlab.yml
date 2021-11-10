@@ -17,11 +17,16 @@ jobs:
       - name: Install Prereqs
         run: |
           sudo apt update -yq
-          sudo apt install -yq --no-install-recommends ninja-build gfortran libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
+          sudo apt install -yq --no-install-recommends libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
 
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v1
 
       - run: cmake --preset default
-      - run: cmake --build build
+        timeout-minutes: 3
+
+      - run: cmake --build build --parallel
+        timeout-minutes: 4
+
       - run: ctest --preset default
+        timeout-minutes: 10
