@@ -12,19 +12,17 @@ runner_name = "gemini3d.run";
 exe = which(exe);
 
 if isempty(exe)
-  srcdir = expanduser(getenv("GEMINI_ROOT"));
-  if ~isfolder(srcdir)
-    cwd = fileparts(mfilename('fullpath'));
-    run(fullfile(cwd, "../../setup.m"))
-    srcdir = expanduser(getenv("GEMINI_ROOT"));
+  src_dir = expanduser(getenv("GEMINI_ROOT"));
+  assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
+  for b = ["../GEMINI3D-build", ".", "build", "build/Release", "build/RelWithDebInfo", "build/Debug"]
+    build_dir = fullfile(src_dir, b);
+    if isfolder(build_dir)
+      break
+    end
   end
-  bindir = fullfile(srcdir, "build");
-  exe = which(runner_name, bindir);
+  exe = which(runner_name, build_dir);
 
-  if isempty(exe)
-    gemini3d.sys.cmake(srcdir, bindir, "gemini3d.run gemini.bin");
-    exe = which(runner_name, bindir);
-  end
+  assert(~isempty(exe), 'gemini3d.run executable not found under %s. Please build with cmake from top-level mat-gemini/ dir.  See README.md.', src_dir)
 end
 assert(~isempty(exe), "failed to build/find %s", exe)
 %% sanity check Gemini executable

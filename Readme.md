@@ -26,6 +26,13 @@ To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
 setup
 ```
 
+To use features requiring Gemini3D such as "msis_setup", also build from mat_gemini/ directory:
+
+```sh
+cmake -B build
+cmake --build build
+```
+
 ### Self-check (optional, but recommended)
 
 Run the self-tests from Matlab in the mat_gemini/ directory:
@@ -34,13 +41,19 @@ Run the self-tests from Matlab in the mat_gemini/ directory:
 runtests('gemini3d')
 ```
 
+or
+
+```sh
+ctest --test-dir build
+```
+
 ---
 
 We use .zst ZSTD files for the reference test data.
-If you don't have "zstd" on your system, you can install this from the mat_gemini/ directory by:
+If you don't have "zstd" on your system, you can install this from Gemini3D project gemini3d/ directory by:
 
 ```sh
-cmake -P cmake/build_zstd.cmake
+cmake -P scripts/build_zstd.cmake
 ```
 
 ---
@@ -48,16 +61,17 @@ cmake -P cmake/build_zstd.cmake
 If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
 If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
 
-1. edit ~/.bashrc to have
+Edit ~/.bashrc to have
 
-    ```sh
-    export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
-    ```
-2. issue Terminal command:
+```sh
+export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+```
 
-    ```sh
-    git config --global http.sslCAInfo /etc/ssl/certs/ca-bundle.crt
-    ```
+Then run:
+
+```sh
+git config --global http.sslCAInfo /etc/ssl/certs/ca-bundle.crt
+```
 
 ## Usage
 

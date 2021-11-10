@@ -37,15 +37,16 @@ end
 %% path to msis executable
 src_dir = expanduser(getenv("GEMINI_ROOT"));
 assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
-build_dir = fullfile(src_dir, "build");
+for b = ["../GEMINI3D-build", ".", "build", "build/Release", "build/RelWithDebInfo", "build/Debug"]
+  build_dir = fullfile(src_dir, b);
+  if isfolder(build_dir)
+    break
+  end
+end
 exe = which("msis_setup", build_dir);
 
 %% build exe if not present
-if isempty(exe)
-  cmake(src_dir, build_dir, "msis_setup")
-end
-exe = which("msis_setup", build_dir);
-assert(~isempty(exe), 'MSIS setup executable not found: %s', exe)
+assert(~isempty(exe), 'MSIS setup executable not found under %s. Please build with cmake from top-level mat-gemini/ dir.  See README.md.', src_dir)
 
 %% SPECIFY SIZES ETC.
 alt=xg.alt/1e3;

@@ -4,10 +4,6 @@ function setup()
 assert(~verLessThan('matlab', '9.9'), 'Matlab >= R2020b is required')
 
 cwd = fileparts(mfilename('fullpath'));
-meta = jsondecode(fileread(fullfile(cwd, "libraries.json")));
-
-gemini3d_dirname = "gemini3d";
-
 addpath(cwd)
 setenv('MATGEMINI', cwd)
 
@@ -20,58 +16,28 @@ end
 
 addpath(stdlib_dir)
 %% fix MacOS PATH since ZSH isn't populated into Matlab
-fix_macos()
-%% Get Gemini3D if not present
-gemini_root = stdlib.fileio.expanduser(getenv("GEMINI_ROOT"));
-if isempty(gemini_root) || strlength(gemini_root) == 0
-  gemini_root = stdlib.fileio.absolute_path(fullfile(cwd, "..", gemini3d_dirname));
+if ismac
+  homebrew_path()
 end
-
-canary = fullfile(gemini_root, "CMakeLists.txt");
-
-if ~isfile(canary)
-  ret = -1;
-  % assumption behind pause is git clone will complete << 5 seconds
-  cmd = join(["git -C", fullfile(cwd, ".."), "clone", meta.gemini3d.url, gemini3d_dirname]);
-  pause(5*rand)
-  if ~isfile(canary)
-    % may have race condition if tests run in parallel
-    disp(cmd)
-    ret = system(cmd);
-  end
-
-  if ret == 0
-    cmd = join(["git -C", gemini_root, "checkout", meta.gemini3d.tag]);
-    disp(cmd)
-    ret = system(cmd);
-    assert(ret == 0, "problem Git checkout Gemini3D")
-  else
-    pause(5)
-    % waiting to see if race condition with other workers Git clones
-  end
-end
-
-assert(isfile(canary), "Trouble setting up / finding Gemini3D. Not able to run simulations. Please set environment variable GEMINI_ROOT to Gemini3D directory.")
-
-setenv('GEMINI_ROOT', gemini_root)
 
 end % function
 
 
-function fix_macos()
+function homebrew_path()
 
-%% MacOS PATH workaround
+%% MacOS Homebrew PATH workaround
 % Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
 % Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
-if ~ismac
+
+sys_path = getenv("PATH");
+homebrew_prefix = getenv("HOMEBREW_PREFIX");
+if contains(sys_path, homebrew_prefix)
   return
 end
 
-sys_path = getenv("PATH");
-needed_paths = ["/usr/local/bin", "/opt/homebrew/bin"];
-for np = needed_paths
-  if isfolder(np) && ~contains(sys_path, np)
-    sys_path = np + pathsep + sys_path;
+for p = ["/opt/homebrew/bin", "/usr/local/bin"]
+  if isfolder(p) && ~contains(sys_path, p)
+    sys_path = p + pathsep + sys_path;
   end
 end
 
