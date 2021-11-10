@@ -23,13 +23,7 @@ assert(system("cmake --version") == 0, 'CMake not found')
 %% configure
 % don't use ctest -S as it will infinite loop with MSIS build/test
 cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off";
-if system(cmd) ~=0
-  % try reconfiguring
-  if isfile(fullfile(build_dir, "CMakeCache.txt"))
-    rmdir(build_dir, 's')
-  end
-  assert(system(cmd) == 0, "error configuring %s with CMake", src_dir)
-end
+assert(system(cmd) == 0, "error configuring %s with CMake", src_dir)
 
 %% build
 cmd = "cmake --build " + build_dir + " --parallel";
