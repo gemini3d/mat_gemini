@@ -22,8 +22,9 @@ jobs:
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v1
 
-      - run: cmake --preset default
-        timeout-minutes: 3
-
-      - run: ctest --preset default
-        timeout-minutes: 15
+      - name: Run tests and generate artifacts
+        timeout-minutes: 20
+        uses: matlab-actions/run-tests@v1
+        with:
+          test-results-junit: test-results/results.xml
+          code-coverage-cobertura: code-coverage/coverage.xml
