@@ -4,8 +4,8 @@
 
 cmake_minimum_required(VERSION 3.20...3.22)
 
-file(READ ${CMAKE_CURRENT_LIST_DIR}/libraries.json _libj)
-string(JSON PROJECT_VERSION GET ${_libj} mat_gemini version)
+file(READ ${CMAKE_CURRENT_LIST_DIR}/codemeta.json _libj)
+string(JSON PROJECT_VERSION GET ${_libj} version)
 
 project(MatGemini
 LANGUAGES NONE
