@@ -25,11 +25,11 @@ if isempty(gemini_exe)
   src_dir = getenv("GEMINI_ROOT");
   if isempty(src_dir)
     src_dir = getenv("MATGEMINI");
-    cmake(src_dir, fullfile(src_dir, "build"));
   end
+  gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
+  gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 end
 
-gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 assert(~isempty(gemini_exe), "Gemini3D executable not found")
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);

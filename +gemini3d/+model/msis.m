@@ -21,11 +21,9 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
-import gemini3d.sys.get_gemini_exe
 import stdlib.fileio.absolute_path
 import stdlib.fileio.which
 import stdlib.sys.subprocess_run
-import gemini3d.sys.cmake
 import stdlib.hdf5nc.h5save
 
 if isfield(p, "msis_version")
@@ -35,15 +33,15 @@ else
 end
 
 %% find or build msis_setup executable
-exe = get_gemini_exe("msis_setup");
+exe = gemini3d.sys.get_gemini_exe("msis_setup");
 
 if isempty(exe)
   src_dir = getenv("GEMINI_ROOT");
   if isempty(src_dir)
     src_dir = getenv("MATGEMINI");
-    cmake(src_dir, fullfile(src_dir, "build"));
   end
-  exe = get_gemini_exe("msis_setup");
+  gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
+  exe = gemini3d.sys.get_gemini_exe("msis_setup");
 end
 
 assert(~isempty(exe), 'MSIS setup executable not found')
