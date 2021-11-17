@@ -26,7 +26,8 @@ To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
 setup
 ```
 
-To use features requiring Gemini3D such as "msis_setup", also build from mat_gemini/ directory:
+To use features requiring Gemini3D such as "msis_setup", MatGemini will use CMake to build Gemini3D.
+If desired, you can optionally do this manually:
 
 ```sh
 cmake -B build
