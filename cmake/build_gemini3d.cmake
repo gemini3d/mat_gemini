@@ -6,6 +6,7 @@ set(gemini_args
 -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
+file(READ ${PROJECT_SOURCE_DIR}/libraries.json _libj)
 string(JSON gemini_url GET ${_libj} gemini3d url)
 string(JSON gemini_tag GET ${_libj} gemini3d tag)
 
