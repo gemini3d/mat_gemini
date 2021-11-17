@@ -25,8 +25,5 @@ jobs:
       - run: cmake --preset default
         timeout-minutes: 3
 
-      - run: cmake --build build --parallel
-        timeout-minutes: 4
-
       - run: ctest --preset default
-        timeout-minutes: 10
+        timeout-minutes: 15

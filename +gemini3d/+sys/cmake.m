@@ -1,10 +1,9 @@
-function cmake(src_dir, build_dir, target)
+function cmake(src_dir, build_dir)
 % build program using CMake and default generator
-% to specify generator with CMake >= 3.15 set environment variable CMAKE_GENERATOR
+% specify CMake generator: set environment variable CMAKE_GENERATOR
 arguments
   src_dir (1,1) string
   build_dir (1,1) string
-  target string = string.empty
 end
 
 import stdlib.fileio.posix
@@ -22,14 +21,12 @@ assert(system("cmake --version") == 0, 'CMake not found')
 
 %% configure
 % don't use ctest -S as it will infinite loop with MSIS build/test
-cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off";
+cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off --install-prefix=" + build_dir;
 assert(system(cmd) == 0, "error configuring %s with CMake", src_dir)
 
 %% build
 cmd = "cmake --build " + build_dir + " --parallel";
-if ~isempty(target)
-  cmd = cmd + " --target " + target;
-end
+
 ret = system(cmd);
 assert(ret == 0, 'error building with CMake in %s', build_dir)
 

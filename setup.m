@@ -9,11 +9,8 @@ setenv('MATGEMINI', cwd)
 
 %% ensure matlab-stdlib is present
 stdlib_dir = fullfile(cwd, "matlab-stdlib");
-if ~isfolder(fullfile(stdlib_dir, "+stdlib"))
-  cmd = "git submodule update --init";
-  assert(system(cmd) == 0, "could not update Matlab-stdlib submodule. Please make a GitHub Issue for this.")
-end
-
+assert(system("git submodule update --init") == 0, ...
+  "could not update Matlab-stdlib submodule. Please make a GitHub Issue for this.")
 addpath(stdlib_dir)
 %% fix MacOS PATH since ZSH isn't populated into Matlab
 if ismac
@@ -30,8 +27,7 @@ function homebrew_path()
 % Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
 
 sys_path = getenv("PATH");
-homebrew_prefix = getenv("HOMEBREW_PREFIX");
-if contains(sys_path, homebrew_prefix)
+if contains(sys_path, getenv("HOMEBREW_PREFIX"))
   return
 end
 

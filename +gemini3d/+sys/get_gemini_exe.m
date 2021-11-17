@@ -1,33 +1,19 @@
-function exe = get_gemini_exe(exe)
+function exe = get_gemini_exe(name)
 arguments
-  exe (1,1) string = "gemini3d.run"
+  name (1,1) string {mustBeNonzeroLengthText}
 end
 
-import stdlib.fileio.expanduser
 import stdlib.fileio.which
-import stdlib.sys.subprocess_run
 
-runner_name = "gemini3d.run";
+paths = [string(getenv("MATGEMINI")), string(getenv("GEMINI_ROOT"))];
+bindirs = ["build", ".", "bin", "build/bin", "build/Release", "build/RelWithDebInfo", "build/Debug"];
 
-exe = which(exe);
-
-if isempty(exe)
-  src_dir = expanduser(getenv("GEMINI_ROOT"));
-  assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
-  for b = ["../GEMINI3D-build", ".", "build", "build/Release", "build/RelWithDebInfo", "build/Debug"]
-    build_dir = fullfile(src_dir, b);
-    if isfolder(build_dir)
-      break
+for p = paths
+  for b = bindirs
+    exe = which(name, fullfile(p, b));
+    if ~isempty(exe)
+      return
     end
   end
-  exe = which(runner_name, build_dir);
-
-  assert(~isempty(exe), 'gemini3d.run executable not found under %s. Please build with cmake from top-level mat-gemini/ dir.  See README.md.', src_dir)
 end
-assert(~isempty(exe), "failed to build/find %s", exe)
-%% sanity check Gemini executable
-[ret, msg] = subprocess_run(exe);
-
-assert(ret == 0, "problem with Gemini executable: %s  error: %s", exe, msg)
-
 end % function

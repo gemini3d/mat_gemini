@@ -14,17 +14,17 @@ end
 methods (Test)
 
 
-function test_nml_gemini_simroot(tc)
+function test_nml_gemini_envvar(tc)
 
 import gemini3d.fileio.expand_envvar
 
-old = getenv("GEMINI_SIMROOT");
+old = getenv("GEMINI_CIROOT");
 
-setenv("GEMINI_SIMROOT", "abc123")
+setenv("GEMINI_CIROOT", "abc123")
 
-out = expand_envvar("@GEMINI_SIMROOT@/foo");
+out = expand_envvar("@GEMINI_CIROOT@/foo");
 
-setenv("GEMINI_SIMROOT", old)
+setenv("GEMINI_CIROOT", old)
 
 tc.verifyEqual(out, fullfile("abc123", "foo"))
 

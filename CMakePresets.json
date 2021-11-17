@@ -4,18 +4,7 @@
 "configurePresets": [
 {
   "name": "default",
-  "binaryDir": "${sourceDir}/build",
-  "cacheVariables": {
-    "package": false,
-    "equil": false
-  }
-},
-{
-  "name": "regen-package", "inherits": "default",
-  "cacheVariables": {
-    "equil": true,
-    "package": true
-  }
+  "binaryDir": "${sourceDir}/build"
 }
 ],
 "testPresets": [
@@ -29,19 +18,6 @@
   "execution": {
     "noTestsAction": "error",
     "stopOnFailure": false
-  }
-},
-{
-  "name": "regen-package", "inherits": "default",
-  "configurePreset": "regen-package",
-  "description": "Regenerates .zst reference data, by disabling compare",
-  "filter": {
-    "exclude": {
-      "label": "(compare|download)",
-      "fixtures": {
-        "any": "(compare_fxt|inputOK_fxt)"
-        }
-      }
   }
 }
 ]

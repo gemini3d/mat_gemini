@@ -1,4 +1,5 @@
-# Matlab (and Python) don't have an easy way to specify test dependencies between files.
+# Matlab (and Python) don't have an easy way to specify
+# test dependencies between test code files.
 # Hence, we use a CMake project to specify depedencies and run tests in parallel.
 
 cmake_minimum_required(VERSION 3.20...3.22)
@@ -12,6 +13,7 @@ VERSION ${PROJECT_VERSION}
 )
 
 enable_testing()
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(CMAKE_TLS_VERIFY true)
 set(tmod gemini3d.tests.Test)
@@ -19,57 +21,29 @@ set(tmod gemini3d.tests.Test)
 find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 
 if(NOT Matlab_OK)
-  execute_process(COMMAND ${Matlab_MAIN_PROGRAM} -batch "assert(~verLessThan('matlab', '9.9'))"
+  execute_process(COMMAND ${Matlab_MAIN_PROGRAM} -nojvm -batch "assert(~verLessThan('matlab', '9.9'))"
   RESULT_VARIABLE ret
   TIMEOUT 60
   )
   if(NOT ret EQUAL 0)
-    message(FATAL_ERROR "Matlab version is too old. Please upgrade to at least R2020b")
+    message(FATAL_ERROR "Matlab version is too old. Please upgrade Matlab >= R2020b")
   endif()
   set(Matlab_OK true CACHE BOOL "Matlab is OK")
 endif()
 
 # -- setup Gemini3D program
-include(ExternalProject)
+# if the computer has Gemini3D source code at GEMINI_ROOT,
+# we build our own Gemini3D binaries under mat_gemini/ from
+# that source.
+# If there is no GEMINI_ROOT, we download Gemini3D source and build.
 
 if(NOT GEMINI_ROOT)
   set(GEMINI_ROOT $ENV{GEMINI_ROOT})
 endif()
 
-set(gemini_args
--DBUILD_TESTING:BOOL=off
---install-prefix=${PROJECT_BINARY_DIR}
-)
+include(cmake/build_gemini3d.cmake)
 
-if(CMAKE_BUILD_TYPE)
-  list(APPEND cmake_args -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
-endif()
-
-if(GEMINI_ROOT)
-  ExternalProject_Add(GEMINI3D
-  SOURCE_DIR ${GEMINI_ROOT}
-  CMAKE_ARGS ${gemini_args}
-  INACTIVITY_TIMEOUT 15
-  CONFIGURE_HANDLED_BY_BUILD true
-  )
-else()
-  string(JSON gemini_url GET ${_libj} gemini3d url)
-  string(JSON gemini_tag GET ${_libj} gemini3d tag)
-
-  ExternalProject_Add(GEMINI3D
-  GIT_REPOSITORY ${gemini_url}
-  GIT_TAG ${gemini_tag}
-  CMAKE_ARGS ${gemini_args}
-  INACTIVITY_TIMEOUT 15
-  CONFIGURE_HANDLED_BY_BUILD true
-  )
-endif()
-
-ExternalProject_Get_property(GEMINI3D SOURCE_DIR)
-cmake_path(NORMAL_PATH SOURCE_DIR OUTPUT_VARIABLE GEMINI_ROOT)
-message(STATUS "Gemini3D source: ${GEMINI_ROOT}")
-
-# -- testing
+# -- MatGemini testing
 
 add_test(NAME Lint
 COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}Lint'))"

@@ -21,8 +21,8 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
+import gemini3d.sys.get_gemini_exe
 import stdlib.fileio.absolute_path
-import stdlib.fileio.expanduser
 import stdlib.fileio.which
 import stdlib.sys.subprocess_run
 import gemini3d.sys.cmake
@@ -34,22 +34,19 @@ else
   msis_version = 0;
 end
 
-%% path to msis executable
-src_dir = expanduser(getenv("GEMINI_ROOT"));
-assert(isfolder(src_dir), "Please set environment variable GEMINI_ROOT to top-level Gemini3D folder.")
-for b = ["../GEMINI3D-build", ".", "build", "build/Release", "build/RelWithDebInfo", "build/Debug"]
-  build_dir = fullfile(src_dir, b);
-  if isfolder(build_dir)
-    break
+%% find or build msis_setup executable
+exe = get_gemini_exe("msis_setup");
+
+if isempty(exe)
+  src_dir = getenv("GEMINI_ROOT");
+  if isempty(src_dir)
+    src_dir = getenv("MATGEMINI");
+    cmake(src_dir, fullfile(src_dir, "build"));
   end
+  exe = get_gemini_exe("msis_setup");
 end
-exe = which("msis_setup", build_dir);
 
-%% build exe if not present
-assert(~isempty(exe), 'MSIS setup executable not found under %s. Please build with cmake from top-level mat-gemini/ dir.  See README.md.', src_dir)
-
-%% SPECIFY SIZES ETC.
-alt=xg.alt/1e3;
+assert(~isempty(exe), 'MSIS setup executable not found')
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
 if isfield(p, 'activ')
   f107a = p.activ(1);
@@ -64,6 +61,7 @@ end
 doy = day(time, 'dayofyear');
 UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
 % KLUDGE THE BELOW-ZERO ALTITUDES SO THAT THEY DON'T GIVE INF
+alt = xg.alt/1e3;
 alt(alt <= 0) = 1;
 %% MSIS file API
 % we use binary files because they are MUCH faster than stdin/stdout pipes
@@ -76,8 +74,7 @@ else
 end
 msis_infile = absolute_path(msis_infile);
 if ~isfolder(fileparts(msis_infile))
-  warning('model:msis:FolderNotFound', 'msis_infile not an absolute path. Falling back to tempdir')
-  msis_infile = fullfile(tempdir, 'msis_setup_in.h5');
+  msis_infile = tempname + "-msis_setup_in.h5";
 end
 
 if isfield(p, "msis_outfile")
@@ -87,8 +84,7 @@ else
 end
 msis_outfile = absolute_path(msis_outfile);
 if ~isfolder(fileparts(msis_outfile))
-  warning('model:msis:FolderNotFound', 'msis_outfile not an absolute path. Falling back to tempdir')
-  msis_outfile = fullfile(tempdir, 'msis_setup_in.h5');
+  msis_outfile = tempname + "-msis_setup_out.h5";
 end
 
 if isfile(msis_infile)
@@ -113,14 +109,14 @@ h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
 if msis_version == 20
-  msis20_file = fullfile(build_dir, 'msis20.parm');
+  msis20_file = fullfile(fileparts(exe), 'msis20.parm');
   assert(isfile(msis20_file), "%s not found", msis20_file)
 end
 
 if msis_version == 20
   % limitation of Matlab system() vis pwd for msis20.parm
   old_pwd = pwd;
-  cd(build_dir)
+  cd(fileparts(exe))
 end
 [status, msg] = subprocess_run([exe, msis_infile, msis_outfile]);
 % output written to file

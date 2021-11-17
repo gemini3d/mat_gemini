@@ -29,7 +29,7 @@ end
 methods(Test)
 
 function test_get_gemini_exe(tc)
-tc.verifyNotEmpty(gemini3d.sys.get_gemini_exe())
+tc.verifyNotEmpty(gemini3d.sys.get_gemini_exe("gemini3d.run"))
 end
 
 
