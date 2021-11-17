@@ -37,14 +37,15 @@ end % function
 function archive = download_data(name, data_dir, url_file)
 
 import stdlib.fileio.makedir
+import stdlib.fileio.expanduser
 
 if isempty(url_file)
-  url_file = fullfile(fileparts(mfilename('fullpath')), "../+tests/ref_data.json");
+  url_file = fullfile(getenv("MATGEMINI"), "ref_data.json");
 end
 
 makedir(data_dir)
 
-urls = jsondecode(fileread(url_file));
+urls = jsondecode(fileread(expanduser(url_file)));
 
 archive = fullfile(data_dir, urls.tests.(name).archive);
 
