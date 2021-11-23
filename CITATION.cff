@@ -7,7 +7,6 @@ authors:
   - family-names: Hirsch
     given-names: Michael
     orcid: 0000-0002-1637-6526
-title: Matlab-stdlib
-version: 5.3.1
+title: MatGemini
 doi: 10.5281/zenodo.3964540
 date-released: 2021-11-17
