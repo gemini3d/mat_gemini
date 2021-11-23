@@ -17,15 +17,11 @@ arguments
 end
 
 %% ensure all paths are OK
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../setup.m'))
+run(fullfile(fileparts(mfilename('fullpath')), '../setup.m'))
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 if isempty(gemini_exe)
-  src_dir = getenv("GEMINI_ROOT");
-  if isempty(src_dir)
-    src_dir = getenv("MATGEMINI");
-  end
+  src_dir = getenv("MATGEMINI");
   gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
   gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 end

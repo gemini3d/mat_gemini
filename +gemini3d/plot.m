@@ -15,8 +15,7 @@ arguments
 end
 
 %% ensure all paths are OK
-cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../setup.m'))
+run(fullfile(fileparts(mfilename('fullpath')), '../setup.m'))
 %% internal plot
 h = gemini3d.plot.plotall(direc, saveplot_fmt, ...
       "plotfun", opts.plotfun, ...
