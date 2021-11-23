@@ -27,7 +27,6 @@ jobs:
 
       - name: Run tests and generate artifacts
         timeout-minutes: 20
-        uses: matlab-actions/run-tests@v1
+        uses: matlab-actions/run-command@v1
         with:
-          test-results-junit: test-results/results.xml
-          code-coverage-cobertura: code-coverage/coverage.xml
+          command: setup_gemini3d, assertSuccess(runtests('gemini3d'))
