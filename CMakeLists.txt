@@ -18,26 +18,25 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_TLS_VERIFY true)
 
 include(cmake/options.cmake)
+include(cmake/libraries.cmake)
 
 set(tmod gemini3d.tests.Test)
 
 find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 
-if(NOT Matlab_OK)
-  execute_process(COMMAND ${Matlab_MAIN_PROGRAM} -nojvm -batch "assert(~verLessThan('matlab', '9.9'))"
-  RESULT_VARIABLE ret
-  TIMEOUT 60
-  )
-  if(NOT ret EQUAL 0)
-    message(FATAL_ERROR "Matlab version is too old. Please upgrade Matlab >= R2020b")
-  endif()
-  set(Matlab_OK true CACHE BOOL "Matlab is OK")
-endif()
-
 # -- setup Gemini3D program
 # For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build
 
 include(cmake/build_gemini3d.cmake)
+
+# -- setup Zstd
+# Zstandard is used to archive reference and input files
+# it is much faster and more robust than Zip, particularly for large files as used
+# by Gemini3D
+find_program(ZSTD NAMES zstd)
+if(NOT ZSTD)
+  include(cmake/build_zstd.cmake)
+endif()
 
 # -- MatGemini testing
 

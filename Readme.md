@@ -14,64 +14,28 @@ Matlab R2020a Update 5 and newer have better plot quality due to new Matlab grap
 
 ## Quick Start
 
-We assume you already have a Fortran compiler and MPI library installed.
-
 ```sh
 git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
 ```
 
-To enable mat_gemini functions, from the "mat_gemini/" directory in Matlab:
+From Matlab in this "mat_gemini/" directory:
 
 ```matlab
 setup
 ```
 
-To use features requiring Gemini3D such as "msis_setup", MatGemini will use CMake to build Gemini3D.
-If desired, you can optionally do this manually:
+To use features requiring Gemini3D such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
+We assume you already have a Fortran compiler and MPI library installed.
+Optionally, you can build manually from Matlab:
 
 ```sh
-cmake -B build
-cmake --build build
+setup_gemini3d
 ```
 
-### Self-check (optional, but recommended)
-
-Run the self-tests from Matlab in the mat_gemini/ directory:
+Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
 runtests('gemini3d')
-```
-
-or
-
-```sh
-ctest --test-dir build
-```
-
----
-
-We use .zst ZSTD files for the reference test data.
-If you don't have "zstd" on your system, you can install this from Gemini3D project gemini3d/ directory by:
-
-```sh
-cmake -P scripts/build_zstd.cmake
-```
-
----
-
-If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
-If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
-
-Edit ~/.bashrc to have
-
-```sh
-export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
-```
-
-Then run:
-
-```sh
-git config --global http.sslCAInfo /etc/ssl/certs/ca-bundle.crt
 ```
 
 ## Usage
@@ -187,3 +151,20 @@ gemini3d.tests.generate_reference_data('../gemini-examples/init', '~/sim', 'test
 
 That makes all tests with subdirectory names containing "test2d".
 A cell array or string array of names can also be specified.
+
+## Troubleshooting
+
+If there are failures with SSL certificate errors, you may need to tell Git the location of your system SSL certificates. This can be an issue in general on HPC.
+If this is an issue, and assuming your SSL certificates are at "/etc/ssl/certs/ca-bundle.crt", do these two steps from Terminal (not Matlab), one time.
+
+Edit ~/.bashrc or ~/.zshrc to have
+
+```sh
+export SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+```
+
+Then run:
+
+```sh
+git config --global http.sslCAInfo /etc/ssl/certs/ca-bundle.crt
+```

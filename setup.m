@@ -12,6 +12,11 @@ stdlib_dir = fullfile(cwd, "matlab-stdlib");
 assert(system("git submodule update --init") == 0, ...
   "could not update Matlab-stdlib submodule. Please make a GitHub Issue for this.")
 addpath(stdlib_dir)
+%% add our local binary dir to PATH (e.g. for Zstd)
+matGemini_bin = fullfile(cwd, "build", "bin");
+if ~contains(getenv("PATH"), matGemini_bin)
+  setenv('PATH', matGemini_bin + pathsep + getenv("PATH"))
+end
 %% fix MacOS PATH since ZSH isn't populated into Matlab
 if ismac
   homebrew_path()

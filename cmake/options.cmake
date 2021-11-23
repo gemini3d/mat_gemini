@@ -1,3 +1,6 @@
+
+set_directory_properties(PROPERTIES EP_UPDATE_DISCONNECTED true)
+
 # --- for ExternalProject generator
 if(CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
   set(EXTPROJ_GENERATOR "Ninja")
