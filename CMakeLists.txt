@@ -16,6 +16,9 @@ enable_testing()
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(CMAKE_TLS_VERIFY true)
+
+include(cmake/options.cmake)
+
 set(tmod gemini3d.tests.Test)
 
 find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
@@ -32,14 +35,7 @@ if(NOT Matlab_OK)
 endif()
 
 # -- setup Gemini3D program
-# if the computer has Gemini3D source code at GEMINI_ROOT,
-# we build our own Gemini3D binaries under mat_gemini/ from
-# that source.
-# If there is no GEMINI_ROOT, we download Gemini3D source and build.
-
-if(NOT GEMINI_ROOT)
-  set(GEMINI_ROOT $ENV{GEMINI_ROOT})
-endif()
+# For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build
 
 include(cmake/build_gemini3d.cmake)
 
