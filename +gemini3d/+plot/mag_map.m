@@ -29,13 +29,13 @@ assert(isfile(fn), fn + " not found")
 switch cfg.file_format
 case 'h5'
   lpoints = h5read(fn, "/lpoints");
-  r = h5read(fn, "/r");
+  % r = h5read(fn, "/r");
   theta = double(h5read(fn, "/theta"));
   phi = double(h5read(fn, "/phi"));
 case 'dat'
   fid=fopen(fn, 'r');
   lpoints=fread(fid,1,'integer*4');
-  r=fread(fid,lpoints, freal);
+  fread(fid,lpoints, freal);
   theta=fread(fid,lpoints, freal);    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
   phi=fread(fid,lpoints, freal);
   fclose(fid);
@@ -45,7 +45,7 @@ end
 %REORGANIZE THE FIELD POINTS (PROBLEM-SPECIFIC)
 ltheta=10;
 lphi=10;
-r=reshape(r(:),[ltheta,lphi]);
+%r=reshape(r(:),[ltheta,lphi]);
 theta=reshape(theta(:),[ltheta,lphi]);
 phi=reshape(phi(:),[ltheta,lphi]);
 mlat=90-theta*180/pi;
@@ -146,7 +146,7 @@ end
 
 mlatlim=[min(mlatp),max(mlatp)];
 mlonlim=[min(mlonp),max(mlonp)];
-[cfg.MLAT, cfg.MLON]=meshgrat(mlatlim,mlonlim,[llonp, llatp]);
+[cfg.MLAT, cfg.MLON]=meshgrat(mlatlim,mlonlim,[llonp, llatp]); %#ok<MESHGRAT>
 
 fig = figure('position', [10, 10, 1200, 500]);
 
@@ -184,8 +184,7 @@ tightmap
 caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
 caxis(ax, [-caxlim,caxlim]);
-c=colorbar("peer", ax);
-% set(c,'FontSize',FS)
+colorbar("peer", ax)
 title(ax, "B_r (nT)  " + ttxt + sprintf('\n\n'))
 xlabel(ax, 'magnetic long. (deg.)')
 ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))
@@ -214,9 +213,8 @@ colormap(ax, gemini3d.plot.bwr())
 tightmap
 caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
-caxis(ax, [-caxlim,caxlim]);
-c=colorbar("peer", ax);
-%set(c,'FontSize',FS)
+caxis(ax, [-caxlim,caxlim])
+colorbar("peer", ax)
 title(ax, "B_\theta (nT)  " + ttxt + sprintf('\n\n'))
 xlabel(ax, 'magnetic long. (deg.)')
 ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))
@@ -246,8 +244,7 @@ caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
 caxis(ax, [-caxlim,caxlim])
 
-c=colorbar("peer", ax);
-%set(c,'FontSize',FS)
+colorbar("peer", ax)
 title(ax, "B_\phi (nT)  " + ttxt + sprintf('\n\n'));
 xlabel(ax, 'magnetic long. (deg.)')
 ylabel(ax, sprintf('magnetic lat. (deg.)\n\n'))

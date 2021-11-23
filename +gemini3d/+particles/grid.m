@@ -1,4 +1,4 @@
-function pg = precip_grid(xg, p)
+function pg = grid(xg, p)
 % xg: spatial grid
 % p: simulation params
 % pg: precipitation params

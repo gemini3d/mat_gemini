@@ -43,7 +43,9 @@ measdiff = abs(actual-desired);
 tol = opts.atol + opts.rtol * abs(desired);
 result = measdiff <= tol;
 
-if ~all(result)
+testok = all(result);
+
+if ~testok
   Nfail = sum(~result);
   j = find(~result);
   [bigbad,i] = max(measdiff(j));

@@ -1,4 +1,4 @@
-function z = altitude_grid(alt_min, alt_max, incl_deg, d)
+function z = altitude(alt_min, alt_max, incl_deg, d)
 %% SETUP NONUNIFORM GRID IN ALTITUDE AND FIELD LINE DISTANCE
 % This defines x1 for the simulations
 % alt_min:  minimum altitude [m]

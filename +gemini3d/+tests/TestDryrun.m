@@ -8,8 +8,6 @@ methods(TestMethodSetup)
 
 function setup_sim(tc)
 
-cwd = fileparts(mfilename('fullpath'));
-
 name = "mini2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));

@@ -1,4 +1,4 @@
-function Q = precip_gaussian2d(pg, Qpeak, Qbackground)
+function Q = gaussian2d(pg, Qpeak, Qbackground)
 %% makes a 2D Gaussian shape in Latitude, Longitude
 arguments
   pg (1,1) struct

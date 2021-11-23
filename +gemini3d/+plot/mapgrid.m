@@ -430,7 +430,8 @@ else
     if has_map
         hold on;
         %ax=axis;
-        load('coastlines');
+        coastlat = load('coastlines', 'coastlat').coastlat;
+        coastlon = loat('coastlines', 'coastlon').coastlon;
         [thetacoast,phicoast] = gemini3d.geog2geomag(coastlat,coastlon);
         mlatcoast=90-thetacoast*180/pi;
         mloncoast=phicoast*180/pi;
