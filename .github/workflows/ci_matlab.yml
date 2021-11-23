@@ -4,7 +4,10 @@ on:
   push:
     paths:
     - "**.m"
+    - "**.cmake"
+    - "**/CMakeLists.txt"
     - ".github/workflows/ci_matlab.yml"
+  pull_request:
 
 
 jobs:
