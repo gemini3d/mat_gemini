@@ -1,4 +1,4 @@
-set(_names gemini3d zstd)
+set(_names gemini3d)
 
 file(READ ${CMAKE_CURRENT_LIST_DIR}/libraries.json _libj)
 

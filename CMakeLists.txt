@@ -29,15 +29,6 @@ find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 
 include(cmake/build_gemini3d.cmake)
 
-# -- setup Zstd
-# Zstandard is used to archive reference and input files
-# it is much faster and more robust than Zip, particularly for large files as used
-# by Gemini3D
-find_program(ZSTD NAMES zstd)
-if(NOT ZSTD)
-  include(cmake/build_zstd.cmake)
-endif()
-
 # -- MatGemini testing
 
 add_test(NAME Lint

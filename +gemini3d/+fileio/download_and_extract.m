@@ -11,6 +11,7 @@ end
 
 import stdlib.fileio.expanduser
 import stdlib.fileio.extract_zstd
+import stdlib.fileio.makedir
 
 data_dir = expanduser(data_dir);
 test_dir = fullfile(data_dir, name);
@@ -22,6 +23,8 @@ archive = download_data(name, data_dir, url_ini);
 
 %% extract
 [~,~,arc_type] = fileparts(archive);
+
+makedir(test_dir)
 
 switch arc_type
   case ".zip", unzip(archive, data_dir)
