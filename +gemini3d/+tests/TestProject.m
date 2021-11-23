@@ -15,8 +15,6 @@ function setup_env(tc)
 
 cwd = fileparts(mfilename('fullpath'));
 
-run(fullfile(cwd, '../../setup.m'))
-
 tc.TestData.cwd = cwd;
 tc.TestData.ref_dir = fullfile(cwd, "data");
 

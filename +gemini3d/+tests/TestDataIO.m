@@ -14,9 +14,6 @@ tc.TestData.cwd = cwd;
 tc.TestData.name = "mini2dew_glow";
 tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 
-% setup so that hdf5nc is present
-run(fullfile(cwd, "../../setup.m"))
-
 % don't import so it sets up first
 gemini3d.fileio.download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
 

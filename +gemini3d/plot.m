@@ -14,8 +14,6 @@ arguments
   opts.plotfun string = string.empty
 end
 
-%% ensure all paths are OK
-run(fullfile(fileparts(mfilename('fullpath')), '../setup.m'))
 %% internal plot
 h = gemini3d.plot.plotall(direc, saveplot_fmt, ...
       "plotfun", opts.plotfun, ...

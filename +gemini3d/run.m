@@ -16,12 +16,11 @@ arguments
   opts.dryrun (1,1) logical = false
 end
 
-%% ensure all paths are OK
-run(fullfile(fileparts(mfilename('fullpath')), '../setup.m'))
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 if isempty(gemini_exe)
-  src_dir = getenv("MATGEMINI");
+  src_dir = fullfile(what('gemini3d').path, '..');
+
   gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
   gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 end

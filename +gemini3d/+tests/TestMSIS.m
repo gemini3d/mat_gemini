@@ -9,7 +9,6 @@ methods(TestMethodSetup)
 function setup_stdlib(tc) %#ok<MANU>
 
 cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
 
 end
 

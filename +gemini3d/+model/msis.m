@@ -26,9 +26,6 @@ import stdlib.fileio.which
 import stdlib.sys.subprocess_run
 import stdlib.hdf5nc.h5save
 
-%% ensure all paths are OK
-run(fullfile(fileparts(mfilename('fullpath')), '../../setup.m'))
-
 if isfield(p, "msis_version")
   msis_version = p.msis_version;
 else
@@ -38,7 +35,7 @@ end
 %% find or build msis_setup executable
 exe = gemini3d.sys.get_gemini_exe("msis_setup");
 if isempty(exe)
-  src_dir = getenv("MATGEMINI");
+  src_dir = fullfile(what('gemini3d').path, "..");
   gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
   exe = gemini3d.sys.get_gemini_exe("msis_setup");
 end

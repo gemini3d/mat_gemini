@@ -3,10 +3,9 @@
 % however if you wish you can run it manually to setup gemini3d
 
 %% ensure all paths are OK
-run(fullfile(fileparts(mfilename('fullpath')), 'setup.m'))
+cwd = fullfile(fileparts(mfilename('fullpath')));
+run(fullfile(cwd, 'setup.m'))
 
-src_dir = getenv("MATGEMINI");
-gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
-exe = gemini3d.sys.get_gemini_exe("msis_setup");
+gemini3d.sys.cmake(cwd, fullfile(cwd, "build"));
 
-setenv("GEMINI_ROOT", src_dir)
+setenv("GEMINI_ROOT", cwd)

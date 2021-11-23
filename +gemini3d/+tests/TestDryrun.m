@@ -9,7 +9,6 @@ methods(TestMethodSetup)
 function setup_sim(tc)
 
 cwd = fileparts(mfilename('fullpath'));
-run(fullfile(cwd, '../../setup.m'))
 
 name = "mini2dew_eq";
 
