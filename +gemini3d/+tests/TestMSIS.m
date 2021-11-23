@@ -66,7 +66,7 @@ catch e
 end
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
-tc.verifyEqual(atmos.Tn(1,2,3), single(186.54959), 'reltol', single(1e-5))
+tc.verifyEqual(atmos.Tn(1,2,3), single(189.7185), 'reltol', single(1e-5))
 end
 
 end

@@ -29,4 +29,4 @@ jobs:
         timeout-minutes: 15
         uses: matlab-actions/run-command@v1
         with:
-          command: setup_gemini3d, r = runtests('gemini3d.tests'), assert ~isempty(r), assertSuccess(r)
+          command: setup_gemini3d, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
