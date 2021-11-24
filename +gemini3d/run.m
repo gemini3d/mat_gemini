@@ -38,6 +38,7 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
+disp(join([gemini_exe, cfg.outdir], " "))
 [ret, msg] = stdlib.sys.subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
 if ret ~=0
   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
