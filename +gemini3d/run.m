@@ -38,8 +38,9 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
 end
 
 %% assemble run command
-disp(join([gemini_exe, cfg.outdir], " "))
-[ret, msg] = stdlib.sys.subprocess_run([gemini_exe, cfg.outdir, "-dryrun"]);
+cmd = [gemini_exe, cfg.outdir];
+disp("dryrun: " + join(cmd, " "))
+[ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
 if ret ~=0
   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
 end
@@ -50,7 +51,8 @@ end
 %% run simulation
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
-ret = stdlib.sys.subprocess_run([gemini_exe, cfg.outdir]);
+disp("run: " + join(cmd, " "))
+ret = stdlib.sys.subprocess_run(cmd);
 assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function
