@@ -1,6 +1,6 @@
 function mpiexec = check_mpiexec(mpiexec, exe)
 arguments
-  mpiexec string
+  mpiexec string {mustBeScalarOrEmpty}
   exe (1,1) string
 end
 
@@ -25,7 +25,7 @@ if isempty(mpiexec)
   return
 end
 
-[ret, msg] = system(mpiexec + " -help");
+[ret, msg] = system('"' + mpiexec + '"' + " -help");
 if ret ~= 0
   mpiexec = string.empty;
   return
@@ -36,10 +36,15 @@ if ~ispc
 end
 
 % get gemini.bin compiler ID
-[~, vendor] = system(exe + " -compiler");
+exe = stdlib.fileio.which(exe);
+if isempty(exe)
+  return
+end
+% get gemini.bin compiler ID
+[~, vendor] = system(stdlib.fileio.absolute_path(exe) + " -compiler");
 if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
+  warning("MinGW is not compatible with Intel MPI %s", mpiexec)
   mpiexec = string.empty;
-  warning("Not using MPIexec since MinGW is not compatible with Intel MPI")
 end
 
 end % function

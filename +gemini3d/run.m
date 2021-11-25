@@ -9,7 +9,7 @@ arguments
   outdir (1,1) string
   config_path (1,1) string
   opts.overwrite (1,1) logical = false
-  opts.mpiexec string = string.empty
+  opts.mpiexec string = "mpiexec"
   opts.gemini_exe (1,1) string = "gemini3d.run"
   opts.ssl_verify string = string.empty
   opts.file_format string = string.empty
@@ -37,8 +37,14 @@ if ~isfield(cfg, 'mcadence') || cfg.mcadence < 0
   end
 end
 
+%% check MPIexec
+mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
+
 %% assemble run command
 cmd = [gemini_exe, cfg.outdir];
+if ~isempty(mpiexec)
+  cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
+end
 disp("dryrun: " + join(cmd, " "))
 [ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
 if ret ~=0
