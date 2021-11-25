@@ -6,7 +6,9 @@ end
 import stdlib.fileio.which
 import stdlib.fileio.absolute_path
 
-paths = [fullfile(what('gemini3d').path, ".."), string(getenv("GEMINI_ROOT"))];
+
+
+paths = [fullfile(gemini3d.root(), ".."), string(getenv("GEMINI_ROOT"))];
 bindirs = ["build", ".", "bin", "build/bin", "build/Release", "build/RelWithDebInfo", "build/Debug"];
 
 for p = paths

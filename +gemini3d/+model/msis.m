@@ -35,7 +35,7 @@ end
 %% find or build msis_setup executable
 exe = gemini3d.sys.get_gemini_exe("msis_setup");
 if isempty(exe)
-  src_dir = fullfile(what('gemini3d').path, "..");
+  src_dir = fullfile(gemini3d.root(), "..");
   gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
   exe = gemini3d.sys.get_gemini_exe("msis_setup");
 end

@@ -43,7 +43,7 @@ import stdlib.fileio.makedir
 import stdlib.fileio.expanduser
 
 if isempty(url_file)
-  url_file = fullfile(what('gemini3d').path, "ref_data.json");
+  url_file = fullfile(gemini3d.root(), "ref_data.json");
 end
 
 makedir(data_dir)
