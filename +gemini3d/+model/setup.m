@@ -10,8 +10,6 @@ import gemini3d.fileio.make_valid_paths
 import stdlib.fileio.makedir
 import stdlib.fileio.copyfile
 
-assert(~verLessThan('matlab', '9.7'), 'Matlab >= R2019b is required')
-
 %% parse input
 if ~isstruct(cfg)
   % path to config.nml
@@ -29,6 +27,7 @@ disp("copying config.nml to " + cfg.input_dir)
 % specify filename in case it wasn't config.nml
 copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
 
+setup_summary(cfg)
 
 %% is this equilibrium or interpolated simulation
 if isfield(cfg, 'eq_dir') && ~isempty(cfg.eq_dir)
