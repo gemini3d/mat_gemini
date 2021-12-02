@@ -32,6 +32,12 @@ Optionally, you can build manually from Matlab:
 setup_gemini3d
 ```
 
+On MacOS with Homebrew, if you have issues with CMake, GCC or Git not found, try running from Matlab:
+
+```sh
+setup_homebrew
+```
+
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
