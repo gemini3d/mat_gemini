@@ -1,3 +1,4 @@
+option(hwm14 "use HWM14 model")
 
 set_directory_properties(PROPERTIES EP_UPDATE_DISCONNECTED true)
 
