@@ -1,11 +1,19 @@
 include(ExternalProject)
 
+# Can run Gemini3D without MPI, but it's a lot slower
+find_package(MPI COMPONENTS C Fortran)
+if(MPI_FOUND)
+  set(mpi on)
+else()
+  set(mpi off)
+endif()
+
 
 set(GEMINI_ROOT ${PROJECT_BINARY_DIR})
 
 set(gemini3d_args
 -DBUILD_TESTING:BOOL=off
--Dmpi:BOOL=on
+-Dmpi:BOOL=${mpi}
 -Dmsis2:BOOL=on
 -Dglow:BOOL=on
 -Dhdf5:BOOL=on
