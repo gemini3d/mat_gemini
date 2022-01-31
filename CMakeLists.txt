@@ -13,6 +13,7 @@ VERSION ${PROJECT_VERSION}
 )
 
 enable_testing()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(CMAKE_TLS_VERIFY true)
@@ -27,7 +28,7 @@ find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
 # -- setup Gemini3D program
 # For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build
 
-include(cmake/build_gemini3d.cmake)
+include(cmake/gemini3d.cmake)
 
 # -- MatGemini testing
 

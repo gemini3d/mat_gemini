@@ -41,7 +41,7 @@ setup_homebrew
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-runtests('gemini3d')
+runtests('gemini3d.tests')
 ```
 
 ## Usage
