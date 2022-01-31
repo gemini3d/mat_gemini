@@ -41,9 +41,24 @@ function archive = download_data(name, data_dir, url_file)
 
 import stdlib.fileio.makedir
 import stdlib.fileio.expanduser
+import stdlib.fileio.sha256sum
+
+cert_file = getenv("SSL_CERT_FILE");
+if isfile(cert_file)
+  web_opts = weboptions('CertificateFilename', cert_file, 'Timeout', 15);
+else
+  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
+end
 
 if isempty(url_file)
-  url_file = fullfile(gemini3d.root(), "ref_data.json");
+  lib_file = fullfile(gemini3d.root(), "../cmake/libraries.json");
+  url_file = fullfile(gemini3d.root(), "../build/ref_data.json");
+
+  libs = jsondecode(fileread(lib_file));
+
+  if ~isfile(url_file) || sha256sum(url_file) ~= libs.ref_data.sha256
+    websave(url_file, libs.ref_data.url, web_opts);
+  end
 end
 
 makedir(data_dir)
@@ -55,12 +70,6 @@ archive = fullfile(data_dir, urls.tests.(name).archive);
 if isfile(archive) && dir(archive).bytes > 10000
   check_data(name, archive, urls.tests)
   return
-end
-
-if isfile(getenv("SSL_CERT_FILE"))
-  web_opts = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"), 'Timeout', 15);
-else
-  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
 end
 
 websave(archive, urls.tests.(name).url, web_opts);
