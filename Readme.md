@@ -1,4 +1,4 @@
-# Gemini Matlab scripts
+# ```mat_gemini``` - Base Gemini Matlab Scripts
 
 [![MATLAB on GitHub-Hosted Runner](https://github.com/gemini3d/mat_gemini/actions/workflows/ci.yml/badge.svg)](https://github.com/gemini3d/mat_gemini/actions/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
@@ -7,12 +7,15 @@
 These scripts form the basic core needed to work with Gemini3D ionospheric model to:
 
 * generate a new simulation from scratch
+* run a simulation
 * read simulation output
-* plot simulation
+* plot simulation output
 
-Matlab R2020a Update 5 and newer have better plot quality due to new Matlab graphics backend.
+The latter two functions are independent of the core GEMINI fortran/C model and as such can be used without first downloading and building.  I.e. to load and plot output data one does not need the main GEMINI fortran/C code, but creating input and running the GEMINI model from matlab require the core fortran/C code.  
 
-## Quick Start
+Note that Matlab R2020a Update 5 and newer have better plot quality due to new Matlab graphics backend.
+
+## Quick Start:  loading and plotting data only
 
 ```sh
 git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
@@ -24,7 +27,9 @@ From Matlab in this "mat_gemini/" directory:
 setup
 ```
 
-To use features requiring Gemini3D such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
+## Simulation prep:  calling GEMINI core model components from MATLAB
+
+To use features requiring Gemini3D (i.e. the main Fortran/C code) such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
 We assume you already have a Fortran compiler and MPI library installed.
 Optionally, you can build manually from Matlab:
 
@@ -44,12 +49,14 @@ Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 runtests('gemini3d.tests')
 ```
 
-## Usage
+## ```mat_gemini``` functionality
 
 Generally, one sets up a simulation, runs, then plots the outputs of that simulation.
 Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom functions.
 
-The model setup creates a neutral atmosphere using MSIS.
+### Creating new simulation data
+
+```gemini3d.model.setup()``` creates a neutral atmosphere using MSIS.
 The default is to use MSISE00, but MSIS 2.0 is also available.
 This is user selectable in the simulation config.nml file like:
 
@@ -63,6 +70,8 @@ where `0` is MSISE00 (default) and `20` is MSIS 2.0.
 
 ### Run Simulation
 
+By default we assume that the user will run the GEMINI core model from the command line.  
+
 The Matlab Live Scripts [Examples/ns_fang.mlx](./Examples/ns_fang.mlx) interactively demonstrates running a 2D simulation.
 Open and run this script, or simply run from Matlab:
 
@@ -70,9 +79,19 @@ Open and run this script, or simply run from Matlab:
 gemini3d.run(out_dir, 'Examples/init/2dns_fang.nml')
 ```
 
+### Load a simulation config.nml file
+
+Information from a simulation config.nml can be loaded into a structure via:  
+
+```matlab
+cfg = gemini3d.read.config(directory)
+```
+
+For a complete description of possible options to specify in a ```config.nml``` file please see [Readme_input](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_input.md)
+
 ### Load a data frame
 
-The data writes out to a file each time step it's commanded to by the config.nml "dtout" parameter.
+The data writes out to a file at a rate set by the ```dtout``` parameter in ```config.nml```.
 You can load these by filename, or by directory + time:
 
 ```matlab
@@ -82,6 +101,19 @@ dat = gemini3d.read.frame(filename);
 ```matlab
 dat = gemini3d.read.frame(directory, 'time', datetime(2012,1,20,12,5,3));
 ```
+
+The variables in the ```dat``` struct are listed and explained in the main GEMINI repository [Readme_output](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_output.md)
+
+### Load a grid file
+
+To read the grid data from a simulation directory do:
+
+```matlab
+xg = gemini3d.read.grid(directory)
+```
+
+Elements of the output grid structure are listed and described in the [Readme_input](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_input.md)
+
 
 ### Plot all simulation outputs
 
@@ -115,8 +147,8 @@ myfunc(cfg, xg)
 
 then they can be specified in the config.nml file under setup/setup_functions.
 For examples see
-[GDI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/GDI_periodic_lowres) and
-[KHI_periodic_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/KHI_periodic_lowres).
+[GDI\_periodic\_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/GDI_periodic_lowres) and
+[KHI\_periodic\_lowres](https://github.com/gemini3d/gemini-examples/tree/main/init/KHI_periodic_lowres).
 
 ### compare data directories
 
