@@ -2,6 +2,8 @@ option(hwm14 "use HWM14 model")
 
 set_directory_properties(PROPERTIES EP_UPDATE_DISCONNECTED true)
 
+set(CMAKE_TLS_VERIFY true)
+
 # --- for ExternalProject generator
 if(CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
   set(EXTPROJ_GENERATOR "Ninja")

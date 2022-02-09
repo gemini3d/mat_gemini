@@ -14,10 +14,6 @@ VERSION ${PROJECT_VERSION}
 
 enable_testing()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-set(CMAKE_TLS_VERIFY true)
-
 include(cmake/options.cmake)
 include(cmake/libraries.cmake)
 
@@ -32,54 +28,83 @@ include(cmake/gemini3d.cmake)
 
 # -- MatGemini testing
 
+cmake_path(SET setup_m ${CMAKE_CURRENT_SOURCE_DIR}/setup.m)
+
 add_test(NAME Lint
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}Lint'))"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}Lint'); assert(~isempty(r)), assertSuccess(r)"
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 set_tests_properties(Lint PROPERTIES
 TIMEOUT 120
 FIXTURES_SETUP lint_fxt
 )
 
-foreach(n Unit Grid MSIS)
+# --- unit tests
 
-add_test(NAME ${n}
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}${n}'))"
-WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-)
+set(unit_tests Unit Grid)
 
-set_tests_properties(${n} PROPERTIES
+foreach(n ${unit_tests})
+
+  add_test(NAME ${n}
+  COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}${n}'); assert(~isempty(r)), assertSuccess(r)"
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
+
+endforeach()
+
+set_tests_properties(${unit_tests} PROPERTIES
 TIMEOUT 120
 FIXTURES_REQUIRED lint_fxt
 FIXTURES_SETUP unit_fxt
 )
 
-endforeach()
+# --- MSIS tests
+
+add_test(NAME MSIS
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}MSIS'); assert(~isempty(r)), assertSuccess(r)"
+)
+
+set_tests_properties(${unit_tests} MSIS PROPERTIES
+TIMEOUT 120
+REQUIRED_FILES ${setup_m}
+FIXTURES_REQUIRED lint_fxt
+FIXTURES_SETUP unit_fxt
+)
+set_tests_properties(MSIS PROPERTIES
+ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
+)
+
+# --- data download tests
 
 add_test(NAME DataIO
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}DataIO'))"
-WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}DataIO'); assert(~isempty(r)), assertSuccess(r)"
 )
 
 set_tests_properties(DataIO PROPERTIES
 TIMEOUT 120
+REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED unit_fxt
 FIXTURES_SETUP io_fxt
 )
 
-foreach(n Dryrun Project)
+# --- integration tests
 
-add_test(NAME ${n}
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "assertSuccess(runtests('${tmod}${n}'))"
-WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+add_test(NAME Dryrun
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Dryrun'); assert(~isempty(r)), assertSuccess(r)"
 )
-
-set_tests_properties(${n} PROPERTIES
+set_tests_properties(Dryrun PROPERTIES
 TIMEOUT 240
+REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED io_fxt
+FIXTURES_SETUP dryrun_fxt
+ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
 )
 
-endforeach()
-
-set_tests_properties(MSIS Dryrun Project PROPERTIES
+add_test(NAME Project
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Project'); assert(~isempty(r)), assertSuccess(r)"
+)
+set_tests_properties(Project PROPERTIES
+TIMEOUT 240
+REQUIRED_FILES ${setup_m}
+FIXTURES_REQUIRED dryrun_fxt
 ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
 )
