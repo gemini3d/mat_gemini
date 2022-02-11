@@ -2,7 +2,7 @@
 # test dependencies between test code files.
 # Hence, we use a CMake project to specify depedencies and run tests in parallel.
 
-cmake_minimum_required(VERSION 3.20...3.22)
+cmake_minimum_required(VERSION 3.20...3.23)
 
 file(READ ${CMAKE_CURRENT_LIST_DIR}/codemeta.json _libj)
 string(JSON PROJECT_VERSION GET ${_libj} version)
@@ -19,7 +19,7 @@ include(cmake/libraries.cmake)
 
 set(tmod gemini3d.tests.Test)
 
-find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
+find_package(Matlab 9.9 COMPONENTS MAIN_PROGRAM REQUIRED)
 
 # -- setup Gemini3D program
 # For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build
