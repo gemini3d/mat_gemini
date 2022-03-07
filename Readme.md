@@ -11,11 +11,11 @@ These scripts form the basic core needed to work with Gemini3D ionospheric model
 * read simulation output
 * plot simulation output
 
-The latter two functions are independent of the core GEMINI fortran/C model and as such can be used without first downloading and building.  I.e. to load and plot output data one does not need the main GEMINI fortran/C code, but creating input and running the GEMINI model from matlab require the core fortran/C code.  
-
-Note that Matlab R2020a Update 5 and newer have better plot quality due to new Matlab graphics backend.
+The latter two functions are independent of the core GEMINI fortran/C model and as such can be used without first downloading and building.  I.e. to load and plot output data one does not need the main GEMINI fortran/C code, but creating input and running the GEMINI model from matlab require the core fortran/C code.
 
 ## Quick Start:  loading and plotting data only
+
+This assumes Gemini3D [prereqs are already setup](https://github.com/gemini3d/external).
 
 ```sh
 git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
@@ -24,18 +24,24 @@ git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
 From Matlab in this "mat_gemini/" directory:
 
 ```matlab
-setup
+prefix = '~/gemlibs';   % wherever gemini3d/external was installed to
+setup_gemini3d(prefix)  % one-time setup
+```
+
+If you prefer more control over the build process, instead of `setup_gemini3d` you can invoke CMake directly:
+
+```sh
+cmake -B build -DCMAKE_PREFIX_PATH=~/gemlibs
+
+cmake --build build
+
+ctest --test-dir build -V
 ```
 
 ## Simulation prep:  calling GEMINI core model components from MATLAB
 
 To use features requiring Gemini3D (i.e. the main Fortran/C code) such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
 We assume you already have a Fortran compiler and MPI library installed.
-Optionally, you can build manually from Matlab:
-
-```sh
-setup_gemini3d
-```
 
 On MacOS with Homebrew, if you have issues with CMake, GCC or Git not found, try running from Matlab:
 
@@ -70,7 +76,7 @@ where `0` is MSISE00 (default) and `20` is MSIS 2.0.
 
 ### Run Simulation
 
-By default we assume that the user will run the GEMINI core model from the command line.  
+By default we assume that the user will run the GEMINI core model from the command line.
 
 The Matlab Live Scripts [Examples/ns_fang.mlx](./Examples/ns_fang.mlx) interactively demonstrates running a 2D simulation.
 Open and run this script, or simply run from Matlab:
@@ -81,7 +87,7 @@ gemini3d.run(out_dir, 'Examples/init/2dns_fang.nml')
 
 ### Load a simulation config.nml file
 
-Information from a simulation config.nml can be loaded into a structure via:  
+Information from a simulation config.nml can be loaded into a structure via:
 
 ```matlab
 cfg = gemini3d.read.config(directory)

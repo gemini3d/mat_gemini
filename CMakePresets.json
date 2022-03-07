@@ -3,8 +3,7 @@
 
 "configurePresets": [
 {
-  "name": "default",
-  "binaryDir": "${sourceDir}/build"
+  "name": "default"
 }
 ],
 "testPresets": [

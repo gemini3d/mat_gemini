@@ -54,12 +54,6 @@ foreach(n ${unit_tests})
 
 endforeach()
 
-set_tests_properties(${unit_tests} PROPERTIES
-TIMEOUT 120
-FIXTURES_REQUIRED lint_fxt
-FIXTURES_SETUP unit_fxt
-)
-
 # --- MSIS tests
 
 add_test(NAME MSIS
