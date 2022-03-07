@@ -1,9 +1,10 @@
-function cmake(src_dir, build_dir)
+function cmake(src_dir, build_dir, cmake_args)
 % build program using CMake and default generator
 % specify CMake generator: set environment variable CMAKE_GENERATOR
 arguments
   src_dir (1,1) string
   build_dir (1,1) string
+  cmake_args string {mustBeScalarOrEmpty} = string.empty
 end
 
 import stdlib.fileio.posix
@@ -21,7 +22,10 @@ assert(system("cmake --version") == 0, 'CMake not found')
 
 %% configure
 % don't use ctest -S as it will infinite loop with MSIS build/test
-cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off --install-prefix=" + build_dir;
+cmd = "cmake -S" + src_dir + " -B" + build_dir + " -DBUILD_TESTING:BOOL=off -DCMAKE_INSTALL_PREFIX:PATH=" + build_dir;
+if ~isempty(cmake_args)
+  cmd = cmd + " " + cmake_args;
+end
 assert(system(cmd) == 0, "error configuring %s with CMake", src_dir)
 
 %% build

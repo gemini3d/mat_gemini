@@ -48,7 +48,7 @@ jobs:
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
-        command: r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
+        command: setup, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
 
 
 # Matlab Windows is in beta, seems a path issue for setup_gemini fails immediately.
