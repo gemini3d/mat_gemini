@@ -1,5 +1,12 @@
 name: matlab
 
+env:
+  CMAKE_PREFIX_PATH: ~/gemlibs
+  GEMINI_ROOT: ~/gemini3d
+  GEMINI_CIROOT: ~/ci
+  CMAKE_BUILD_TYPE: Release
+  CMAKE_GENERATOR: Ninja
+
 on:
   push:
     paths:
@@ -20,7 +27,7 @@ jobs:
     - name: Install Prereqs
       run: |
         sudo apt update -yq
-        sudo apt install -yq --no-install-recommends libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
+        sudo apt install -yq --no-install-recommends ninja-build libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
 
     - name: Checkout Gemini3D-External
       uses: actions/checkout@v2
@@ -31,7 +38,7 @@ jobs:
     - name: Install model libraries
       timeout-minutes: 15
       run: |
-        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dmsis2:BOOL=false --install-prefix=${{ runner.temp }}/gemlibs
+        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dmsis2:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ env.CMAKE_PREFIX_PATH }}
         cmake --build gemext/build --target ffilesystem glow hwm14 msis
         cmake --install gemext/build
 
@@ -42,7 +49,7 @@ jobs:
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
-        command: setup_gemini3d('${{ runner.temp }}/gemlibs')
+        command: setup_gemini3d()
 
     - name: Run Matlab tests
       timeout-minutes: 15
@@ -51,7 +58,7 @@ jobs:
         command: setup, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
 
     - name: CMake config
-      run: cmake -B build_cmake -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}/gemlibs
+      run: cmake -B build_cmake
 
     - name: CMake build
       run: cmake --build build_cmake
