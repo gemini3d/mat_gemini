@@ -31,22 +31,20 @@ jobs:
     - name: Install model libraries
       timeout-minutes: 15
       run: |
-        cmake -S $GITHUB_WORKSPACE/gemext -B $GITHUB_WORKSPACE/gemext/build -Dfind:BOOL=true -Dmsis2:BOOL=true --install-prefix=${HOME}/gemlibs
-        cmake --build $GITHUB_WORKSPACE/gemext/build --target ffilesystem glow hwm14 msis
-        cmake --install $GITHUB_WORKSPACE/gemext/build
+        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dmsis2:BOOL=false --install-prefix=${{ runner.temp }}/gemlibs
+        cmake --build gemext/build --target ffilesystem glow hwm14 msis
+        cmake --install gemext/build
 
     - name: Install MATLAB
       uses: matlab-actions/setup-matlab@v1
 
-    - name: Run tests and generate artifacts
+    - name: Install Gemini3D
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
-        command: setup_gemini3d
-      env:
-        CMAKE_PREFIX_PATH: ${HOME}/gemlibs
+        command: setup_gemini3d('${{ runner.temp }}/gemlibs')
 
-    - name: Run tests and generate artifacts
+    - name: Run Matlab tests
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
