@@ -35,12 +35,9 @@ end
 %% find or build msis_setup executable
 exe = gemini3d.sys.get_gemini_exe("msis_setup");
 if isempty(exe)
-  src_dir = fullfile(gemini3d.root(), "..");
-  gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
-  exe = gemini3d.sys.get_gemini_exe("msis_setup");
+  error("Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
 end
 
-assert(~isempty(exe), 'MSIS setup executable not found')
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
 if isfield(p, 'activ')
   f107a = p.activ(1);

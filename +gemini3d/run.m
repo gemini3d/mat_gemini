@@ -21,13 +21,8 @@ import stdlib.sys.subprocess_run
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 if isempty(gemini_exe)
-  src_dir = fullfile(gemini3d.root(), '..');
-
-  gemini3d.sys.cmake(src_dir, fullfile(src_dir, "build"));
-  gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
+  error("Please run setup_gemini3d() to setup Gemini3D")
 end
-
-assert(~isempty(gemini_exe), "Gemini3D executable not found")
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
 %% check MPIexec
