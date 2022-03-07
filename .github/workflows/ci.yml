@@ -57,14 +57,15 @@ jobs:
       with:
         command: setup, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
 
-    - name: CMake config
-      run: cmake -B build_cmake
+# save CI time by not running duplicitive tests
+    # - name: CMake config
+    #   run: cmake -B build_cmake
 
-    - name: CMake build
-      run: cmake --build build_cmake
+    # - name: CMake build
+    #   run: cmake --build build_cmake
 
-    - name: CMake Test
-      run: ctest --test-dir build_cmake --preset default
+    # - name: CMake Test
+    #   run: ctest --test-dir build_cmake --preset default
 
 
 # Matlab Windows is in beta, seems a path issue for setup_gemini fails immediately.

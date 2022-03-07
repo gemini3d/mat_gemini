@@ -27,7 +27,19 @@ methods(Test)
 
 
 function test_dryrun(tc)
-gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, 'dryrun', true)
+
+try
+  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, 'dryrun', true)
+catch e
+  if contains(e.message, "HDF5 library version mismatched error")
+    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
+  elseif contains(e.message, "GLIBCXX")
+    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
+  else
+    rethrow(e)
+  end
+end
+
 end
 end
 

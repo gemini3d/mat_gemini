@@ -25,7 +25,17 @@ inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('P
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
   'msis_version', 0, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
 
-atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
+try
+  atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
+catch e
+  if contains(e.message, "HDF5 library version mismatched error")
+    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
+  elseif contains(e.message, "GLIBCXX")
+    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
+  else
+    rethrow(e)
+  end
+end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
@@ -40,7 +50,17 @@ inputs_dir =  'not-exist';
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
   'msis_version', 0, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
 
-atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
+try
+  atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
+catch e
+  if contains(e.message, "HDF5 library version mismatched error")
+    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
+  elseif contains(e.message, "GLIBCXX")
+    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
+  else
+    rethrow(e)
+  end
+end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
@@ -59,7 +79,11 @@ try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
 catch e
   if contains(e.message, "msis20.parm not found")
-    tc.assumeTrue(false, "MSIS 2 not enabled")
+    tc.assumeFail("MSIS 2 not enabled")
+  elseif contains(e.message, "HDF5 library version mismatched error")
+    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
+  elseif contains(e.message, "GLIBCXX")
+    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
   else
     rethrow(e)
   end
