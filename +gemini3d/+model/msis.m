@@ -89,7 +89,7 @@ if isfile(msis_outfile)
 end
 
 h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
-h5save(msis_infile, "/doy", doy)
+h5save(msis_infile, "/doy", doy, 'type', 'int32')
 h5save(msis_infile, "/UTsec", UTsec0)
 h5save(msis_infile, "/f107a", f107a)
 h5save(msis_infile, "/f107", f107)
@@ -112,7 +112,8 @@ if msis_version == 20
   old_pwd = pwd;
   cd(fileparts(exe))
 end
-[status, msg] = subprocess_run([exe, msis_infile, msis_outfile]);
+cmd = [exe, msis_infile, msis_outfile];
+[status, msg] = subprocess_run(cmd);
 % output written to file
 if msis_version == 20
   cd(old_pwd)
@@ -121,7 +122,7 @@ end
 switch status
   case -1073741515, error("if on Windows, is libgfortran on PATH?")
   case 0  % good
-  otherwise, error('problem running MSIS %s', msg)
+  otherwise, error('problem running MSIS %s %s', strjoin(cmd), msg)
 end
 
 %% load MSIS output
