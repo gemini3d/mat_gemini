@@ -19,7 +19,10 @@ include(cmake/libraries.cmake)
 
 set(tmod gemini3d.tests.Test)
 
-find_package(Matlab 9.9 COMPONENTS MAIN_PROGRAM REQUIRED)
+find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
+if(Matlab_VERSION_STRING AND Matlab_VERSION_STRING VERSION_LESS 9.9)
+  message(STATUS "Matlab >= 9.9 required, found ${Matlab_VERSION_STRING}")
+endif()
 
 # -- setup Gemini3D program
 # For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build

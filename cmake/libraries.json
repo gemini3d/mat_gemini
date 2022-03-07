@@ -1,7 +1,7 @@
 {
 "gemini3d": {
   "url": "https://github.com/gemini3d/gemini3d.git",
-  "tag": "v1.2.1"
+  "tag": "v1.4.0"
 },
 "ref_data": {
   "url": "https://www.dropbox.com/s/tzwho5199ede15v/ref_data.json?dl=1",
