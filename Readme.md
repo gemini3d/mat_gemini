@@ -43,10 +43,10 @@ ctest --test-dir build -V
 To use features requiring Gemini3D (i.e. the main Fortran/C code) such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
 We assume you already have a Fortran compiler and MPI library installed.
 
-On MacOS with Homebrew, if you have issues with CMake, GCC or Git not found, try running from Matlab:
+If MacOS issues with CMake or Git not found, try running from Matlab:
 
 ```sh
-setup_homebrew
+setup_macos
 ```
 
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
