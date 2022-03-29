@@ -79,6 +79,7 @@ h5save(fn, '/lx3', xg.lx(3), "type", "int32")
 lx1 = xg.lx(1);
 lx2 = xg.lx(2);
 lx3 = xg.lx(3);
+Ng = 4;  % total number of ghost cells
 
 %% grid
 fn = with_suffix(p.indat_grid, '.h5');
@@ -87,14 +88,19 @@ if isfile(fn), delete(fn), end
 
 freal = 'float32';
 
-for i = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h"]
-  h5save(fn, "/"+i, xg.(i), "type", freal)
-end
+h5save(fn, '/x1', xg.x1, "size", lx1 + Ng, "type", freal)
+h5save(fn, '/x1i', xg.x1i, "size", lx1+1, "type", freal)
+h5save(fn, '/dx1b', xg.dx1b, "size", lx1+Ng-1, "type", freal)
+h5save(fn, '/dx1h', xg.dx1h, "size", lx1, "type", freal)
+h5save(fn, '/x2', xg.x2, "size", lx2 + Ng, "type", freal)
+h5save(fn, '/x2i', xg.x2i, "size", lx2+1, "type", freal)
+h5save(fn, '/dx2b', xg.dx2b, "size", lx2+Ng-1, "type", freal)
+h5save(fn, '/dx2h', xg.dx2h, "size", lx2, "type", freal)
 
-%MZ - squeeze() for dipole grids
-for i = ["x3", "x3i", "dx3b", "dx3h"]
-  h5save(fn, "/"+i, squeeze(xg.(i)), "type", freal)
-end
+h5save(fn, '/x3', xg.x3, "size", lx3 + Ng, "type", freal)
+h5save(fn, '/x3i', xg.x3i, "size", lx3+1, "type", freal)
+h5save(fn, '/dx3b', xg.dx3b, "size", lx3+Ng-1, "type", freal)
+h5save(fn, '/dx3h', xg.dx3h, "size", lx3, "type", freal)
 
 h5save(fn, '/h1', xg.h1, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
 h5save(fn, '/h2', xg.h2, "size", [lx1+4, lx2+4, lx3+4], "type", freal)
@@ -116,8 +122,6 @@ for i = ["gx1", "gx2", "gx3", "alt", "glat", "glon", "Bmag", "nullpts", "r", "th
   h5save(fn, "/"+i, xg.(i), "size", [lx1, lx2, lx3], "type", freal)
 end
 
-% MZ - squeeze() for singleton dimensions
-%h5save(fn, '/I', squeeze(xg.I), "size", [lx2, lx3], "type", freal)
 h5save(fn, '/I', xg.I, "size", [lx2, lx3], "type", freal)
 
 
@@ -126,8 +130,8 @@ for i = ["e1","e2","e3","er","etheta","ephi"]
 end
 
 if isfield(xg,"glonctr")
-  h5save(fn,"/glonctr",xg.glonctr)
-  h5save(fn,"/glatctr",xg.glatctr)
+  h5save(fn,"/glonctr", xg.glonctr)
+  h5save(fn,"/glatctr", xg.glatctr)
 end
 
 end % function
