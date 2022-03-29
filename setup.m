@@ -14,4 +14,12 @@ end
 
 addpath(stdlib_dir)
 
+%% check if msis_setup is found--needed to setup simulations
+exe = gemini3d.sys.get_gemini_exe("msis_setup");
+if isempty(exe)
+  warning("Please install https://github.com/gemini3d/external.git for Gemini3D msis_setup." + ...
+  " If already installed, try setting environment variable CMAKE_PREFIX_PATH to the top level install" + ...
+  " directory e.g. ~/libgem if ~/libgem/bin/msis_setup exists.")
+end
+
 end % function
