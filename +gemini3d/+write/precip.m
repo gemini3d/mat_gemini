@@ -37,8 +37,8 @@ freal = 'float32';
 
 fn = fullfile(outdir, 'simgrid.h5');
 if isfile(fn), delete(fn), end
-h5save(fn, '/mlon', pg.mlon, "type", freal)
-h5save(fn, '/mlat', pg.mlat, "type", freal)
+h5save(fn, '/mlon', pg.mlon, "size", pg.llon, "type", freal)
+h5save(fn, '/mlat', pg.mlat, "size", pg.llat, "type", freal)
 
 for i = 1:length(pg.times)
 

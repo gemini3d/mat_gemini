@@ -49,8 +49,8 @@ end
 
 freal = 'float32';
 
-h5save(fn, '/mlon', E.mlon, "type", freal)
-h5save(fn, '/mlat', E.mlat, "type", freal)
+h5save(fn, '/mlon', E.mlon, "size", llon, "type", freal)
+h5save(fn, '/mlat', E.mlat, "size", llat, "type", freal)
 
 disp("write to " + dir_out)
 
