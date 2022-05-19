@@ -5,6 +5,7 @@ cmake_path(SET GEMINI_ROOT ${PROJECT_BINARY_DIR})
 
 set(gemini_args
 -DCMAKE_BUILD_TYPE=Release
+-DBUILD_SHARED_LIBS:BOOL=off
 -DBUILD_TESTING:BOOL=off
 -Dmpi:BOOL=on
 -Dmsis2:BOOL=${msis2}

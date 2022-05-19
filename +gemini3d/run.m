@@ -34,7 +34,15 @@ if ~isempty(mpiexec)
 end
 disp("dryrun: " + join(cmd, " "))
 [ret, msg] = subprocess_run([cmd, "-dryrun"]);
-if ret ~=0
+if ret == 0
+  % pass
+elseif ret == -1073741515
+  % Windows 0xc0000135, missing DLL
+  msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
+    "such as LAPACK. " + ...
+    "Currently, we are missing a DLL on your system and gemini.bin with shared libs cannot run.";
+   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
+else
   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
 end
 
