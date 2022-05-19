@@ -56,7 +56,7 @@ if isempty(url_file)
 
   libs = jsondecode(fileread(lib_file));
 
-  if ~isfile(url_file) || sha256sum(url_file) ~= libs.ref_data.sha256
+  if ~isfile(url_file)
     websave(url_file, libs.ref_data.url, web_opts);
   end
 end
