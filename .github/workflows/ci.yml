@@ -38,8 +38,8 @@ jobs:
     - name: Install model libraries
       timeout-minutes: 15
       run: |
-        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dmsis2:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ env.CMAKE_PREFIX_PATH }}
-        cmake --build gemext/build --target ffilesystem glow hwm14 msis
+        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dhwm14:BOOL=false -Dmsis2:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ env.CMAKE_PREFIX_PATH }}
+        cmake --build gemext/build --target ffilesystem iniparser glow hwm14 msis
         cmake --install gemext/build
 
     - name: Install MATLAB
