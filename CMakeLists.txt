@@ -2,7 +2,7 @@
 # test dependencies between test code files.
 # Hence, we use a CMake project to specify depedencies and run tests in parallel.
 
-cmake_minimum_required(VERSION 3.20...3.23)
+cmake_minimum_required(VERSION 3.20)
 
 file(READ ${CMAKE_CURRENT_LIST_DIR}/codemeta.json _libj)
 string(JSON PROJECT_VERSION GET ${_libj} version)
@@ -15,7 +15,6 @@ VERSION ${PROJECT_VERSION}
 enable_testing()
 
 include(cmake/options.cmake)
-include(cmake/libraries.cmake)
 
 set(tmod gemini3d.tests.Test)
 
