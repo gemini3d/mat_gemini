@@ -15,13 +15,25 @@ The latter two functions are independent of the core GEMINI fortran/C model and 
 
 ## Quick Start:  loading and plotting data only
 
-This assumes Gemini3D [prereqs are already setup](https://github.com/gemini3d/external).
+Get MatGemini code:
 
 ```sh
 git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
 ```
 
-From Matlab in this "mat_gemini/" directory:
+If Gemini3D has previously been setup, from Matlab configure/check MatGemini paths:
+
+```matlab
+setup
+```
+
+Then run desired MatGemini commands.
+
+---
+
+If Gemini3D need to be built, build Gemini3D
+[prereqs](https://github.com/gemini3d/external)
+and then from Matlab in this "mat_gemini/" directory:
 
 ```matlab
 prefix = '~/gemlibs';   % wherever gemini3d/external was installed to
@@ -40,9 +52,7 @@ ctest --test-dir build -V
 
 ## Simulation prep:  calling GEMINI core model components from MATLAB
 
-To use features requiring Gemini3D (i.e. the main Fortran/C code) such as "gemini3d.model.setup" or "gmeini3d.run", MatGemini will use CMake to build Gemini3D.
-We assume you already have a Fortran compiler and MPI library installed.
-
+Features requiring Gemini3D runs include "gemini3d.model.setup" and "gmeini3d.run".
 If MacOS issues with CMake or Git not found, try running from Matlab:
 
 ```sh
@@ -55,14 +65,14 @@ Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 runtests('gemini3d.tests')
 ```
 
-## ```mat_gemini``` functionality
+## `mat_gemini` functionality
 
 Generally, one sets up a simulation, runs, then plots the outputs of that simulation.
 Once that works, one perhaps changes simulation parameters, perhaps by perturbing the plasma or inputs with custom functions.
 
 ### Creating new simulation data
 
-```gemini3d.model.setup()``` creates a neutral atmosphere using MSIS.
+`gemini3d.model.setup()` creates a neutral atmosphere using MSIS.
 The default is to use MSISE00, but MSIS 2.0 is also available.
 This is user selectable in the simulation config.nml file like:
 
