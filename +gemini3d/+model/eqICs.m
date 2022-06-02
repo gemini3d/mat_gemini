@@ -16,9 +16,9 @@ atmos = gemini3d.model.msis(p, xg);
 
 closeddip = abs(xg.r(1,1,1) - xg.r(xg.lx(1),1,1)) < 50e3;     %logical flag marking the grid as closed dipole
 if closeddip         %closed dipole grid
-%    [~,ialtmax]=max(xg.alt(:,1,1));
-%    lalt=ialtmax;
-  lalt=floor(xg.lx(1)/2);                         %FIXME:  needs to work with asymmetric grid...
+    [~,ialtmax]=max(xg.alt(:,1,1));
+    lalt=ialtmax;
+%  lalt=floor(xg.lx(1)/2);                         %FIXME:  needs to work with asymmetric grid...
   alt=xg.alt(1:lalt,:,:);
   lx1=lalt;
   lx2=xg.lx(2);
@@ -138,12 +138,14 @@ for ix3=1:lx3
         iref=inds1(end);
       end
       n0=nmolc(iref);
+      zref=alt(iref,ix2,ix3);
       ms=30.5*amu;
       H=kb*Tn(inds2,ix2,ix3)./ms./g(inds2,ix2,ix3);
       z = alt(inds2,ix2,ix3);
       lz=numel(z);
       [z,iord]=sort(z);
-      z = [z; 2*z(lz)-z(lz-1)];
+%      z = [z; 2*z(lz)-z(lz-1)];
+      z = [zref; z];
       integrand = 1./H(iord);
       integrand=[integrand; integrand(lz)];
 %        redheight=intrap(integrand,z);
