@@ -183,7 +183,7 @@ colormap(ax, gemini3d.plot.bwr());
 tightmap
 caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
-caxis(ax, [-caxlim,caxlim]);
+clim(ax, [-caxlim,caxlim]);
 colorbar("peer", ax)
 title(ax, "B_r (nT)  " + ttxt + sprintf('\n\n'))
 xlabel(ax, 'magnetic long. (deg.)')
@@ -213,7 +213,7 @@ colormap(ax, gemini3d.plot.bwr())
 tightmap
 caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
-caxis(ax, [-caxlim,caxlim])
+clim(ax, [-caxlim,caxlim])
 colorbar("peer", ax)
 title(ax, "B_\theta (nT)  " + ttxt + sprintf('\n\n'))
 xlabel(ax, 'magnetic long. (deg.)')
@@ -242,7 +242,7 @@ colormap(ax, gemini3d.plot.bwr())
 tightmap
 caxlim=max(abs(param(:)));
 caxlim=max(caxlim,0.001);
-caxis(ax, [-caxlim,caxlim])
+clim(ax, [-caxlim,caxlim])
 
 colorbar("peer", ax)
 title(ax, "B_\phi (nT)  " + ttxt + sprintf('\n\n'));

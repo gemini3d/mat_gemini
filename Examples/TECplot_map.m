@@ -54,8 +54,8 @@ for it=1:length(cfg.times)
     colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
-%    caxis([-3,3]);
-    caxis([-0.5,0.5]);
+%    clim([-3,3]);
+    clim([-0.5,0.5]);
     c=colorbar;
     set(c,'FontSize',FS)
     xlabel(c,'\Delta vTEC (TECU)')

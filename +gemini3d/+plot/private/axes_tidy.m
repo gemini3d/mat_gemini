@@ -8,7 +8,7 @@ set(ax, 'ydir', 'normal')
 
 colormap(ax, P.cmap)
 if ~isempty(P.caxlims) && all(~isnan(P.caxlims)) && P.caxlims(1) < P.caxlims(2)
-  caxis(ax, P.caxlims);
+  clim(ax, P.caxlims);
 end
 
 c = colorbar('peer', ax);

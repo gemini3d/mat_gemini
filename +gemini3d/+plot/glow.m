@@ -115,7 +115,7 @@ for i=1:length(inds)
   imagesc(ax, x2/1e3, x3/1e3, squeeze(bFrame(:,:,inds(i)))');
   axis(ax, 'xy')
   axis(ax, 'tight')
-  %caxis(caxlims);
+  % clim(caxlims);
   cb = colorbar('peer', ax);
   %set(cb,'yticklabel',sprintf('10^{%g}|', get(cb,'ytick')))
   ylabel(cb,'Intensity (R)')

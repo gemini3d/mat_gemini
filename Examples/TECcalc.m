@@ -224,15 +224,15 @@ for it=1:length(cfg.times)
       FS=18;
       imagesc(mlong,mlat,dvTEC(:,:,it));
       colormap(parula(256));
-      set(gca,'FontSize',FS);
+%       set(gca,'FontSize',FS);
       axis xy;
       axis tight;
       caxlim=max(max(abs(dvTEC(:,:,it))));
       caxlim=max(caxlim,0.01);
-      caxis([-1*caxlim, caxlim]);
-%      caxis([-4,4]);
-      c=colorbar
-      set(c,'FontSize',FS)
+      clim([-1*caxlim, caxlim]);
+%      clim([-4,4]);
+      c=colorbar;
+%       set(c,'FontSize',FS)
       xlabel(c,'\Delta vTEC (TECU)')
       xlabel('magnetic long. (deg.)')
       ylabel('magnetic lat. (deg.)')
@@ -255,13 +255,13 @@ if (flag2D)
 
   imagesc(cfg.times, mlat, dvTEC(:,:));
   colormap(parula(256));
-  set(gca,'FontSize',FS);
+%   set(gca,'FontSize',FS);
   axis xy;
   datetick;
   axis tight;
-  caxis([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
+  clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
   c=colorbar;
-  set(c,'FontSize',FS)
+%   set(c,'FontSize',FS)
   xlabel(c,'\Delta vTEC (TECU)')
   xlabel('UT')
   ylabel('magnetic lat. (deg.)')

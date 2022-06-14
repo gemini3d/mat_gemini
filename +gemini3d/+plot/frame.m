@@ -54,7 +54,7 @@ time = cfg.times(i);
 dat = gemini3d.read.frame(direc, "time", time);
 disp(dat.filename + ' => ' + func2str(plotfun))
 
-%% SET THE CAXIS LIMITS FOR THE PLOTS
+%% SET THE Color LIMITS FOR THE PLOTS
 %{
 nelim =  [0 6e11];
 v1lim = [-400 400];

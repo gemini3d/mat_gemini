@@ -110,7 +110,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-caxis(ax, [bmin, bmax]);
+clim(ax, [bmin, bmax]);
 %%
 ax = nexttile(t, 2);
 hi = pcolor(ax, B);
@@ -119,7 +119,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-caxis(ax, [bmin, bmax]);
+clim(ax, [bmin, bmax]);
 %%
 ax = nexttile(t, 3);
 dAB = A - B;
@@ -131,6 +131,6 @@ hi = pcolor(ax, dAB);
 set(hi, "EdgeColor", "none")
 colorbar(ax)
 colormap(gemini3d.plot.bwr())
-caxis(ax, [-b, b]);
+clim(ax, [-b, b]);
 
 end
