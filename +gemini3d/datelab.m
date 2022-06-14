@@ -5,13 +5,13 @@ arguments
   time datetime
 end
 
-day = datetime(time.Year, time.Month, time.Day);
+day = datetime(time.Year, time.Month, time.Day, "Format", "yyyyMMdd");
 UTsec = seconds(time - day);
 
 strlab = string.empty;
 
 for i = 1:length(day)
-  strlab(i) = datestr(day(i), "yyyymmdd") + "_" + num2str(UTsec(i), '%012.6f');
+  strlab(i) = string(day(i)) + "_" + num2str(UTsec(i), '%012.6f');
 end
 
 end % function

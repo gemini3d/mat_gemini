@@ -46,7 +46,7 @@ else
 end
 
 bFrame = squeeze(loadglow_aurmap(fn, lx2, lx3, Lw));
-t_str = datestr(time) + " UT";
+t_str = string(time) + " UT";
 
 if lx2 > 1 && lx3 > 1
   % 3D sim

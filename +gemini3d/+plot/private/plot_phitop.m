@@ -17,6 +17,6 @@ axes_tidy(ax, P)
 ylabel(ax, 'northward dist. (km)')
 xlabel(ax, 'eastward dist. (km)')
 
-title(ax, datestr(P.time) + " UT")
+title(ax, string(P.time) + " UT")
 
 end

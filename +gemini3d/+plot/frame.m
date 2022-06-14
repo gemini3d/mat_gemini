@@ -47,7 +47,7 @@ end
 %% get time index
 i = interp1(cfg.times, 1:length(cfg.times), time_req, 'nearest');
 if isnan(i)
-  error('plot:frame:value_error', "requested time " + datestr(time_req) + " is outside simulation time span " + datestr(cfg.times(1)) + " " + datestr(cfg.times(end)))
+  error('plot:frame:value_error', "requested time " + string(time_req) + " is outside simulation time span " + string(cfg.times(1)) + " " + string(cfg.times(end)))
 end
 time = cfg.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME

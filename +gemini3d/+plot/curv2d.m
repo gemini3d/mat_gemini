@@ -182,6 +182,6 @@ xlabel('magnetic latitude (deg.)')
 ylabel('magnetic longitude (deg.)')
 %}
 
-title(ha, [datestr(time), ' UT'])
+title(ha, string(time) + " UT")
 
 end % function

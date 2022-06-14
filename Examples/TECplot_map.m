@@ -65,7 +65,7 @@ for it=1:length(cfg.times)
     plotm(cfg.sourcemlat,cfg.sourcemlon,'r^','MarkerSize',10,'LineWidth',2);
     hold off;
 
-    title(datestr(cfg.times(it)))
+    title(string(cfg.times(it)))
     %gridm;
 
     %ADD A MAP OF COASTLINES

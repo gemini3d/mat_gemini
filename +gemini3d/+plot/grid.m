@@ -103,7 +103,7 @@ arguments
 end
 %% suptitle
 if isfield(xg, 'time')
-  ttxt = ttxt + " " + datestr(xg.time) + " ";
+  ttxt = ttxt + " " + string(xg.time) + " ";
   fig.Name = append(fig.Name, int2str(year(xg.time)));
 end
 

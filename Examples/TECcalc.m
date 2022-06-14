@@ -240,7 +240,7 @@ for it=1:length(cfg.times)
       ax=axis;
       plot(cfg.sourcemlon,cfg.sourcemlat,'r^','MarkerSize',10,'LineWidth',2);
       hold off;
-      titlestring = datestr(cfg.times(it));
+      titlestring = string(cfg.times(it));
       title(titlestring);
       print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
     end

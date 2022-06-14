@@ -127,7 +127,7 @@ else
   end
 end
 
-title(ha, [datestr(time), ' UT'])
+title(ha, string(time) + " UT")
 
 end % function
 

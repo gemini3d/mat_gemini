@@ -26,7 +26,7 @@ end
 
 % some times might not have magnetic field computed
 if isempty(filename)
-  disp("SKIP: read.magframe %s", datestr(opts.time))
+  disp("SKIP: read.magframe %s", string(opts.time))
   return
 end
 

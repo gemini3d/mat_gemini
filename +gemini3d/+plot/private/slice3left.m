@@ -21,6 +21,6 @@ axes_tidy(ax, P)
 xlabel(ax, P.left_xlabel);
 ylabel(ax, P.left_ylabel);
 
-title(ax, [datestr(P.time), ' UT'])
+title(ax, string(P.time) + " UT")
 
 end % function

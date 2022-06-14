@@ -152,7 +152,7 @@ fig = figure('position', [10, 10, 1200, 500]);
 
 for it=1:length(cfg.times)-1
   filename = gemini3d.datelab(cfg.times(it));
-  ttxt = datestr(cfg.times(it));
+  ttxt = string(cfg.times(it));
 
   clf(fig)
   subplot(1,3,1, 'parent', fig)

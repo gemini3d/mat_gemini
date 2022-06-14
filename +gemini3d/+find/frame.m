@@ -28,7 +28,8 @@ end
 MAX_OFFSET = seconds(1);
 %10 ms precision, allow extra accumulated tolerance
 
-pat = datestr(time, "yyyymmdd") + "_*";
+time = datetime(time, "Format", "yyyyMMdd");
+pat = string(time) + "_*";
 file_times = datetime.empty;
 for ext = suffix
     files = dir(fullfile(direc, pat + ext));
