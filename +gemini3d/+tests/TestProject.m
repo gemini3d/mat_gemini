@@ -101,14 +101,8 @@ function test_Arunner(tc, file_type, name)
 
 try
   project_runner(tc, name, file_type, tc.TestData.ref_dir)
-catch e
-  if contains(e.message, "HDF5 library version mismatched error")
-    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
-  elseif contains(e.message, "GLIBCXX")
-    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
-  else
-    rethrow(e)
-  end
+catch err
+  catcher(err, tc)
 end
 
 end
