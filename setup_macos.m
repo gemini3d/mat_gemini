@@ -8,14 +8,16 @@ import stdlib.fileio.which
 
 sys_path = getenv("PATH");
 
-prefix_path = [getenv("HOMEBREW_PREFIX"), ...
-fileparts(which("brew")), fileparts(which("port")), ...
+[ret, homebrew_prefix] = system('brew --prefix');
+if ret ~= 0
+  homebrew_prefix = string.empty;
+end
+
+prefix_path = [homebrew_prefix, ...
 "/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"];
 
 for p = prefix_path
-  if strlength(p) == 0
-    continue
-  elseif contains(sys_path, p)
+  if contains(sys_path, p)
     return
   elseif isfolder(p)
     disp("Adding prefix to Matlab path: " + p)
