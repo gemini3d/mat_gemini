@@ -6,6 +6,11 @@ function setup_macos()
 
 import stdlib.fileio.which
 
+if ~ismac
+  return
+end
+
+
 sys_path = getenv("PATH");
 
 [ret, homebrew_prefix] = system('brew --prefix');

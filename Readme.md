@@ -115,10 +115,11 @@ dat = gemini3d.read.frame(filename);
 ```
 
 ```matlab
-dat = gemini3d.read.frame(directory, 'time', datetime(2012,1,20,12,5,3));
+dat = gemini3d.read.frame(directory, time=datetime(2012,1,20,12,5,3));
 ```
 
-The variables in the ```dat``` struct are listed and explained in the main GEMINI repository [Readme_output](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_output.md)
+The variables in the ```dat``` struct are listed and explained in the main GEMINI repository
+[Readme_output](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_output.md)
 
 ### Load a grid file
 
@@ -128,7 +129,8 @@ To read the grid data from a simulation directory do:
 xg = gemini3d.read.grid(directory)
 ```
 
-Elements of the output grid structure are listed and described in the [Readme_input](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_input.md)
+Elements of the output grid structure are listed and described in the
+[Readme_input](https://github.com/gemini3d/gemini3d/blob/main/docs/Readme_input.md)
 
 
 ### Plot all simulation outputs
