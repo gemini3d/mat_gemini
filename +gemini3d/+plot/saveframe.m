@@ -28,7 +28,7 @@ for fmt = saveplot_fmt
   disp("writing plots to " + plotdir + "*." + fmt)
   for i = 1:length(pp)
     if (flagoutput~=3 || i==10) && ~isempty(h(i))
-      export_graphics(h(i), fullfile(plotdir, pp(i) + "-" + stem + "." + fmt), 'resolution', dpi)
+      exportgraphics(h(i), fullfile(plotdir, pp(i) + "-" + stem + "." + fmt), 'resolution', dpi)
     end
   end
 end % for

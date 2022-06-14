@@ -14,7 +14,7 @@ outdir = fullfile(outdir, "../plots");
 for suffix = saveplot_fmt
   outfile = fullfile(outdir, "aurora-" + outname + "." + suffix);
   disp("write " + outfile)
-  export_graphics(h, outfile, 'resolution', dpi)
+  exportgraphics(h, outfile, 'resolution', dpi)
 end
 
 end % function
