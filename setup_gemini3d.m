@@ -8,9 +8,7 @@ end
 
 import gemini3d.sys.cmake
 
-%% ensure all paths are OK
 cwd = fullfile(fileparts(mfilename('fullpath')));
-run(fullfile(cwd, 'setup.m'))
 
 cmake(cwd, fullfile(cwd, "build"), install_prefix);
 
@@ -21,5 +19,7 @@ else
 end
 
 disp("Gemini3D installed to: " + getenv("GEMINI_ROOT"))
+
+run(fullfile(cwd, 'setup.m'))
 
 end
