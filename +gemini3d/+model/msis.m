@@ -35,7 +35,7 @@ end
 %% find or build msis_setup executable
 exe = gemini3d.sys.get_gemini_exe("msis_setup");
 if isempty(exe)
-  error("Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
+  error("gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
 end
 
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
