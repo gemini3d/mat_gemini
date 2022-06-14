@@ -27,14 +27,8 @@ cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a',
 
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
-catch e
-  if contains(e.message, "HDF5 library version mismatched error")
-    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
-  elseif contains(e.message, "GLIBCXX")
-    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
-  else
-    rethrow(e)
-  end
+catch err
+  catcher(err, tc)
 end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
@@ -52,14 +46,8 @@ cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a',
 
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
-catch e
-  if contains(e.message, "HDF5 library version mismatched error")
-    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
-  elseif contains(e.message, "GLIBCXX")
-    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
-  else
-    rethrow(e)
-  end
+catch err
+  catcher(err, tc)
 end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
@@ -77,16 +65,8 @@ cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a',
 
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
-catch e
-  if contains(e.message, "msis20.parm not found")
-    tc.assumeFail("MSIS 2 not enabled")
-  elseif contains(e.message, "HDF5 library version mismatched error")
-    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
-  elseif contains(e.message, "GLIBCXX")
-    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
-  else
-    rethrow(e)
-  end
+catch err
+  catcher(err, tc)
 end
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
@@ -95,4 +75,18 @@ end
 
 end
 
+end
+
+function catcher(err, tc)
+if contains(err.message, "msis20.parm not found")
+  tc.assumeFail("MSIS 2 not enabled")
+elseif err.identifier == "gemini3d:model:msis:FileNotFoundError"
+    tc.assumeFail("msis_setup not found. Compile with gemini3d/external.git")
+elseif contains(err.message, "HDF5 library version mismatched error")
+  tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
+elseif contains(err.message, "GLIBCXX")
+  tc.assumeFail("conflict in libstdc++ Matlab <=> system")
+else
+  rethrow(err)
+end
 end
