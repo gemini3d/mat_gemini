@@ -19,7 +19,7 @@ tc.TestData.cwd = cwd;
 tc.TestData.ref_dir = fullfile(cwd, "data");
 
 % temporary working directory
-tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture('PreservingOnFailure', true)).Folder;
+tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture(PreservingOnFailure=true)).Folder;
 
 if isempty(getenv("GEMINI_CIROOT"))
   setenv("GEMINI_CIROOT", tc.TestData.outdir)
@@ -49,7 +49,7 @@ cfg.indat_size = fullfile(cfg.outdir, cfg.indat_size);
 cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
 gemini3d.write.grid(cfg, xg);
 
-gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
+gemini3d.compare(cfg.indat_grid, test_dir, only="grid")
 end
 
 function test_Efield(tc)
@@ -72,7 +72,7 @@ xg = gemini3d.read.grid(test_dir);
 gemini3d.efield.Efield_BCs(p, xg);
 
 time = p.times(1):seconds(p.dtE0):p.times(end);
-gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), 'only', 'efield', "time", time)
+gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), only='efield', time=time)
 end
 
 
@@ -94,7 +94,7 @@ xg = gemini3d.read.grid(test_dir);
 
 gemini3d.particles.particles_BCs(p, xg);
 
-gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir),"only", "precip", "time", p.times)
+gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), only="precip", time=p.times)
 end
 
 function test_Arunner(tc, file_type, name)
@@ -143,7 +143,7 @@ h = gemini3d.plot.init(gemini3d.read.grid(d3));
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')
 
-gemini3d.plot.frame(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
+gemini3d.plot.frame(d3, datetime(2013, 2, 20, 5, 5, 0), figures=h)
 close(h)
 end
 

@@ -24,18 +24,18 @@ end
 function test_grid1d(tc)
 
 x = gemini3d.grid.grid1d(100., 5);
-tc.verifyEqual(x, -100:25:100, 'RelTol', 1e-6, 'AbsTol', 1e-8)
+tc.verifyEqual(x, -100:25:100, RelTol=1e-6, AbsTol=1e-8)
 
 x = gemini3d.grid.grid1d(100., 5, [200, 0.5, 9.5, 10]);
 tc.verifyEqual(x, [-50.25, -40.25, -30.25, -20.25, -10.25, -0.25, 0.25, 10.25, 20.25, 30.25, 40.25, 50.25], ...
-  'RelTol', 1e-6, 'AbsTol', 1e-8)
+  RelTol=1e-6, AbsTol=1e-8)
 
 end
 
 function test_dateinc(tc)
 [ymd3, utsec] = gemini3d.dateinc(1.5, [2020, 1, 1], 86399);
 tc.verifyEqual(ymd3, [2020,1,2])
-tc.verifyEqual(utsec, 0.5, 'AbsTol', 1e-6)
+tc.verifyEqual(utsec, 0.5, AbsTol=1e-6)
 end
 
 function test_version(tc)
@@ -68,16 +68,16 @@ end
 function test_coord(tc)
 
 [lat, lon] = gemini3d.geomag2geog(pi/2, pi/2);
-tc.verifyEqual([lat, lon], [0, 19], 'AbsTol', 1e-6, 'RelTol', 0.001)
+tc.verifyEqual([lat, lon], [0, 19], AbsTol=1e-6, RelTol=0.001)
 
 [theta, phi] = gemini3d.geog2geomag(0,0);
-tc.verifyEqual([theta, phi], [1.50863496978059, 1.24485046147953], 'AbsTol', 1e-6, 'RelTol', 0.001)
+tc.verifyEqual([theta, phi], [1.50863496978059, 1.24485046147953], AbsTol=1e-6, RelTol=0.001)
 
 [alt, lon, lat] = gemini3d.UEN2geog(0,0,0, pi/2, pi/2);
-tc.verifyEqual([alt, lat, lon], [0, 0, 19], 'AbsTol', 1e-6, 'RelTol', 0.001)
+tc.verifyEqual([alt, lat, lon], [0, 0, 19], AbsTol=1e-6, RelTol=0.001)
 
 [z,x,y] = gemini3d.geog2UEN(0, 0, 0, pi/2, pi/2);
-tc.verifyEqual([z,x,y], [0, -2076275.16205889, 395967.844181141], 'AbsTol', 1e-6, 'RelTol', 0.001)
+tc.verifyEqual([z,x,y], [0, -2076275.16205889, 395967.844181141], AbsTol=1e-6, RelTol=0.001)
 
 end
 

@@ -76,7 +76,7 @@ tc.verifyEqual(dat.time, datetime(2013,2,20,5,0,0))
 end
 
 function test_read_frame_folder_datetime(tc)
-dat = gemini3d.read.frame(fullfile(tc.TestData.data_path), "time", datetime(2013,2,20,5,0,0), "vars", "ne");
+dat = gemini3d.read.frame(fullfile(tc.TestData.data_path), time=datetime(2013,2,20,5,0,0), vars="ne");
 
 lxs = gemini3d.simsize(tc.TestData.data_path);
 tc.assertEqual(dat.lxs, double(lxs))
