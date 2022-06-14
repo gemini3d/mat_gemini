@@ -7,6 +7,7 @@ resources/project/
 *.m~
 
 +gemini3d/+tests/data/
++gemini3d/+tests/ref_data.json
 
 code-coverage/
 test-results/

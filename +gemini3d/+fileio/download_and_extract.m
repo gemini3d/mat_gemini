@@ -31,7 +31,7 @@ switch arc_type
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(archive, test_dir)
   case {".zst", ".zstd"}, extract_zstd(archive, test_dir)
-  otherwise, error("gemini3d:fileio:download_and_extract", "unknown reference archive type: " + arc_type)
+  otherwise, error("gemini3d:fileio:download_and_extract:ValueError", "unknown reference archive type: " + arc_type)
 end
 
 end % function
@@ -45,14 +45,14 @@ import stdlib.fileio.sha256sum
 
 cert_file = getenv("SSL_CERT_FILE");
 if isfile(cert_file)
-  web_opts = weboptions('CertificateFilename', cert_file, 'Timeout', 15);
+  web_opts = weboptions(CertificateFilename=cert_file, Timeout=15);
 else
-  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
+  web_opts = weboptions(Timeout=15);  % 5 seconds has nuisance timeouts
 end
 
 if isempty(url_file)
   lib_file = fullfile(gemini3d.root(), "../cmake/libraries.json");
-  url_file = fullfile(gemini3d.root(), "../build/ref_data.json");
+  url_file = fullfile(gemini3d.root(), "+tests/ref_data.json");
 
   libs = jsondecode(fileread(lib_file));
 
