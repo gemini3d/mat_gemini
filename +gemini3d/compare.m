@@ -50,11 +50,11 @@ if any(opts.only == "in")
 end
 if any(opts.only == "efield")
   % TODO: the generated error shouldn't be so big. Need to update ref data?
-  compare_efield(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*100, "time", opts.time)
+  compare_efield(outdir, refdir, abs=tol.atol, rel=tol.rtol*100, time=opts.time)
 end
 if any(opts.only == "precip")
   % TODO: the generated error shouldn't be so big. Need to update ref data?
-  compare_precip(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*10, "time", opts.time)
+  compare_precip(outdir, refdir, abs=tol.atol, rel=tol.rtol*10, time=opts.time)
 end
 if any(opts.only == "grid")
   compare_grid(outdir, refdir, tol.rtol, tol.atol)

@@ -27,9 +27,9 @@ assert(Nt > 0, "simulation has zero duration")
 bad = 0;
 
 for i = 1:Nt
-  out = gemini3d.read.frame(new_dir, "time", params.times(i));
+  out = gemini3d.read.frame(new_dir, time=params.times(i));
 
-  ref = gemini3d.read.frame(ref_dir, "time", params.times(i));
+  ref = gemini3d.read.frame(ref_dir, time=params.times(i));
 
   bad = bad + compare_plot(out.ne, ref.ne, tol.rtolN, tol.atolN, "Ne", params.times(i), new_dir, ref_dir);
   bad = bad + compare_plot(out.v1, ref.v1, tol.rtolV, tol.atolV, "V1", params.times(i), new_dir, ref_dir);

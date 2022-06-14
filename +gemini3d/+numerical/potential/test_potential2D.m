@@ -13,7 +13,7 @@ Phi2 = h5read(fn, '/Phi2squeeze');
 Phitrue = h5read(fn, '/Phitrue');
 
 
-gemini3d.assert_allclose(Phi2(13, 13), 0.00032659, 'rtol', 1e-5, 'err_msg', 'Potential 2d accuracy')
+gemini3d.assert_allclose(Phi2(13, 13), 0.00032659, rtol=1e-5, err_msg='Potential 2d accuracy')
 
 if ~isinteractive
   return

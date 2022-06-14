@@ -28,7 +28,7 @@ for i = 1:size(time)
     b = ref.(k);
     a = new.(k);
 
-    gemini3d.assert_allclose(a, b, 'rtol', opts.rel, 'atol', opts.abs, "err_msg", "mismatch: " + k)
+    gemini3d.assert_allclose(a, b, rtol=opts.rel, atol=opts.abs, err_msg="mismatch: " + k)
   end
 end % for i
 
