@@ -133,9 +133,17 @@ for ix3=1:lx3
     nmolc(inds1)=(1- rho(inds1)).*ne(inds1);
     if ~isempty(inds2)
       if xg.r(1,1)>xg.r(2,1)
+        if (~isempty(inds1))
           iref=inds1(1);
+        else
+          iref=inds2(end);
+        end
       else
-        iref=inds1(end);
+        if (~isempty(inds1))
+          iref=inds1(end);
+        else
+          iref=inds2(1);
+        end
       end
       n0=nmolc(iref);
       zref=alt(iref,ix2,ix3);
