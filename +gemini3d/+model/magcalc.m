@@ -16,24 +16,26 @@ cfg = gemini3d.read.config(direc);
 %WE ALSO NEED TO LOAD THE GRID FILE
 if isempty(xg)
   xg = gemini3d.read.grid(direc);
+  disp('Grid loaded')
+end
 %  lx1 = xg.lx(1);
-  lx3 = xg.lx(3);
+lx3 = xg.lx(3);
 %  lh=lx1;   %possibly obviated in this version - need to check
-  if (lx3==1)
+if (lx3==1)
     flag2D=true;
     disp('2D meshgrid')
-%     x1=xg.x1(3:end-2);
-%     x2=xg.x2(3:end-2);
-%     x3=xg.x3(3:end-2);
-%     [X2,X1]=meshgrid(x2(:),x1(1:lh)');
-  else
+    %     x1=xg.x1(3:end-2);
+    %     x2=xg.x2(3:end-2);
+    %     x3=xg.x3(3:end-2);
+    %     [X2,X1]=meshgrid(x2(:),x1(1:lh)');
+else
     flag2D=false;
     disp('3D meshgrid')
-%     x1=xg.x1(3:end-2);
-%     x2=xg.x2(3:end-2);
-%     x3=xg.x3(3:end-2);
-%     [X2,X1,X3]=meshgrid(x2(:),x1(1:lh)',x3(:));
-  end
+    %     x1=xg.x1(3:end-2);
+    %     x2=xg.x2(3:end-2);
+    %     x3=xg.x3(3:end-2);
+    %     [X2,X1,X3]=meshgrid(x2(:),x1(1:lh)',x3(:));
+end
 
   %TABULATE THE SOURCE OR GRID CENTER LOCATION
   if isempty(cfg.sourcemlon)
@@ -43,17 +45,15 @@ if isempty(xg)
     thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
     phidist= deg2rad(cfg.sourcemlon);
   end
-disp('Grid loaded')
-end
 
 %FIELD POINTS OF INTEREST (CAN/SHOULD BE DEFINED INDEPENDENT OF SIMULATION GRID)
-ltheta=10;
+ltheta=40;
 if flag2D
   lphi=1;
 else
-  lphi=10;
+  lphi=40;
 end
-%lr=1;
+lr=1;
 
 thmin=thdist - deg2rad(dang);
 thmax=thdist + deg2rad(dang);
@@ -73,6 +73,7 @@ r=6370e3*ones(ltheta,lphi);                          %use ground level for altit
 mag.R = r;
 mag.PHI = phi;
 mag.THETA = theta;
+mag.gridsize =[lr,ltheta,lphi];
 filename = fullfile(direc, "inputs/magfieldpoints.h5");
 gemini3d.write.maggrid(filename, mag)
 
