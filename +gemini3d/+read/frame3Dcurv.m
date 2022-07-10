@@ -13,8 +13,6 @@ end
 [~,~,ext] = fileparts(filename);
 switch ext
   case '.h5', dat = frame3Dcurv_hdf5(filename, vars);
-  case '.nc', dat = frame3Dcurv_nc4(filename, vars);
-  case '.dat', dat = frame3Dcurv_raw(filename);
   otherwise, error('frame3Dcurv:value_error', 'unknown file type %s', filename)
 end
 

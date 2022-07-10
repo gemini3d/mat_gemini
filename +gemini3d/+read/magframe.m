@@ -9,7 +9,7 @@ arguments
   filename (1,1) string {mustBeNonzeroLengthText}
   opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
   opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
-  opts.gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
+  % opts.gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
 
 % make sure to add the default directory where the magnetic fields are to
@@ -37,21 +37,8 @@ else
   cfg = opts.cfg;
 end
 
-% temp grid size variable...
-gridsize=opts.gridsize;
-
 % load and construct the magnetic field point grid
 switch cfg.file_format
-  case 'dat'
-    fn = fullfile(direc,'inputs/magfieldpoints.dat');
-    assert(isfile(fn), fn + " not found")
-
-    fid=fopen(fn, 'r');
-    lpoints=fread(fid,1,'integer*4');
-    r=fread(fid,lpoints,'real*8');
-    theta=fread(fid,lpoints,'real*8');    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
-    phi=fread(fid,lpoints,'real*8');
-    fclose(fid);
   case 'h5'
     fn = fullfile(direc,'inputs/magfieldpoints.h5');
     assert(isfile(fn), fn + " not found")
@@ -103,46 +90,33 @@ dat(1).Btheta=zeros(lr,ltheta,lphi);
 dat(1).Bphi=zeros(lr,ltheta,lphi);
 
 switch cfg.file_format
-  case 'dat'
-%        fid=fopen(fullfile(basemagdir,strcat(filename,".dat")),'r');
-    fid=fopen(filename,'r');
-    data=fread(fid,lpoints,'real*8');
-  case 'h5'
-    data = h5read(filename, '/magfields/Br');
+  case 'h5', data = h5read(filename, '/magfields/Br');
 end
 
 dat.Br(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Br(:,:,:)=dat.Br(:,ilatsort,:);
-    dat.Br(:,:,:)=dat.Br(:,:,ilonsort);
+  dat.Br(:,:,:)=dat.Br(:,ilatsort,:);
+  dat.Br(:,:,:)=dat.Br(:,:,ilonsort);
 end
 
 switch cfg.file_format
-    case 'dat'
-        data=fread(fid,lpoints,'real*8');
-    case 'h5'
-        data = h5read(filename, '/magfields/Btheta');
+    case 'h5', data = h5read(filename, '/magfields/Btheta');
 end
 
 dat.Btheta(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Btheta(:,:,:)=dat.Btheta(:,ilatsort,:);
-    dat.Btheta(:,:,:)=dat.Btheta(:,:,ilonsort);
+  dat.Btheta(:,:,:)=dat.Btheta(:,ilatsort,:);
+  dat.Btheta(:,:,:)=dat.Btheta(:,:,ilonsort);
 end %if
 
 switch cfg.file_format
-    case 'dat'
-        data=fread(fid, lpoints,'real*8');
-    case 'h5'
-        data = h5read(filename, '/magfields/Bphi');
+  case 'h5', data = h5read(filename, '/magfields/Bphi');
 end
 
 dat.Bphi(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
-    dat.Bphi(:,:,:)=dat.Bphi(:,ilatsort,:);
-    dat.Bphi(:,:,:)=dat.Bphi(:,:,ilonsort);
+  dat.Bphi(:,:,:)=dat.Bphi(:,ilatsort,:);
+  dat.Bphi(:,:,:)=dat.Bphi(:,:,ilonsort);
 end
 
-if exist("fid", "var")
-    fclose(fid);
-end
+end % function

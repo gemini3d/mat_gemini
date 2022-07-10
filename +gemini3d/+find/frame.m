@@ -2,7 +2,7 @@ function filename = frame(direc, time, suffix)
 arguments
   direc (1,1) string {mustBeNonzeroLengthText}
   time (1,1) datetime
-  suffix (1,:) string {mustBeNonzeroLengthText} = [".h5", ".nc", ".dat"]
+  suffix (1,:) string {mustBeNonzeroLengthText} = [".h5"]
 end
 
 import stdlib.fileio.expanduser
@@ -48,7 +48,7 @@ for ext = suffix
 end
 
 if isempty(filename) || ~isfile(filename)
-  error("gemini33:find:frame:FileNotFound", "did not find frame under %s", direc)
+  error("gemini3d:find:frame:FileNotFound", "did not find frame under %s", direc)
 end
 
 

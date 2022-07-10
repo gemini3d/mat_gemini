@@ -13,9 +13,7 @@ end
 
 switch ext
   case '.h5', dat = frame3Dcurvavg_hdf5(filename, vars);
-  case '.dat', dat = frame3Dcurvavg_raw(filename);
-  case '.nc', dat = frame3Dcurvavg_nc4(filename, vars);
-  otherwise, error('frame3Dcurvavg:value_error', 'unknown file type %s',filename)
+  otherwise, error('gemini3d:read:frame3Dcurvavg:value_error', 'unknown file type %s',filename)
 end
 dat.filename = filename;
 

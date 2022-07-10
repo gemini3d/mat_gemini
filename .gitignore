@@ -6,8 +6,8 @@ resources/project/
 *.asv
 *.m~
 
-+gemini3d/+tests/data/
-+gemini3d/+tests/ref_data.json
++gemini3d/+test/data/
++gemini3d/+test/ref_data.json
 
 code-coverage/
 test-results/

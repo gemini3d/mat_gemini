@@ -29,7 +29,6 @@ else
 end
 
 %% GET THE SYSTEM SIZE
-Lw = length(wavelengths);
 lx2=xg.lx(2);
 lx3=xg.lx(3);
 x2=xg.x2(3:end-2);
@@ -45,7 +44,7 @@ else
   fg = make_glowfig(isempty(saveplot_fmt));
 end
 
-bFrame = squeeze(loadglow_aurmap(fn, lx2, lx3, Lw));
+bFrame = squeeze(loadglow_aurmap(fn));
 t_str = string(time) + " UT";
 
 if lx2 > 1 && lx3 > 1

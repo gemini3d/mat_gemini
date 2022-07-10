@@ -1,6 +1,6 @@
 classdef TestProject < matlab.unittest.TestCase
 properties (TestParameter)
-  file_type = {"h5", "nc"}
+  file_type = {"h5"}
   name = {"mini2dew_eq", "mini2dew_fang", "mini2dew_glow", ...
           "mini2dns_eq", "mini2dns_fang", "mini2dns_glow", ...
           "mini3d_eq", "mini3d_fang", "mini3d_glow"}

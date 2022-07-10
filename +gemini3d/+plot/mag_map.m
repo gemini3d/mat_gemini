@@ -9,14 +9,11 @@ import stdlib.fileio.makedir
 addons = matlab.addons.installedAddons();
 assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
 
-freal = 'float64';
-
 direc = expanduser(direc);
 
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
 makedir(pdir)
-basemagdir = fullfile(direc, 'magfields');
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
@@ -24,21 +21,13 @@ cfg = gemini3d.read.config(direc);
 %LOAD/CONSTRUCT THE FIELD POINT GRID
 
 fn = fullfile(direc, "inputs/magfieldpoints." + cfg.file_format);
-assert(isfile(fn), fn + " not found")
 
 switch cfg.file_format
 case 'h5'
-  lpoints = h5read(fn, "/lpoints");
+  % lpoints = h5read(fn, "/lpoints");
   % r = h5read(fn, "/r");
   theta = double(h5read(fn, "/theta"));
   phi = double(h5read(fn, "/phi"));
-case 'dat'
-  fid=fopen(fn, 'r');
-  lpoints=fread(fid,1,'integer*4');
-  fread(fid,lpoints, freal);
-  theta=fread(fid,lpoints, freal);    %by default these are read in as a row vector, AGHHHH!!!!!!!!!
-  phi=fread(fid,lpoints, freal);
-  fclose(fid);
 otherwise, error("not sure how to read " + cfg.file_format + " files")
 end
 
@@ -67,9 +56,6 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   filename = gemini3d.datelab(cfg.times(it));
 
   switch cfg.file_format
-  case 'dat'
-    fid = fopen(fullfile(basemagdir, filename + ".dat"), 'r');
-    data = fread(fid,lpoints, freal);
   case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
   end
 
@@ -78,7 +64,6 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
 
   switch cfg.file_format
-  case 'dat', data = fread(fid,lpoints, freal);
   case 'h5', data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
   end
 
@@ -87,7 +72,6 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
 
   switch cfg.file_format
-  case 'dat', data=fread(fid,lpoints, freal);
   case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
   end
 
@@ -95,9 +79,6 @@ for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc
   Bphit(:,:,:,it)=Bphit(:,ilatsort,:,it);
   Bphit(:,:,:,it)=Bphit(:,:,ilonsort,it);
 
-  if exist("fid", "var")
-    fclose(fid);
-  end
 end
 
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING

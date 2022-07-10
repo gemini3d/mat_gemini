@@ -5,15 +5,12 @@ arguments
 end
 
 [~,~,ext] = fileparts(filename);
-assert(isfile(filename), 'not a file: %s', filename)
 
 vars = ["ns", "Ts", "v1"];
 
 switch ext
   case '.h5', dat = frame3Dcurv_hdf5(filename, vars);
-  case '.nc', dat = frame3Dcurv_nc4(filename, vars);
-  case '.dat', dat = frame3Dcurvnoelec_raw(filename);
-  otherwise, error('frame3Dcurvnoelec:not_implemented', 'unknown file type %s',filename)
+  otherwise, error('gemini3d:read:frame3Dcurvnoelec:value_error', 'unknown file type %s',filename)
 end
 
 dat.filename = filename;

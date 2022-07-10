@@ -16,18 +16,17 @@ end
 
 simpath = string.empty;
 ext = string.empty;
-suffixes = [".h5", ".nc", ".dat"];
+suffix = ".h5";
 % search all suffixes in case the inputs files are different from output
-for suffix = suffixes
-  for stem = ["inputs", ""]
-    simsize_fn = fullfile(apath, stem, "simsize") + suffix;
-    if isfile(simsize_fn)
-      simpath = fullfile(apath, stem);
-      ext = suffix;
-      return
-    end
+for stem = ["inputs", ""]
+  simsize_fn = fullfile(apath, stem, "simsize") + suffix;
+  if isfile(simsize_fn)
+    simpath = fullfile(apath, stem);
+    ext = suffix;
+    return
   end
 end
+
 
 if isempty(simpath) || ~isfile(simpath)
   error("find:simsize:FileNotFound", "could not find simsize in %s", apath)

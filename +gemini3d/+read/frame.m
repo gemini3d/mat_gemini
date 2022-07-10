@@ -107,8 +107,6 @@ import stdlib.hdf5nc.ncvariables
 % again below if h5 is used...
 switch lower(ext)
   case '.h5', var_names = h5variables(filename);
-  case '.nc', var_names = ncvariables(filename);
-  case '.dat', var_names = string.empty;
   otherwise, error('gemini3d:read:frame:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
 end
 

@@ -1,4 +1,4 @@
-function maggrid(filename,xmag)
+function maggrid(filename, xmag)
 
 arguments
   filename (1,1) string
@@ -31,9 +31,8 @@ end %if
 assert(isfolder(parent), parent + " parent directory does not exist")
 
 switch ext
-  case ".dat", writemagraw(filename, xmag)
   case ".h5", writemagh5(filename, xmag, gridsize)
-  otherwise, error(ext + " not handled yet. Please open GitHub issue.")
+  otherwise, error("gemini3d:write:maggrid:value_error", "Unknown file type %s" , filename)
 end %switch
 
 end %function
@@ -56,22 +55,5 @@ h5save(fn, "/r", mag.R(:), "type", freal);
 h5save(fn, "/theta", mag.THETA(:), "type", freal);
 h5save(fn, "/phi", mag.PHI(:), "type", freal);
 h5save(fn, "/gridsize", gridsize, "type", "int32");
-
-end %function
-
-
-function writemagraw(fn, mag)
-
-% raw binary output for the magcalc program; note that this is just a flat
-% list and does not carry grid size information like hdf5 does.
-
-disp("write: " + fn)
-
-fid=fopen(fn,'w');
-fwrite(fid, numel(mag.THETA),'integer*4');
-fwrite(fid, mag.R(:),'real*8');
-fwrite(fid, mag.THETA(:),'real*8');
-fwrite(fid, mag.PHI(:),'real*8');
-fclose(fid);
 
 end %function

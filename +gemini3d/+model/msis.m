@@ -99,10 +99,6 @@ h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
 h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
-if msis_version == 20
-  msis20_file = fullfile(fileparts(exe), 'msis20.parm');
-  assert(isfile(msis20_file), "%s not found", msis20_file)
-end
 
 if msis_version == 20
   % limitation of Matlab system() vis pwd for msis20.parm

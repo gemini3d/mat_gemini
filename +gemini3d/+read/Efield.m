@@ -12,7 +12,6 @@ end
 
 switch ext
   case '.h5', dat = load_h5(filename);
-  case '.nc', dat = load_nc(filename);
   otherwise, error("gemini3d:read:Efield:value_error", "unsupported file type " + filename)
 end
 
@@ -21,24 +20,16 @@ end % function
 
 function dat = load_h5(filename)
 
+import stdlib.hdf5nc.h5variables
+
 dat = struct();
 
-for k = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
-  try
+Evars = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"];
+vars = h5variables(filename);
+
+for k = Evars
+  if any(vars == k)
     dat.(k) = h5read(filename, "/" + k);
-  end
-end
-
-end % function
-
-
-function dat = load_nc(filename)
-
-dat = struct();
-
-for k = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"]
-  try %#ok<*TRYNC>
-   dat.(k) = ncread(filename, "/" + k);
   end
 end
 

@@ -17,8 +17,7 @@ addpath(stdlib_dir)
 %% check if msis_setup is found--needed to setup simulations
 exe = gemini3d.sys.get_gemini_exe("msis_setup");
 if isempty(exe)
-  warning("Run setup_gemini() for Gemini3D executables." + ...
-  " If already installed, set environment variable CMAKE_PREFIX_PATH to the top level Gemini3D install" + ...
+  warning("If Gemini3D already installed, set environment variable GEMINI_ROOT to the top level Gemini3D install" + ...
   " directory e.g. ~/libgem if ~/libgem/bin/msis_setup exists.")
 end
 

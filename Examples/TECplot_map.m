@@ -34,7 +34,7 @@ for it=1:length(cfg.times)
 %    FS=16;
     FS=10;
 
-    filename = gemini3d.datelab(cfg.times(it)) + ".dat";
+    filename = gemini3d.datelab(cfg.times(it)) + ".h5";
     disp(filename)
 
     mlatlimplot=double([min(mlat)-0.5,max(mlat)+0.5]);
