@@ -48,7 +48,7 @@ setup_macos
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
-runtests('gemini3d.tests')
+runtests('gemini3d.test')
 ```
 
 ## `mat_gemini` functionality
@@ -188,7 +188,7 @@ When a significant change is made to internal Gemini3D code, this may change the
 If determined that new reference datasets are needed:
 
 ```matlab
-gemini3d.tests.generate_reference_data('../gemini-examples/init', '~/sim', 'test2d')
+gemini3d.test.generate_reference_data('../gemini-examples/init', '~/sim', 'test2d')
 ```
 
 That makes all tests with subdirectory names containing "test2d".
