@@ -1,11 +1,8 @@
 name: matlab
 
 env:
-  CMAKE_PREFIX_PATH: ~/gemlibs
-  GEMINI_ROOT: ~/gemini3d
   GEMINI_CIROOT: ~/ci
   CMAKE_BUILD_TYPE: Release
-  CMAKE_GENERATOR: Ninja
 
 on:
   push:
@@ -27,7 +24,7 @@ jobs:
     - name: Install Prereqs
       run: |
         sudo apt update -yq
-        sudo apt install -yq --no-install-recommends ninja-build libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
+        sudo apt install -yq --no-install-recommends libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
 
     - name: Checkout Gemini3D-External
       uses: actions/checkout@v2
@@ -35,27 +32,36 @@ jobs:
         repository: gemini3d/external
         path: gemext
 
-    - name: Install model libraries
+    - name: Install Gemini3D libraries
       timeout-minutes: 15
       run: |
-        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dhwm14:BOOL=false -Dmsis2:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ env.CMAKE_PREFIX_PATH }}
-        cmake --build gemext/build --target ffilesystem iniparser glow hwm14 msis
+        cmake -S gemext -B gemext/build -Dfind:BOOL=true -Dhwm14:BOOL=false -Dmsis2:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
+        cmake --build gemext/build --target ffilesystem iniparser glow hwm14 msis --parallel
         cmake --install gemext/build
 
-    - name: Install MATLAB
-      uses: matlab-actions/setup-matlab@v1
+    - name: Checkout Gemini3D
+      uses: actions/checkout@v2
+      with:
+        repository: gemini3d/gemini3d
+        path: gemini3d
 
     - name: Install Gemini3D
       timeout-minutes: 15
-      uses: matlab-actions/run-command@v1
-      with:
-        command: setup_gemini3d()
+      run: |
+        cmake -S gemini3d -B gemini3d/build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
+        cmake --build gemini3d/build --parallel
+        cmake --install gemini3d/build
+
+    - name: Install MATLAB
+      uses: matlab-actions/setup-matlab@v1
 
     - name: Run Matlab tests
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
-        command: setup, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
+        command: setup, r = runtests('gemini3d.test'), assert(~isempty(r)), assertSuccess(r)
+      env:
+        GEMINI_ROOT: ${{ runner.temp }}
 
 # save CI time by not running duplicitive tests
     # - name: CMake config
@@ -98,4 +104,4 @@ jobs:
   #     timeout-minutes: 15
   #     uses: matlab-actions/run-command@v1
   #     with:
-  #       command: addpath('${{ env.GITHUB_WORKSPACE }}'), setup_gemini3d, r = runtests('gemini3d.tests'), assert(~isempty(r)), assertSuccess(r)
+  #       command: addpath('${{ env.GITHUB_WORKSPACE }}'), r = runtests('gemini3d.test'), assert(~isempty(r)), assertSuccess(r)

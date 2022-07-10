@@ -10,7 +10,7 @@ import matlab.unittest.parameters.Parameter
 
 param = Parameter.fromData('out_dir', {out_dir}, 'ref_dir', {ref_dir}, 'only', {only});
 
-suite = TestSuite.fromClass(?gemini3d.tests.TestCompare, 'ExternalParameters', param);
+suite = TestSuite.fromClass(?gemini3d.test.TestCompare, 'ExternalParameters', param);
 
 result = suite.run;
 

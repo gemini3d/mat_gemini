@@ -21,7 +21,7 @@ import stdlib.sys.subprocess_run
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.sys.get_gemini_exe(opts.gemini_exe);
 if isempty(gemini_exe)
-  error("Please run setup_gemini3d() to setup Gemini3D")
+  error("Please setup Gemini3D. Set environment variable GEMINI_ROOT to the directory over bin/gemini.bin")
 end
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);

@@ -31,24 +31,10 @@ Then run desired MatGemini commands.
 
 ---
 
-If Gemini3D need to be built, build Gemini3D
-[prereqs](https://github.com/gemini3d/external)
-and then from Matlab in this "mat_gemini/" directory:
-
-```matlab
-prefix = '~/gemlibs';   % wherever gemini3d/external was installed to
-setup_gemini3d(prefix)  % one-time setup
-```
-
-If you prefer more control over the build process, instead of `setup_gemini3d` you can invoke CMake directly:
-
-```sh
-cmake -B build -DCMAKE_PREFIX_PATH=~/gemlibs
-
-cmake --build build
-
-ctest --test-dir build -V
-```
+If Gemini3D needs to be built, install Gemini3D
+[gemini3d/external](https://github.com/gemini3d/external)
+and then
+[Gemini3D](https://github.com/gemini3d/gemini3d).
 
 ## Simulation prep:  calling GEMINI core model components from MATLAB
 
