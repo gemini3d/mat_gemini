@@ -18,18 +18,20 @@ function time = time_h5(file)
 import stdlib.hdf5nc.h5variables
 
 time = datetime.empty;
-[vars, grps] = h5variables(file);
+vars = h5variables(file);
 
-if ~(any(vars == "ymd") || any(grps == "/time"))
-  return
-end
+if any(vars == "ymd")
 
-if any(grps == "/time")
-  i = "/time";
-  vars = h5variables(file, '/time');
-else
   i = "";
+else
+  vars = h5variables(file, "/time");
+  if any(vars == "ymd")
+    i = "/time";
+  else
+    return
+  end
 end
+
 
 d = h5read(file, i + "/ymd");
 time = datetime(d(1), d(2), d(3));
