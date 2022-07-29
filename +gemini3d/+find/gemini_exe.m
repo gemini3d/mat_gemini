@@ -14,23 +14,12 @@ paths = [fullfile(gemini3d.root(), ".."), ...
 bindirs = [".", "bin", "build", "build/bin", ...
   "build/Release", "build/RelWithDebInfo", "build/Debug"];
 
-exe = string.empty;
 for p = paths
   for b = bindirs
-    if ispc
-      % stdlib.fileio.which isn't used on Windows due to possible issue
-      % with WSL executable from Windows-native Matlab
-      e = fullfile(p, b, name);
-      if isfile(e)
-        exe = e;
-        return
-      end
-    else
-      exe = which(name, fullfile(p, b));
-      if ~isempty(exe)
-        exe = absolute_path(exe);
-       return
-      end
+    exe = which(name, fullfile(p, b));
+    if ~isempty(exe)
+      exe = absolute_path(exe);
+      return
     end
   end
 end
