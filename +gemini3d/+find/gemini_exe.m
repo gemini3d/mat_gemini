@@ -18,7 +18,6 @@ for p = paths
   for b = bindirs
     exe = which(name, fullfile(p, b));
     if ~isempty(exe)
-      exe = absolute_path(exe);
       return
     end
   end
