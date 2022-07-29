@@ -101,7 +101,7 @@ h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 %% CALL MSIS
 
 if msis_version == 20
-  % limitation of Matlab system() vis pwd for msis20.parm
+  % limitation of Matlab system() vis pwd
   old_pwd = pwd;
   cd(fileparts(exe))
 end
