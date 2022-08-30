@@ -36,6 +36,20 @@ If Gemini3D needs to be built, install Gemini3D
 and then
 [Gemini3D](https://github.com/gemini3d/gemini3d).
 
+## Make offline package
+
+To make an offline mat_gemini package suitable for computers without Internet, package mat_gemini.tar.bz2 like:
+
+```sh
+cmake -P scripts/package.cmake
+```
+
+Then the end user copies that mat_gemini.tar.bz2 to the offline computer and extracts:
+
+```sh
+tar xf mat_gemini.tar.bz2
+```
+
 ## Simulation prep:  calling GEMINI core model components from MATLAB
 
 Features requiring Gemini3D runs include "gemini3d.model.setup" and "gmeini3d.run".
