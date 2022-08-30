@@ -1,5 +1,6 @@
 *.job
 *.job.*
+*.tar*
 
 build*/
 resources/project/
