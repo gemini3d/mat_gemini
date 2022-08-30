@@ -9,7 +9,7 @@ setenv("MATGEMINI", cwd)
 %% ensure matlab-stdlib is present
 stdlib_dir = fullfile(cwd, "matlab-stdlib");
 if ~isfolder(fullfile(stdlib_dir, "+stdlib"))
-  assert(system("git submodule update --init") == 0, "Run this command from Terminal, then run mat_gemini/setup.m script again: \n%s", "git submodule update --init")
+  assert(system("git submodule update --init") == 0, "Run this command from mat_gemini/ directory in Terminal, then run mat_gemini/setup.m script again: \n%s", "git submodule update --init")
 end
 
 addpath(stdlib_dir)
