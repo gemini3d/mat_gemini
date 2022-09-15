@@ -89,20 +89,20 @@ pI=R./Re./sin(THETA).^2;
 X3I=PHI;   %phi variable name already used, this is a bit kludgey
 
 
-ith1=find(theta-(thdist-dang*pi/180)>0, 1 )
+ith1=find(theta-(thdist-dang*pi/180)>0, 1 );
 if (isempty(ith1))
    ith1=1;
 end
-ith2=find(theta-(thdist+dang*pi/180)>0, 1 )
+ith2=find(theta-(thdist+dang*pi/180)>0, 1 );
 if (isempty(ith2))
    ith2=numel(theta);
 end
 if (~flag2D)
-  iphi1=find(phi-(phidist-dang*pi/180)>0, 1 )
+  iphi1=find(phi-(phidist-dang*pi/180)>0, 1 );
   if (isempty(iphi1))
     iphi1=1;
   end
-  iphi2=find(phi-(phidist+dang*pi/180)>0, 1 )
+  iphi2=find(phi-(phidist+dang*pi/180)>0, 1 );
   if (isempty(iphi2))
     iphi2=numel(phi);
   end
@@ -249,8 +249,8 @@ end
 
 %CREATE A FULL TIME SERIES PLOT IF IN 2D
 if (flag2D)
-  fprintf('Printing TEC plot for entire time series...\n');
-  direc=[basedir,simname]
+  disp('Printing TEC plot for entire time series.')
+  direc = fullfile(basedir,simname);
   FS=18;
 
   imagesc(cfg.times, mlat, dvTEC(:,:));

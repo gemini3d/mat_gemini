@@ -1,6 +1,6 @@
 function TECplot_map(direc)
 arguments
-  direc (1,1) string
+  direc (1,1) string {mustBeFolder}
 end
 
 import stdlib.fileio.makedir
@@ -46,6 +46,9 @@ for it=1:length(cfg.times)
     mlatlim=double([min(mlat),max(mlat)]);
     mlonlim=double([min(mlon),max(mlon)]);
     [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
+    % possibly replace like:
+    % [MLAT, MLON] = ndgrid(linspace(mlatlim(1),mlatlim(2), size(param), ...
+    %                        linspace(mlonlim(1), mlonlim(2), size(param))
     pcolorm(MLAT,MLON,param);
 %    cmap=colormap(old_parula(256));
 %    colormap(bwr());

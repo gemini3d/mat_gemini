@@ -60,7 +60,7 @@ x(1) = 1/2*dx0;    %start offset from zero so we can have an even number (better
 
 while x(end) < xmax
   dx = dx0 + dxincr * (1/2+1/2*tanh((x(end)-x2)/ell));
-  x(end+1) = x(end)+dx;
+  x(end+1) = x(end)+dx; %#ok<AGROW>
 end %while
 x = [-fliplr(x), x];
 

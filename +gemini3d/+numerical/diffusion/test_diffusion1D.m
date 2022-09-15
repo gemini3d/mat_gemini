@@ -16,7 +16,7 @@ for it=1:L
   ic = num2str(it, '%4.4d');
 
   time(it) = h5read(fn, "/t" + ic);
-  TsEuler(:, it) = h5read(fn, "/TsEuler" + ic);
+  TsEuler(:, it) = h5read(fn, "/TsEuler" + ic); %#ok<*AGROW>
   TsBDF2(:, it) = h5read(fn, "/TsBDF2" + ic);
   Tstrue(:, it) = h5read(fn, "/TsTrue" + ic);
 end

@@ -22,7 +22,7 @@ alt(1) = alt_min;
 while alt(end) < alt_max
   % dalt=10+9.5*tanh((alt(end)-500)/150);
   dalt = d(1) + d(2) * tanh((alt(end) - d(3)) / d(4));
-  alt(end+1) = alt(end) + dalt;
+  alt(end+1) = alt(end) + dalt; %#ok<AGROW>
 end
 
 assert(length(alt) > 10, 'grid too small')

@@ -84,9 +84,9 @@ neuinfo.rhomax=[];        %meaningless in 3D situations
 
 
 %% FOR USERS INFO CONVERT SOURCE LOCATION TO GEOMAG
-[sourcetheta,sourcephi] = gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
-sourcemlat=90-sourcetheta*180/pi;
-sourcemlon=sourcephi*180/pi;
+%[sourcetheta,sourcephi] = gemini3d.geog2geomag(neuinfo.sourcelat,neuinfo.sourcelong);
+%sourcemlat=90-sourcetheta*180/pi;
+%sourcemlon=sourcephi*180/pi;
 
 
 %% RUN THE GRID GENERATION CODE
@@ -103,7 +103,7 @@ end
 
 %% PLOT THE GRID AND NEUTRAL INPUT EXTENT
 %ha=plotgrid(xg,flagsource,sourcelat,sourcelong,neugridtype,zmin,zmax,rhomax);
-ha = gemini3d.plot.mapgrid(xg,flagsource,neuinfo);
+gemini3d.plot.mapgrid(xg,flagsource,neuinfo);
 end % function
 
 %% ADDITIONAL EXAMPLES OF GRIDS AND SOURCE LOCATIONS...
