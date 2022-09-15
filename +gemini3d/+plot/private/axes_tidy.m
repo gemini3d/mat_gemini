@@ -8,7 +8,11 @@ set(ax, 'ydir', 'normal')
 
 colormap(ax, P.cmap)
 if ~isempty(P.caxlims) && all(~isnan(P.caxlims)) && P.caxlims(1) < P.caxlims(2)
-  clim(ax, P.caxlims);
+  if verLessThan('matlab', '9.12')
+    warning('gemini3d:plot', 'Matlab R2022a or newer recommended for plots')
+  else
+    clim(ax, P.caxlims);
+  end
 end
 
 c = colorbar('peer', ax);

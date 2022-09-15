@@ -229,8 +229,12 @@ for it=1:length(cfg.times)
       axis tight;
       caxlim=max(max(abs(dvTEC(:,:,it))));
       caxlim=max(caxlim,0.01);
-      clim([-1*caxlim, caxlim]);
-%      clim([-4,4]);
+      if verLessThan('matlab', '9.12')
+        warning('MATLAB 2022a or newer recommended for plots')
+      else
+        clim([-1*caxlim, caxlim]);
+  %      clim([-4,4]);
+      end
       c=colorbar;
 %       set(c,'FontSize',FS)
       xlabel(c,'\Delta vTEC (TECU)')
@@ -259,7 +263,11 @@ if (flag2D)
   axis xy;
   datetick;
   axis tight;
-  clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
+  if verLessThan('matlab', '9.12')
+    warning('MATLAB 2022a or newer recommended for plots')
+  else
+    clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
+  end
   c=colorbar;
 %   set(c,'FontSize',FS)
   xlabel(c,'\Delta vTEC (TECU)')

@@ -57,8 +57,12 @@ for it=1:length(cfg.times)
     colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
-%    clim([-3,3]);
-    clim([-0.5,0.5]);
+    if verLessThan('matlab', '9.12')
+        warning('MATLAB 2022a or newer recommended for plots')
+    else
+    %    clim([-3,3]);
+        clim([-0.5,0.5]);
+    end
     c=colorbar;
     set(c,'FontSize',FS)
     xlabel(c,'\Delta vTEC (TECU)')

@@ -95,6 +95,11 @@ arguments
   t (1,1)
 end
 
+if verLessThan('matlab', '9.12')
+  warning('gemini3d:plot:diff', 'diff2d requires MATLAB 2022a or newer')
+  return
+end
+
 cmap = string.empty;
 if any(startsWith(name, ["J", "v"]))
   cmap = gemini3d.plot.bwr();

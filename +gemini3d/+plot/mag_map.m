@@ -9,6 +9,11 @@ import stdlib.fileio.makedir
 addons = matlab.addons.installedAddons();
 assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
 
+if verLessThan('matlab', '9.12')
+  warning('gemini3d:plot:mag_map', 'mag_map requires MATLAB 2022a or newer')
+  return
+end
+
 direc = expanduser(direc);
 
 %SIMULATIONS LOCAITON
