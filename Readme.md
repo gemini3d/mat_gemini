@@ -62,6 +62,12 @@ setup_macos
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
 ```matlab
+buildtool
+```
+
+for Matlab older than R2022b, the tests can be run by:
+
+```matlab
 runtests('gemini3d.test')
 ```
 
