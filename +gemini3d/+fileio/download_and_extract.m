@@ -9,11 +9,9 @@ arguments
   url_ini string = string.empty
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.extract_zstd
-import stdlib.fileio.makedir
+gemini3d.sys.check_stdlib()
 
-data_dir = expanduser(data_dir);
+data_dir = stdlib.fileio.expanduser(data_dir);
 test_dir = fullfile(data_dir, name);
 if isfolder(test_dir)
   return
@@ -24,13 +22,13 @@ archive = download_data(name, data_dir, url_ini);
 %% extract
 [~,~,arc_type] = fileparts(archive);
 
-makedir(test_dir)
+stdlib.fileio.makedir(test_dir)
 
 switch arc_type
   case ".zip", unzip(archive, data_dir)
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(archive, test_dir)
-  case {".zst", ".zstd"}, extract_zstd(archive, test_dir)
+  case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(archive, test_dir)
   otherwise, error("gemini3d:fileio:download_and_extract:ValueError", "unknown reference archive type: " + arc_type)
 end
 
@@ -38,10 +36,6 @@ end % function
 
 
 function archive = download_data(name, data_dir, url_file)
-
-import stdlib.fileio.makedir
-import stdlib.fileio.expanduser
-import stdlib.fileio.sha256sum
 
 cert_file = getenv("SSL_CERT_FILE");
 if isfile(cert_file)
@@ -61,9 +55,9 @@ if isempty(url_file)
   end
 end
 
-makedir(data_dir)
+stdlib.fileio.makedir(data_dir)
 
-urls = jsondecode(fileread(expanduser(url_file)));
+urls = jsondecode(fileread(stdlib.fileio.expanduser(url_file)));
 
 archive = fullfile(data_dir, urls.tests.(name).archive);
 
@@ -89,10 +83,8 @@ arguments
   urls (1,1) struct
 end
 
-import stdlib.fileio.sha256sum
-
 if isfield(urls.(name), "sha256")
-  if sha256sum(archive) ~= urls.(name).sha256
+  if stdlib.fileio.sha256sum(archive) ~= urls.(name).sha256
     warning('%s sha256 hash does not match, file may be corrupted', archive)
   end
 end
