@@ -45,7 +45,7 @@ for it=1:length(cfg.times)
     %imagesc(mlon,mlat,param);
     mlatlim=double([min(mlat),max(mlat)]);
     mlonlim=double([min(mlon),max(mlon)]);
-    [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param));
+    [MLAT,MLON]=meshgrat(mlatlim,mlonlim,size(param)); %#ok<MESHGRAT>
     % possibly replace like:
     % [MLAT, MLON] = ndgrid(linspace(mlatlim(1),mlatlim(2), size(param), ...
     %                        linspace(mlonlim(1), mlonlim(2), size(param))

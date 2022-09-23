@@ -15,7 +15,7 @@ function setupTask(~)
 setup()
 setup_macos()
 
-exe = gemini3d.sys.get_gemini_exe("msis_setup");
+exe = gemini3d.find.gemini_exe("msis_setup");
 assert(~isempty(exe), "need to setup Gemini3D and/or set environment variable GEMINI_ROOT")
 end
 

@@ -4,8 +4,6 @@ function setup_macos()
 % Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
 % Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
 
-import stdlib.fileio.which
-
 if ~ismac
   return
 end
