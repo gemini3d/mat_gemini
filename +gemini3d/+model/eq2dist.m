@@ -6,8 +6,7 @@ arguments
   xg (1,1) struct
 end
 
-import stdlib.fileio.extract_zstd
-import stdlib.fileio.makedir
+gemini3d.sys.check_stdlib()
 
 peq = read_equilibrium(p);
 %% read equilibrium grid
@@ -47,13 +46,20 @@ end % function eq2dist
 
 function peq = read_equilibrium(p)
 
+assert(isfield(p, "eq_dir"), "equilibrium directory eq_dir must be specified in struct p input to eq2dist")
+
 if isfolder(p.eq_dir)
   peq = gemini3d.read.config(p.eq_dir);
   return
 end
 
 if ~all(isfield(p, ["eq_url", "eq_archive"]))
-  error("gemini3d:model:eq2dist", "run equilibrium simulation in %s \n OR specify eq_url and eq_archive in %s", p.eq_dir, p.nml)
+  if isfield(p, "nml")
+    n = p.nml;
+  else
+    n = "config.nml";
+  end
+  error("gemini3d:model:eq2dist", "run equilibrium simulation in %s \n OR specify eq_url and eq_archive in %s", p.eq_dir, n)
 end
 
 if ~isfile(p.eq_archive)
@@ -66,7 +72,7 @@ if ~isfile(p.eq_archive)
   else
     web_opt = weboptions('CertificateFilename', 'default');
   end
-  makedir(p.eq_dir)
+  stdlib.fileio.makedir(p.eq_dir)
   websave(p.eq_archive, p.eq_url, web_opt);
 end
 
@@ -76,7 +82,7 @@ switch arc_type
   case ".zip", unzip(p.eq_archive, fullfile(p.eq_dir, '..'))
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(p.eq_archive, p.eq_dir)
-  case {".zst", ".zstd"}, extract_zstd(p.eq_archive, p.eq_dir)
+  case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(p.eq_archive, p.eq_dir)
   otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)
 end
 

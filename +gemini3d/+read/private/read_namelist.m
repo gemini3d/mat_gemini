@@ -1,16 +1,11 @@
 function params = read_namelist(filename, namelist)
 
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeFile}
   namelist (1,1) string
 end
 
-import stdlib.fileio.expanduser
-
 params = struct();
-
-filename = expanduser(filename);
-assert(isfile(filename),  '%s not found.', filename)
 
 fid = fopen(filename);
 while ~feof(fid)

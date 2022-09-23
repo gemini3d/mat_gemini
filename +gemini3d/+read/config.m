@@ -4,13 +4,7 @@ arguments
   direc (1,1) string {mustBeNonzeroLengthText}
 end
 
-filename = gemini3d.find.config(direc);
-
-if endsWith(filename, ".ini", 'IgnoreCase', true)
-  cfg = read_ini(filename);
-else
-  cfg = read_nml(filename);
-end
+cfg = read_nml(direc);
 
 if isempty(cfg)
   return

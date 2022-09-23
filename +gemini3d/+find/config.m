@@ -1,6 +1,5 @@
 function filename = config(direc)
 %% get configuration file
-% if not found, errors
 arguments
   direc (1,1) string {mustBeNonzeroLengthText}
 end
@@ -16,24 +15,22 @@ if isfile(direc)
   return
 end
 
-if isfolder(direc)
-  names = ["config.nml", "inputs/config.nml", "config.ini", "inputs/config.ini"];
-  filename = check_names(direc, names);
-  if isfile(filename)
-    return
-  end
-
-  files = dir(fullfile(direc, "inputs/config*.nml"));
-  filename = check_names(fullfile(direc, "inputs"), {files.name});
-
-  if ~isfile(filename)
-    files = dir(fullfile(direc, "config*.nml"));
-    filename = check_names(direc, {files.name});
-  end
+if ~isfolder(direc)
+  return
 end
 
-if isempty(filename) || ~isfile(filename)
-  error("find:config:FileNotFound", "could not find config file under %s", direc)
+names = ["config.nml", "inputs/config.nml"];
+filename = check_names(direc, names);
+if ~isempty(filename)
+  return
+end
+
+for p = ["inputs/config*.nml", "config*.nml"]
+  files = dir(fullfile(direc, p));
+  filename = check_names(p, {files.name});
+  if ~isempty(filename)
+    return
+  end
 end
 
 end % function
