@@ -1,18 +1,16 @@
 function r = root()
 %% return top-level MatGemini path
 
-p = what('gemini3d');
-if isempty(p)
+p = what('gemini3d'); % Matlab package on Matlab path, and directories in cwd
+if isempty(p) || ~any(contains(p.classes, 'Gemini3d'))
   rp = fullfile(fileparts(mfilename('fullpath')), "..");
   error("gemini3d:root:FileNotFound", ...
     "Gemini3D MatGemini package not found. Try running 'setup()' from the mat_gemini/ directory, which should be at: %s", rp)
 end
 
-gp = p.path;
-assert(~isempty(p.path), "Gemini3D MatGemini package was found, but has an unknown path. This is an unexpected error.")
+gp = p(1).path;
+assert(~isempty(gp), "Gemini3D MatGemini package was found, but has an unknown path. This is an unexpected error.")
 
-root = string(gp);
-
-r = root(1);
+r = string(gp);
 
 end
