@@ -4,28 +4,27 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
+gemini3d.sys.check_stdlib()
+
 if ~isempty(time)
   filename = gemini3d.find.frame(filename, time);
 end
 
-[~,~,ext] = fileparts(filename);
+filename = stdlib.fileio.expanduser(filename);
 
-switch ext
-  case '.h5', dat = load_h5(filename);
-  otherwise, error("gemini3d:read:Efield:value_error", "unsupported file type " + filename)
-end
+assert(~isempty(filename) && isfile(filename), "Invalid simulation directory: no E-field file found")
+
+dat = load_h5(filename);
 
 end % function
 
 
 function dat = load_h5(filename)
 
-import stdlib.hdf5nc.h5variables
-
 dat = struct();
 
 Evars = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"];
-vars = h5variables(filename);
+vars = stdlib.hdf5nc.h5variables(filename);
 
 for k = Evars
   if any(vars == k)

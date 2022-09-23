@@ -4,16 +4,18 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
+gemini3d.sys.check_stdlib()
+
+filename = stdlib.fileio.expanduser(filename);
+
 if ~isempty(time)
   filename = gemini3d.find.frame(filename, time);
 end
 
-[~,~,ext] = fileparts(filename);
+assert(~isempty(filename) && isfile(filename), "Invalid simulation directory: no precipitation data file found")
 
-switch ext
-  case '.h5', dat = load_h5(filename);
-  otherwise, error('gemini3d:read:precip:value_error', 'unsupported file type %s', filename)
-end
+
+dat = load_h5(filename);
 
 end % function
 

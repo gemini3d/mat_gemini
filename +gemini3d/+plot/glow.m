@@ -36,6 +36,7 @@ x3=xg.x3(3:end-2);
 
 %% get filename
 fn = gemini3d.find.frame(direc, time);
+assert(~isempty(fn), "Invalid simulation directory: no data file found in " + direc)
 
 %% make plots
 if isfield(opts, "figure")

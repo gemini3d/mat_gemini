@@ -1,9 +1,8 @@
-function dat = magdata(direc,gridsize)
+function dat = magdata(direc)
 % reads full set of magnetic field output data
 
 arguments
   direc (1,1) string {mustBeNonzeroLengthText}
-  gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
 end
 
 
@@ -13,7 +12,7 @@ dat.times = cfg.times;
 
 % read in one frame at a time and store results
 for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc quirk
-  datframe=gemini3d.read.magframe(direc,"time",dat.times(it),"cfg",cfg,"gridsize",gridsize);
+  datframe = gemini3d.read.magframe(direc,dat.times(it));
 
   if (isfield(datframe,"Br"))
     if (~isfield(dat,"Brt"))

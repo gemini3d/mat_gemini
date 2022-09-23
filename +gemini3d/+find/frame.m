@@ -2,7 +2,7 @@ function filename = frame(direc, time, suffix)
 arguments
   direc (1,1) string {mustBeNonzeroLengthText}
   time (1,1) datetime
-  suffix (1,:) string {mustBeNonzeroLengthText} = [".h5"]
+  suffix (1,1) string {mustBeNonzeroLengthText} = ".h5"
 end
 
 gemini3d.sys.check_stdlib()
@@ -14,13 +14,11 @@ stem0 = gemini3d.datelab(time);
 direc = stdlib.fileio.expanduser(direc);
 % so that we return a usable path
 
-for ext = suffix
-  stem = stem0;
-  fn = fullfile(direc, stem + ext);
-  if isfile(fn)
-    filename = fn;
-    return
-  end
+stem = stem0;
+fn = fullfile(direc, stem + suffix);
+if isfile(fn)
+  filename = fn;
+  return
 end
 
 %% workaround: imprecise real32 filename time
@@ -31,26 +29,20 @@ MAX_OFFSET = seconds(1);
 time = datetime(time, "Format", "yyyyMMdd");
 pat = string(time) + "_*";
 file_times = datetime.empty;
-for ext = suffix
-    files = dir(fullfile(direc, pat + ext));
-    for i = 1:length(files)
-        file_times(i) = datetime(files(i).name(1:8), "InputFormat", "yyyyMMdd") + seconds(str2double(files(i).name(10:21)));
-    end
-
-    if ~isempty(file_times)
-        [~, i] = min(abs(file_times - time));
-
-        if abs(file_times(i) - time) <= MAX_OFFSET
-            filename = fullfile(direc, files(i).name);
-            return
-        end
-    end
+files = dir(fullfile(direc, pat + suffix));
+for i = 1:length(files)
+  file_times(i) = datetime(files(i).name(1:8), "InputFormat", "yyyyMMdd") + seconds(str2double(files(i).name(10:21)));
 end
 
-if isempty(filename) || ~isfile(filename)
-  error("gemini3d:find:frame:FileNotFound", "did not find frame under %s", direc)
+if ~isempty(file_times)
+  [~, i] = min(abs(file_times - time));
+
+  if abs(file_times(i) - time) <= MAX_OFFSET
+    n = fullfile(direc, files(i).name);
+    if(isfile(n))
+      filename = n;
+    end
+  end
 end
-
-
 
 end % function

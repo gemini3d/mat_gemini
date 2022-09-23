@@ -21,15 +21,17 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
-import stdlib.fileio.expanduser
+gemini3d.sys.check_stdlib()
 
-filename = expanduser(filename);
+filename = stdlib.fileio.expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
     filename = gemini3d.find.frame(filename, opts.time);
   end
 end
+
+assert(~isempty(filename) && isfile(filename), "Invalid simulation directory: no data file found")
 
 if isempty(opts.cfg)
   parent = fileparts(filename);
@@ -94,7 +96,7 @@ end % function
 
 function flag = get_flagoutput(filename, cfg)
 arguments
-  filename (1,1) string {mustBeNonzeroLengthText}
+  filename (1,1) string {mustBeFile}
   cfg struct {mustBeScalarOrEmpty}
 end
 

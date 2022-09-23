@@ -1,55 +1,46 @@
-function dat = magframe(filename,opts)
+function dat = magframe(filename, time)
 
 % example use
 % dat = gemini3d.read.magframe(filename)
-% dat = gemini3d.read.magframe(folder, "time", datetime)
-% dat = gemini3d.read.magframe(filename, "config", cfg)
+% dat = gemini3d.read.magframe(folder, datetime)
 
 arguments
   filename (1,1) string {mustBeNonzeroLengthText}
-  opts.time datetime {mustBeScalarOrEmpty} = datetime.empty
-  opts.cfg struct {mustBeScalarOrEmpty} = struct.empty
-  % opts.gridsize (1,3) {mustBeInteger} = [-1,-1,-1]    % [lr,ltheta,lphi] grid sizes
+  time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
+
+gemini3d.sys.check_stdlib()
 
 % make sure to add the default directory where the magnetic fields are to
 % be found
-direc=fileparts(filename);
+
+filename = stdlib.fileio.expanduser(filename);
+
+direc = fileparts(filename);
 basemagdir = fullfile(direc,"magfields");
 
 % find the actual filename if only the directory was given
 if ~isfile(filename)
-  if ~isempty(opts.time)
-    filename = gemini3d.find.frame(basemagdir, opts.time);
+  if ~isempty(time)
+    filename = gemini3d.find.frame(basemagdir, time);
   end
 end
 
 % some times might not have magnetic field computed
 if isempty(filename)
-  disp("SKIP: read.magframe %s", string(opts.time))
+  disp("SKIP: read.magframe %s", string(time))
   return
 end
 
-% read the config file if one was not provided as input
-if isempty(opts.cfg)
-  cfg = gemini3d.read.config(direc);
-else
-  cfg = opts.cfg;
-end
-
 % load and construct the magnetic field point grid
-switch cfg.file_format
-  case 'h5'
-    fn = fullfile(direc,'inputs/magfieldpoints.h5');
-    assert(isfile(fn), fn + " not found")
+fn = fullfile(direc,'inputs/magfieldpoints.h5');
+assert(isfile(fn), fn + " not found")
 
-    lpoints = h5read(fn, "/lpoints");
-    r = double(h5read(fn, "/r"));
-    theta = double(h5read(fn, "/theta"));
-    phi = double(h5read(fn, "/phi"));
-    gridsize=reshape(h5read(fn,"/gridsize"),[1,3]);
-  otherwise, error('Unrecognized input field point file format %s', cfg.file_format)
-end
+lpoints = h5read(fn, "/lpoints");
+r = double(h5read(fn, "/r"));
+theta = double(h5read(fn, "/theta"));
+phi = double(h5read(fn, "/phi"));
+gridsize=reshape(h5read(fn,"/gridsize"),[1,3]);
 
 % Reorganize the field points if the user has specified a grid size
 if any(gridsize < 0)
@@ -89,9 +80,7 @@ dat(1).Br=zeros(lr,ltheta,lphi);
 dat(1).Btheta=zeros(lr,ltheta,lphi);
 dat(1).Bphi=zeros(lr,ltheta,lphi);
 
-switch cfg.file_format
-  case 'h5', data = h5read(filename, '/magfields/Br');
-end
+data = h5read(filename, '/magfields/Br');
 
 dat.Br(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
@@ -99,9 +88,7 @@ if ~flatlist
   dat.Br(:,:,:)=dat.Br(:,:,ilonsort);
 end
 
-switch cfg.file_format
-    case 'h5', data = h5read(filename, '/magfields/Btheta');
-end
+data = h5read(filename, '/magfields/Btheta');
 
 dat.Btheta(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
@@ -109,9 +96,7 @@ if ~flatlist
   dat.Btheta(:,:,:)=dat.Btheta(:,:,ilonsort);
 end %if
 
-switch cfg.file_format
-  case 'h5', data = h5read(filename, '/magfields/Bphi');
-end
+data = h5read(filename, '/magfields/Bphi');
 
 dat.Bphi(:,:,:)=reshape(data,[lr,ltheta,lphi]);
 if ~flatlist
