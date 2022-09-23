@@ -15,6 +15,7 @@ bindirs = [".", "bin", "build", "build/bin", ...
   "build/Release", "build/RelWithDebInfo", "build/Debug"];
 
 for p = paths
+  if isempty(p), continue, end
   for b = bindirs
     exe = which(name, fullfile(p, b));
     if ~isempty(exe)

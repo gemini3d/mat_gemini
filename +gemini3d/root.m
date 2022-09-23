@@ -9,10 +9,7 @@ if isempty(p)
 end
 
 gp = p.path;
-if isempty(gp)
-  error("gemini3d:root:FileNotFound", ...
-    "Gemini3D MatGemini package was found, but has an unknown path. This is an unexpected error.")
-end
+assert(~isempty(p.path), "Gemini3D MatGemini package was found, but has an unknown path. This is an unexpected error.")
 
 root = string(gp);
 
