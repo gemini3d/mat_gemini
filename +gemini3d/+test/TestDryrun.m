@@ -8,6 +8,9 @@ methods(TestMethodSetup)
 
 function setup_sim(tc)
 
+exe = gemini3d.find.gemini_exe("gemini3d.run");
+tc.assumeNotEmpty(exe, "gemini3d.run program not found. Compile with https://github.com/gemini3d/gemini3d.git")
+
 name = "mini2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
