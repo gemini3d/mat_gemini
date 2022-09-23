@@ -1,6 +1,5 @@
 classdef TestProject < matlab.unittest.TestCase
 properties (TestParameter)
-  file_type = {"h5"}
   name = {"mini2dew_eq", "mini2dew_fang", "mini2dew_glow", ...
           "mini2dns_eq", "mini2dns_fang", "mini2dns_glow", ...
           "mini3d_eq", "mini3d_fang", "mini3d_glow"}
@@ -97,10 +96,10 @@ gemini3d.particles.particles_BCs(p, xg);
 gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), only="precip", time=p.times)
 end
 
-function test_Arunner(tc, file_type, name)
+function test_Arunner(tc, name)
 
 try
-  project_runner(tc, name, file_type, tc.TestData.ref_dir)
+  project_runner(tc, name, tc.TestData.ref_dir)
 catch err
   catcher(err, tc)
 end
@@ -109,7 +108,7 @@ end
 
 function test_plot_2d(tc)
 tname = "mini2dew_glow";
-project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
+project_runner(tc, tname, fullfile(tc.TestData.cwd, "data"))
 
 data_dir = fullfile(tc.TestData.cwd, "data", tname);
 % test 2D plots
@@ -129,7 +128,7 @@ end
 
 function test_plot_3d(tc)
 tname = 'mini3d_glow';
-project_runner(tc, tname, 'h5', fullfile(tc.TestData.cwd, "data"))
+project_runner(tc, tname, fullfile(tc.TestData.cwd, "data"))
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data", tname);
 h = gemini3d.plot.init(gemini3d.read.grid(d3));

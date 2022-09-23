@@ -48,6 +48,6 @@ mustBeNonnegative(precip.Qit)
 %E0it = max(E0it,0.100);
 %E0it = E0it*1e3;
 
-gemini3d.write.precip(precip, p.prec_dir, p.file_format)
+gemini3d.write.precip(precip, p.prec_dir)
 
 end % function

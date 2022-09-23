@@ -13,10 +13,8 @@ function cfg = setup_if_needed(opts, outdir, config_path)
   cfg = gemini3d.read.config(config_path);
   cfg.outdir = outdir;
 
-  for k = ["ssl_verify", "file_format"]
-    if ~isempty(opts.(k))
-      cfg.(k) = opts.(k);
-    end
+  if ~isempty(opts.ssl_verify)
+    cfg.ssl_verify = opts.ssl_verify;
   end
 
   if opts.overwrite

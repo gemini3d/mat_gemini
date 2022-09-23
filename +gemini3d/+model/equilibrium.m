@@ -20,6 +20,6 @@ gemini3d.write.grid(cfg, xg);
 
 ics = gemini3d.model.eqICs(cfg, xg);
 % Note: should be rewritten to include the neutral module form the fortran code
-gemini3d.write.state(cfg.indat_file, ics, cfg.file_format);
+gemini3d.write.state(cfg.indat_file, ics);
 
 end % function

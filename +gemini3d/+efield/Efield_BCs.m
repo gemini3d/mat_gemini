@@ -153,7 +153,7 @@ end
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
 % THE EFIELD DATA DO NOT TYPICALLY NEED TO BE SMOOTHED.
-gemini3d.write.Efield(E, p.E0_dir, p.file_format)
+gemini3d.write.Efield(E, p.E0_dir)
 
 end % function
 

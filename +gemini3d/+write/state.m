@@ -1,4 +1,4 @@
-function state(fn, init_cond, file_format)
+function state(fn, init_cond)
 
 %% WRITE STATE VARIABLE DATA TO BE USED AS INITIAL CONDITIONS
 % FOR ANOTHER SIMULATION.  NOTE THAT WE
@@ -11,7 +11,6 @@ function state(fn, init_cond, file_format)
 arguments
   fn (1,1) string
   init_cond (1,1) struct
-  file_format string = string.empty
 end
 
 % FIXME:  may want validate potential input
@@ -20,16 +19,7 @@ if isfolder(fn)
   fn = fullfile(fn, "inputs/initial_conditions.h5");
 end
 
-if isempty(file_format)
-  [~, ~, suffix] = fileparts(fn);
-  file_format = extractAfter(suffix, 1);
-end
-
-
-switch file_format
-  case 'h5', write_hdf5(fn, init_cond)
-  otherwise, error('gemini3d:write:state:value_error', 'unknown file_format %s', file_format)
-end
+write_hdf5(fn, init_cond)
 
 end % function
 
@@ -37,9 +27,6 @@ end % function
 function write_hdf5(fn, ics)
 
 import stdlib.hdf5nc.h5save
-import stdlib.fileio.with_suffix
-
-fn = with_suffix(fn, ".h5");
 
 disp("write " + fn)
 if isfile(fn), delete(fn), end

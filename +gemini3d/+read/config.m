@@ -13,13 +13,6 @@ end
 t0 = datetime(cfg.ymd(1), cfg.ymd(2), cfg.ymd(3)) + seconds(cfg.UTsec0);
 cfg.times = t0:seconds(cfg.dtout):(t0 + seconds(cfg.tdur));
 
-%% deduce data file format from simsize format
-% needs to be here and in read_nml
-if ~isfield(cfg, 'file_format')
-  [~,~,ext] = fileparts(cfg.indat_size);
-  cfg.file_format = extractAfter(ext, 1);
-end
-
 %% if a GLOW sim
 if isfield(cfg, "dtglow")
   if ~isfield(cfg, "aurmap_dir")

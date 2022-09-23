@@ -39,7 +39,7 @@ check_temperature(ic_interp.Ts)
 
 %% write the interpolated grid and data
 gemini3d.write.grid(p, xg)
-gemini3d.write.state(p.indat_file, ic_interp, p.file_format);
+gemini3d.write.state(p.indat_file, ic_interp);
 
 end % function eq2dist
 

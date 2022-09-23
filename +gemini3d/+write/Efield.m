@@ -1,8 +1,7 @@
-function Efield(E, dir_out, file_format)
+function Efield(E, dir_out)
 arguments
   E (1,1) struct
   dir_out (1,1) string
-  file_format (1,1) string
 end
 
 import stdlib.fileio.makedir
@@ -11,10 +10,7 @@ nan_check(E)
 
 makedir(dir_out)
 
-switch file_format
-  case 'h5', write_hdf5(dir_out, E)
-  otherwise, error('gemini3d:write:Efield:value_error', 'unknown file format %s', file_format)
-end
+write_hdf5(dir_out, E)
 
 end
 

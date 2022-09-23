@@ -23,20 +23,11 @@ end
 % e.g. "inputs" than the base simdir
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
-[gdir, ~, suffix] = fileparts(p.indat_grid);
+gdir = fileparts(p.indat_grid);
 makedir(gdir)
 
-if isfield(p, 'file_format')
-  file_format = p.file_format;
-else
-  file_format = extractAfter(suffix, 1);
-end
-switch file_format
-  case 'h5'
-    write_hdf5(p, xg)
-    [xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.h5'));
-  otherwise, error('gemini3d:write:grid:value_error', 'unknown file format %s', p.file_format)
-end
+write_hdf5(p, xg)
+[xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.h5'));
 
 rtol = 1e-7;  % allow for single precision
 names = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h", "x3", "x3i", "dx3b", "dx3h", ...

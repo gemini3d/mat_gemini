@@ -12,7 +12,6 @@ arguments
   opts.mpiexec string = "mpiexec"
   opts.gemini_exe (1,1) string = "gemini3d.run"
   opts.ssl_verify string = string.empty
-  opts.file_format string = string.empty
   opts.dryrun (1,1) logical = false
 end
 

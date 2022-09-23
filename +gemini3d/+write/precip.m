@@ -1,4 +1,4 @@
-function precip(pg, outdir, file_format)
+function precip(pg, outdir)
 %% SAVE to files
 % LEAVE THE SPATIAL AND TEMPORAL INTERPOLATION TO THE
 % FORTRAN CODE IN CASE DIFFERENT GRIDS NEED TO BE TRIED.
@@ -6,19 +6,13 @@ function precip(pg, outdir, file_format)
 arguments
   pg (1,1) struct
   outdir (1,1) string
-  file_format (1,1) string
 end
 
-import stdlib.fileio.makedir
-
-makedir(outdir)
+stdlib.fileio.makedir(outdir)
 
 disp("write precip to: " + outdir)
 
-switch file_format
-  case 'h5', write_hdf5(outdir, pg)
-  otherwise, error('gemini3d:write:precip:value_error', 'unknown file format %s', file_format)
-end
+write_hdf5(outdir, pg)
 
 end % function
 

@@ -3,8 +3,7 @@ arguments
   direc (1,1) string
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.makedir
+gemini3d.sys.check_stdlib()
 
 addons = matlab.addons.installedAddons();
 assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
@@ -14,27 +13,23 @@ if verLessThan('matlab', '9.12')
   return
 end
 
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
-makedir(pdir)
+stdlib.fileio.makedir(pdir)
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
 
 %LOAD/CONSTRUCT THE FIELD POINT GRID
 
-fn = fullfile(direc, "inputs/magfieldpoints." + cfg.file_format);
+fn = fullfile(direc, "inputs/magfieldpoints.h5");
 
-switch cfg.file_format
-case 'h5'
-  % lpoints = h5read(fn, "/lpoints");
-  % r = h5read(fn, "/r");
-  theta = double(h5read(fn, "/theta"));
-  phi = double(h5read(fn, "/phi"));
-otherwise, error("not sure how to read " + cfg.file_format + " files")
-end
+% lpoints = h5read(fn, "/lpoints");
+% r = h5read(fn, "/r");
+theta = double(h5read(fn, "/theta"));
+phi = double(h5read(fn, "/phi"));
 
 %REORGANIZE THE FIELD POINTS (PROBLEM-SPECIFIC)
 ltheta=10;
@@ -60,25 +55,19 @@ Bphit=zeros(1,ltheta,lphi, length(cfg.times));
 for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc quirk
   filename = gemini3d.datelab(cfg.times(it));
 
-  switch cfg.file_format
-  case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
-  end
+  data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
 
   Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Brt(:,:,:,it)=Brt(:,ilatsort,:,it);
   Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
 
-  switch cfg.file_format
-  case 'h5', data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
-  end
+  data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
 
   Bthetat(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Bthetat(:,:,:,it)=Bthetat(:,ilatsort,:,it);
   Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
 
-  switch cfg.file_format
-  case 'h5', data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
-  end
+  data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
 
   Bphit(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Bphit(:,:,:,it)=Bphit(:,ilatsort,:,it);

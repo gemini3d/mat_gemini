@@ -21,7 +21,6 @@ arguments
   outdir (1,1) string
   refdir (1,1) string
   opts.only (1,:) string {mustBeMember(opts.only, ["in", "out", "efield", "grid", "precip"])} = ["in", "out"]
-  opts.file_format string = string.empty
   opts.time (1,:) datetime = datetime.empty
 end
 
@@ -46,7 +45,7 @@ if any(opts.only == "out")
 end
 %% check input dirs
 if any(opts.only == "in")
-  compare_input(outdir, refdir, tol, opts.file_format);
+  compare_input(outdir, refdir, tol);
 end
 if any(opts.only == "efield")
   % TODO: the generated error shouldn't be so big. Need to update ref data?

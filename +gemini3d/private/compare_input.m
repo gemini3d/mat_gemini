@@ -1,9 +1,8 @@
-function compare_input(new_dir, ref_dir, tol, file_format)
+function compare_input(new_dir, ref_dir, tol)
 arguments
   new_dir (1,1) string
   ref_dir (1,1) string
   tol (1,1) struct
-  file_format string = string.empty
 end
 
 import stdlib.fileio.samepath
@@ -18,7 +17,7 @@ compare_grid(new_dir, ref_dir, tol.rtol, tol.atol)
 ref_params = make_valid_paths(gemini3d.read.config(ref_dir), ref_dir);
 ref = gemini3d.read.frame3Dcurvnoelec(ref_params.indat_file);
 
-new_params = make_valid_paths(gemini3d.read.config(new_dir), new_dir, file_format);
+new_params = make_valid_paths(gemini3d.read.config(new_dir), new_dir);
 new = gemini3d.read.frame3Dcurvnoelec(new_params.indat_file);
 
 assert(~isempty(new_params.times), "simulation input has zero duration")
