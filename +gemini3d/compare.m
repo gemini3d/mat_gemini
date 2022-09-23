@@ -25,7 +25,7 @@ arguments
   opts.time (1,:) datetime = datetime.empty
 end
 
-import stdlib.fileio.samepath
+gemini3d.sys.check_stdlib()
 
 tol.rtol = 1e-5;
 tol.rtolN = 1e-5;
@@ -38,7 +38,7 @@ tol.atolT = 100;
 tol.atolJ = 1e-7;
 tol.atolV = 50;
 
-assert(~samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
+assert(~stdlib.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% check output dirs
 if any(opts.only == "out")

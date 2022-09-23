@@ -5,9 +5,7 @@ arguments
   type (1,1) string {mustBeMember(type, ["md5", "sha1", "sha256"])}
 end
 
-import stdlib.fileio.expanduser
-
-file = expanduser(file);
+file = stdlib.fileio.expanduser(file);
 
 assert(isfile(file), "%s not found", file)
 

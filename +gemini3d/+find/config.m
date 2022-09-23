@@ -5,9 +5,9 @@ arguments
   direc (1,1) string {mustBeNonzeroLengthText}
 end
 
-import stdlib.fileio.expanduser
+gemini3d.sys.check_stdlib()
 
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 
 filename = string.empty;
 

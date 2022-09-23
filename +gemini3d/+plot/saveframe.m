@@ -8,16 +8,13 @@ arguments
   h (1,:) matlab.ui.Figure
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.makedir
-
 dpi = 150;
 % filename has the suffix, let's ditch the suffix.
 [~, stem] = fileparts(filename);
 
-plotdir = fullfile(expanduser(direc), "plots");
+plotdir = fullfile(stdlib.fileio.expanduser(direc), "plots");
 
-makedir(plotdir)
+stdlib.fileio.makedir(plotdir)
 
 pp = ["v1", "Ti", "Te", "J1", "v2", "v3", "J2", "J3", "Phitop", "ne"];
 assert(length(pp) == length(h), "number of figures ~= number of variables")

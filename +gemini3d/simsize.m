@@ -3,6 +3,8 @@ arguments
   apath (1,1) string
 end
 
+gemini3d.sys.check_stdlib()
+
 [apath, ext] = gemini3d.find.simsize(apath);
 
 switch ext
@@ -17,11 +19,9 @@ end % function
 
 function lxs = read_h5(path)
 
-import stdlib.hdf5nc.h5variables
-
 fn = fullfile(path, "simsize.h5");
 
-varnames = h5variables(fn);
+varnames = stdlib.hdf5nc.h5variables(fn);
 
 if any(varnames == "lxs")
   lxs = h5read(fn, '/lxs');

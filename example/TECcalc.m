@@ -1,4 +1,4 @@
-import stdlib.fileio.makedir
+gemini3d.sys.check_stdlib()
 
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_lowres/';
@@ -9,7 +9,7 @@ basedir='~/simulations/';
 direc = fullfile(basedir, simname);
 direc_control = fullfile(basedir, simname_control);
 
-makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
+stdlib.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION

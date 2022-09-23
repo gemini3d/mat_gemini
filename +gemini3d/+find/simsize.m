@@ -6,9 +6,9 @@ arguments
   apath (1,1) string {mustBeNonzeroLengthText}
 end
 
-import stdlib.fileio.expanduser
+gemini3d.sys.check_stdlib()
 
-apath = expanduser(apath);
+apath = stdlib.fileio.expanduser(apath);
 
 if isfile(apath)
   apath = fileparts(apath);

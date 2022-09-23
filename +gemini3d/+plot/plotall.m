@@ -20,11 +20,10 @@ arguments
   opts.parallel (1,1) {mustBeInteger} = 0
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.is_absolute_path
+gemini3d.sys.check_stdlib()
 
 visible = isempty(saveplot_fmt);
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 
 lxs = gemini3d.simsize(direc);
 disp("sim grid dimensions: " + num2str(lxs))
@@ -51,7 +50,7 @@ end
 %% determine if GLOW
 if isfield(cfg, "aurmap_dir")
   % glow sim
-  if is_absolute_path(cfg.aurmap_dir)
+  if stdlib.fileio.is_absolute_path(cfg.aurmap_dir)
     aurmap_dir = cfg.aurmap_dir;
   else
     aurmap_dir = fullfile(direc, cfg.aurmap_dir);

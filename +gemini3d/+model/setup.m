@@ -6,9 +6,7 @@ arguments
   out_dir string = string.empty
 end
 
-import gemini3d.fileio.make_valid_paths
-import stdlib.fileio.makedir
-import stdlib.fileio.copyfile
+gemini3d.sys.check_stdlib()
 
 %% parse input
 if ~isstruct(cfg)
@@ -20,12 +18,12 @@ if ~isempty(out_dir)
   cfg.outdir = out_dir;
 end
 
-cfg = make_valid_paths(cfg);
+cfg = gemini3d.fileio.make_valid_paths(cfg);
 
-makedir(cfg.input_dir)
+stdlib.fileio.makedir(cfg.input_dir)
 disp("copying config.nml to " + cfg.input_dir)
 % specify filename in case it wasn't config.nml
-copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
+stdlib.fileio.copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
 
 setup_summary(cfg)
 

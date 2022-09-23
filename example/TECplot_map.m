@@ -3,10 +3,10 @@ arguments
   direc (1,1) string {mustBeFolder}
 end
 
-import stdlib.fileio.makedir
+gemini3d.sys.check_stdlib()
 
-makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
-makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
+stdlib.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
+stdlib.fileio.makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED TEC DATA

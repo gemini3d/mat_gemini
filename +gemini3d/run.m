@@ -16,7 +16,7 @@ arguments
   opts.dryrun (1,1) logical = false
 end
 
-import stdlib.sys.subprocess_run
+gemini3d.sys.check_stdlib()
 
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.find.gemini_exe(opts.gemini_exe);
@@ -33,7 +33,7 @@ if ~isempty(mpiexec)
   cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
 end
 disp("dryrun: " + join(cmd, " "))
-[ret, msg] = subprocess_run([cmd, "-dryrun"]);
+[ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
 if ret == 0
   % pass
 elseif ret == -1073741515
@@ -53,7 +53,7 @@ end
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
 disp("run: " + join(cmd, " "))
-ret = subprocess_run(cmd);
+ret = stdlib.sys.subprocess_run(cmd);
 assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function

@@ -5,9 +5,9 @@ arguments
   xg struct = struct.empty
 end
 
-import stdlib.fileio.expanduser
+gemini3d.sys.check_stdlib()
 
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 assert(isfolder(direc), direc + " is not a directory")
 
 %SIMULATION META-DATA

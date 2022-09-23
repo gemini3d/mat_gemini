@@ -5,13 +5,13 @@ arguments
   suffix (1,:) string {mustBeNonzeroLengthText} = [".h5"]
 end
 
-import stdlib.fileio.expanduser
+gemini3d.sys.check_stdlib()
 
 filename = string.empty;
 
 stem0 = gemini3d.datelab(time);
 
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 % so that we return a usable path
 
 for ext = suffix

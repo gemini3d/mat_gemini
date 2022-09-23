@@ -21,9 +21,8 @@ arguments
   time (1,1) datetime = p.times(1)
 end
 
-import stdlib.fileio.absolute_path
-import stdlib.fileio.which
-import stdlib.sys.subprocess_run
+gemini3d.sys.check_stdlib()
+
 import stdlib.hdf5nc.h5save
 
 if isfield(p, "msis_version")
@@ -56,14 +55,14 @@ alt = xg.alt/1e3;
 alt(alt <= 0) = 1;
 %% MSIS file API
 % we use binary files because they are MUCH faster than stdin/stdout pipes
-% we need absolute paths because MSIS 2.0 requires a chdir() due to Matlab
+% we need absolute paths because MSIS 2 requires a chdir() due to Matlab
 % system() not having cwd= like Python.
 if isfield(p, "msis_infile")
   msis_infile = p.msis_infile;
 else
   msis_infile = fullfile(fileparts(p.indat_size), "msis_setup_in.h5");
 end
-msis_infile = absolute_path(msis_infile);
+msis_infile = stdlib.fileio.absolute_path(msis_infile);
 if ~isfolder(fileparts(msis_infile))
   msis_infile = tempname + "-msis_setup_in.h5";
 end
@@ -73,7 +72,7 @@ if isfield(p, "msis_outfile")
 else
   msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
 end
-msis_outfile = absolute_path(msis_outfile);
+msis_outfile = stdlib.fileio.absolute_path(msis_outfile);
 if ~isfolder(fileparts(msis_outfile))
   msis_outfile = tempname + "-msis_setup_out.h5";
 end
@@ -106,7 +105,7 @@ if msis_version == 20
   cd(fileparts(exe))
 end
 cmd = [exe, msis_infile, msis_outfile];
-[status, msg] = subprocess_run(cmd);
+[status, msg] = stdlib.sys.subprocess_run(cmd);
 % output written to file
 if msis_version == 20
   cd(old_pwd)
