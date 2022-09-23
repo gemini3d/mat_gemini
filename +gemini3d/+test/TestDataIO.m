@@ -30,7 +30,7 @@ tc.verifyTrue(endsWith(gemini3d.find.config(tc.TestData.data_path), fullfile(tc.
 end
 
 function test_find_simsize(tc)
-tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs")))
+tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "simsize.h5")))
 end
 
 function test_read_config(tc)

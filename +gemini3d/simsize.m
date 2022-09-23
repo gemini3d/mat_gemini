@@ -5,21 +5,16 @@ end
 
 gemini3d.sys.check_stdlib()
 
-[apath, ext] = gemini3d.find.simsize(apath);
+fn = gemini3d.find.simsize(apath);
+assert(~isempty(fn), "Invalid simulation directory: no simulation grid simgrid.h5 found in " + apath)
 
-switch ext
-  case '.h5', lxs = read_h5(apath);
-  otherwise, error('gemini3d:simsize:value_error', 'unknown file format %s', file_format)
-end
-
+lxs = read_h5(fn);
 lxs = lxs(:).';  % needed for concatenation
 
 end % function
 
 
-function lxs = read_h5(path)
-
-fn = fullfile(path, "simsize.h5");
+function lxs = read_h5(fn)
 
 varnames = stdlib.hdf5nc.h5variables(fn);
 

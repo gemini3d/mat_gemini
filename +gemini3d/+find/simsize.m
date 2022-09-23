@@ -1,35 +1,36 @@
-function [simpath, ext] = simsize(apath)
-%% find the path (directory, even if given filename) where simsize.* is
-% also return the suffix
-% the filename MUST be simsize.{h5,nc,dat}
+function file = simsize(apath, suffix)
+%% return full path where simsize.h5 is
 arguments
   apath (1,1) string {mustBeNonzeroLengthText}
+  suffix (1,1) string {mustBeNonzeroLengthText} = ".h5"
 end
 
 gemini3d.sys.check_stdlib()
 
 apath = stdlib.fileio.expanduser(apath);
 
-if isfile(apath)
-  apath = fileparts(apath);
-end
+file = string.empty;
 
-simpath = string.empty;
-ext = string.empty;
-suffix = ".h5";
-% search all suffixes in case the inputs files are different from output
-for stem = ["inputs", ""]
-  simsize_fn = fullfile(apath, stem, "simsize") + suffix;
-  if isfile(simsize_fn)
-    simpath = fullfile(apath, stem);
-    ext = suffix;
+if isfile(apath)
+  [d, n] = fileparts(apath);
+  if n == "simsize"
+    file = apath;
     return
   end
+
+  apath = d;
 end
 
+if ~isfolder(apath)
+  return
+end
 
-if isempty(simpath) || ~isfile(simpath)
-  error("find:simsize:FileNotFound", "could not find simsize in %s", apath)
+for stem = ["inputs", ""]
+  n = fullfile(apath, stem, "simsize" + suffix);
+  if isfile(n)
+    file = n;
+    return
+  end
 end
 
 end % function

@@ -1,39 +1,33 @@
 function [xg, ok] = grid(apath)
-%% READS A GRID FROM MATLAB
-% OR POSSIBLY FORTRAN (THOUGH THIS IS NOT YET IMPLEMENTED AS OF 9/15/2016)
-% we don't use file_format because the output / new simulation may be in
-% one file format while the equilibrium sim was in another file format
+%% reads simulation grid
 arguments
   apath (1,1) string
 end
 
-[apath, suffix] = gemini3d.find.simsize(apath);
+simsize_fn = gemini3d.find.simsize(apath);
+assert(~isempty(simsize_fn), "Invalid simulation directory: no simulation grid simgrid.h5 found in " + apath)
 
-switch suffix
-  case '.h5', xg = read_hdf5(apath);
-  otherwise, error('gemini3d:read:grid:value_error', 'unknown file type %s', filename)
-end
+d = fileparts(simsize_fn);
+simgrid_fn = fullfile(d, "simgrid.h5");
+
+xg = read_hdf5(simgrid_fn);
 
 ok = gemini3d.check_grid(xg);
 if ~ok
-  warning('read:grid:value_error', "grid has unsuitable values: " + apath)
+  warning('read:grid:value_error', "grid has unsuitable values: " + simgrid_fn)
 end
 
 end % function
 
 
-function xgf = read_hdf5(apath)
+function xgf = read_hdf5(fn)
 
-import stdlib.hdf5nc.h5variables
-
-fn = fullfile(apath, 'simgrid.h5');
-
-for v = h5variables(fn)
+for v = stdlib.hdf5nc.h5variables(fn)
   xgf.(v) = h5read(fn, "/" + v);
 end
 
 % do this last to avoid overwriting
 xgf.filename = fn;
-xgf.lx = gemini3d.simsize(apath);
+xgf.lx = gemini3d.simsize(fn);
 
 end  % function read_hdf5
