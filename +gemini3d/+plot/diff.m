@@ -95,10 +95,6 @@ arguments
   t (1,1)
 end
 
-if verLessThan('matlab', '9.12')
-  warning('gemini3d:plot:diff', 'diff2d requires MATLAB 2022a or newer')
-  return
-end
 
 cmap = string.empty;
 if any(startsWith(name, ["J", "v"]))
@@ -115,7 +111,11 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-clim(ax, [bmin, bmax]);
+if verLessThan('matlab', '9.12')
+  caxis(ax, [bmin, bmax]) %#ok<CAXIS>
+else
+  clim(ax, [bmin, bmax])
+end
 %%
 ax = nexttile(t, 2);
 hi = pcolor(ax, B);
@@ -124,7 +124,11 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-clim(ax, [bmin, bmax]);
+if verLessThan('matlab', '9.12')
+  caxis(ax, [bmin, bmax]) %#ok<CAXIS>
+else
+  clim(ax, [bmin, bmax])
+end
 %%
 ax = nexttile(t, 3);
 dAB = A - B;
@@ -136,6 +140,11 @@ hi = pcolor(ax, dAB);
 set(hi, "EdgeColor", "none")
 colorbar(ax)
 colormap(gemini3d.plot.bwr())
-clim(ax, [-b, b]);
+
+if verLessThan('matlab', '9.12')
+  caxis(ax, [-b, b]) %#ok<CAXIS>
+else
+  clim(ax, [-b, b])
+end
 
 end

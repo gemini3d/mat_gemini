@@ -58,10 +58,10 @@ for it=1:length(cfg.times)
     set(gca,'FontSize',FS);
     tightmap;
     if verLessThan('matlab', '9.12')
-        warning('MATLAB 2022a or newer recommended for plots')
+        caxis([-0.5,0.5]) %#ok<CAXIS>
     else
     %    clim([-3,3]);
-        clim([-0.5,0.5]);
+        clim([-0.5,0.5])
     end
     c=colorbar;
     set(c,'FontSize',FS)

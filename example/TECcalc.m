@@ -230,9 +230,9 @@ for it=1:length(cfg.times)
       caxlim=max(max(abs(dvTEC(:,:,it))));
       caxlim=max(caxlim,0.01);
       if verLessThan('matlab', '9.12')
-        warning('MATLAB 2022a or newer recommended for plots')
+        caxis([-1*caxlim, caxlim]) %#ok<CAXIS>
       else
-        clim([-1*caxlim, caxlim]);
+        clim([-1*caxlim, caxlim])
   %      clim([-4,4]);
       end
       c=colorbar;
@@ -264,9 +264,9 @@ if (flag2D)
   datetick;
   axis tight;
   if verLessThan('matlab', '9.12')
-    warning('MATLAB 2022a or newer recommended for plots')
+    caxis([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]) %#ok<CAXIS>
   else
-    clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]);
+    clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))])
   end
   c=colorbar;
 %   set(c,'FontSize',FS)
