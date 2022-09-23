@@ -4,22 +4,20 @@ arguments
   exe (1,1) string
 end
 
-import stdlib.fileio.which
-
-mpiexec = which(mpiexec);
+mpiexec = stdlib.fileio.which(mpiexec);
 if isempty(mpiexec)
   for p = [string(getenv("I_MPI_ROOT")), string(getenv("MPI_ROOT"))]
     if strlength(p) == 0
       continue
     end
-    mpiexec = which("mpiexec", fullfile(p, "bin"));
+    mpiexec = stdlib.fileio.which("mpiexec", fullfile(p, "bin"));
     if ~isempty(mpiexec)
       break
     end
   end
 end
 if isempty(mpiexec)
-  mpiexec = which("mpiexec");
+  mpiexec = stdlib.fileio.which("mpiexec");
 end
 if isempty(mpiexec)
   return

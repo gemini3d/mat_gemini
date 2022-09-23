@@ -1,12 +1,10 @@
 function exe = gemini_exe(name)
+%% Find an executable from the Gemini3D program set, using paths common to Gemini3D
 arguments
   name (1,1) string {mustBeNonzeroLengthText}
 end
-%% Find an executable from the Gemini3D program set, using paths common to Gemini3D
 
-import stdlib.fileio.which
-import stdlib.fileio.absolute_path
-
+gemini3d.sys.check_stdlib()
 
 paths = [fullfile(gemini3d.root(), ".."), ...
   string(getenv("GEMINI_ROOT")), ...
@@ -18,7 +16,7 @@ bindirs = [".", "bin", "build", "build/bin", ...
 for p = paths
   if isempty(p), continue, end
   for b = bindirs
-    exe = which(name, fullfile(p, b));
+    exe = stdlib.fileio.which(name, fullfile(p, b));
     if ~isempty(exe)
       return
     end
