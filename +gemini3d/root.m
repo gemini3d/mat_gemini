@@ -2,6 +2,11 @@ function r = root()
 %% return top-level MatGemini path
 
 p = what('gemini3d'); % Matlab package on Matlab path, and directories in cwd
+
+if ~isempty(p)
+  p = p(1);  % first entry is from matlabpath, later comes directory of that name
+end
+
 if isempty(p) || ~any(contains(p.classes, 'Gemini3d'))
   rp = fullfile(fileparts(mfilename('fullpath')), "..");
   error("gemini3d:root:FileNotFound", ...
