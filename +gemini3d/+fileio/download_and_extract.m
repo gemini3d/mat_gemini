@@ -39,9 +39,9 @@ function archive = download_data(name, data_dir, url_file)
 
 cert_file = getenv("SSL_CERT_FILE");
 if isfile(cert_file)
-  web_opts = weboptions(CertificateFilename=cert_file, Timeout=15);
+  web_opts = weboptions('CertificateFilename', cert_file, 'Timeout', 15);
 else
-  web_opts = weboptions(Timeout=15);  % 5 seconds has nuisance timeouts
+  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
 end
 
 if isempty(url_file)

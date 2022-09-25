@@ -29,6 +29,6 @@ end
 gemini3d.model.setup(p);
 %% check generated files
 
-gemini3d.compare(p.outdir, test_dir, only="in")
+gemini3d.compare(p.outdir, test_dir, "only", "in")
 
 end  % function

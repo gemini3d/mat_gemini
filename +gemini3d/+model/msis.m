@@ -23,8 +23,6 @@ end
 
 gemini3d.sys.check_stdlib()
 
-import stdlib.hdf5nc.h5save
-
 if isfield(p, "msis_version")
   msis_version = p.msis_version;
 else
@@ -84,18 +82,18 @@ if isfile(msis_outfile)
   delete(msis_outfile)
 end
 
-h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
-h5save(msis_infile, "/doy", doy, 'type', 'int32')
-h5save(msis_infile, "/UTsec", UTsec0)
-h5save(msis_infile, "/f107a", f107a)
-h5save(msis_infile, "/f107", f107)
-h5save(msis_infile, "/Ap", repmat(ap, [1, 7]))
+stdlib.hdf5nc.h5save (msis_infile, "/msis_version", msis_version, 'type', 'int32')
+stdlib.hdf5nc.h5save (msis_infile, "/doy", doy, 'type', 'int32')
+stdlib.hdf5nc.h5save (msis_infile, "/UTsec", UTsec0)
+stdlib.hdf5nc.h5save (msis_infile, "/f107a", f107a)
+stdlib.hdf5nc.h5save (msis_infile, "/f107", f107)
+stdlib.hdf5nc.h5save (msis_infile, "/Ap", repmat(ap, [1, 7]))
 % float32 to save disk IO time/space
 % ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not
 % suitable for Fortran
-h5save(msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
-h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
-h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save (msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save (msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save (msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
 

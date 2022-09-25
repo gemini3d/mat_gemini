@@ -29,7 +29,7 @@ end
 if verLessThan('matlab', '9.10')
   json = jsonencode(js);
 else
-  json = jsonencode(js, PrettyPrint=true);
+  json = jsonencode(js, "PrettyPrint", true);
 end
 
 fid = fopen(filename, 'w');

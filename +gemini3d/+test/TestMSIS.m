@@ -20,10 +20,9 @@ methods (Test)
 
 function test_msis00_setup(tc)
 
-inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture(PreservingOnFailure=true)).Folder;
-
+inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture);
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
-  'msis_version', 0, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
+  'msis_version', 0, 'indat_size', fullfile(inputs_dir.Folder, "simsize.h5"));
 
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
@@ -33,7 +32,7 @@ end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
-tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), RelTol=single(1e-5))
+tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), 'RelTol', single(1e-5))
 end
 
 
@@ -52,13 +51,13 @@ end
 
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
-tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), RelTol=single(1e-5))
+tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), 'RelTol', single(1e-5))
 end
 
 
 function test_msis20_setup(tc)
 
-inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture(PreservingOnFailure=true)).Folder;
+inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
   'msis_version', 20, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
@@ -70,7 +69,7 @@ catch err
 end
 tc.verifySize(atmos.Tn, tc.TestData.xg.lx, 'MSIS setup data output shape unexpected')
 
-tc.verifyEqual(atmos.Tn(1,2,3), single(189.7185), RelTol=single(1e-5))
+tc.verifyEqual(atmos.Tn(1,2,3), single(189.7185), 'RelTol', single(1e-5))
 end
 
 end

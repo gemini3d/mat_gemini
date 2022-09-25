@@ -20,7 +20,7 @@ tc.TestData.datapath = fullfile(cwd, "data", name);
 gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))
 
 % temporary working directory
-tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture(PreservingOnFailure=true)).Folder;
+tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 end
 
 end
@@ -32,7 +32,7 @@ methods(Test)
 function test_dryrun(tc)
 
 try
-  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, dryrun=true)
+  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, "dryrun", true)
 catch e
   if contains(e.message, "HDF5 library version mismatched error")
     tc.assumeFail("HDF5 shared library conflict Matlab <=> system")

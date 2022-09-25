@@ -24,7 +24,7 @@ for k = string(fieldnames(ref)).'
 
   assert(all(size(a) == size(b)), k + ": ref shape " + int2str(size(b)) + " != data shape " + int2str(size(a)))
 
-  gemini3d.assert_allclose(a, b, rtol=rtol, atol=atol, err_msg="mismatch: " + k)
+  gemini3d.assert_allclose(a, b, "rtol", rtol, "atol", atol, "err_msg", "mismatch: " + k)
 end
 
 disp("OK: simulation input grid " + outdir)
