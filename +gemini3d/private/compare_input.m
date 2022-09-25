@@ -8,7 +8,7 @@ end
 import stdlib.fileio.samepath
 import gemini3d.fileio.make_valid_paths
 
-assert(~samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
+assert(~samepath(new_dir, ref_dir), "gemini3d:compare:samepath_error", new_dir + " and " + ref_dir + " are the same folder.")
 
 %% check simulation grid
 compare_grid(new_dir, ref_dir, tol.rtol, tol.atol)

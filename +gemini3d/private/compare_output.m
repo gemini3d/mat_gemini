@@ -14,10 +14,10 @@ params = gemini3d.read.config(new_dir);
 
 lxs = gemini3d.simsize(new_dir);
 lxs_ref = gemini3d.simsize(ref_dir);
-assert(~isempty(lxs), new_dir + " does not contain Gemini3D simulation data")
-assert(~isempty(lxs_ref), ref_dir + " does not contain Gemini3D simulation data")
+assert(~isempty(lxs), "gemini3d:compare:file_not_found", new_dir + " does not contain Gemini3D simulation data")
+assert(~isempty(lxs_ref), "gemini3d:compare:file_not_found", ref_dir + " does not contain Gemini3D simulation data")
 
-assert(all(lxs == lxs_ref), "ref dims " + int2str(lxs_ref) + " != this sim dims " + int2str(lxs))
+assert(all(lxs == lxs_ref), "gemini3d:compare:shape_error", "ref dims " + int2str(lxs_ref) + " != this sim dims " + int2str(lxs))
 
 disp("sim grid dimensions: " + int2str(lxs))
 
