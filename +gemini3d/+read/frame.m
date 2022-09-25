@@ -96,30 +96,19 @@ end % function
 
 function flag = get_flagoutput(filename, cfg)
 arguments
-  filename (1,1) string {mustBeFile}
-  cfg struct {mustBeScalarOrEmpty}
+  filename (1,1) string
+  cfg struct
 end
 
-import stdlib.hdf5nc.h5variables
-import stdlib.hdf5nc.ncvariables
-
-[~,~,ext] = fileparts(filename);
-% regardless of what the output type is if "nsall" exists we need
-% to do a full read; this is a bit messy because loadframe will check
-% again below if h5 is used...
-switch lower(ext)
-  case '.h5', var_names = h5variables(filename);
-  otherwise, error('gemini3d:read:frame:get_flagoutput:value_error', '%s has unknown suffix %s', filename, ext)
-end
-
-if any(var_names == "nsall")
+vars = stdlib.hdf5nc.h5variables(filename);
+if any(vars == "nsall")
   disp('Full or milestone input detected.')
   flag = 1;
 elseif ~isempty(cfg) && isfield(cfg, 'flagoutput')
   flag = cfg.flagoutput;
-elseif any(var_names == "Tavgall")
+elseif any(vars == "Tavgall")
   flag = 2;
-elseif any(var_names == "neall")
+elseif any(vars == "neall")
   flag = 3;
 else
   error('gemini3d:read:frame:value_error', 'could not determine flagoutput for %s', filename)

@@ -23,7 +23,8 @@ cfg = gemini3d.fileio.make_valid_paths(cfg);
 stdlib.fileio.makedir(cfg.input_dir)
 disp("copying config.nml to " + cfg.input_dir)
 % specify filename in case it wasn't config.nml
-stdlib.fileio.copyfile(cfg.nml, fullfile(cfg.input_dir, "config.nml"))
+copyfile(stdlib.fileio.expanduser(cfg.nml), ...
+stdlib.fileio.expanduser(fullfile(cfg.input_dir, "config.nml")))
 
 setup_summary(cfg)
 

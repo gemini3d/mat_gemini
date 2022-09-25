@@ -1,17 +1,12 @@
 function dat = frame3Dcurvnoelec(filename)
 %% READ IN SIMULATION DATA WITH NO ELECTRODYNAMIC PARAMS SUCH AS FROM AN INPUT FILE
 arguments
-  filename (1,1) string
+  filename (1,1) {mustBeFile}
 end
-
-[~,~,ext] = fileparts(filename);
 
 vars = ["ns", "Ts", "v1"];
 
-switch ext
-  case '.h5', dat = frame3Dcurv_hdf5(filename, vars);
-  otherwise, error('gemini3d:read:frame3Dcurvnoelec:value_error', 'unknown file type %s',filename)
-end
+dat = frame3Dcurv_hdf5(filename, vars);
 
 dat.filename = filename;
 

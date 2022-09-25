@@ -1,30 +1,16 @@
 function t = time(file)
 arguments
-  file (1,1) string {mustBeNonzeroLengthText}
+  file (1,1) string {mustBeFile}
 end
 
-[~, ~, suffix] = fileparts(file);
-
-switch suffix
-case '.h5', t = time_h5(file);
-otherwise, error('gemini3d:read:time:value_error', 'Unknown file format %s', file)
-end %switch
-
-end %function
-
-
-function time = time_h5(file)
-
-import stdlib.hdf5nc.h5variables
-
-time = datetime.empty;
-vars = h5variables(file);
+t = datetime.empty;
+vars = stdlib.hdf5nc.h5variables(file);
 
 if any(vars == "ymd")
 
   i = "";
 else
-  vars = h5variables(file, "/time");
+  vars = stdlib.hdf5nc.h5variables(file, "/time");
   if any(vars == "ymd")
     i = "/time";
   else
@@ -34,12 +20,12 @@ end
 
 
 d = h5read(file, i + "/ymd");
-time = datetime(d(1), d(2), d(3));
+t = datetime(d(1), d(2), d(3));
 
 if any(vars == "UTsec")
-  time = time + seconds(h5read(file, i + "/UTsec"));
+  t = t + seconds(h5read(file, i + "/UTsec"));
 elseif any(vars == "UThour")
-  time = time + hours(h5read(file, i + "/UThour"));
+  t = t + hours(h5read(file, i + "/UThour"));
 end
 
 end

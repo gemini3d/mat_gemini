@@ -1,14 +1,9 @@
 function dat = frame3Dcurvne(filename)
 arguments
-  filename (1,1) string {mustBeNonzeroLengthText}
+  filename (1,1) string {mustBeFile}
 end
 
-[~,~,ext] = fileparts(filename);
-
-switch ext
-  case '.h5', dat.ne = h5read(filename, '/ne');
-  otherwise, error('gemini3d:read:frame3Dcurvne:value_error', 'unknown file type %s',filename)
-end
+dat.ne = h5read(filename, '/ne');
 
 dat.filename = filename;
 dat.lxs = size(dat.ne, 1:3);

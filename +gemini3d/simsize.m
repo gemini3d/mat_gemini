@@ -1,6 +1,6 @@
 function lxs = simsize(apath)
 arguments
-  apath (1,1) string
+  apath (1,1) string {mustBeNonzeroLengthText}
 end
 
 gemini3d.sys.check_stdlib()

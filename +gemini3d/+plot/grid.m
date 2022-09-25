@@ -9,14 +9,11 @@ arguments
   save string {mustBeScalarOrEmpty} = string.empty
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.makedir
-
 if isempty(only)
   only = ["basic", "alt", "ecef", "geog"];
 end
 
-direc = expanduser(direc);
+direc = stdlib.fileio.expanduser(direc);
 
 xg = gemini3d.read.grid(direc);
 
@@ -51,7 +48,7 @@ end
 %% save
 if ~isempty(save)
   pdir = fullfile(direc, "plots");
-  makedir(pdir)
+  stdlib.fileio.makedir(pdir)
   for f = h
     filename = fullfile(pdir, "grid-" + f.Name + "." + save);
     disp("writing " + filename)

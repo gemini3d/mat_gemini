@@ -10,11 +10,9 @@ arguments
   only (1,:) string = string.empty
 end
 
-import stdlib.fileio.expanduser
-
 names = string.empty;
 j = 1;
-dirs = dir(expanduser(topdir));
+dirs = dir(stdlib.fileio.expanduser(topdir));
 for i = 1:length(dirs)
   if dirs(i).isdir && length(dirs(i).name) > 2
     [~, name] = fileparts(dirs(i).name);

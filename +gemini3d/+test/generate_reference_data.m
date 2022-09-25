@@ -17,10 +17,8 @@ arguments
   opts.gemini_exe string = string.empty
 end
 
-import stdlib.fileio.expanduser
-
-topdir = expanduser(topdir);
-outdir = expanduser(outdir);
+topdir = stdlib.fileio.expanduser(topdir);
+outdir = stdlib.fileio.expanduser(outdir);
 
 assert(isfolder(topdir), '%s is not a folder', topdir)
 

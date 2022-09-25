@@ -1,13 +1,11 @@
 function dat = frame3Dcurv_hdf5(fn, vars)
 arguments
-  fn (1,1) string {mustBeNonzeroLengthText}
+  fn (1,1) string
   vars (1,:) string
 end
 
-import stdlib.hdf5nc.h5variables
-
 %% SIMULATION RESULTS
-fvars = h5variables(fn);
+fvars =  stdlib.hdf5nc.h5variables(fn);
 
 if any(contains(vars, ["ne", "ns"]))
 dat.ns = h5read(fn, '/nsall');

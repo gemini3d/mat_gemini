@@ -6,9 +6,6 @@ arguments
   xg (1,1) struct
 end
 
-import stdlib.fileio.with_suffix
-import stdlib.fileio.makedir
-
 %% check the input struct to make sure needed fields are present
 assert(isfield(p, "indat_grid"), "Field indat_grid missing...");
 assert(isfield(p, "indat_size"), "Field indat_size missing...");
@@ -24,10 +21,10 @@ end
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
 gdir = fileparts(p.indat_grid);
-makedir(gdir)
+stdlib.fileio.makedir(gdir)
 
 write_hdf5(p, xg)
-[xg_check, ok] = gemini3d.read.grid(with_suffix(p.indat_grid, '.h5'));
+[xg_check, ok] = gemini3d.read.grid(p.indat_grid);
 
 rtol = 1e-7;  % allow for single precision
 names = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h", "x3", "x3i", "dx3b", "dx3h", ...
@@ -49,11 +46,10 @@ end % function
 
 function write_hdf5(p, xg)
 
-import stdlib.fileio.with_suffix
 import stdlib.hdf5nc.h5save
 
 %% size
-fn = with_suffix(p.indat_size, '.h5');
+fn = p.indat_size;
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
@@ -67,7 +63,7 @@ lx3 = xg.lx(3);
 Ng = 4;  % total number of ghost cells
 
 %% grid
-fn = with_suffix(p.indat_grid, '.h5');
+fn = p.indat_grid;
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 

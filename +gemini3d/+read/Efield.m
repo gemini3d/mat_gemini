@@ -1,6 +1,6 @@
 function dat = Efield(filename, time)
 arguments
-  filename (1,1) string
+  filename (1,1) string {mustBeNonzeroLengthText}
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 

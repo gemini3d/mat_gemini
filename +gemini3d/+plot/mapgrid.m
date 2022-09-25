@@ -5,8 +5,6 @@ arguments
   neuinfo struct = struct.empty
 end
 
-import stdlib.fileio.makedir
-
 addons = matlab.addons.installedAddons();
 has_map = any(addons.Name == "Mapping Toolbox");
 
