@@ -27,7 +27,7 @@ end
 gemini3d.sys.check_stdlib()
 
 tol.rtol = 1e-5;
-tol.rtolN = 1e-5;
+tol.rtolN = 0.001;  % may need to update ref data
 tol.rtolT = 1e-5;
 tol.rtolJ = 1e-5;
 tol.rtolV = 1e-5;

@@ -21,7 +21,8 @@ jobs:
 
     strategy:
       matrix:
-        release: [R2020a, R2020b, R2021a, R2021b, R2022a, R2022b]
+        release: [R2020b, R2021a, R2021b, R2022a, R2022b]
+      # R2020a is missing several "mustBe" functions
 
     steps:
 
