@@ -22,9 +22,9 @@ new = gemini3d.read.frame3Dcurvnoelec(new_params.indat_file);
 
 assert(~isempty(new_params.times), "simulation input has zero duration")
 
-gemini3d.assert_allclose(new.ns, ref.ns, "rtol", tol.rtol, "atol", tol.atolN/100, "err_msg", 'mismatch: Ns')
-gemini3d.assert_allclose(new.Ts, ref.Ts, "rtol", tol.rtol, "atol", tol.atolT/100, "err_msg", 'mismatch: Ts')
-gemini3d.assert_allclose(new.vs1, ref.vs1, "rtol", tol.rtol, "atol", tol.atolV/100, "err_msg", 'mismatch: vs')
+gemini3d.assert_allclose(new.ns, ref.ns, "rtol", tol.rtolN, "atol", tol.atolN/100, "err_msg", 'mismatch: Ns')
+gemini3d.assert_allclose(new.Ts, ref.Ts, "rtol", tol.rtolT, "atol", tol.atolT/100, "err_msg", 'mismatch: Ts')
+gemini3d.assert_allclose(new.vs1, ref.vs1, "rtol", tol.rtolV, "atol", tol.atolV/100, "err_msg", 'mismatch: vs')
 
 %% precipitation
 if isfield(new_params, 'prec_dir')
