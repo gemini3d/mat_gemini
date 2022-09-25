@@ -27,7 +27,7 @@ end
 gemini3d.sys.check_stdlib()
 
 tol.rtol = 1e-5;
-tol.rtolN = 0.001;  % may need to update ref data
+tol.rtolN = 1e-5;  % TODO: need to update ref data
 tol.rtolT = 1e-5;
 tol.rtolJ = 1e-5;
 tol.rtolV = 1e-5;
@@ -41,22 +41,22 @@ assert(~stdlib.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " ar
 
 %% check output dirs
 if any(opts.only == "out")
-  compare_output(outdir, refdir, tol);
+  gemini3d.compare.output(outdir, refdir, tol);
 end
 %% check input dirs
 if any(opts.only == "in")
-  compare_input(outdir, refdir, tol);
+  gemini3d.compare.input(outdir, refdir, tol);
 end
 if any(opts.only == "efield")
   % TODO: the generated error shouldn't be so big. Need to update ref data?
-  compare_efield(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*100, "time", opts.time)
+  gemini3d.compare.efield(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*100, "time", opts.time)
 end
 if any(opts.only == "precip")
   % TODO: the generated error shouldn't be so big. Need to update ref data?
-  compare_precip(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*10, "time", opts.time)
+  gemini3d.compare.precip(outdir, refdir, "abs", tol.atol, "rel", tol.rtol*10, "time", opts.time)
 end
 if any(opts.only == "grid")
-  compare_grid(outdir, refdir, tol.rtol, tol.atol)
+  gemini3d.compare.grid(outdir, refdir, tol.rtol, tol.atol)
 end
 
 end % function

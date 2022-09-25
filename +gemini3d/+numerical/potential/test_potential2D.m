@@ -1,10 +1,8 @@
 function test_potential2D(fn)
 % test_potential2D('../../..\gemini3d\build\src\numerical\potential\test_potential2d.h5')
 arguments
-  fn (1,1) string
+  fn (1,1) string {mustBeFile}
 end
-
-gemini3d.test.exist_or_skip(fn, 'file')
 
 x2 = h5read(fn, '/x2');
 x3 = h5read(fn, '/x3');

@@ -7,15 +7,12 @@ arguments
 end
 
 %% check the input struct to make sure needed fields are present
-assert(isfield(p, "indat_grid"), "Field indat_grid missing...");
-assert(isfield(p, "indat_size"), "Field indat_size missing...");
+assert(isfield(p, "indat_grid"), "gemini3d:write:grid:file_not_found", "Field indat_grid missing...");
+assert(isfield(p, "indat_size"), "gemini3d:write:grid:file_not_found", "Field indat_size missing...");
 
 %% sanity check grid
-ok = gemini3d.check_grid(xg);
+assert(gemini3d.check_grid(xg), 'gemini3d:write:grid:value_error', 'problematic grid values')
 
-if ~ok
-  error('gemini3d:write:grid:value_error', 'problematic grid values')
-end
 %% output directory for the simulation grids may be different
 % e.g. "inputs" than the base simdir
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
@@ -32,7 +29,8 @@ names = ["x1", "x1i", "dx1b", "dx1h", "x2", "x2i", "dx2b", "dx2h", "x3", "x3i", 
   "gx1", "gx2", "gx3", "Bmag", "I", "nullpts", "e1", "e2", "e3", "er", "etheta", "ephi", ...
   "r", "theta", "phi", "x", "y", "z"];
 for n = names
-  gemini3d.assert_allclose(xg.(n), xg_check.(n), 'rtol', rtol)
+  assert(gemini3d.assert_allclose(xg.(n), xg_check.(n), 'rtol', rtol, 'warnonly', true), ...
+      "gemini3d:write:grid:allclose_error", "mismatch" + n)
 end
 
 if ~ok

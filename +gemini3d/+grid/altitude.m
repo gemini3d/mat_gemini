@@ -25,7 +25,7 @@ while alt(end) < alt_max
   alt(end+1) = alt(end) + dalt; %#ok<AGROW>
 end
 
-assert(length(alt) > 10, 'grid too small')
+assert(length(alt) > 10, "gemini3d:grid:altitude:value_error", 'grid too small')
 
 %% tilt for magnetic inclination
 z = alt * cscd(incl_deg);

@@ -19,9 +19,8 @@ gemini3d.sys.check_stdlib()
 
 %% find or build gemini.bin executable
 gemini_exe = gemini3d.find.gemini_exe(opts.gemini_exe);
-if isempty(gemini_exe)
-  error("Please setup Gemini3D. Set environment variable GEMINI_ROOT to the directory over bin/gemini.bin")
-end
+assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...
+  "Please setup Gemini3D. Set environment variable GEMINI_ROOT to the directory over bin/gemini.bin")
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
 %% check MPIexec

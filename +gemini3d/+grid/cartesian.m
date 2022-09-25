@@ -26,7 +26,7 @@ elseif( all(isfield(p,["alt_min","alt_max","lzp"])))
   z=cat(2,z(1)-2*dz,z(1)-dz,z,z(end)+dz,z(end)+2*dz);
   z=z(:);
 else
-  error('cartesian:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
+  error('gemini3d:grid:cartesian:lookup_error', 'must specify altitude grid parameters or grid file to reuse')
 end
 
 %% TRANSVERSE GRID (BASED ON SIZE OF CURRENT REGION SPECIFIED ABOVE)

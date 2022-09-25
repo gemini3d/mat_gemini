@@ -46,9 +46,22 @@ xg = gemini3d.grid.cartesian(cfg);
 cfg.outdir = tc.TestData.outdir;
 cfg.indat_size = fullfile(cfg.outdir, cfg.indat_size);
 cfg.indat_grid = fullfile(cfg.outdir, cfg.indat_grid);
-gemini3d.write.grid(cfg, xg);
 
-gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
+try
+  gemini3d.write.grid(cfg, xg);
+catch e
+  if e.identifier == "gemini3d:write:grid:allclose_error"
+    tc.verifyFail("gemini3d.write.grid data mismatch")
+  end
+end
+
+try
+  gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
+catch e
+  if e.identifier == "gemini3d:compare:grid:allclose_error"
+    tc.verifyFail("gemini3d.compare.grid data mismatch")
+  end
+end
 end
 
 function test_Efield(tc)
@@ -93,15 +106,39 @@ xg = gemini3d.read.grid(test_dir);
 
 gemini3d.particles.particles_BCs(p, xg);
 
-gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), "only","precip", "time", p.times)
+try
+  gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), "only","precip", "time", p.times)
+catch e
+  if e.identifier == "gemini3d:compare:precip:allclose_error"
+    tc.verifyFail("preciptation data didn't match reference")
+  else
+    rethrow(e)
+  end
+end
 end
 
-function test_Arunner(tc, name)
+function test_gemini3d_run(tc, name)
 
 try
   project_runner(tc, name, tc.TestData.ref_dir)
 catch err
   catcher(err, tc)
+end
+
+try
+  gemini3d.compare(tc.TestData.outdir, fullfile(tc.TestData.ref_dir, name), "only", "in")
+catch e
+  if e.identifier == "gemini3d:compare:input:allclose_error"
+    tc.verifyFail("generated plasma data didn't match reference")
+elseif e.identifier == "gemini3d:compare:output:allclose_error"
+   tc.verifyFail("simulated plasma data didn't match reference")
+  elseif e.identifier == "gemini3d:compare:precip:allclose_error"
+   tc.verifyFail("generated precipitation data didn't match reference")
+  elseif e.identifier == "gemini3d:compare:efield:allclose_error"
+   tc.verifyFail("generated E-field data didn't match reference")
+  else
+    rethrow(e)
+  end
 end
 
 end

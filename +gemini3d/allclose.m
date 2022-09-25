@@ -23,10 +23,7 @@ arguments
 end
 
 %% compare
-actual = actual(:);
-desired = desired(:);
-
-if isinteger(desired)
+if isinteger(desired) && isinteger(actual)
   close_enough = isequal(actual, desired);
   return
 end
@@ -34,7 +31,7 @@ end
 measdiff = abs(actual-desired);
 tol = opts.atol + opts.rtol * abs(desired);
 
-close_enough = all(measdiff <= tol);
+close_enough = all(measdiff <= tol, 'all');
 
 end  % function
 

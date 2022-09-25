@@ -10,8 +10,8 @@ end
 
 gemini3d.sys.check_stdlib()
 
-assert(all(size(A) == size(B)), "size of new and ref arrays don't match")
-assert(ndims(A) <= 3, "for 3D or 2D arrays only")
+assert(all(size(A) == size(B)), "gemini3d:plot:diff:shape_error", "size of new and ref arrays don't match")
+assert(ndims(A) <= 3, "gemini3d:plot:diff:shape_error", "for 3D or 2D arrays only")
 
 lx = gemini3d.simsize(newdir);
 is3d = lx(2) ~= 1 && lx(3) ~= 1;
@@ -32,7 +32,7 @@ if ndims(A) == 3
     i = round(size(A,2) / 2);
     gemini3d.plot.diff(A(:,i,:), B(:,i,:), name + "-x3", time, newdir, refdir)
   else
-    error("unexpected case, 2D data but in if-tree only for 3D")
+    error("gemini3d:plot:diff:shape_error", "unexpected case, 2D data but in if-tree only for 3D")
   end
 
   return
@@ -46,7 +46,7 @@ if ismatrix(A)
 elseif isvector(A)
   maxdiff = diff1d(A, B, name, t);
 else
-  error(name + " unexpected > 2D. Size: " + int2str(size(A)) + " " + string(time))
+  error("gemini3d:plot:diff:shape_error", name + " unexpected > 2D. Size: " + int2str(size(A)) + " " + string(time))
 end
 
 title(nexttile(t, 1), newdir, "interpreter", "none")
@@ -70,8 +70,8 @@ end
 
 function maxdiff = diff1d(A, B, t)
 arguments
-  A {mustBeNumeric}
-  B {mustBeNumeric}
+  A
+  B
   t (1,1)
 end
 
@@ -89,8 +89,8 @@ end
 
 function maxdiff = diff2d(A, B, name, t)
 arguments
-  A {mustBeNumeric}
-  B {mustBeNumeric}
+  A
+  B
   name (1,1) string
   t (1,1)
 end

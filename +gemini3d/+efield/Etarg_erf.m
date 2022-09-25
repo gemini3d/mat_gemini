@@ -25,7 +25,7 @@ if flagdip
     S = E.Etarg * E.sigx2 .* xg.h2(lx1, floor(lx2/2), 1) .* sqrt(pi)./2;
     taper = erf((E.MLON - E.mlonmean) / E.mlonsig) .* erf((E.MLAT - E.mlatmean) / E.mlatsig);
   else
-    error(' Efield_target:  you appear to be making a zonal ribbon grid, which is not yet supported');
+    error("gemini3d:efield:Etarg_erf", 'Efield_target:  you appear to be making a zonal ribbon grid, which is not yet supported');
   end
 else
   if lx3 == 1 % east-west

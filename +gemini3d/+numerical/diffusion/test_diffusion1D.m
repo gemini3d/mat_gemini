@@ -4,10 +4,8 @@ function [x1,TsEuler,TsBDF2,Tstrue] = test_diffusion1D(fn)
 %return the test data to the user in case they want to
 %look over the differences and numerical error.
 arguments
-  fn (1,1) string
+  fn (1,1) string {mustBeFile}
 end
-
-gemini3d.test.exist_or_skip(fn, 'file')
 
 L = h5read(fn, '/lt');
 x1 = h5read(fn, '/x1');

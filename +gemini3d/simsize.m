@@ -25,7 +25,7 @@ elseif any(varnames == "lx")
 elseif any(varnames == "lx1")
   lxs = [h5read(fn, '/lx1'), h5read(fn, '/lx2'), h5read(fn, '/lx3')];
 else
-  error('simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
+  error('gemini3d:simsize:lookup_error', 'did not find lxs, lx, lx1 in %s', fn)
 end
 
 end % function

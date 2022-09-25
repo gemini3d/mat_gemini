@@ -32,10 +32,19 @@ else
   efunc = @error;
 end
 
-%% compare
-actual = actual(:);
-desired = desired(:);
+assert(ndims(actual) == ndims(desired), "gemini3d:assert_allclose:shape_error", "ndims actual /= ndims desired")
 
+desired_shape = size(desired);
+actual_shape = size(actual);
+if ~all(desired_shape == actual_shape)
+  if ismatrix(actual)
+    desired = desired.';
+  else
+    error("gemini3d:assert_allclose:shape_error", "actual shape /= desired shape")
+  end
+end
+
+%% compare
 if isinteger(desired)
   actual = cast(actual, 'like', desired);
 end
@@ -43,12 +52,12 @@ measdiff = abs(actual-desired);
 tol = opts.atol + opts.rtol * abs(desired);
 result = measdiff <= tol;
 
-testok = all(result);
+testok = all(result, 'all');
 
 if ~testok
-  Nfail = sum(~result);
+  Nfail = sum(~result, 'all');
   j = find(~result);
-  [bigbad,i] = max(measdiff(j));
+  [bigbad,i] = max(measdiff(j), [], 'all');
   i = j(i);
   if opts.verbose
     disp(['error mag.: ',num2str(measdiff(j)')])
@@ -59,7 +68,7 @@ if ~testok
 
   emsg = "AssertionError: " + opts.err_msg;
   emsg = emsg + " " + num2str(Nfail/numel(desired)*100,'%.2f') + ...
-  "% failed accuracy. maximum error magnitude " + num2str(bigbad) + " Actual: " + ...
+  "% of values failed accuracy. maximum error magnitude " + num2str(bigbad) + " Actual: " + ...
   num2str(actual(i)) + " Desired: " + num2str(desired(i)) + " atol: " + num2str(opts.atol) + ...
   " rtol: " + num2str(opts.rtol);
 
