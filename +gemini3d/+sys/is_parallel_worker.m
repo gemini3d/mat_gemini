@@ -16,8 +16,7 @@ function ispar = is_parallel_worker()
 
 ispar = false;
 
-addons = matlab.addons.installedAddons();
-if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+if gemini3d.sys.has_parallel()
   ispar = ~isempty(getCurrentWorker());
 end
 

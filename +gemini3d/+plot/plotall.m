@@ -71,8 +71,7 @@ if ~visible
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
     if opts.parallel > 1
       % specific number of workers requested
-      addons = matlab.addons.installedAddons();
-      if any(contains(addons.Name, 'Parallel Computing Toolbox'))
+      if gemini3d.sys.has_parallel()
         pool = gcp('nocreate');
         if isempty(pool) || pool.NumWorkers ~= optfions.parallel
           delete(pool)

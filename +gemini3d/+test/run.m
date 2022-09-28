@@ -7,8 +7,7 @@ arguments
 end
 
 % need to manually start parallel pool for CI
-addons = matlab.addons.installedAddons();
-if parallel && ~isCI && any(contains(addons.Name, 'Parallel Computing Toolbox'))
+if parallel && ~isCI && gemini3d.sys.has_parallel()
   results = runInParallel(runner, suite);
 else
   results = runner.run(suite);

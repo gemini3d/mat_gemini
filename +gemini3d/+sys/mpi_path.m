@@ -3,13 +3,12 @@ function path_new = mpi_path()
 
 path_new = getenv("PATH");
 
-addons = matlab.addons.installedAddons();
-if ~any(addons.Name == "Parallel Computing Toolbox")
+if ~gemini3d.sys.has_parallel()
   return
 end
 
-path_orig = split(path_new, ';');
+path_orig = split(path_new, pathsep);
 i = contains(path_orig, 'MATLAB');
-path_new = string(join(path_orig(~i), ';'));
+path_new = string(join(path_orig(~i), pathsep));
 
 end

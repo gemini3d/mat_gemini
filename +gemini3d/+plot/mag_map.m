@@ -5,8 +5,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-addons = matlab.addons.installedAddons();
-assert(any(addons.Name == "Mapping Toolbox"), "Mapping Toolbox is needed")
+assert(gemini3d.sys.has_mapping(), "Mapping Toolbox is needed")
 
 direc = stdlib.fileio.expanduser(direc);
 
