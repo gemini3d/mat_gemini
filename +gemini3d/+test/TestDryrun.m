@@ -36,9 +36,7 @@ tc.TestData.datapath = fullfile(cwd, "data", name);
 try
   gemini3d.fileio.download_and_extract(name, fullfile(cwd, "data"))
 catch e
-  if e.identifier == "MATLAB:webservices:UnknownHost"
-    tc.assumeFail("no internet connection to website")
-  end
+  catcher(e, tc)
 end
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
@@ -55,13 +53,7 @@ function test_dryrun(tc)
 try
   gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, "dryrun", true)
 catch e
-  if contains(e.message, "HDF5 library version mismatched error")
-    tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
-  elseif contains(e.message, "GLIBCXX")
-    tc.assumeFail("conflict in libstdc++ Matlab <=> system")
-  else
-    rethrow(e)
-  end
+  catcher(e, tc)
 end
 
 end

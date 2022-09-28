@@ -14,7 +14,7 @@ end
 methods (Test)
 
 
-function test_grid(tc)
+function test_dipole_grid(tc)
 
 parm = struct("lq", 4, "lp", 6, "lphi", 1, ...
   "dtheta", 7.5, "dphi", 12, "altmin", 80e3, ...

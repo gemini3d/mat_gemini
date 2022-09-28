@@ -8,7 +8,7 @@ arguments
 end
 
 fn = gemini3d.find.config(apath);
-assert(~isempty(fn), "Invalid simulation directory: no simulation config file config.nml found in " + fn)
+assert(~isempty(fn), "Invalid simulation directory: no simulation config file config.nml found in " + apath)
 
 %% required namelists
 p = read_namelist(fn, 'base');

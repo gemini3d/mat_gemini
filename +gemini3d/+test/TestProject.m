@@ -46,7 +46,7 @@ end
 
 methods (Test)
 
-function test_grid(tc)
+function test_cartesian_grid(tc)
 
 tname = "mini2dew_fang";
 
@@ -55,9 +55,7 @@ test_dir = fullfile(tc.TestData.ref_dir, tname);
 try
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
 catch e
-  if e.identifier == "MATLAB:webservices:UnknownHost"
-    tc.assumeFail("no internet connection to website")
-  end
+  catcher(e, tc)
 end
 %% setup new test data
 cfg = gemini3d.read.config(test_dir);
@@ -94,9 +92,7 @@ test_dir = fullfile(tc.TestData.ref_dir, tname);
 try
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
 catch e
-  if e.identifier == "MATLAB:webservices:UnknownHost"
-    tc.assumeFail("no internet connection to website")
-  end
+  catcher(e, tc)
 end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
@@ -122,9 +118,7 @@ test_dir = fullfile(tc.TestData.ref_dir, tname);
 try
   gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
 catch e
-  if e.identifier == "MATLAB:webservices:UnknownHost"
-    tc.assumeFail("no internet connection to website")
-  end
+  catcher(e, tc)
 end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
@@ -173,12 +167,14 @@ end
 end
 
 function test_plot_2d(tc)
+
 tname = "mini2dew_glow";
+
 project_runner(tc, tname, fullfile(tc.TestData.cwd, "data"))
 
 data_dir = fullfile(tc.TestData.cwd, "data", tname);
-% test 2D plots
 
+% test 2D plots
 h = gemini3d.plot.frame(data_dir, datetime(2013, 2, 20, 5, 5, 0));
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')
@@ -194,7 +190,9 @@ end
 
 function test_plot_3d(tc)
 tname = 'mini3d_glow';
+
 project_runner(tc, tname, fullfile(tc.TestData.cwd, "data"))
+
 % test 3D plots
 d3 = fullfile(tc.TestData.cwd, "data", tname);
 h = gemini3d.plot.init(gemini3d.read.grid(d3));

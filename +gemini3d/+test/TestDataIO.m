@@ -27,9 +27,7 @@ tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 try
   gemini3d.fileio.download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
 catch e
-  if e.identifier == "MATLAB:webservices:UnknownHost"
-    tc.assumeFail("no internet connection to website")
-  end
+  catcher(e, tc)
 end
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
