@@ -19,18 +19,7 @@ end
 
 archive = download_data(name, data_dir, url_ini);
 
-%% extract
-[~,~,arc_type] = fileparts(archive);
-
-stdlib.fileio.makedir(test_dir)
-
-switch arc_type
-  case ".zip", unzip(archive, data_dir)
-  % old zip files had vestigial folder of same name instead of just files
-  case ".tar", untar(archive, test_dir)
-  case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(archive, test_dir)
-  otherwise, error("gemini3d:fileio:download_and_extract:ValueError", "unknown reference archive type: " + arc_type)
-end
+gemini3d.fileio.extract_data(archive, test_dir)
 
 end % function
 

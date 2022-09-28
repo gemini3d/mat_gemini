@@ -66,14 +66,7 @@ if ~isfile(p.eq_archive)
   download_equilibrium(p.eq_url, p.eq_archive, isfield(p, 'ssl_verify') && p.ssl_verify)
 end
 
-[~,~,arc_type] = fileparts(p.eq_archive);
-
-switch arc_type
-  case ".zip", unzip(p.eq_archive, p.eq_dir)
-  case ".tar", untar(p.eq_archive, p.eq_dir)
-  case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(p.eq_archive, p.eq_dir)
-  otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)
-end
+gemini3d.fileio.extract_data(p.eq_archive, p.eq_dir)
 
 peq = gemini3d.read.config(p.eq_dir);
 
