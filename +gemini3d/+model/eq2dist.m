@@ -63,24 +63,13 @@ if ~all(isfield(p, ["eq_url", "eq_archive"]))
 end
 
 if ~isfile(p.eq_archive)
-  if isfield(p, 'ssl_verify') && ~p.ssl_verify
-    % disable SSL, better to fix your SSL certificates as arbitrary
-    % code can be downloaded
-    web_opt = weboptions('CertificateFilename', '');
-  elseif isfile(getenv("SSL_CERT_FILE"))
-    web_opt = weboptions('CertificateFilename', getenv("SSL_CERT_FILE"));
-  else
-    web_opt = weboptions('CertificateFilename', 'default');
-  end
-  stdlib.fileio.makedir(p.eq_dir)
-  websave(p.eq_archive, p.eq_url, web_opt);
+  download_equilibrium(p.eq_url, p.eq_archive, isfield(p, 'ssl_verify') && p.ssl_verify)
 end
 
 [~,~,arc_type] = fileparts(p.eq_archive);
 
 switch arc_type
-  case ".zip", unzip(p.eq_archive, fullfile(p.eq_dir, '..'))
-  % old zip files had vestigial folder of same name instead of just files
+  case ".zip", unzip(p.eq_archive, p.eq_dir)
   case ".tar", untar(p.eq_archive, p.eq_dir)
   case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(p.eq_archive, p.eq_dir)
   otherwise, error("gemini3d:model:eq2dist", "unknown equilibrium archive type: " + arc_type)

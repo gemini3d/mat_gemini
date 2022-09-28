@@ -37,13 +37,6 @@ end % function
 
 function archive = download_data(name, data_dir, url_file)
 
-cert_file = getenv("SSL_CERT_FILE");
-if isfile(cert_file)
-  web_opts = weboptions('CertificateFilename', cert_file, 'Timeout', 15);
-else
-  web_opts = weboptions('Timeout', 15);  % 5 seconds has nuisance timeouts
-end
-
 if isempty(url_file)
   lib_file = fullfile(gemini3d.root(), "../cmake/libraries.json");
   url_file = fullfile(gemini3d.root(), "+test/ref_data.json");
@@ -51,7 +44,7 @@ if isempty(url_file)
   libs = jsondecode(fileread(lib_file));
 
   if ~isfile(url_file)
-    websave(url_file, libs.ref_data.url, web_opts);
+    websave(url_file, libs.ref_data.url, gemini3d.fileio.web_opt());
   end
 end
 
@@ -66,10 +59,7 @@ if isfile(archive) && dir(archive).bytes > 10000
   return
 end
 
-websave(archive, urls.tests.(name).url, web_opts);
-
-% cmd = "curl -L -o " + archive + " '" + urls.tests.(name).url + "'";
-% assert(system(cmd) == 0, "download failed: " + urls.tests.(name).url)
+websave(archive, urls.tests.(name).url, gemini3d.fileio.web_opt());
 
 check_data(name, archive, urls.tests)
 
@@ -85,7 +75,8 @@ end
 
 if isfield(urls.(name), "sha256")
   if stdlib.fileio.sha256sum(archive) ~= urls.(name).sha256
-    warning('%s sha256 hash does not match, file may be corrupted', archive)
+    warning('gemini3d:fileio:download_and_extract:hash_error', ...
+      '%s sha256 hash does not match, file may be corrupted', archive)
   end
 end
 
