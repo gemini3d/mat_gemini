@@ -10,6 +10,23 @@ properties
 end
 
 methods(TestMethodSetup)
+
+function check_stdlib(tc)
+try
+  gemini3d.sys.check_stdlib()
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+
+function check_root(tc)
+try
+  gemini3d.root();
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+
 function setup_env(tc)
 
 cwd = fileparts(mfilename('fullpath'));
@@ -31,13 +48,17 @@ methods (Test)
 
 function test_grid(tc)
 
-import gemini3d.fileio.download_and_extract
-
 tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
-download_and_extract(tname, tc.TestData.ref_dir)
+try
+  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
+catch e
+  if e.identifier == "MATLAB:webservices:UnknownHost"
+    tc.assumeFail("no internet connection to website")
+  end
+end
 %% setup new test data
 cfg = gemini3d.read.config(test_dir);
 xg = gemini3d.grid.cartesian(cfg);
@@ -66,13 +87,17 @@ end
 
 function test_Efield(tc)
 
-import gemini3d.fileio.download_and_extract
-
 tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
-download_and_extract(tname, tc.TestData.ref_dir)
+try
+  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
+catch e
+  if e.identifier == "MATLAB:webservices:UnknownHost"
+    tc.assumeFail("no internet connection to website")
+  end
+end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
 tc.assumeNotEmpty(p, test_dir + " not contain config.nml")
@@ -90,13 +115,17 @@ end
 
 function test_precip(tc)
 
-import gemini3d.fileio.download_and_extract
-
 tname = "mini2dew_fang";
 
 test_dir = fullfile(tc.TestData.ref_dir, tname);
 %% get files if needed
-download_and_extract(tname, tc.TestData.ref_dir)
+try
+  gemini3d.fileio.download_and_extract(tname, tc.TestData.ref_dir)
+catch e
+  if e.identifier == "MATLAB:webservices:UnknownHost"
+    tc.assumeFail("no internet connection to website")
+  end
+end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
 prec_dir = p.prec_dir;

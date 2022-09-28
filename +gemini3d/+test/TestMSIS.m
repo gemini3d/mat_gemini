@@ -6,6 +6,22 @@ end
 
 methods(TestMethodSetup)
 
+function check_stdlib(tc)
+try
+  gemini3d.sys.check_stdlib()
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+
+function check_root(tc)
+try
+  gemini3d.root();
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+
 function setup_grid(tc)
 lx = [4, 2, 3];
 [glon, alt, glat] = meshgrid(linspace(-147, -145, lx(2)), linspace(100e3, 200e3, lx(1)), linspace(65, 66, lx(3)));

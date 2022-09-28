@@ -6,6 +6,15 @@ end
 
 methods(TestMethodSetup)
 
+function check_stdlib(tc)
+try
+  gemini3d.sys.check_stdlib()
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+
+
 function setup_env(tc)
 
 cwd = fileparts(mfilename('fullpath'));
@@ -15,8 +24,13 @@ tc.TestData.name = "mini2dew_glow";
 tc.TestData.data_path = fullfile(cwd, "data", tc.TestData.name);
 
 % don't import so it sets up first
-gemini3d.fileio.download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
-
+try
+  gemini3d.fileio.download_and_extract(tc.TestData.name, fullfile(cwd, "data"))
+catch e
+  if e.identifier == "MATLAB:webservices:UnknownHost"
+    tc.assumeFail("no internet connection to website")
+  end
+end
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 

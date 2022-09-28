@@ -13,5 +13,5 @@ switch arc_type
   % old zip files had vestigial folder of same name instead of just files
   case ".tar", untar(archive, odir)
   case {".zst", ".zstd"}, stdlib.fileio.extract_zstd(archive, odir)
-  otherwise, error("gemini3d:fileio:download_and_extract:ValueError", "unknown reference archive type: " + arc_type)
+  otherwise, error("gemini3d:fileio:extract_data:ValueError", "unknown reference archive type: " + arc_type)
 end

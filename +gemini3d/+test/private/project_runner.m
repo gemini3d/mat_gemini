@@ -7,7 +7,13 @@ end
 
 test_dir = fullfile(ref_dir, name);
 %% get files if needed
-gemini3d.fileio.download_and_extract(name, ref_dir)
+try
+  gemini3d.fileio.download_and_extract(name, ref_dir)
+catch e
+  if e.identifier == "MATLAB:webservices:UnknownHost"
+    tc.assumeFail("no internet connection to website")
+  end
+end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
 tc.assumeNotEmpty(p)

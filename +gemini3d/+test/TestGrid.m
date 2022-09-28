@@ -1,4 +1,16 @@
 classdef TestGrid < matlab.unittest.TestCase
+
+methods(TestMethodSetup)
+
+function check_stdlib(tc)
+try
+  gemini3d.sys.check_stdlib()
+catch e
+  tc.fatalAssertFail(e.message)
+end
+end
+end
+
 methods (Test)
 
 

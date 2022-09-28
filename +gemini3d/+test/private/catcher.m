@@ -7,6 +7,8 @@ elseif contains(err.message, "HDF5 library version mismatched error")
   tc.assumeFail("HDF5 shared library conflict Matlab <=> system")
 elseif contains(err.message, "GLIBCXX")
   tc.assumeFail("conflict in libstdc++ Matlab <=> system")
+elseif err.identifier == "MATLAB:webservices:UnknownHost"
+  tc.assumeFail("no internet connection to website")
 else
   rethrow(err)
 end
