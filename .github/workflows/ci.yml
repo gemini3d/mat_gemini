@@ -31,20 +31,16 @@ jobs:
       with:
         release: ${{ matrix.release }}
 
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-
-    - name: Install Prereqs
-      run: |
-        sudo apt update -yq
-        sudo apt install -yq --no-install-recommends libhdf5-dev liblapack-dev libmumps-dev libopenmpi-dev openmpi-bin
-
     - name: Checkout Gemini3D-External
       uses: actions/checkout@v3
       with:
         repository: gemini3d/external
         path: gemext
+
+    - name: Install Prereqs
+      run: |
+        sudo apt update
+        sudo $(cmake -P gemext/scripts/requirements.cmake) libmumps-dev
 
     - name: Install Gemini3D libraries
       timeout-minutes: 15
@@ -65,6 +61,11 @@ jobs:
         cmake -S gemini3d -B gemini3d/build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }} -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}
         cmake --build gemini3d/build --parallel
         cmake --install gemini3d/build
+
+    - name: Git Checkout MatGemini
+      uses: actions/checkout@v3
+      with:
+        submodules: true
 
     - name: Run Matlab tests (buildtool)
       if: ${{ matrix.release == 'R2022b' }}
