@@ -34,6 +34,9 @@ end
 
 %% neutral_perturb
 p = read_if_present(p, fn, 'neutral_perturb');
+if isfield(p, 'source_dir')
+  p.sourcedir = p.source_dir;
+end
 
 if ~isfield(p, 'sourcemlat'), p.sourcemlat = []; end
 if ~isfield(p, 'sourcemlon'), p.sourcemlon = []; end
