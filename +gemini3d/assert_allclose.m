@@ -32,7 +32,9 @@ else
   efunc = @error;
 end
 
-assert(ndims(actual) == ndims(desired), "gemini3d:assert_allclose:shape_error", "ndims actual /= ndims desired")
+assert(ndims(actual) == ndims(desired), ...
+"gemini3d:assert_allclose:shape_error", ...
+"ndims actual %d /= ndims desired %d", ndims(actual), ndims(desired))
 
 desired_shape = size(desired);
 actual_shape = size(actual);
