@@ -70,9 +70,7 @@ jobs:
     - name: Run Matlab tests (buildtool)
       if: ${{ matrix.release == 'R2022b' }}
       timeout-minutes: 15
-      uses: matlab-actions/run-command@v1
-      with:
-        command: buildtool
+      uses: matlab-actions/run-build@v1
       env:
         GEMINI_ROOT: ${{ runner.temp }}
 
