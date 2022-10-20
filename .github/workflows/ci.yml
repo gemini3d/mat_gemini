@@ -37,17 +37,23 @@ jobs:
         repository: gemini3d/external
         path: gemext
 
-    - name: Install Prereqs
+    - name: Install Prereqs (Linux)
+      if: runner.os == 'Linux'
       run: |
         sudo apt update
         sudo $(cmake -P gemext/scripts/requirements.cmake) libmumps-dev
 
+    - name: Install Prereqs (Macos)
+      if: runner.os == 'macOS'
+      run: $(cmake -P gemext/scripts/requirements.cmake)
+
     - name: Install Gemini3D libraries
       timeout-minutes: 15
       run: |
-        cmake -S gemext -B gemext/build -Dfind:BOOL=true -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
-        cmake --build gemext/build --target ffilesystem iniparser glow hwm14 msis --parallel
-        cmake --install gemext/build
+        cmake -B build -Dfind:BOOL=true -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
+        cmake --build build --parallel
+        cmake --install build
+      working-directory: gemext
 
     - name: Checkout Gemini3D
       uses: actions/checkout@v3
@@ -58,11 +64,12 @@ jobs:
     - name: Install Gemini3D
       timeout-minutes: 15
       run: |
-        cmake -S gemini3d -B gemini3d/build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }} -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}
-        cmake --build gemini3d/build --parallel
-        cmake --install gemini3d/build
+        cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }} -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}
+        cmake --build build --parallel
+        cmake --install build
+      working-directory: gemini3d
 
-    - name: Git Checkout MatGemini
+    - name: Git Checkout ${{ github.action_repository }}
       uses: actions/checkout@v3
       with:
         submodules: true
