@@ -55,45 +55,29 @@ alt(alt <= 0) = 1;
 % we use binary files because they are MUCH faster than stdin/stdout pipes
 % we need absolute paths because MSIS 2 requires a chdir() due to Matlab
 % system() not having cwd= like Python.
-if isfield(p, "msis_infile")
-  msis_infile = p.msis_infile;
-else
-  msis_infile = fullfile(fileparts(p.indat_size), "msis_setup_in.h5");
-end
-msis_infile = stdlib.fileio.absolute_path(msis_infile);
-if ~isfolder(fileparts(msis_infile))
-  msis_infile = tempname + "-msis_setup_in.h5";
-end
+msis_infile = tempname + "-msis_setup_in.h5";
+msis_outfile = tempname + "-msis_setup_out.h5";
 
-if isfield(p, "msis_outfile")
-  msis_outfile = p.msis_outfile;
-else
-  msis_outfile = fullfile(fileparts(p.indat_size), "msis_setup_out.h5");
-end
-msis_outfile = stdlib.fileio.absolute_path(msis_outfile);
-if ~isfolder(fileparts(msis_outfile))
-  msis_outfile = tempname + "-msis_setup_out.h5";
-end
-
+% even though filename is guaranteed unique, in case of weird corner case.
 if isfile(msis_infile)
-  delete(msis_infile)
+  warning("msis_infile exists, this may fail to write " + msis_infile)
 end
 if isfile(msis_outfile)
-  delete(msis_outfile)
+  warning("msis_outfile exist, this may fail to write " + msis_outfile)
 end
 
-stdlib.hdf5nc.h5save (msis_infile, "/msis_version", msis_version, 'type', 'int32')
-stdlib.hdf5nc.h5save (msis_infile, "/doy", doy, 'type', 'int32')
-stdlib.hdf5nc.h5save (msis_infile, "/UTsec", UTsec0)
-stdlib.hdf5nc.h5save (msis_infile, "/f107a", f107a)
-stdlib.hdf5nc.h5save (msis_infile, "/f107", f107)
-stdlib.hdf5nc.h5save (msis_infile, "/Ap", repmat(ap, [1, 7]))
+stdlib.hdf5nc.h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
+stdlib.hdf5nc.h5save(msis_infile, "/doy", doy, 'type', 'int32')
+stdlib.hdf5nc.h5save(msis_infile, "/UTsec", UTsec0)
+stdlib.hdf5nc.h5save(msis_infile, "/f107a", f107a)
+stdlib.hdf5nc.h5save(msis_infile, "/f107", f107)
+stdlib.hdf5nc.h5save(msis_infile, "/Ap", repmat(ap, [1, 7]))
 % float32 to save disk IO time/space
 % ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not
 % suitable for Fortran
-stdlib.hdf5nc.h5save (msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
-stdlib.hdf5nc.h5save (msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
-stdlib.hdf5nc.h5save (msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save(msis_infile, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save(msis_infile, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
+stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32');
 
 %% CALL MSIS
 
