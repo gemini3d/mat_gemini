@@ -79,16 +79,17 @@ Once that works, one perhaps changes simulation parameters, perhaps by perturbin
 ### Creating new simulation data
 
 `gemini3d.model.setup()` creates a neutral atmosphere using MSIS.
-The default is to use MSISE00, but MSIS 2.0 is also available.
-This is user selectable in the simulation config.nml file like:
+The default is to use MSISE00, but MSIS 2.x is also available.
+This is user selectable in the simulation config.nml file as 10 times the MSIS version.
+For example, for MSIS 2.1:
 
 ```
 &neutral_BG
-msis_version = 20
+msis_version = 21
 /
 ```
 
-where `0` is MSISE00 (default) and `20` is MSIS 2.0.
+`0` is MSISE00 (default)
 
 ### Run Simulation
 

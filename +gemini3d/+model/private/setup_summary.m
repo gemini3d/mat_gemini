@@ -45,8 +45,8 @@ else
   disp("GLOW disabled")
 end
 
-if any(contains(fieldnames(cfg), "msis_version")) &&  cfg.msis_version == 20
-  disp("MSIS 2.0 enabled for neutral atmosphere calculations.")
+if any(contains(fieldnames(cfg), "msis_version")) && cfg.msis_version > 0
+  disp("MSIS " + num2str(cfg.msis_version / 10) + " enabled for neutral atmosphere calculations.")
 else
   disp("MSISE00 enabled for neutral atmosphere calculations.")
 end
