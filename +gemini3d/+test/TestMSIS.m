@@ -71,7 +71,7 @@ tc.verifyEqual(atmos.Tn(1,2,3), single(185.5902), 'RelTol', single(1e-5))
 end
 
 
-function test_msis20_setup(tc)
+function test_msis2_setup(tc)
 
 inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 

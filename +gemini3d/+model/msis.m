@@ -56,7 +56,7 @@ alt(alt <= 0) = 1;
 
 if ispc && startsWith(exe, "\\wsl$")
   using_wsl = true;
-  assert(~isempty(stdlib.fileio.which("wsl")), "Windows Subsystem for Linux not found. Assumed WSL for path " + exe)
+  assert(stdlib.sys.has_wsl(), "Windows Subsystem for Linux not found. Assumed WSL for path " + exe)
 
   wsl_infile = stdlib.sys.wsl_tempfile();
   msis_infile = stdlib.sys.wslpath2winpath(wsl_infile);
@@ -85,7 +85,7 @@ stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32')
 %% CALL MSIS
 
 if using_wsl
-  cmd = ["wsl", stdlib.sys.wslpath2winpath(exe), wsl_infile, wsl_outfile];
+  cmd = ["wsl", stdlib.sys.winpath2wslpath(exe), wsl_infile, wsl_outfile];
 else
   cmd = [exe, msis_infile, msis_outfile];
 end
