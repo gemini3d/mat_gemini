@@ -55,15 +55,20 @@ alt(alt <= 0) = 1;
 % we use binary files because they are MUCH faster than stdin/stdout pipes
 % we need absolute paths because MSIS 2 requires a chdir() due to Matlab
 % system() not having cwd= like Python.
-msis_infile = tempname + "-msis_setup_in.h5";
-msis_outfile = tempname + "-msis_setup_out.h5";
 
-% even though filename is guaranteed unique, in case of weird corner case.
-if isfile(msis_infile)
-  warning("msis_infile exists, this may fail to write " + msis_infile)
-end
-if isfile(msis_outfile)
-  warning("msis_outfile exist, this may fail to write " + msis_outfile)
+if ispc && startsWith(exe, "\\wsl$")
+  iswsl = true;
+  assert(~isempty(stdlib.fileio.which("wsl")), "Windows Subsystem for Linux not found. Assumed WSL for path " + exe)
+
+  wsl_infile = wsl_tempfile();
+  msis_infile = wslpath2winpath(wsl_infile);
+
+  wsl_outfile = wsl_tempfile();
+  msis_outfile = wslpath2winpath(wsl_outfile);
+else
+  iswsl = false;
+  msis_infile = tempname;
+  msis_outfile = tempname;
 end
 
 stdlib.hdf5nc.h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
@@ -81,15 +86,25 @@ stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32')
 
 %% CALL MSIS
 
-if msis_version == 20
+if msis_version > 0
   % limitation of Matlab system() vis pwd
   old_pwd = pwd;
   cd(fileparts(exe))
 end
-cmd = [exe, msis_infile, msis_outfile];
+
+if iswsl
+  [stat, exe] = system("wsl wslpath " + strrep(exe, '\', '/'));
+  exe = strtrim(exe);
+  assert(stat == 0, "could not convert exe wslpath " + exe)
+
+  cmd = ["wsl", exe, wsl_infile, wsl_outfile];
+else
+  cmd = [exe, msis_infile, msis_outfile];
+end
+
 [status, msg] = stdlib.sys.subprocess_run(cmd);
 % output written to file
-if msis_version == 20
+if msis_version > 0
   cd(old_pwd)
 end
 
