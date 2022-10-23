@@ -31,9 +31,7 @@ end
 
 %% find or build msis_setup executable
 exe = gemini3d.find.gemini_exe("msis_setup");
-if isempty(exe)
-  error("gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
-end
+assert(~isempty(exe), "gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
 
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
 if isfield(p, 'activ')
@@ -57,16 +55,16 @@ alt(alt <= 0) = 1;
 % system() not having cwd= like Python.
 
 if ispc && startsWith(exe, "\\wsl$")
-  iswsl = true;
+  using_wsl = true;
   assert(~isempty(stdlib.fileio.which("wsl")), "Windows Subsystem for Linux not found. Assumed WSL for path " + exe)
 
-  wsl_infile = wsl_tempfile();
-  msis_infile = wslpath2winpath(wsl_infile);
+  wsl_infile = stdlib.sys.wsl_tempfile();
+  msis_infile = stdlib.sys.wslpath2winpath(wsl_infile);
 
-  wsl_outfile = wsl_tempfile();
-  msis_outfile = wslpath2winpath(wsl_outfile);
+  wsl_outfile = stdlib.sys.wsl_tempfile();
+  msis_outfile = stdlib.sys.wslpath2winpath(wsl_outfile);
 else
-  iswsl = false;
+  using_wsl = false;
   msis_infile = tempname;
   msis_outfile = tempname;
 end
@@ -86,31 +84,17 @@ stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32')
 
 %% CALL MSIS
 
-if msis_version > 0
-  % limitation of Matlab system() vis pwd
-  old_pwd = pwd;
-  cd(fileparts(exe))
-end
-
-if iswsl
-  [stat, exe] = system("wsl wslpath " + strrep(exe, '\', '/'));
-  exe = strtrim(exe);
-  assert(stat == 0, "could not convert exe wslpath " + exe)
-
-  cmd = ["wsl", exe, wsl_infile, wsl_outfile];
+if using_wsl
+  cmd = ["wsl", stdlib.sys.wslpath2winpath(exe), wsl_infile, wsl_outfile];
 else
   cmd = [exe, msis_infile, msis_outfile];
 end
 
-[status, msg] = stdlib.sys.subprocess_run(cmd);
+[stat, msg] = stdlib.sys.subprocess_run(cmd);
 % output written to file
-if msis_version > 0
-  cd(old_pwd)
-end
-
-switch status
-  case -1073741515, error("if on Windows, is libgfortran on PATH?")
+switch stat
   case 0  % good
+  case -1073741515, error("if on Windows, is libgfortran on PATH?")
   otherwise, error('problem running MSIS %s %s', strjoin(cmd), msg)
 end
 
