@@ -50,9 +50,7 @@ UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
 alt = xg.alt/1e3;
 alt(alt <= 0) = 1;
 %% MSIS file API
-% we use binary files because they are MUCH faster than stdin/stdout pipes
-% we need absolute paths because MSIS 2 requires a chdir() due to Matlab
-% system() not having cwd= like Python.
+% binary files are MUCH faster than stdin/stdout pipes
 
 if ispc && startsWith(exe, "\\wsl$")
   using_wsl = true;
@@ -90,6 +88,7 @@ else
   cmd = [exe, msis_infile, msis_outfile];
 end
 
+disp(join(cmd, " "))
 [stat, msg] = stdlib.sys.subprocess_run(cmd);
 % output written to file
 switch stat

@@ -33,7 +33,8 @@ end
 disp("dryrun: " + join(cmd, " "))
 [ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
 if ret == 0
-  % pass
+  % check for operating system failure that returned 0 but did nothing or failed
+  assert(contains(msg, "OK: Gemini dry run"), gemini_exe + " didn't run correctly." + msg)
 elseif ret == -1073741515
   % Windows 0xc0000135, missing DLL
   msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
