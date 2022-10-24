@@ -70,7 +70,7 @@ stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32')
 
 %% CALL MSIS
 
-if ispc && startsWith(exe, "\\wsl$")
+if stdlib.fileio.is_wsl_path(exe)
   cmd = ["wsl", stdlib.sys.winpath2wslpath(exe), stdlib.sys.winpath2wslpath(msis_infile), stdlib.sys.winpath2wslpath(msis_outfile)];
 else
   cmd = [exe, msis_infile, msis_outfile];

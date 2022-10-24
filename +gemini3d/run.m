@@ -24,7 +24,7 @@ assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
 %% assemble run command
-if ispc && startsWith(gemini_exe, "\\wsl$")
+if stdlib.fileio.is_wsl_path(gemini_exe)
   cmd = ["wsl", stdlib.sys.winpath2wslpath(gemini_exe), stdlib.sys.winpath2wslpath(cfg.outdir)];
 else
   cmd = [gemini_exe, cfg.outdir];
