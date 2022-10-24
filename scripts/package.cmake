@@ -39,9 +39,8 @@ execute_process(
 COMMAND ${tar} --create --file ${archive} --bzip2 ${exclude} .
 WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..
 RESULT_VARIABLE ret
-ERROR_VARIABLE err
 )
 if(NOT ret EQUAL 0)
   message(FATAL_ERROR "Failed to create archive ${archive}:
-  ${ret}: ${err}")
+  ${ret}")
 endif()
