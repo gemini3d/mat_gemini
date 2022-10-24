@@ -25,9 +25,7 @@ assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...
 cfg = setup_if_needed(opts, outdir, config_path);
 %% assemble run command
 if ispc && startsWith(gemini_exe, "\\wsl$")
-  outdir = stdlib.sys.winpath2wslpath(cfg.outdir);
-  exe_wsl = stdlib.sys.winpath2wslpath(gemini_exe);
-  cmd = ["wsl", exe_wsl, outdir];
+  cmd = ["wsl", stdlib.sys.winpath2wslpath(gemini_exe), stdlib.sys.winpath2wslpath(cfg.outdir)];
 else
   cmd = [gemini_exe, cfg.outdir];
   mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);

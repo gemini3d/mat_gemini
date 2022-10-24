@@ -52,20 +52,8 @@ alt(alt <= 0) = 1;
 %% MSIS file API
 % binary files are MUCH faster than stdin/stdout pipes
 
-if ispc && startsWith(exe, "\\wsl$")
-  using_wsl = true;
-  assert(stdlib.sys.has_wsl(), "Windows Subsystem for Linux not found. Assumed WSL for path " + exe)
-
-  wsl_infile = stdlib.sys.wsl_tempfile();
-  msis_infile = stdlib.sys.wslpath2winpath(wsl_infile);
-
-  wsl_outfile = stdlib.sys.wsl_tempfile();
-  msis_outfile = stdlib.sys.wslpath2winpath(wsl_outfile);
-else
-  using_wsl = false;
-  msis_infile = tempname;
-  msis_outfile = tempname;
-end
+msis_infile = tempname;
+msis_outfile = tempname;
 
 stdlib.hdf5nc.h5save(msis_infile, "/msis_version", msis_version, 'type', 'int32')
 stdlib.hdf5nc.h5save(msis_infile, "/doy", doy, 'type', 'int32')
@@ -82,8 +70,8 @@ stdlib.hdf5nc.h5save(msis_infile, "/alt", alt, 'size', xg.lx, 'type', 'float32')
 
 %% CALL MSIS
 
-if using_wsl
-  cmd = ["wsl", stdlib.sys.winpath2wslpath(exe), wsl_infile, wsl_outfile];
+if ispc && startsWith(exe, "\\wsl$")
+  cmd = ["wsl", stdlib.sys.winpath2wslpath(exe), stdlib.sys.winpath2wslpath(msis_infile), stdlib.sys.winpath2wslpath(msis_outfile)];
 else
   cmd = [exe, msis_infile, msis_outfile];
 end
