@@ -23,13 +23,19 @@ assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...
   "Please setup Gemini3D. Set environment variable GEMINI_ROOT to the directory over bin/gemini.bin")
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
-%% check MPIexec
-mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
 %% assemble run command
-cmd = [gemini_exe, cfg.outdir];
-if ~isempty(mpiexec)
-  cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
+if ispc && startsWith(gemini_exe, "\\wsl$")
+  outdir = stdlib.sys.winpath2wslpath(cfg.outdir);
+  exe_wsl = stdlib.sys.winpath2wslpath(gemini_exe);
+  cmd = ["wsl", exe_wsl, outdir];
+else
+  cmd = [gemini_exe, cfg.outdir];
+  mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
+  if ~isempty(mpiexec)
+    cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
+  end
 end
+
 disp("dryrun: " + join(cmd, " "))
 [ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
 if ret == 0
