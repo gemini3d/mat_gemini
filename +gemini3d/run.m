@@ -17,37 +17,16 @@ end
 
 gemini3d.sys.check_stdlib()
 
-%% find or build gemini.bin executable
+%% find gemini.bin executable
 gemini_exe = gemini3d.find.gemini_exe(opts.gemini_exe);
 assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...
   "Please setup Gemini3D. Set environment variable GEMINI_ROOT to the directory over bin/gemini.bin")
 %% check if model needs to be setup
 cfg = setup_if_needed(opts, outdir, config_path);
-%% assemble run command
-if stdlib.fileio.is_wsl_path(gemini_exe)
-  cmd = ["wsl", stdlib.sys.winpath2wslpath(gemini_exe), stdlib.sys.winpath2wslpath(cfg.outdir)];
-else
-  cmd = [gemini_exe, cfg.outdir];
-  mpiexec = gemini3d.sys.check_mpiexec(opts.mpiexec, gemini_exe);
-  if ~isempty(mpiexec)
-    cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
-  end
-end
 
-disp("dryrun: " + join(cmd, " "))
-[ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
-if ret == 0
-  % check for operating system failure that returned 0 but did nothing or failed
-  assert(contains(msg, "OK: Gemini dry run"), gemini_exe + " didn't run correctly." + msg)
-elseif ret == -1073741515
-  % Windows 0xc0000135, missing DLL
-  msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
-    "such as LAPACK. " + ...
-    "Currently, we are missing a DLL on your system and gemini.bin with shared libs cannot run.";
-   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
-else
-  error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
-end
+cmd = gemini_cmd(gemini_exe, cfg.outdir, opts.mpiexec);
+
+dryrun(cmd)
 
 if opts.dryrun
   return
@@ -60,3 +39,40 @@ ret = stdlib.sys.subprocess_run(cmd);
 assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function
+
+
+function cmd = gemini_cmd(exe, outdir, mpi_exe)
+
+import stdlib.sys.winpath2wslpath
+
+if stdlib.fileio.is_wsl_path(exe)
+  cmd = ["wsl", winpath2wslpath(exe), winpath2wslpath(outdir)];
+else
+  cmd = [exe, outdir];
+  mpiexec = gemini3d.sys.check_mpiexec(mpi_exe, exe);
+  if ~isempty(mpiexec)
+    cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
+  end
+end
+
+end
+
+
+function dryrun(cmd)
+
+disp("dryrun: " + join(cmd, " "))
+[ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
+if ret == 0
+  % check for operating system failure that returned 0 but did nothing or failed
+  assert(contains(msg, "OK: Gemini dry run"), cmd(1) + " didn't run correctly." + msg)
+elseif ret == -1073741515
+  % Windows 0xc0000135, missing DLL
+  msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
+    "such as LAPACK. " + ...
+    "Currently, we are missing a DLL on your system and gemini.bin with shared libs cannot run.";
+   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
+else
+  error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
+end
+
+end
