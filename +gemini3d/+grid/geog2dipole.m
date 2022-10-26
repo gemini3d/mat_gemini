@@ -1,14 +1,14 @@
-function [q,p,phi] = geog2dipole(alt,glon,glat)
+function [q, p, phi] = geog2dipole(alt, glon, glat)
 arguments
-  alt {mustBeNumeric}
-  glon {mustBeNumeric}
-  glat {mustBeNumeric}
+  alt {mustBeReal}
+  glon {mustBeReal}
+  glat {mustBeReal}
 end
 
-[theta,phi] = gemini3d.geog2geomag(glat,glon);
-mlat=90-theta*180/pi;
-mlon=phi*180/pi;
+[theta,phi] = gemini3d.geog2geomag(glat, glon);
+mlat = 90 - rad2deg(theta);
+mlon = rad2deg(phi);
 
-[q,p,phi] = gemscr.geomag2dipole(alt,mlon,mlat);
+[q,p,phi] = gemini3d.grid.geomag2dipole(alt, mlon, mlat);
 
 end %function geog2dipole

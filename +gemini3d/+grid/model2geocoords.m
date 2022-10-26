@@ -5,7 +5,7 @@ arguments
   lalt (1,1) {mustBePositive,mustBeInteger} = 150
   llon (1,1) {mustBePositive,mustBeInteger} = 150
   llat (1,1) {mustBePositive,mustBeInteger} = 150
-  altlims (1,2) {mustBeReal} = [min(double(xg.alt(:))), max(double(xg.alt(:)))]
+  altlims (1,2) {mustBeReal} = [min(xg.alt, 'all')+0.0001, max(xg.alt, 'all')-0.0001]
   glonlims (1,2) {mustBeReal} = [nan,nan]
   glatlims (1,2) {mustBeReal} = [nan,nan]
 end
@@ -21,8 +21,10 @@ end
 %glon=xg.glon;
 %glat=xg.glat;
 [glat,glon] = gemini3d.geomag2geog(double(xg.theta),double(xg.phi));    %use alternative calculation that always works
-thetactr=mean(xg.theta(:)); phictr=mean(xg.phi(:));
-mlatctr=90-thetactr*180/pi; mlonctr=phictr*180/pi;
+thetactr=mean(xg.theta, 'all');
+phictr=mean(xg.phi, 'all');
+mlatctr=90- rad2deg(thetactr);
+mlonctr=rad2deg(phictr);
 
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2; inds2=3:lx2+2; inds3=3:lx3+2;
@@ -51,9 +53,9 @@ glati=linspace(glatlims(1),glatlims(2),llat);
 minh1=min(xg.h1(:));
 maxh1=max(xg.h1(:));
 if (abs(minh1-1)>1e-4 || abs(maxh1-1)>1e-4)    %curvilinear grid
-    flagcurv=1;
+  flagcurv=1;
 else                                           %cartesian grid
-    flagcurv=0;
+  flagcurv=0;
 % elseif others possible...
 end %if
 
@@ -62,10 +64,10 @@ end %if
 %There needs to be a separate transformation here for each coordinate system that the model
 % may use...
 if (flagcurv==1)
-    [qi,pei,phii]= gemscr.geog2dipole(ALTi,GLONi,GLATi);
+    [qi,pei,phii]= gemini3d.grid.geog2dipole(ALTi,GLONi,GLATi);
     x1i=qi(:); x2i=pei(:); x3i=phii(:);
 elseif (flagcurv==0)
-    [zUENi,xUENi,yUENi]= gemscr.geog2UENgeomag(ALTi,GLONi,GLATi,mlonctr,mlatctr);
+    [zUENi,xUENi,yUENi]= gemini3d.grid.geog2UENgeomag(ALTi,GLONi,GLATi,mlonctr,mlatctr);
     x1i=zUENi(:); x2i=xUENi(:); x3i=yUENi(:);
 else
     error('Unsupported grid type...');

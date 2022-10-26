@@ -1,5 +1,14 @@
 function [parmi, alti,mloni,mlati] = model2magcoords(xg,parm,lalt,llon,llat,altlims,mlonlims,mlatlims)
-
+arguments
+  xg (1,1) struct
+  parm {mustBeReal}
+  lalt (1,1) {mustBePositive,mustBeInteger} = 150
+  llon (1,1) {mustBePositive,mustBeInteger} = 150
+  llat (1,1) {mustBePositive,mustBeInteger} = 150
+  altlims (1,2) {mustBeReal} = [min(xg.alt, 'all')+0.0001, max(xg.alt, 'all')-0.0001]
+  mlonlims (1,2) {mustBeReal} = [nan,nan]
+  mlatlims (1,2) {mustBeReal} = [nan,nan]
+end
 %Grid the scalar GEMINI output data in parm onto a regular *geomagnetic* coordinates
 %grid.  By default create a linearly spaced output grid based on
 %user-provided limits (or grid limits).  Needs to be updated to deal with
@@ -11,21 +20,20 @@ function [parmi, alti,mloni,mlati] = model2magcoords(xg,parm,lalt,llon,llat,altl
 %% Need at least two arguments, set defaults an necessary
 narginchk(2,8);
 
-mlon=xg.phi*180/pi;
-mlat=90-xg.theta*180/pi;
-alt=xg.alt;
+mlon = rad2deg(xg.phi);
+mlat = 90 - rad2deg(xg.theta);
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2; inds2=3:lx2+2; inds3=3:lx3+2;
 x1=xg.x1(inds1); x2=xg.x2(inds2); x3=xg.x3(inds3);
 
-if (nargin<8)    %default to using grid limits if not given
-    altlims=[min(alt(:))+0.0001,max(alt(:))-0.0001];   %make sure we say just inside model limits...
-    mlonlims=[min(mlon(:))+0.0001,max(mlon(:))-0.0001];
-    mlatlims=[min(mlat(:))+0.0001,max(mlat(:))-0.0001];
+if any(isnan(mlonlims))
+  mlonlims=[min(mlon, 'all')+0.0001, max(mlon, 'all')-0.0001];
+end
+
+if any(isnan(mlatlims))
+  mlatlims=[min(mlat, 'all')+0.0001, max(mlat, 'all')-0.0001];
 end %if
-if (nargin<5)    %default to some number of grid points if not given
-    lalt=150; llon=150; llat=150;
-end %if
+
 
 %% Define a regular mesh of a set number of points that encompasses the grid (or part of the grid)
 alti=linspace(altlims(1),altlims(2),lalt);

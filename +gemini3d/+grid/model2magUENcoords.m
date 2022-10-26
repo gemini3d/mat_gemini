@@ -10,10 +10,10 @@ narginchk(2,8);
 
 mlon=xg.phi*180/pi;
 mlat=90-xg.theta*180/pi;
-reflat=mean(mlat(:));
-reflon=mean(mlon(:));
+reflat=mean(mlat, 'all');
+reflon=mean(mlon, 'all');
 alt=xg.alt;
-[zUEN,xUEN,yUEN]= gemscr.geomag2UENgeomag(alt,mlon,mlat);
+[zUEN,xUEN,yUEN]= gemini3d.grid.geomag2UENgeomag(alt,mlon,mlat);
 
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2; inds2=3:lx2+2; inds3=3:lx3+2;
@@ -51,8 +51,8 @@ end %if
 %There needs to be a separate transformation here for each coordinate system that the model
 % may use...
 if (flagcurv==1)
-    [ALTi,MLONi,MLATi]= gemscr.UENgeomag2geomag(ZUENi,XUENi,YUENi,reflon,reflat);
-    [qi,pei,phii]= gemscr.geomag2dipole(ALTi,MLONi,MLATi);
+    [ALTi,MLONi,MLATi]= gemini3d.grid.UENgeomag2geomag(ZUENi,XUENi,YUENi,reflon,reflat);
+    [qi,pei,phii]= gemini3d.grid.geomag2dipole(ALTi,MLONi,MLATi);
     x1i=qi(:); x2i=pei(:); x3i=phii(:);
 elseif (flagcurv==0)
 %    x1i=zUENi(:); x2i=xUENi(:); x3i=yUENi(:);

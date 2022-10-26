@@ -1,5 +1,11 @@
-function track=virtual_spacecraft(direc,glonsat,glatsat,altsat,tsat)
-
+function track=virtual_spacecraft(direc, glonsat, glatsat, altsat, tsat)
+arguments
+  direc (1,1) string {mustBeFolder}
+  glonsat (:,:) {mustBeReal}
+  glatsat (:,:) {mustBeReal}
+  altsat (:,:) {mustBeReal}
+  tsat (:,1) {mustBeReal}
+end
 % This utility traces a spacecraft through the model domain.  Inputs:
 %
 %    direc (string) - location of simulation output data, must contain output files,
@@ -11,37 +17,30 @@ function track=virtual_spacecraft(direc,glonsat,glatsat,altsat,tsat)
 %    the beginning of the simulation, seconds
 
 % READ IN THE SIMULATION INFORMATION
-disp('Loading config file...')
 cfg = gemini3d.read.config(direc);
 ymd0=cfg.ymd; UTsec0=cfg.UTsec0;
-mloc=[cfg.sourcemlat,cfg.sourcemlon];
+% mloc=[cfg.sourcemlat,cfg.sourcemlon];
 dtout=cfg.dtout; tdur=cfg.tdur;
 
 % CHECK WHETHER WE NEED TO RELOAD THE GRID (WHICH CAN BE TIME CONSUMING)
 disp('Loading grid...')
 xg = gemini3d.read.grid(direc);
-lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
-thetactr=double(mean(xg.theta(:)));
-phictr=double(mean(xg.phi(:)));
+% lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
+thetactr=double(mean(xg.theta, 'all'));
+phictr=double(mean(xg.phi, 'all'));
 [X1,X2,X3]=gemini3d.geog2UEN(xg.alt,xg.glon,xg.glat,thetactr,phictr);
 X1=double(X1(:)); X2=double(X2(:)); X3=double(X3(:));
 
 % TIMES WHERE WE HAVE MODEL OUTPUT
-times=UTsec0:dtout:UTsec0+tdur;
-lt=numel(times);
-datemod0=datenum([ymd0,UTsec0/3600,0,0]);
-datemod=datemod0:dtout/86400:datemod0+tdur/86400;
+datemod = datetime(ymd0(1), ymd0(2), ymd0(3), 0, 0, UTsec0:dtout:tdur);
 
 % size on input satellite track
-[lorb,lsat]=size(altsat);
-UTsat=UTsec0+tsat;
-ymdsat=repmat(ymd0,[lorb,1]);
-datevecsat=[ymdsat,UTsat(:)/3600,zeros(lorb,1),zeros(lorb,1)];
-datesat=datenum(datevecsat);
+[lorb,lsat] = size(altsat);
+datesat = datetime(ymd0(1), ymd0(2), ymd0(3), 0, 0, UTsec0 + tsat);
 
 %MAIN LOOP OVER ORBIT SEGMENTS
-datebufprev=datemod0;
-datebufnext=datemod0;
+datebufprev=datemod(1);
+datebufnext=datemod(1);
 track.nesat=zeros(lorb,lsat);
 track.visat=zeros(lorb,lsat);
 track.Tisat=zeros(lorb,lsat);
@@ -61,41 +60,38 @@ for iorb=1:lorb
 
 
   %FIND THE TWO FRAMES THAT BRACKET THIS ORBIT TIME
-  datemodnext=datemod0;
-  datemodprev=datemod0;
-  while(datemodnext<datenow & datemodnext<=datemod(end))
+  datemodnext=datemod(1);
+  datemodprev=datemod(1);
+  while(datemodnext < datenow && datemodnext <= datemod(end))
     datemodprev=datemodnext;
-    datemodnext=datemodnext+dtout/86400;    %matlab datenums are in units of days from 0000
+    datemodnext = datemodnext + seconds(dtout);
   end
 
-  if (datemodnext==datemodprev | datemodnext>datemod(end))    %set everything to zero if outside model *time* domain
-    fprintf('Requested time %s is out of simulation time interval...\n',datestr(datenow));
-    zeroarray=zeros(lx1,lx2,lx3);     %infuriatingly MATLAB is was faster this way rather than calling zeros a bunch...
-    neprev=zeroarray; nenext=zeroarray;
-    viprev=zeroarray; vinext=zeroarray;
-    Tiprev=zeroarray; Tinext=zeroarray;
-    Teprev=zeroarray; Tenext=zeroarray;
-    J1prev=zeroarray; J1next=zeroarray;
-    J2prev=zeroarray; J2next=zeroarray;
-    J3prev=zeroarray; J3next=zeroarray;
-    v2prev=zeroarray; v2next=zeroarray;
-    v3prev=zeroarray; v3next=zeroarray;
+  if (datemodnext==datemodprev || datemodnext>datemod(end))    %set everything to zero if outside model *time* domain
+    fprintf('Requested time %s is out of simulation time interval...\n', datenow);
+%     zeroarray=zeros(lx1,lx2,lx3);     %infuriatingly MATLAB is was faster this way rather than calling zeros a bunch...
+%     neprev=zeroarray; nenext=zeroarray;
+%     viprev=zeroarray; vinext=zeroarray;
+%     Tiprev=zeroarray; Tinext=zeroarray;
+%     Teprev=zeroarray; Tenext=zeroarray;
+%     J1prev=zeroarray; J1next=zeroarray;
+%     J2prev=zeroarray; J2next=zeroarray;
+%     J3prev=zeroarray; J3next=zeroarray;
+%     v2prev=zeroarray; v2next=zeroarray;
+%     v3prev=zeroarray; v3next=zeroarray;
 
     continue;   % go to next iteration, nothing else to do
   else     % go ahead and read in data (in needed) and set up the spatial interpolations
       %DATA BUFFER UPDATES required for time interpolation
-      if (abs(datebufprev-datemodprev)>=dtout/86400/2 || firstprev)    % need to reload the previous output frame data buffers
-          if (firstprev && firstnext || abs(datemodprev-datebufnext)>=dtout/86400/2)               % only load a prev buffer if the desired previous model date (datemodprev) is not the existing next buffer (datebufnext)
-              fprintf('Loading previous buffer... %s \n',datestr(datenow));
-              datevecmodprev=datevec(datemodprev);
-              ymd=datevecmodprev(1:3);
-              UTsec=datevecmodprev(4)*3600+datevecmodprev(5)*60+datevecmodprev(6);
-              UTsec=round(UTsec);    %some accuracy problems...  this is fishy and an infuriating kludge that needs to be fixed...
-              dat=gemini3d.read.frame(direc, 'time', datetime([ymd,0,0,UTsec]));
+      if (abs(datebufprev-datemodprev) >= seconds(dtout/2) || firstprev)    % need to reload the previous output frame data buffers
+          if (firstprev && firstnext || abs(datemodprev-datebufnext) >= seconds(dtout/2))               % only load a prev buffer if the desired previous model date (datemodprev) is not the existing next buffer (datebufnext)
+              fprintf('Loading previous buffer... %s \n', datenow);
+
+              dat=gemini3d.read.frame(direc, 'time', datemodprev);
               neprev=double(dat.ne(:)); viprev=double(dat.v1(:)); Tiprev=double(dat.Ti(:)); Teprev=double(dat.Te(:));
               J1prev=double(dat.J1(:)); J2prev=double(dat.J2(:)); J3prev=double(dat.J3(:)); v2prev=double(dat.v2(:));
               v3prev=double(dat.v3(:));
-              clear dat;    %avoid keeping extra copies of data
+              clear('dat')    %avoid keeping extra copies of data
 
               % Interpolant in space (prev)
               fnesatprev=scatteredInterpolant(X1,X2,X3,neprev,interptype,extraptype);
@@ -108,7 +104,7 @@ for iorb=1:lorb
               fv2satprev=scatteredInterpolant(X1,X2,X3,v2prev,interptype,extraptype);
               fv3satprev=scatteredInterpolant(X1,X2,X3,v3prev,interptype,extraptype);
           else    % we can simply set the previous buffer to the next if we are not skipping over an output file
-              fprintf('Copying next into previous buffer... %s %f\n',datestr(datenow),tsat(iorb));
+              fprintf('Copying next into previous buffer... %s %f\n', datenow, tsat(iorb))
               fnesatprev=fnesatnext;
               fvisatprev=fvisatnext;
               fTisatprev=fTisatnext;
@@ -122,13 +118,10 @@ for iorb=1:lorb
           datebufprev=datemodprev;
           firstprev=false;
       end %if
-    if (abs(datebufnext-datemodnext)>=dtout/86400/2 || firstnext)    %need to reload the next output frame into data buffers
-      fprintf('Loading next buffer... %s \n',datestr(datenow));
-      datevecmodnext=datevec(datemodnext);
-      ymd=datevecmodnext(1:3);
-      UTsec=datevecmodnext(4)*3600+datevecmodnext(5)*60+datevecmodnext(6);
-      UTsec=round(UTsec);
-      dat=gemini3d.read.frame(direc,'time', datetime([ymd,0,0,UTsec]));
+    if (abs(datebufnext-datemodnext) >= seconds(dtout/2) || firstnext)    %need to reload the next output frame into data buffers
+      fprintf('Loading next buffer... %s\n', datenow)
+
+      dat=gemini3d.read.frame(direc, 'time', datemodnext);
       nenext=double(dat.ne(:)); vinext=double(dat.v1(:)); Tinext=double(dat.Ti(:)); Tenext=double(dat.Te(:));
       J1next=double(dat.J1(:)); J2next=double(dat.J2(:)); J3next=double(dat.J3(:)); v2next=double(dat.v2(:));
       v3next=double(dat.v3(:));
@@ -160,7 +153,7 @@ for iorb=1:lorb
       fprintf('Starting interpolations for satellite:  %d\n',isat);
 
       % Interp in space (prev)
-      nesatprev=fnesatprev(x1sat,x2sat,x3sat); 
+      nesatprev=fnesatprev(x1sat,x2sat,x3sat);
       visatprev=fvisatprev(x1sat,x2sat,x3sat);
       Tisatprev=fTisatprev(x1sat,x2sat,x3sat);
       Tesatprev=fTesatprev(x1sat,x2sat,x3sat);
