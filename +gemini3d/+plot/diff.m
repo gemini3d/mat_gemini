@@ -80,7 +80,7 @@ plot(nexttile(t, 1), A)
 plot(nexttile(t, 2), b)
 
 d = A - B;
-maxdiff = abs(max(d(:)));
+maxdiff = abs(max(d, [], 'all'));
 
 plot(nexttile(t, 3), d)
 
@@ -101,8 +101,8 @@ if any(startsWith(name, ["J", "v"]))
   cmap = gemini3d.plot.bwr();
 end
 
-bmin = min(min(A(:)), min(B(:)));
-bmax = max(max(A(:)), max(B(:)));
+bmin = min(min(A, [], 'all'), min(B, [], 'all'));
+bmax = max(max(A, [], 'all'), max(B, [], 'all'));
 
 ax = nexttile(t, 1);
 hi = pcolor(ax, A);
@@ -132,9 +132,9 @@ end
 %%
 ax = nexttile(t, 3);
 dAB = A - B;
-b = max(abs(min(dAB(:))), abs(max(dAB(:))));
+b = max(abs(min(dAB, [], 'all')), abs(max(dAB, [], 'all')));
 
-maxdiff = abs(max(dAB(:)));
+maxdiff = abs(max(dAB, [], 'all'));
 
 hi = pcolor(ax, dAB);
 set(hi, "EdgeColor", "none")

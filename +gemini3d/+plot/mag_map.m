@@ -72,8 +72,8 @@ end
 %INTERPOLATE TO HIGHER SPATIAL RESOLUTION FOR PLOTTING
 llonp=200;
 llatp=200;
-mlonp=linspace(min(mlon(:)),max(mlon(:)),llonp);
-mlatp=linspace(min(mlat(:)),max(mlat(:)),llatp);
+mlonp=linspace(min(mlon, [], 'all'),max(mlon, [], 'all'),llonp);
+mlatp=linspace(min(mlat, [], 'all'),max(mlat, [], 'all'),llatp);
 [MLONP,MLATP]=meshgrid(mlonp,mlatp);
 for it=1:length(cfg.times)
   param=interp2(cfg.mlon, cfg.mlat,squeeze(Brt(:,:,:,it)),MLONP,MLATP);
@@ -91,8 +91,8 @@ mlonsrc=cfg.sourcemlon;
 
 %TABULATE THE SOURCE OR GRID CENTER LOCATION
 if isempty(cfg.sourcemlat)
-  thdist=mean(theta(:));
-  phidist=mean(phi(:));
+  thdist=mean(theta, 'all');
+  phidist=mean(phi, 'all');
   cfg.sourcemlat = 90 - rad2deg(thdist);
   cfg.sourcemlon = rad2deg(phidist);
 else
@@ -150,7 +150,7 @@ pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 colormap(ax, gemini3d.plot.bwr());
 % set(ax,'FontSize',FS)
 tightmap
-caxlim=max(abs(param(:)));
+caxlim=max(abs(param), [], 'all');
 caxlim=max(caxlim,0.001);
 if verLessThan('matlab', '9.12')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>
@@ -184,8 +184,8 @@ pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 colormap(ax, gemini3d.plot.bwr())
 %set(ax,'FontSize',FS)
 tightmap
-caxlim=max(abs(param(:)));
-caxlim=max(caxlim,0.001);
+caxlim=max(abs(param), [], 'all');
+caxlim=max(caxlim, 0.001);
 if verLessThan('matlab', '9.12')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>
 else
@@ -217,7 +217,7 @@ pcolorm(cfg.MLAT, cfg.MLON, param, "parent", ax)
 colormap(ax, gemini3d.plot.bwr())
 %set(ax,'FontSize',FS)
 tightmap
-caxlim=max(abs(param(:)));
+caxlim=max(abs(param), [], 'all');
 caxlim=max(caxlim,0.001);
 if verLessThan('matlab', '9.12')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>

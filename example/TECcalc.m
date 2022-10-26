@@ -41,8 +41,8 @@ end
 
 %DEFINE A CENTER AND REGION OF INTEREST
 if (isempty(cfg.sourcemlat))    %in case this run didn't have a disturbance!
-  cfg.sourcemlat = (pi/2-mean(xg.theta(:)))*180/pi;
-  cfg.sourcemlon = mean(xg.phi(:))*180/pi;
+  cfg.sourcemlat = pi/2 - rad2deg(mean(xg.theta, 'all'));
+  cfg.sourcemlon = rad2deg(mean(xg.phi, 'all'));
 end
 thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
 phidist = deg2rad(cfg.sourcemlon);
@@ -66,12 +66,12 @@ lphi=600;
 rvals=xg.r(1:lh,:,:);
 thvals=xg.theta(1:lh,:,:);
 phivals=xg.phi(1:lh,:,:);
-rmin=min(rvals(:));
-rmax=max(rvals(:));
-thmin=min(thvals(:));
-thmax=max(thvals(:));
-phimin=min(phivals(:));
-phimax=max(phivals(:));
+rmin=min(rvals, [], 'all');
+rmax=max(rvals, [], 'all');
+thmin=min(thvals, [], 'all');
+thmax=max(thvals, [], 'all');
+phimin=min(phivals, [], 'all');
+phimax=max(phivals, [], 'all');
 
 theta=linspace(thmin,thmax,lth);
 r=linspace(rmin,rmax,lr)';
@@ -227,7 +227,7 @@ for it=1:length(cfg.times)
 %       set(gca,'FontSize',FS);
       axis xy;
       axis tight;
-      caxlim=max(max(abs(dvTEC(:,:,it))));
+      caxlim= max(abs(dvTEC(:,:,it)), [], 'all');
       caxlim=max(caxlim,0.01);
       if verLessThan('matlab', '9.12')
         caxis([-1*caxlim, caxlim]) %#ok<CAXIS>
@@ -264,9 +264,9 @@ if (flag2D)
   datetick;
   axis tight;
   if verLessThan('matlab', '9.12')
-    caxis([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))]) %#ok<CAXIS>
+    caxis([-max(abs(dvTEC), [], 'all'), max(abs(dvTEC), [], 'all')]) %#ok<CAXIS>
   else
-    clim([-max(max(abs(dvTEC(:,:)))), max(max(abs(dvTEC(:,:))))])
+    clim([-max(abs(dvTEC), [], 'all'), max(abs(dvTEC), [], 'all')])
   end
   c=colorbar;
 %   set(c,'FontSize',FS)

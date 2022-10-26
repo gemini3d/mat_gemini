@@ -64,12 +64,12 @@ Nt = length(pg.times);
 pg.Qit = zeros(pg.llon, pg.llat, Nt);
 pg.E0it = nan(pg.llon, pg.llat, Nt);
 
-thetamin = min(xg.theta(:));
-thetamax = max(xg.theta(:));
-mlatmin = 90-thetamax*180/pi;
-mlatmax = 90-thetamin*180/pi;
-mlonmin = min(xg.phi(:))*180/pi;
-mlonmax = max(xg.phi(:))*180/pi;
+thetamin = min(xg.theta, [], 'all');
+thetamax = max(xg.theta, [], 'all');
+mlatmin = 90- rad2deg(thetamax);
+mlatmax = 90- rad2deg(thetamin);
+mlonmin = rad2deg(min(xg.phi, [], 'all'));
+mlonmax = rad2deg(max(xg.phi, [], 'all'));
 
 % add a 1% buffer
 latbuf = 1/100*(mlatmax-mlatmin);

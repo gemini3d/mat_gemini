@@ -5,8 +5,8 @@ end
 
 %% DEFINE THE PLOTTING FUNCTION BASED ON THE TYPE OF GRID USED
 
-minh1=min(xg.h1(:));
-maxh1=max(xg.h1(:));
+minh1=min(xg.h1, [], 'all');
+maxh1=max(xg.h1, [], 'all');
 if (abs(minh1-1)>1e-4 || abs(maxh1-1)>1e-4)    %curvilinear grid
   if (xg.lx(2)>1 && xg.lx(3)>1)
     plotfun = @gemini3d.plot.curv3d_long;

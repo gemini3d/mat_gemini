@@ -5,7 +5,7 @@ arguments
   lalt (1,1) {mustBePositive,mustBeInteger} = 150
   llon (1,1) {mustBePositive,mustBeInteger} = 150
   llat (1,1) {mustBePositive,mustBeInteger} = 150
-  altlims (1,2) {mustBeReal} = [min(xg.alt, 'all')+0.0001, max(xg.alt, 'all')-0.0001]
+  altlims (1,2) {mustBeReal} = [min(xg.alt, [], 'all')+0.0001, max(xg.alt, [], 'all')-0.0001]
   mlonlims (1,2) {mustBeReal} = [nan,nan]
   mlatlims (1,2) {mustBeReal} = [nan,nan]
 end
@@ -27,11 +27,11 @@ inds1=3:lx1+2; inds2=3:lx2+2; inds3=3:lx3+2;
 x1=xg.x1(inds1); x2=xg.x2(inds2); x3=xg.x3(inds3);
 
 if any(isnan(mlonlims))
-  mlonlims=[min(mlon, 'all')+0.0001, max(mlon, 'all')-0.0001];
+  mlonlims=[min(mlon, [], 'all')+0.0001, max(mlon, [], 'all')-0.0001];
 end
 
 if any(isnan(mlatlims))
-  mlatlims=[min(mlat, 'all')+0.0001, max(mlat, 'all')-0.0001];
+  mlatlims=[min(mlat, [], 'all')+0.0001, max(mlat, [], 'all')-0.0001];
 end %if
 
 

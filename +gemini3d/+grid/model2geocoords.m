@@ -5,7 +5,7 @@ arguments
   lalt (1,1) {mustBePositive,mustBeInteger} = 150
   llon (1,1) {mustBePositive,mustBeInteger} = 150
   llat (1,1) {mustBePositive,mustBeInteger} = 150
-  altlims (1,2) {mustBeReal} = [min(xg.alt, 'all')+0.0001, max(xg.alt, 'all')-0.0001]
+  altlims (1,2) {mustBeReal} = [min(xg.alt, [], 'all')+0.0001, max(xg.alt, [], 'all')-0.0001]
   glonlims (1,2) {mustBeReal} = [nan,nan]
   glatlims (1,2) {mustBeReal} = [nan,nan]
 end
@@ -36,10 +36,10 @@ glon(glon < 180) = glon(glon < 180)+360;
 %end %if
 
 if any(isnan(glonlims))
-  glonlims=[min(double(glon(:))), max(double(glon(:)))];
+  glonlims=[min(glon, [], 'all'), max(glon, [], 'all')];
 end
 if any(isnan(glatlims))
-  glatlims=[min(double(glat(:))), max(double(glat(:)))];
+  glatlims=[min(glat, [], 'all'), max(glat, [], 'all')];
 end
 
 %% Define a regular mesh of a set number of points that encompasses the grid (or part of the grid)
@@ -50,8 +50,8 @@ glati=linspace(glatlims(1),glatlims(2),llat);
 
 
 %% Identify the type of grid that we are using
-minh1=min(xg.h1(:));
-maxh1=max(xg.h1(:));
+minh1=min(xg.h1, [], 'all');
+maxh1=max(xg.h1, [], 'all');
 if (abs(minh1-1)>1e-4 || abs(maxh1-1)>1e-4)    %curvilinear grid
   flagcurv=1;
 else                                           %cartesian grid

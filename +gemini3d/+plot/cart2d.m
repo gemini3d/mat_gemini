@@ -46,8 +46,8 @@ plotparams.altref=300;
 
 
 %SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
-meantheta=mean(xg.theta(:));
-%meanphi=mean(xg.phi(:));
+meantheta=mean(xg.theta, 'all');
+%meanphi=mean(xg.phi, 'all');
 y=-1*(xg.theta-meantheta);   %this is a mag colat. coordinate and is only used for defining grid in linspaces below, runs backward from north distance, hence the negative sign
 %x=(xg.phi-meanphi);       %mag. lon coordinate, pos. eastward
 x=xg.x2(inds2)/Re/sin(meantheta);
@@ -55,12 +55,12 @@ z=xg.alt;
 lxp=500;
 lyp=500;
 lzp=500;
-minx=min(x(:));
-maxx=max(x(:));
-miny=min(y(:));
-maxy=max(y(:));
-minz=min(z(:));
-maxz=max(z(:));
+minx=min(x, [], 'all');
+maxx=max(x, [], 'all');
+miny=min(y, [], 'all');
+maxy=max(y, [], 'all');
+minz=min(z, [], 'all');
+maxz=max(z, [], 'all');
 xp=linspace(minx,maxx,lxp);     %eastward distance (rads.)
 yp=linspace(miny,maxy,lyp);     %should be interpreted as northward distance (in rads.).  Irrespective of ordering of xg.theta, this will be monotonic increasing!!!
 zp=linspace(minz,maxz,lzp)';     %altitude (meters)

@@ -69,41 +69,41 @@ J3lim=[-10 10];
 
 clm = opts.clim;
 if ~isfield(clm, "ne") && isfield(dat, 'ne')
-  clm.ne = [min(dat.ne(:)), max(dat.ne(:))];
+  clm.ne = [min(dat.ne, [], 'all'), max(dat.ne, [], 'all')];
 end
 if ~isfield(clm, "v1") && isfield(dat, 'v1')
-% v1mod=max(abs(v1(:)));
+% v1mod=max(abs(v1), [], 'all'));
   v1mod = 80;
   clm.v1 = [-v1mod, v1mod];
 end
 if ~isfield(clm, "Ti") && isfield(dat, 'Ti')
-  clm.Ti = [0, max(dat.Ti(:))];
+  clm.Ti = [0, max(dat.Ti, [], 'all')];
 end
 if ~isfield(clm, "Te") && isfield(dat, 'Te')
-  clm.Te = [0, max(dat.Te(:))];
+  clm.Te = [0, max(dat.Te, [], 'all')];
 end
 if ~isfield(clm, "J1") && isfield(dat, 'J1')
-  J1mod = max(abs(dat.J1(:)));
+  J1mod = max(abs(dat.J1), [], 'all');
   clm.J1 = [-J1mod, J1mod];
 end
 if ~isfield(clm, "v2") && isfield(dat, 'v2')
-  v2mod = max(abs(dat.v2(:)));
+  v2mod = max(abs(dat.v2), [], 'all');
   clm.v2 = [-v2mod, v2mod];
 end
 if ~isfield(clm, "v3") && isfield(dat, 'v3')
-  v3mod = max(abs(dat.v3(:)));
+  v3mod = max(abs(dat.v3), [], 'all');
   clm.v3 = [-v3mod, v3mod];
 end
 if ~isfield(clm, "J2") && isfield(dat, 'J2')
-  J2mod = max(abs(dat.J2(:)));
+  J2mod = max(abs(dat.J2), [], 'all');
   clm.J2 = [-J2mod, J2mod];
 end
 if ~isfield(clm, "J3") && isfield(dat, 'J3')
-  J3mod = max(abs(dat.J3(:)));
+  J3mod = max(abs(dat.J3), [], 'all');
   clm.J3 = [-J3mod, J3mod];
 end
 if ~isfield(clm, "Phitop") && isfield(dat, 'Phitop')
-  clm.Phitop = [min(dat.Phitop(:)), max(dat.Phitop(:))];
+  clm.Phitop = [min(dat.Phitop, [], 'all'), max(dat.Phitop, [], 'all')];
 end
 
 %% MAKE THE PLOTS

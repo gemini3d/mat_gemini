@@ -39,8 +39,8 @@ end
 
   %TABULATE THE SOURCE OR GRID CENTER LOCATION
   if isempty(cfg.sourcemlon)
-    thdist=mean(xg.theta(:));
-    phidist=mean(xg.phi(:));
+    thdist=mean(xg.theta, 'all');
+    phidist=mean(xg.phi, 'all');
   else
     thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
     phidist= deg2rad(cfg.sourcemlon);

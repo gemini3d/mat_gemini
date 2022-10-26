@@ -23,9 +23,9 @@ if (nargin<5)    %default to some number of grid points if not given
     lz=150; lx=150; ly=150;
 end %if
 if (nargin<8)    %default to using grid limits if not given
-    zlims=[min(zUEN(:))+1,max(zUEN(:))-1];   %stay just inside given grid
-    xlims=[min(xUEN(:))+1,max(xUEN(:))-1];
-    ylims=[min(yUEN(:))+1,max(yUEN(:))-1];
+    zlims=[min(zUEN, [], 'all')+1,max(zUEN, [], 'all')-1];   %stay just inside given grid
+    xlims=[min(xUEN, [], 'all')+1,max(xUEN, [], 'all')-1];
+    ylims=[min(yUEN, [], 'all')+1,max(yUEN, [], 'all')-1];
 end %if
 
 
@@ -37,8 +37,8 @@ yUENi=linspace(ylims(1),ylims(2),ly);
 
 
 %% Identify the type of grid that we are using
-minh1=min(xg.h1(:));
-maxh1=max(xg.h1(:));
+minh1=min(xg.h1, [], 'all');
+maxh1=max(xg.h1, [], 'all');
 if (abs(minh1-1)>1e-4 || abs(maxh1-1)>1e-4)    %curvilinear grid
     flagcurv=1;
 else                                           %cartesian grid

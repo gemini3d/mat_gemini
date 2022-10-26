@@ -26,7 +26,7 @@ if (~isempty(sourceloc))
   sourcemlat=sourceloc(1);
   %sourcemlon=sourceloc(2);
 else
-  sourcemlat=mean(90-xg.theta(:)*180/pi);   %just take avg. over the grid
+  sourcemlat=mean(90-rad2deg(xg.theta), 'all');   %just take avg. over the grid
 end %if
 
 
@@ -45,8 +45,8 @@ altref=300;
 
 
 %SIZE OF PLOT GRID THAT WE ARE INTERPOLATING ONTO
-meantheta=mean(xg.theta(:));
-%meanphi=mean(xg.phi(:));
+meantheta=mean(xg.theta, 'all');
+%meanphi=mean(xg.phi, 'all');
 %meanphi=xg.x3(inds3(1));     %dont' forget that x3 has ghost cells!!!
 x=(xg.theta-meantheta);   %this is a mag colat. coordinate and is only used for defining grid in linspaces below
 %y=(xg.phi-meanphi);       %mag. lon coordinate
@@ -54,13 +54,13 @@ z=xg.alt/1e3;
 lxp=1500;
 %lyp=500;
 lzp=1500;
-minx=min(x(:));
-maxx=max(x(:));
-%miny=min(y(:));
-%maxy=max(y(:));
-%minz=min(z(:));
+minx=min(x, [], 'all');
+maxx=max(x, [], 'all');
+%miny=min(y, [], 'all');
+%maxy=max(y, [], 'all');
+%minz=min(z, [], 'all');
 minz=0;
-maxz=max(z(:));
+maxz=max(z, [], 'all');
 xp=linspace(minx,maxx,lxp);
 %yp=linspace(miny,maxy,lyp);
 zp=linspace(minz,maxz,lzp)';
@@ -69,23 +69,23 @@ zp=linspace(minz,maxz,lzp)';
 %ix1s=floor(lx1/2):lx1;    %only valide for a grid which is symmetric aboutu magnetic equator... (I think)
 ix1s=find(xg.x1(inds1)>=0);    %works for asymmetric grids
 minz=0;
-maxz=max(xg.alt(:));
+maxz=max(xg.alt, [], 'all');
 [tmp,ix1]=min(abs(xg.alt(ix1s,1,1)-maxz*1e3));
 ix1=ix1s(ix1);
 thetavals=xg.theta(ix1:lx1,:,:);
-meantheta=mean(thetavals(:));
+meantheta=mean(thetavals, 'all');
 phivals=xg.phi(ix1:lx1,:,:);
-meanphi=mean(phivals(:));
+meanphi=mean(phivals, 'all');
 x=(thetavals-meantheta);      %this is a mag colat. coordinate and is only used for defining grid in linspaces below and the parametric surfaces in the plots
 y=(phivals-meanphi);          %mag. lon coordinate
 z=xg.alt(ix1:lx1,:,:)/1e3;    %altitude
 lxp=500;
 lyp=500;
 lzp=500;
-minx=min(x(:));
-maxx=max(x(:));%+0.5*(max(x(:))-min(x(:)));
-miny=min(y(:));
-maxy=max(y(:));
+minx=min(x, [], 'all');
+maxx=max(x, [], 'all');%+0.5*(max(x, [], 'all')-min(x, [], 'all'));
+miny=min(y, [], 'all');
+maxy=max(y, [], 'all');
 xp=linspace(minx,maxx,lxp);
 yp=linspace(miny,maxy,lyp);
 zp=linspace(minz,maxz,lzp)';

@@ -11,8 +11,8 @@ mlat=90-xg.theta*180/pi;
 % double for plot3m
 mlon = double(mlon);
 mlat = double(mlat);
-dmlon=max(mlon(:))-min(mlon(:));
-dmlat=max(mlat(:))-min(mlat(:));
+dmlon=max(mlon, [], 'all')-min(mlon, [], 'all');
+dmlat=max(mlat, [], 'all')-min(mlat, [], 'all');
 
 
 %% ORGANIZE INPUT STRUCTURE
@@ -41,8 +41,8 @@ if flagsource ~= 0
     sourcemlonplot=sourcemlon;
   end
 else     %no "epicenter" to track just use mean grid locations
-  sourcemlon=mean(mlon(:));
-  sourcemlat=mean(mlat(:));
+  sourcemlon=mean(mlon, 'all');
+  sourcemlat=mean(mlat, 'all');
   sourcemlonplot=sourcemlon;
 end %if
 
@@ -70,9 +70,9 @@ end
 
 %% CONVERT INPUT GRID COORDINATES INTO MLAT,MLON,ALT
 % Re=6370e3;
-% dphi=max(xg.phi(:))-min(xg.phi(:));
+% dphi=max(xg.phi, [], 'all')-min(xg.phi, [], 'all');
 alt=xg.alt/1e3;
-altscale=max(alt(:));
+altscale=max(alt, [], 'all');
 alt=alt/altscale;
 % double for plot3m
 alt = double(alt);
@@ -264,7 +264,7 @@ if flag2D
     drho=rhomax-rhomin;
     xn=linspace(-1*drho,drho,lrho);
     rn=zn+6370;
-    dtheta=(max(xn(:))-min(xn(:)))/rn(1);
+    dtheta=(max(xn, [], 'all')-min(xn, [], 'all'))/rn(1);
     thetan=linspace(sourcetheta-dtheta/2,sourcetheta+dtheta/2,lrho);
     [THETAn,Rn]=meshgrid(thetan,rn);
 
@@ -291,7 +291,7 @@ else     %full 3D grid
 
       drho=rhomax-rhomin;                                                  %radius of circle, in kilometers, describing perp. directions of axisymmetric model
       xn=linspace(-1*drho,drho,lpts);                                       %N-S distance spanned by neutral model ("fake" number of grid points used here)
-      dthetan=(max(xn(:))-min(xn(:)))/rn(1);                               %equivalent theta coordinates of the neutral mesh (used in the plot of grid)
+      dthetan=(max(xn, [], 'all')-min(xn, [], 'all'))/rn(1);                               %equivalent theta coordinates of the neutral mesh (used in the plot of grid)
       thetan=linspace(sourcetheta-dthetan/2,sourcetheta+dthetan/2,lpts);    %theta coordinates of N-S distance specified
       phinhalf1=sourcephi+sqrt((dthetan/2)^2-(thetan-sourcetheta).^2);
       phinhalf2=sourcephi-sqrt((dthetan/2)^2-(thetan-sourcetheta).^2);
@@ -334,8 +334,8 @@ else     %full 3D grid
       yn=xn;              %arbitrarily let the y-extent be the same as x (our defs. of x,y left-handed here)
       rn=zn+6370;         %convert altitude to geocentric distance
 
-      dtheta=(max(xn(:))-min(xn(:)))/rn(1);    %equivalent theta coordinates of the neutral mesh
-      dphi=(max(yn(:))-min(yn(:)))/rn(1)/sin(sourcetheta);
+      dtheta=(max(xn, [], 'all')-min(xn, [], 'all'))/rn(1);    %equivalent theta coordinates of the neutral mesh
+      dphi=(max(yn, [], 'all')-min(yn, [], 'all'))/rn(1)/sin(sourcetheta);
       thetan=linspace(sourcetheta-dtheta/2,sourcetheta+dtheta/2,lpts);
       phin=linspace(sourcephi-dphi/2,sourcephi+dphi/2,lpts);
       [THETAn,PHIn,Rn]=meshgrid(thetan,phin,rn);
@@ -372,8 +372,8 @@ else     %full 3D grid
       yn=linspace(ymin,ymax,lpts);
       rn=zn+6370;         %convert altitude to geocentric distance
 
-      dtheta=(max(xn(:))-min(xn(:)))/rn(1);    %equivalent theta coordinates of the neutral mesh
-      dphi=(max(yn(:))-min(yn(:)))/rn(1)/sin(sourcetheta);
+      dtheta=(max(xn, [], 'all')-min(xn, [], 'all'))/rn(1);    %equivalent theta coordinates of the neutral mesh
+      dphi=(max(yn, [], 'all')-min(yn, [], 'all'))/rn(1)/sin(sourcetheta);
       thetan=linspace(sourcetheta-dtheta/2,sourcetheta+dtheta/2,lpts);
       phin=linspace(sourcephi-dphi/2,sourcephi+dphi/2,lpts);
       [THETAn,PHIn,Rn]=meshgrid(thetan,phin,rn);
