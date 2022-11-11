@@ -37,17 +37,8 @@ end
 
 methods (Test)
 
-function test_find_config(tc)
-tc.verifyTrue(endsWith(gemini3d.find.config(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "config.nml")))
-end
-
 function test_find_simsize(tc)
 tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.TestData.data_path), fullfile(tc.TestData.name, "inputs", "simsize.h5")))
-end
-
-function test_read_config(tc)
-cfg = gemini3d.read.config(tc.TestData.data_path);
-tc.verifyEqual(cfg.ymd, [2013,2,20])
 end
 
 function test_get_mpi_count(tc)
