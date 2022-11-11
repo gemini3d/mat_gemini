@@ -13,6 +13,9 @@ assert(~isempty(fn), "Invalid simulation directory: no simulation config file co
 %% required namelists
 p = read_namelist(fn, 'base');
 
+t0 = datetime(p.ymd(1), p.ymd(2), p.ymd(3)) + seconds(p.UTsec0);
+p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
+
 p = merge_struct(p, read_namelist(fn, 'flags'));
 p = merge_struct(p, read_namelist(fn, 'files'));
 
@@ -45,7 +48,7 @@ if ~isfield(p, 'sourcemlon'), p.sourcemlon = []; end
 p = read_if_present(p, fn, 'neutral_BG');
 
 %% precip
-p = read_if_present(p, fn,  'precip');
+p = read_if_present(p, fn, 'precip');
 % don't make prec_dir absolute here, to respect upcoming p.outdir
 
 p = read_if_present(p, fn, 'efield');
@@ -63,23 +66,9 @@ function p = read_if_present(p, fn, namelist)
 try
   p = merge_struct(p, read_namelist(fn, namelist));
 catch excp
-  if ~strcmp(excp.identifier, 'read_namelist:namelist_not_found')
+  if excp.identifier ~= "read_namelist:namelist_not_found"
     rethrow(excp)
   end
 end
 
 end
-
-% Copyright 2020 Michael Hirsch
-
-% Licensed under the Apache License, Version 2.0 (the "License");
-% you may not use this file except in compliance with the License.
-% You may obtain a copy of the License at
-
-%     http://www.apache.org/licenses/LICENSE-2.0
-
-% Unless required by applicable law or agreed to in writing, software
-% distributed under the License is distributed on an "AS IS" BASIS,
-% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-% See the License for the specific language governing permissions and
-% limitations under the License.
