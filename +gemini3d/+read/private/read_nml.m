@@ -44,12 +44,12 @@ end
 if ~isfield(p, 'sourcemlat'), p.sourcemlat = []; end
 if ~isfield(p, 'sourcemlon'), p.sourcemlon = []; end
 
-%% neutral_BG
 p = read_if_present(p, fn, 'neutral_BG');
 
-%% precip
 p = read_if_present(p, fn, 'precip');
 % don't make prec_dir absolute here, to respect upcoming p.outdir
+
+p = read_if_present(p, fn, "precip_BG");
 
 p = read_if_present(p, fn, 'efield');
 % don't make E0_dir absolute here, to respect upcoming p.outdir
