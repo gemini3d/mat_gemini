@@ -11,7 +11,7 @@ if all(isfield(cfg, ["lxp", "lyp"]))
 elseif all(isfield(cfg, ["lq", "lp", "lphi"]))
   xg = gemini3d.grid.tilted_dipole(cfg);
 else
-  error("grid does not seems to be cartesian or curvilinear")
+  error("grid does not seems to be either:\n* cartesian (lxp, lyp) \n* curvilinear (lq, lp, lphi)")
 end
 
 gemini3d.write.grid(cfg, xg);
