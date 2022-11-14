@@ -9,8 +9,8 @@ end
 gemini3d.sys.check_stdlib()
 
 %% check the input struct to make sure needed fields are present
-assert(isfield(p, "indat_grid"), "gemini3d:write:grid:file_not_found", "Field indat_grid missing...")
-assert(isfield(p, "indat_size"), "gemini3d:write:grid:file_not_found", "Field indat_size missing...")
+assert(isfield(p, "indat_grid"), "gemini3d:write:grid:keyError", "config field indat_grid missing...")
+assert(isfield(p, "indat_size"), "gemini3d:write:grid:keyError", "config field indat_size missing...")
 
 %% sanity check grid
 assert(gemini3d.check_grid(xg), 'gemini3d:write:grid:value_error', 'problematic grid values')

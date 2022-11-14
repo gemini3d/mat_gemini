@@ -25,6 +25,7 @@ end
 cfg.input_dir = fullfile(top, 'inputs');
 
 for n = ["indat_size", "indat_grid", "indat_file"]
+  assert(isfield(cfg, n), "gemini3d:fileio:make_valid_paths:keyError", "config field missing: %s", n)
   cfg.(n) = make_valid_filename(cfg.(n), top);
 end
 
