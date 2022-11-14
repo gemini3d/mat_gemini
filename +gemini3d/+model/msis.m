@@ -59,6 +59,7 @@ if isfield(p, 'activ')
   f107 = p.activ(2);
   ap = p.activ(3);
 else
+  assert(all(isfield(p, ["f107a", "f107", "Ap"])), "gemini3d:model:msis:keyError", "MSIS initialization requires config fields: f107a, f107, Ap")
   f107a = p.f107a;
   f107 = p.f107;
   ap = p.Ap;

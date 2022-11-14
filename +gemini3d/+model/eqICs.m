@@ -8,6 +8,8 @@ arguments
   xg (1,1) struct
 end
 
+assert(all(isfield(p, ["nme", "nmf"])), "gemini3d:model:eqICs:keyError", "Chapman initialization requires config fields: nme, nmf")
+
 %% MAKE UP SOME INITIAL CONDITIONS FOR FORTRAN CODE
 mindens=1e-100;
 

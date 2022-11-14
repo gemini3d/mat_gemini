@@ -29,7 +29,7 @@ lp = cfg.lp + 4;
 lphi = cfg.lphi + 4;
 
 %% DEFINE DIPOLE GRID IN Q,P COORDS.
-fprintf('tilted_dipole: Setting up q,p,phi grid of size %d x %d x %d.\n',lq-4,lp-4,lphi-4);
+disp("tilted_dipole: Setting up q,p,phi grid of size " + int2str(lq-4) + " " + int2str(lp-4) + " " + int2str(lphi-4))
 Re=6370e3;
 
 %TD SPHERICAL LOCATION OF REQUESTED CENTER POINT
@@ -38,11 +38,13 @@ Re=6370e3;
 %SETS THE EDGES OF THE GRID
 thetax2min=thetatd - deg2rad(cfg.dtheta / 2);
 thetax2max=thetatd + deg2rad(cfg.dtheta / 2);
-if thetatd < pi/2   %NH
+if thetatd < pi/2
+  % NH
   pmax=(Re+cfg.altmin)/Re/sin(thetax2min)^2;	%bottom left grid point p
   qtmp=(Re/(Re+cfg.altmin))^2*cos(thetax2min);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2max)^4/qtmp); %bottom right grid p
-else               %SH
+else
+  % SH
   pmax=(Re+cfg.altmin)/Re/sin(thetax2max)^2;	%bottom left grid point p
   qtmp=(Re/(Re+cfg.altmin))^2*cos(thetax2max);	%bottom left grid q (also bottom right)
   pmin=sqrt(cos(thetax2max)/sin(thetax2min)^4/qtmp); %bottom right grid p, why mixing of max/min here???
@@ -305,8 +307,8 @@ Bmag=(4*pi*1e-7)*7.94e22/4/pi./(r.^3).*sqrt(3*(cos(theta)).^2+1);
 
 %STORE RESULTS IN GRID DATA STRUCTURE
 disp('tilted_dipole:  Creating a grid structure with the results.')
-xg.x1=q; xg.x2=p; xg.x3=reshape(phi,[1 1 lphi]);
-xg.x1i=qi; xg.x2i=pii; xg.x3i=reshape(phii,[1 1 lphi+1]);
+xg.x1=q; xg.x2=p; xg.x3=phi;
+xg.x1i=qi; xg.x2i=pii; xg.x3i=phii;
 lx=[numel(xg.x1),numel(xg.x2),numel(xg.x3)];
 xg.lx=lx;
 
@@ -327,9 +329,9 @@ xg.dx3b=xg.dx3f;
 xg.dx3h=xg.dx3f;
 dx1=xg.x3(2)-xg.x3(1);
 dxn=xg.x3(lx(3))-xg.x3(lx(3)-1);
-xg.dx3f=cat(3,xg.x3(1,1,2:lx(3))-xg.x3(1,1,1:lx(3)-1), dxn);         %FWD DIFF
-xg.dx3b=cat(3,dx1, xg.x3(1,1,2:lx(3))-xg.x3(1,1,1:lx(3)-1));         %BACK DIFF
-xg.dx3h=xg.x3i(1,1,2:lx(3)+1)-xg.x3i(1,1,1:lx(3));              %MIDPOINT DIFFS
+xg.dx3f = [xg.x3(2:lx(3)) - xg.x3(1:lx(3)-1), dxn];         %FWD DIFF
+xg.dx3b = [dx1, xg.x3(2:lx(3)) - xg.x3(1:lx(3)-1)];         %BACK DIFF
+xg.dx3h=xg.x3i(2:lx(3)+1)-xg.x3i(1:lx(3));              %MIDPOINT DIFFS
 
 xg.h1=hq; xg.h2=hp; xg.h3=hphi;
 xg.h1x1i=hqqi; xg.h2x1i=hpqi; xg.h3x1i=hphiqi;
