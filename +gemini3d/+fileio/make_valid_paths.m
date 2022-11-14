@@ -1,9 +1,8 @@
-function cfg = make_valid_paths(cfg, top, file_format)
+function cfg = make_valid_paths(cfg, top)
 %% resolve all paths in the config struct
 arguments
   cfg (1,1) struct
   top string = string.empty
-  file_format string = string.empty
 end
 
 import stdlib.fileio.with_suffix
@@ -27,9 +26,6 @@ cfg.input_dir = fullfile(top, 'inputs');
 
 for n = ["indat_size", "indat_grid", "indat_file"]
   cfg.(n) = make_valid_filename(cfg.(n), top);
-  if ~isempty(file_format)
-    cfg.(n) = with_suffix(cfg.(n), "." + file_format);
-  end
 end
 
 for n = ["eq_dir", "eq_archive", "E0_dir", "prec_dir"]
