@@ -4,12 +4,9 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-file(READ ${CMAKE_CURRENT_LIST_DIR}/codemeta.json _libj)
-string(JSON PROJECT_VERSION GET ${_libj} version)
-
 project(MatGemini
 LANGUAGES NONE
-VERSION ${PROJECT_VERSION}
+VERSION 5.5.0
 )
 
 enable_testing()
@@ -30,15 +27,13 @@ include(cmake/gemini3d.cmake)
 
 # -- MatGemini testing
 
-cmake_path(SET setup_m ${CMAKE_CURRENT_SOURCE_DIR}/setup.m)
+set(setup_m ${CMAKE_CURRENT_SOURCE_DIR}/setup.m)
 
 add_test(NAME Lint
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}Lint'); assert(~isempty(r)), assertSuccess(r)"
-WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-set_tests_properties(Lint PROPERTIES
-TIMEOUT 120
-FIXTURES_SETUP lint_fxt
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "issues = codeIssues; assert(isempty(issues.Issues))"
 )
+set_property(TEST Lint PROPERTY FIXTURES_SETUP lint_fxt)
+set_property(TEST Lint PROPERTY DISABLED $<VERSION_LESS:${Matlab_VERSION_STRING},9.13>)
 
 # --- unit tests
 
@@ -46,12 +41,13 @@ set(unit_tests Unit Grid)
 
 foreach(n ${unit_tests})
 
-  add_test(NAME ${n}
-  COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}${n}'); assert(~isempty(r)), assertSuccess(r)"
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-  )
+add_test(NAME ${n}
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}${n}'); assert(~isempty(r)), assertSuccess(r)"
+)
 
 endforeach()
+
+set_property(TEST Lint ${unit_tests} PROPERTY WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # --- MSIS tests
 
@@ -60,15 +56,10 @@ COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}MSI
 )
 
 set_tests_properties(${unit_tests} MSIS PROPERTIES
-TIMEOUT 120
 REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED lint_fxt
 FIXTURES_SETUP unit_fxt
 )
-set_tests_properties(MSIS PROPERTIES
-ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
-)
-
 # --- data download tests
 
 add_test(NAME DataIO
@@ -76,8 +67,6 @@ COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Dat
 )
 
 set_tests_properties(DataIO PROPERTIES
-TIMEOUT 120
-REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED unit_fxt
 FIXTURES_SETUP io_fxt
 )
@@ -88,19 +77,13 @@ add_test(NAME Dryrun
 COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Dryrun'); assert(~isempty(r)), assertSuccess(r)"
 )
 set_tests_properties(Dryrun PROPERTIES
-TIMEOUT 240
-REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED io_fxt
 FIXTURES_SETUP dryrun_fxt
-ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
 )
 
 add_test(NAME Project
 COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Project'); assert(~isempty(r)), assertSuccess(r)"
 )
-set_tests_properties(Project PROPERTIES
-TIMEOUT 240
-REQUIRED_FILES ${setup_m}
-FIXTURES_REQUIRED dryrun_fxt
-ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}"
-)
+set_property(TEST Project PROPERTY FIXTURES_REQUIRED dryrun_fxt)
+
+set_property(TEST Dryrun MSIS Project PROPERTY ENVIRONMENT "GEMINI_ROOT=${GEMINI_ROOT}")

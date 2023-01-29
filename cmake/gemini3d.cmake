@@ -1,13 +1,12 @@
 include(ExternalProject)
 
 
-cmake_path(SET GEMINI_ROOT ${PROJECT_BINARY_DIR})
+set(GEMINI_ROOT ${PROJECT_BINARY_DIR})
 
 set(gemini_args
 -DCMAKE_BUILD_TYPE=Release
 -DBUILD_SHARED_LIBS:BOOL=off
 -DBUILD_TESTING:BOOL=off
--Dmpi:BOOL=on
 -Dmsis2:BOOL=${msis2}
 -Dglow:BOOL=${glow}
 -Dhwm14:BOOL=${hwm14}
@@ -33,7 +32,6 @@ ExternalProject_Add(GEMINI3D
 GIT_REPOSITORY ${gemini3d_url}
 GIT_TAG ${gemini3d_tag}
 CMAKE_ARGS ${gemini_args}
-CMAKE_GENERATOR ${EXTPROJ_GENERATOR}
 INACTIVITY_TIMEOUT 15
 CONFIGURE_HANDLED_BY_BUILD true
 )

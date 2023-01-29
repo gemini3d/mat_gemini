@@ -9,6 +9,3 @@ resources/project/
 
 +gemini3d/+test/data/
 +gemini3d/+test/ref_data.json
-
-code-coverage/
-test-results/
