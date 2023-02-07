@@ -3,6 +3,7 @@ name: matlab
 env:
   GEMINI_CIROOT: ~/ci
   CMAKE_BUILD_TYPE: Release
+  CTEST_NO_TESTS_ACTION: error
 
 on:
   push:
