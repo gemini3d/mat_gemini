@@ -14,6 +14,10 @@ on:
     - ".github/workflows/ci.yml"
     - "!scripts/**"
 
+# R2020a is missing several "mustBe" functions
+# https://www.mathworks.com/support/requirements/supported-compilers-linux.html
+# R2020b, R2021a, R2021b: max GCC version=9
+# R2022a, R2022b: max GCC version=10
 
 jobs:
 
@@ -23,15 +27,25 @@ jobs:
 
     strategy:
       matrix:
-        release: [R2020b, R2021a, R2021b, R2022a, R2022b]
-      # R2020a is missing several "mustBe" functions
+        cfg: [
+            { release: R2020b, cc: gcc-9, cxx: g++-9, fc: gfortran-9},
+            { release: R2021a, cc: gcc-9, cxx: g++-9, fc: gfortran-9},
+            { release: R2021b, cc: gcc-9, cxx: g++-9, fc: gfortran-9},
+            { release: R2022a, cc: gcc-10, cxx: g++-10, fc: gfortran-10},
+            { release: R2022b, cc: gcc-10, cxx: g++-10, fc: gfortran-10}
+            ]
+
+    env:
+      CC: ${{ matrix.cfg.cc }}
+      CXX: ${{ matrix.cfg.cxx }}
+      FC: ${{ matrix.cfg.fc }}
 
     steps:
 
     - name: Install MATLAB
       uses: matlab-actions/setup-matlab@v1
       with:
-        release: ${{ matrix.release }}
+        release: ${{ matrix.cfg.release }}
 
     - name: Checkout Gemini3D-External
       uses: actions/checkout@v3
@@ -77,14 +91,14 @@ jobs:
         submodules: true
 
     - name: Run Matlab tests (buildtool)
-      if: ${{ matrix.release == 'R2022b' }}
+      if: ${{ matrix.cfg.release == 'R2022b' }}
       timeout-minutes: 15
       uses: matlab-actions/run-build@v1
       env:
         GEMINI_ROOT: ${{ runner.temp }}
 
     - name: Run tests (manual)
-      if: ${{ matrix.release != 'R2022b' }}
+      if: ${{ matrix.cfg.release != 'R2022b' }}
       timeout-minutes: 15
       uses: matlab-actions/run-command@v1
       with:
