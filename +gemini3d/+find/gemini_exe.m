@@ -16,7 +16,7 @@ bindirs = [".", "bin", "build", "build/bin", ...
 for p = paths
   if isempty(p), continue, end
   for b = bindirs
-    exe = stdlib.fileio.which(name, fullfile(p, b));
+    exe = stdlib.which(name, fullfile(p, b));
     if ~isempty(exe)
       return
     end

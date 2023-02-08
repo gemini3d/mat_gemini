@@ -5,7 +5,7 @@ arguments
   tol (1,1) struct
 end
 
-assert(stdlib.fileio.samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
+assert(stdlib.samepath(new_dir, ref_dir), new_dir + " and " + ref_dir + " are the same folder.")
 
 %% READ IN THE SIMULATION INFORMATION
 params = gemini3d.read.config(new_dir);

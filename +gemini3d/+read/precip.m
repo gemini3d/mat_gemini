@@ -6,7 +6,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-filename = stdlib.fileio.expanduser(filename);
+filename = stdlib.expanduser(filename);
 
 if ~isempty(time)
   filename = gemini3d.find.frame(filename, time);

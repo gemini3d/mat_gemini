@@ -26,7 +26,7 @@ end % function
 
 function write_hdf5(fn, ics)
 
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 disp("write " + fn)
 if isfile(fn), delete(fn), end

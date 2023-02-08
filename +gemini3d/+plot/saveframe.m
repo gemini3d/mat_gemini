@@ -12,9 +12,9 @@ dpi = 150;
 % filename has the suffix, let's ditch the suffix.
 [~, stem] = fileparts(filename);
 
-plotdir = fullfile(stdlib.fileio.expanduser(direc), "plots");
+plotdir = fullfile(stdlib.expanduser(direc), "plots");
 
-stdlib.fileio.makedir(plotdir)
+stdlib.makedir(plotdir)
 
 pp = ["v1", "Ti", "Te", "J1", "v2", "v3", "J2", "J3", "Phitop", "ne"];
 assert(length(pp) == length(h), "number of figures ~= number of variables")

@@ -4,7 +4,7 @@ arguments
   only (1,:) string = string.empty
 end
 
-import stdlib.fileio.expanduser
+import stdlib.expanduser
 
 topdir = expanduser(topdir);
 

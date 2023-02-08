@@ -4,13 +4,13 @@ arguments
 end
 
 t = datetime.empty;
-vars = stdlib.hdf5nc.h5variables(file);
+vars = stdlib.h5variables(file);
 
 if any(vars == "ymd")
 
   i = "";
 else
-  vars = stdlib.hdf5nc.h5variables(file, "/time");
+  vars = stdlib.h5variables(file, "/time");
   if any(vars == "ymd")
     i = "/time";
   else

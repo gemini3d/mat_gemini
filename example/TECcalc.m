@@ -9,7 +9,7 @@ basedir='~/simulations/';
 direc = fullfile(basedir, simname);
 direc_control = fullfile(basedir, simname_control);
 
-stdlib.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
+stdlib.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
 
 
 %READ IN THE SIMULATION INFORMATION

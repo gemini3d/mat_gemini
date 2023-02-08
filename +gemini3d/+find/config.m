@@ -6,7 +6,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-direc = stdlib.fileio.expanduser(direc);
+direc = stdlib.expanduser(direc);
 
 filename = string.empty;
 

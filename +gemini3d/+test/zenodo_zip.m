@@ -8,7 +8,7 @@ arguments
   saveplot_fmt (1,:) string = "png"
 end
 
-import stdlib.fileio.expanduser
+import stdlib.expanduser
 
 path = expanduser(path);
 

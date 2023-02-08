@@ -5,12 +5,12 @@ arguments
   top string = string.empty
 end
 
-import stdlib.fileio.with_suffix
+import stdlib.with_suffix
 
 if isfield(cfg, 'outdir')
-  cfg.outdir = stdlib.fileio.expanduser(cfg.outdir);
+  cfg.outdir = stdlib.expanduser(cfg.outdir);
 elseif ~isempty(top)
-  cfg.outdir = stdlib.fileio.expanduser(top);
+  cfg.outdir = stdlib.expanduser(top);
 else
   error('must specify output directory')
 end
@@ -19,7 +19,7 @@ end
 if isempty(top)
   top = cfg.outdir;
 else
-  top = stdlib.fileio.expanduser(top);
+  top = stdlib.expanduser(top);
 end
 
 cfg.input_dir = fullfile(top, 'inputs');
@@ -42,10 +42,10 @@ function folder = make_valid_folder(folder, top)
 
 folder = gemini3d.fileio.expand_envvar(folder);
 
-folder = stdlib.fileio.expanduser(folder);
+folder = stdlib.expanduser(folder);
 % in case absolute path was specified
 
-if ~isfolder(folder) && ~stdlib.fileio.is_absolute_path(folder)
+if ~isfolder(folder) && ~stdlib.is_absolute_path(folder)
   folder = fullfile(top, folder);
 end
 
@@ -56,7 +56,7 @@ function filename = make_valid_filename(filename, top)
 
 filename = gemini3d.fileio.expand_envvar(filename);
 
-filename = stdlib.fileio.expanduser(filename);
+filename = stdlib.expanduser(filename);
 % in case absolute path was specified
 
 if ~isfolder(fileparts(filename))

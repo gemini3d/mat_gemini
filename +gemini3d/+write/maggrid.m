@@ -5,7 +5,7 @@ arguments
   xmag (1,1) struct
 end
 
-import stdlib.fileio.expanduser
+import stdlib.expanduser
 
 filename = expanduser(filename);
 
@@ -40,7 +40,7 @@ end %function
 
 function writemagh5(fn, mag, gridsize)
 
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 % hdf5 files can optionally store a gridsize variable which tells readers how to
 % reshape the data into 2D or 3D arrays.

@@ -6,8 +6,8 @@ arguments
   cfg (1,1) struct
 end
 
-import stdlib.fileio.expanduser
-import stdlib.fileio.posix
+import stdlib.expanduser
+import stdlib.posix
 
 filename = expanduser(filename);
 

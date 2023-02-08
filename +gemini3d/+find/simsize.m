@@ -7,7 +7,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-apath = stdlib.fileio.expanduser(apath);
+apath = stdlib.expanduser(apath);
 
 file = string.empty;
 

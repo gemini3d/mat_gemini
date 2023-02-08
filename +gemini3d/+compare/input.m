@@ -5,7 +5,7 @@ arguments
   tol (1,1) struct
 end
 
-assert(~stdlib.fileio.samepath(new_dir, ref_dir), "gemini3d:compare:samepath_error", new_dir + " and " + ref_dir + " are the same folder.")
+assert(~stdlib.samepath(new_dir, ref_dir), "gemini3d:compare:samepath_error", new_dir + " and " + ref_dir + " are the same folder.")
 
 %% check simulation grid
 gemini3d.compare.grid(new_dir, ref_dir, tol.rtol, tol.atol)

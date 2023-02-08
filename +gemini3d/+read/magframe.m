@@ -14,7 +14,7 @@ gemini3d.sys.check_stdlib()
 % make sure to add the default directory where the magnetic fields are to
 % be found
 
-filename = stdlib.fileio.expanduser(filename);
+filename = stdlib.expanduser(filename);
 
 direc = fileparts(filename);
 basemagdir = fullfile(direc,"magfields");

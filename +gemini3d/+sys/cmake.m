@@ -10,8 +10,8 @@ end
 
 % must be absolute path for Unix-like, where cannot traverse upwards from non-existent dir
 % build_dir needs it as well or CMake will use pwd instead
-src_dir = stdlib.fileio.posix(stdlib.fileio.absolute_path(src_dir));
-build_dir = stdlib.fileio.posix(stdlib.fileio.absolute_path(build_dir));
+src_dir = stdlib.posix(stdlib.absolute_path(src_dir));
+build_dir = stdlib.posix(stdlib.absolute_path(build_dir));
 
 assert(isfolder(src_dir), "source directory not found: %s", src_dir)
 assert(isfile(fullfile(src_dir, "CMakeLists.txt")), "%s does not contain CMakeLists.txt", src_dir)

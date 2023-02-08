@@ -10,7 +10,7 @@ if ~isempty(time)
   filename = gemini3d.find.frame(filename, time);
 end
 
-filename = stdlib.fileio.expanduser(filename);
+filename = stdlib.expanduser(filename);
 
 assert(~isempty(filename) && isfile(filename), "Invalid simulation directory: no E-field file found")
 
@@ -24,7 +24,7 @@ function dat = load_h5(filename)
 dat = struct();
 
 Evars = ["flagdirich", "Exit", "Eyit", "Vminx1it", "Vmaxx1it", "Vminx2ist", "Vmaxx2ist", "Vminx3ist", "Vmaxx3ist"];
-vars = stdlib.hdf5nc.h5variables(filename);
+vars = stdlib.h5variables(filename);
 
 for k = Evars
   if any(vars == k)

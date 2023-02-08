@@ -20,7 +20,7 @@ assert(gemini3d.check_grid(xg), 'gemini3d:write:grid:value_error', 'problematic 
 % because grid is so important, and to catch bugs in file I/O early, let's verify the file
 
 gdir = fileparts(p.indat_grid);
-stdlib.fileio.makedir(gdir)
+stdlib.makedir(gdir)
 
 write_grid_hdf5(p, xg)
 

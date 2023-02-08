@@ -7,11 +7,11 @@ gemini3d.sys.check_stdlib()
 
 assert(gemini3d.sys.has_mapping(), "Mapping Toolbox is needed")
 
-direc = stdlib.fileio.expanduser(direc);
+direc = stdlib.expanduser(direc);
 
 %SIMULATIONS LOCAITON
 pdir = fullfile(direc, "plots");
-stdlib.fileio.makedir(pdir)
+stdlib.makedir(pdir)
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);

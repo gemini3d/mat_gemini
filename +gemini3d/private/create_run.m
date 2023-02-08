@@ -14,7 +14,7 @@ else
   env = struct.empty;
 end
 
-ret = stdlib.sys.subprocess_run(cmd, env);
+ret = stdlib.subprocess_run(cmd, env);
 
 assert(ret == 0, 'Gemini dryrun failed')
 

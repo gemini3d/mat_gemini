@@ -37,7 +37,7 @@ tol.atolT = 100;
 tol.atolJ = 1e-7;
 tol.atolV = 50;
 
-assert(~stdlib.fileio.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
+assert(~stdlib.samepath(outdir, refdir), outdir + " and " + refdir + " are the same folder.")
 
 %% check output dirs
 if any(opts.only == "out")

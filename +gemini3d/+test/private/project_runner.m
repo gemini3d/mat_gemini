@@ -18,11 +18,11 @@ tc.assumeNotEmpty(p)
 p.outdir = tc.TestData.outdir;
 
 for k = ["indat_file", "indat_size", "indat_grid"]
-  p.(k) = stdlib.fileio.with_suffix(p.(k), ".h5");
+  p.(k) = stdlib.with_suffix(p.(k), ".h5");
 end
 %% patch eq_dir to use reference data
 if isfield(p, 'eq_dir')
-  eq_dir = fullfile(fileparts(test_dir), stdlib.fileio.path_tail(p.eq_dir));
+  eq_dir = fullfile(fileparts(test_dir), stdlib.path_tail(p.eq_dir));
   if isfolder(eq_dir)
     disp("Using " + eq_dir + " for equilibrium data")
     p.eq_dir = eq_dir;

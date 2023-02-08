@@ -35,7 +35,7 @@ end
 gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revision(fileparts(gemini_exe)), cfg)
 
 disp("run: " + join(cmd, " "))
-ret = stdlib.sys.subprocess_run(cmd);
+ret = stdlib.subprocess_run(cmd);
 assert(ret == 0, 'Gemini run failed, error code %d', ret)
 
 end % function
@@ -43,9 +43,9 @@ end % function
 
 function cmd = gemini_cmd(exe, outdir, mpi_exe)
 
-import stdlib.sys.winpath2wslpath
+import stdlib.winpath2wslpath
 
-if stdlib.fileio.is_wsl_path(exe)
+if stdlib.is_wsl_path(exe)
   cmd = ["wsl", winpath2wslpath(exe), winpath2wslpath(outdir)];
 else
   cmd = [exe, outdir];
@@ -61,7 +61,7 @@ end
 function dryrun(cmd)
 
 disp("dryrun: " + join(cmd, " "))
-[ret, msg] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
+[ret, msg] = stdlib.subprocess_run([cmd, "-dryrun"]);
 if ret == 0
   % check for operating system failure that returned 0 but did nothing or failed
   assert(contains(msg, "OK: Gemini dry run"), cmd(1) + " didn't run correctly." + msg)

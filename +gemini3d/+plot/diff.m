@@ -59,7 +59,7 @@ ttxt = name + "  " + tstr + "maxDiff: " + string(maxdiff);
 sgtitle(fg, ttxt)
 
 plot_dir = fullfile(newdir, "plot_diff");
-stdlib.fileio.makedir(plot_dir)
+stdlib.makedir(plot_dir)
 
 fn = fullfile(plot_dir, name + "-" + tstr + ".png");
 disp("write: " + fn)

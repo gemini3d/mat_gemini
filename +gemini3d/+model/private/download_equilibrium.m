@@ -5,8 +5,8 @@ arguments
   ssl_verify (1,1) logical
 end
 
-stdlib.fileio.makedir(fileparts(archive))
+stdlib.makedir(fileparts(archive))
 
-websave(archive, url, gemini3d.fileio.web_opt(ssl_verify));
+websave(archive, url, gemini3d.web_opt(ssl_verify));
 
 end

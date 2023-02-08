@@ -16,7 +16,7 @@ end % function
 
 function lxs = read_h5(fn)
 
-varnames = stdlib.hdf5nc.h5variables(fn);
+varnames = stdlib.h5variables(fn);
 
 if any(varnames == "lxs")
   lxs = h5read(fn, '/lxs');

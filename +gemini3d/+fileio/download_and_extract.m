@@ -11,7 +11,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-data_dir = stdlib.fileio.expanduser(data_dir);
+data_dir = stdlib.expanduser(data_dir);
 test_dir = fullfile(data_dir, name);
 if isfolder(test_dir)
   return
@@ -37,9 +37,9 @@ if isempty(url_file)
   end
 end
 
-stdlib.fileio.makedir(data_dir)
+stdlib.makedir(data_dir)
 
-urls = jsondecode(fileread(stdlib.fileio.expanduser(url_file)));
+urls = jsondecode(fileread(stdlib.expanduser(url_file)));
 
 archive = fullfile(data_dir, urls.tests.(name).archive);
 
@@ -63,7 +63,7 @@ arguments
 end
 
 if isfield(urls.(name), "sha256")
-  if stdlib.fileio.sha256sum(archive) ~= urls.(name).sha256
+  if stdlib.sha256sum(archive) ~= urls.(name).sha256
     warning('gemini3d:fileio:download_and_extract:hash_error', ...
       '%s sha256 hash does not match, file may be corrupted', archive)
   end

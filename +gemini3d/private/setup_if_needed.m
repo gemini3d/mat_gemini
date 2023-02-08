@@ -5,7 +5,7 @@ function cfg = setup_if_needed(opts, outdir, config_path)
     config_path (1,1) string
   end
 
-  import stdlib.fileio.expanduser
+  import stdlib.expanduser
 
   config_path = expanduser(config_path);
   outdir = expanduser(outdir);

@@ -5,8 +5,8 @@ end
 
 gemini3d.sys.check_stdlib()
 
-stdlib.fileio.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
-stdlib.fileio.makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
+stdlib.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
+stdlib.makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
 
 
 %LOAD THE COMPUTED TEC DATA

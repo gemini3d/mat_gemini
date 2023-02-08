@@ -12,7 +12,7 @@ end
 
 names = string.empty;
 j = 1;
-dirs = dir(stdlib.fileio.expanduser(topdir));
+dirs = dir(stdlib.expanduser(topdir));
 for i = 1:length(dirs)
   if dirs(i).isdir && length(dirs(i).name) > 2
     [~, name] = fileparts(dirs(i).name);

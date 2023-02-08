@@ -8,7 +8,7 @@ arguments
   outdir (1,1) string
 end
 
-stdlib.fileio.makedir(outdir)
+stdlib.makedir(outdir)
 
 disp("write precip to: " + outdir)
 
@@ -18,7 +18,7 @@ end % function
 
 
 function write_hdf5(outdir, pg)
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 fn = fullfile(outdir, 'simsize.h5');
 if isfile(fn), delete(fn), end

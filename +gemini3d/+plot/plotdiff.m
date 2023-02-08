@@ -13,8 +13,8 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
-ref_path = stdlib.fileio.expanduser(ref_path);
-new_path = stdlib.fileio.expanduser(new_path);
+ref_path = stdlib.expanduser(ref_path);
+new_path = stdlib.expanduser(new_path);
 
 if isempty(time)
   assert(isfile(ref_path), "%s is not a file", ref_path)

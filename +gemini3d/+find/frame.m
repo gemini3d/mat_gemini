@@ -11,7 +11,7 @@ filename = string.empty;
 
 stem0 = gemini3d.datelab(time);
 
-direc = stdlib.fileio.expanduser(direc);
+direc = stdlib.expanduser(direc);
 % so that we return a usable path
 
 stem = stem0;

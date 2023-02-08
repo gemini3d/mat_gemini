@@ -6,7 +6,7 @@ end
 
 nan_check(E)
 
-stdlib.fileio.makedir(dir_out)
+stdlib.makedir(dir_out)
 
 write_hdf5(dir_out, E)
 
@@ -23,7 +23,7 @@ end % function
 
 function write_hdf5(dir_out, E)
 
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 fn = fullfile(dir_out, 'simsize.h5');
 if isfile(fn), delete(fn), end

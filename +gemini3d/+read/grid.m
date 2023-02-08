@@ -22,7 +22,7 @@ end % function
 
 function xgf = read_hdf5(fn)
 
-for v = stdlib.hdf5nc.h5variables(fn)
+for v = stdlib.h5variables(fn)
   xgf.(v) = h5read(fn, "/" + v);
 end
 

@@ -45,7 +45,7 @@ end % function
 
 function msis_input(p, xg, time, file)
 
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 if isfield(p, "msis_version")
   msis_version = p.msis_version;
@@ -89,14 +89,14 @@ end
 
 function msis_run(exe, in, out)
 
-if stdlib.fileio.is_wsl_path(exe)
-  cmd = ["wsl", stdlib.sys.winpath2wslpath(exe), stdlib.sys.winpath2wslpath(in), stdlib.sys.winpath2wslpath(out)];
+if stdlib.is_wsl_path(exe)
+  cmd = ["wsl", stdlib.winpath2wslpath(exe), stdlib.winpath2wslpath(in), stdlib.winpath2wslpath(out)];
 else
   cmd = [exe, in, out];
 end
 
 disp(join(cmd, " "))
-[stat, msg] = stdlib.sys.subprocess_run(cmd);
+[stat, msg] = stdlib.subprocess_run(cmd);
 % output written to file
 switch stat
   case 0  % good

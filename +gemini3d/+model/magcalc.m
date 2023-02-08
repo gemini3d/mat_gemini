@@ -7,7 +7,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-direc = stdlib.fileio.expanduser(direc);
+direc = stdlib.expanduser(direc);
 assert(isfolder(direc), direc + " is not a directory")
 
 %SIMULATION META-DATA

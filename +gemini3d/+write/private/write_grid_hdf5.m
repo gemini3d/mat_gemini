@@ -1,6 +1,6 @@
 function write_grid_hdf5(p, xg)
 
-import stdlib.hdf5nc.h5save
+import stdlib.h5save
 
 %% size
 fn = p.indat_size;

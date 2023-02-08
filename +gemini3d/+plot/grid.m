@@ -13,7 +13,7 @@ if isempty(only)
   only = ["basic", "alt", "ecef", "geog"];
 end
 
-direc = stdlib.fileio.expanduser(direc);
+direc = stdlib.expanduser(direc);
 
 xg = gemini3d.read.grid(direc);
 
@@ -48,7 +48,7 @@ end
 %% save
 if ~isempty(save)
   pdir = fullfile(direc, "plots");
-  stdlib.fileio.makedir(pdir)
+  stdlib.makedir(pdir)
   for f = h
     filename = fullfile(pdir, "grid-" + f.Name + "." + save);
     disp("writing " + filename)

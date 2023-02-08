@@ -23,7 +23,7 @@ end
 
 gemini3d.sys.check_stdlib()
 
-filename = stdlib.fileio.expanduser(filename);
+filename = stdlib.expanduser(filename);
 
 if ~isfile(filename)
   if ~isempty(opts.time)
@@ -100,7 +100,7 @@ arguments
   cfg struct
 end
 
-vars = stdlib.hdf5nc.h5variables(filename);
+vars = stdlib.h5variables(filename);
 if any(vars == "nsall")
   disp('Full or milestone input detected.')
   flag = 1;
