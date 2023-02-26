@@ -11,6 +11,7 @@ on:
     - "**.m"
     - "**.cmake"
     - "**/CMakeLists.txt"
+    - "cmake/libraries.json"
     - ".github/workflows/ci.yml"
     - "!scripts/**"
 
