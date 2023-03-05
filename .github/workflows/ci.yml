@@ -24,7 +24,7 @@ jobs:
 
   linux:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
