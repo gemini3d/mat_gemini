@@ -19,17 +19,24 @@ Determine this location by from Windows Terminal:
 wsl --list
 ```
 
-Note the name of the "default" distro--let's assume it's Ubuntu-22.04.
-Then in Windows PowerShell set GEMINI_ROOT environment variable like:
+the typical result is like:
 
 ```
-$env:GEMINI_ROOT="\\wsl$\Ubuntu-22.04\home\username\libgem_gnu"
+Windows Subsystem for Linux Distributions:
+Ubuntu (Default)
 ```
 
-Note: use the full WSL path you installed Gemini3D to, not the literal text above.
-You can see the path from Windows Explorer using the filepath syntax above.
-You can set the environment variable in Matlab like:
+Note the name of the "default" distro.
+
+Check in Windows Explorer for the path to the Gemini3D install in WSL. 
+It might be like (for username "me"):
+
+```
+\\wsl$\Ubuntu\home\me\libgem_gnu
+```
+
+Set the environment variable in Matlab like:
 
 ```matlab
-setenv("GEMINI_ROOT", "\\wsl$\Ubuntu-22.04\home\username\libgem_gnu")
+setenv("GEMINI_ROOT", "\\wsl$\Ubuntu\home\me\libgem_gnu")
 ```
