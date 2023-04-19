@@ -57,10 +57,10 @@ end %if
 %There needs to be a separate transformation here for each coordinate system that the model
 % may use...
 if (flagcurv==1)
-    [qi,pei,phii]= gemscr.geomag2dipole(ALTi,MLONi,MLATi);
+    [qi,pei,phii]= gemini3d.grid.geomag2dipole(ALTi,MLONi,MLATi);
     x1i=qi(:); x2i=pei(:); x3i=phii(:);
 elseif (flagcurv==0)
-    [zUENi,xUENi,yUENi]= gemscr.geomag2UENgeomag(ALTi,MLONi,MLATi);
+    [zUENi,xUENi,yUENi]= gemini3d.grid.geomag2UENgeomag(ALTi,MLONi,MLATi);
     x1i=zUENi(:); x2i=xUENi(:); x3i=yUENi(:);
 else
     error('Unsupported grid type...');
