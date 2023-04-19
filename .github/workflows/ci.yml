@@ -17,13 +17,13 @@ on:
 
 # R2020a is missing several "mustBe" functions
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
-# R2020b, R2021a, R2021b: max GCC version=9
-# R2022a, R2022b: max GCC version=10
+# R2020b, R2021a, R2021b: GCC version=9
+# R2022a, R2022b: GCC version=10
 
 jobs:
 
   linux:
-    timeout-minutes: 15
+    timeout-minutes: 30
     runs-on: ${{ matrix.os }}
 
     strategy:
