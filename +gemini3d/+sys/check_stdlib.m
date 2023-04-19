@@ -1,4 +1,11 @@
-function check_stdlib()
+function is_ok = check_stdlib()
+
+persistent stdlib_ok
+
+if ~isempty(stdlib_ok) && stdlib_ok
+  if nargout > 0, is_ok = stdlib_ok; end
+  return
+end
 
 cwd = fileparts(mfilename('fullpath'));
 r = fullfile(cwd, "../..");
@@ -19,5 +26,8 @@ end
 if ~contains(path(), r)
   addpath(p.path)
 end
+
+stdlib_ok = true;
+if nargout > 0, is_ok = stdlib_ok; end
 
 end
