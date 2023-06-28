@@ -229,7 +229,7 @@ for it=1:length(cfg.times)
       axis tight;
       caxlim= max(abs(dvTEC(:,:,it)), [], 'all');
       caxlim=max(caxlim,0.01);
-      if verLessThan('matlab', '9.12')
+      if isMATLABReleaseOlderThan('R2022a')
         caxis([-1*caxlim, caxlim]) %#ok<CAXIS>
       else
         clim([-1*caxlim, caxlim])
@@ -263,7 +263,7 @@ if (flag2D)
   axis xy;
   datetick;
   axis tight;
-  if verLessThan('matlab', '9.12')
+  if isMATLABReleaseOlderThan('R2022a')
     caxis([-max(abs(dvTEC), [], 'all'), max(abs(dvTEC), [], 'all')]) %#ok<CAXIS>
   else
     clim([-max(abs(dvTEC), [], 'all'), max(abs(dvTEC), [], 'all')])

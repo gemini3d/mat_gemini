@@ -8,7 +8,7 @@ set(ax, 'ydir', 'normal')
 
 colormap(ax, P.cmap)
 if ~isempty(P.caxlims) && all(~isnan(P.caxlims)) && P.caxlims(1) < P.caxlims(2)
-  if verLessThan('matlab', '9.12')
+  if isMATLABReleaseOlderThan('R2022a')
     caxis(ax, P.caxlims) %#ok<CAXIS>
   else
     clim(ax, P.caxlims)

@@ -1,7 +1,7 @@
 function setup()
 %% run this before running Gemini Matlab scripts
 
-assert(~verLessThan('matlab', '9.9'), 'MatGemini requires Matlab >= R2020b. You are running Matlab %s', version())
+assert(~isMATLABReleaseOlderThan('R2020b'), 'MatGemini requires Matlab >= R2020b. You are running Matlab %s', version())
 
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)

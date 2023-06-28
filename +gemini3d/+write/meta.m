@@ -26,7 +26,7 @@ if isfield(cfg, "eq_dir")
   end
 end
 
-if verLessThan('matlab', '9.10')
+if isMATLABReleaseOlderThan('R2021a')
   json = jsonencode(js);
 else
   json = jsonencode(js, "PrettyPrint", true);

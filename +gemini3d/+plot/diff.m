@@ -111,7 +111,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [bmin, bmax]) %#ok<CAXIS>
 else
   clim(ax, [bmin, bmax])
@@ -124,7 +124,7 @@ colorbar(ax)
 if ~isempty(cmap)
   colormap(ax, cmap)
 end
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [bmin, bmax]) %#ok<CAXIS>
 else
   clim(ax, [bmin, bmax])
@@ -141,7 +141,7 @@ set(hi, "EdgeColor", "none")
 colorbar(ax)
 colormap(gemini3d.plot.bwr())
 
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [-b, b]) %#ok<CAXIS>
 else
   clim(ax, [-b, b])

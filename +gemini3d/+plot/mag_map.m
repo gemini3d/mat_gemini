@@ -152,7 +152,7 @@ colormap(ax, gemini3d.plot.bwr());
 tightmap
 caxlim=max(abs(param), [], 'all');
 caxlim=max(caxlim,0.001);
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>
 else
   clim(ax, [-caxlim,caxlim])
@@ -186,7 +186,7 @@ colormap(ax, gemini3d.plot.bwr())
 tightmap
 caxlim=max(abs(param), [], 'all');
 caxlim=max(caxlim, 0.001);
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>
 else
   clim(ax, [-caxlim,caxlim])
@@ -219,7 +219,7 @@ colormap(ax, gemini3d.plot.bwr())
 tightmap
 caxlim=max(abs(param), [], 'all');
 caxlim=max(caxlim,0.001);
-if verLessThan('matlab', '9.12')
+if isMATLABReleaseOlderThan('R2022a')
   caxis(ax, [-caxlim,caxlim]) %#ok<CAXIS>
 else
   clim(ax, [-caxlim,caxlim])

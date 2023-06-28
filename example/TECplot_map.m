@@ -57,7 +57,7 @@ for it=1:length(cfg.times)
     colormap(cmap);
     set(gca,'FontSize',FS);
     tightmap;
-    if verLessThan('matlab', '9.12')
+    if isMATLABReleaseOlderThan('R2022a')
         caxis([-0.5,0.5]) %#ok<CAXIS>
     else
     %    clim([-3,3]);
