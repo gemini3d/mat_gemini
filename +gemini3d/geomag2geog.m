@@ -1,4 +1,6 @@
 function [lat,lon] = geomag2geog(thetat,phit)
+%% geomag2geog converts geomagnetic coordinates to geographic coordinates
+% does not account for geomagnetic changes over time
 arguments
   thetat {mustBeNumeric}
   phit {mustBeNumeric}

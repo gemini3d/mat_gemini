@@ -1,6 +1,5 @@
 function strlab = datelab(time)
-% convert gemini time format to string
-% microsecond resolution
+% convert datetime to Gemini3D string filename time: microsecond resolution
 arguments
   time datetime
 end

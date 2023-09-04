@@ -1,4 +1,8 @@
 function [z,x,y] = geog2UEN(alt,glon,glat,thetactr,phictr)
+%% geog2UEN Converts geographic lon, lat into magnetic up, north, east coordinates.
+% thetactr and phictr are the magnetic coordinates of the center of the region of interest.
+%They can be computed from geog2geomag.
+
 arguments
   alt {mustBeNumeric}
   glon {mustBeNumeric}
@@ -6,10 +10,6 @@ arguments
   thetactr {mustBeNumeric}
   phictr {mustBeNumeric}
 end
-% Converts a set of glon,glat into magnetic up, north, east
-%coordinates.
-% thetactr and phictr are the magnetic coordinates of the center of hte region of interest.
-%They can be computed from geog2geomag.
 
 %UPWARD DISTANCE
 Re=6370e3;
