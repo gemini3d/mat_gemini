@@ -27,6 +27,8 @@ if ~contains(path(), r)
   addpath(p.path)
 end
 
+assert(stdlib.expanduser("~") ~= "~", "stdlib.expanduser() did not expand tilde ~")
+
 stdlib_ok = true;
 if nargout > 0, is_ok = stdlib_ok; end
 
