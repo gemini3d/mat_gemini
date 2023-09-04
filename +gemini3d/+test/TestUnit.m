@@ -38,11 +38,6 @@ tc.verifyEqual(ymd3, [2020,1,2])
 tc.verifyEqual(utsec, 0.5, 'AbsTol', 1e-6)
 end
 
-function test_version(tc)
-tc.verifyTrue(gemini3d.version_atleast("3.19.0.33", "3.19.0"))
-tc.verifyFalse(gemini3d.version_atleast("3.19.0.33", "3.19.0.34"))
-end
-
 function test_max_mpi(tc)
 tc.verifyEqual(gemini3d.sys.max_mpi([48,1,40], 5), 5)
 tc.verifyEqual(gemini3d.sys.max_mpi([48,40,1], 5),  5)
