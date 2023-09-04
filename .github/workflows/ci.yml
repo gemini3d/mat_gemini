@@ -28,8 +28,9 @@ jobs:
 
     strategy:
       matrix:
-        release: [R2022b]
+        release: [R2023a]
         os: [ubuntu-latest, macos-latest]
+# full tests require R2023a -- MatGemini itself works with R2020b or newer
 
     env:
       CC: gcc-12
@@ -62,7 +63,7 @@ jobs:
     - name: Install Gemini3D libraries
       timeout-minutes: 15
       run: |
-        cmake -B build -Dfind:BOOL=true -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
+        cmake -B build -Dfind:BOOL=true -Damr:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
         cmake --build build --parallel
         cmake --install build
       working-directory: gemext
