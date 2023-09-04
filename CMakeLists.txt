@@ -13,49 +13,35 @@ enable_testing()
 
 include(cmake/options.cmake)
 
-set(tmod gemini3d.test.Test)
-
 find_package(Matlab COMPONENTS MAIN_PROGRAM REQUIRED)
-if(Matlab_VERSION_STRING AND Matlab_VERSION_STRING VERSION_LESS 9.9)
-  message(STATUS "Matlab >= 9.9 required, found ${Matlab_VERSION_STRING}")
-endif()
 
 # -- setup Gemini3D program
 # For repeatability, build MatGemini Gemini3D binaries under mat_gemini/build
-
-include(cmake/gemini3d.cmake)
+if(NOT DEFINED ENV{GEMINI_ROOT})
+  include(cmake/gemini3d.cmake)
+endif()
 
 # -- MatGemini testing
 
 set(setup_m ${CMAKE_CURRENT_SOURCE_DIR}/setup.m)
 
-add_test(NAME Lint
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "issues = codeIssues; assert(isempty(issues.Issues))"
-)
+add_test(NAME Lint COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool check")
 set_property(TEST Lint PROPERTY FIXTURES_SETUP lint_fxt)
-set_property(TEST Lint PROPERTY DISABLED $<VERSION_LESS:${Matlab_VERSION_STRING},9.13>)
 
 # --- unit tests
 
-set(unit_tests Unit Grid)
-
-foreach(n ${unit_tests})
-
-add_test(NAME ${n}
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "r=runtests('${tmod}${n}'); assert(~isempty(r)), assertSuccess(r)"
-)
-
+foreach(n IN ITEMS Unit Grid)
+  add_test(NAME ${n}
+    COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool test('Test${n}/*');"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 endforeach()
-
-set_property(TEST Lint ${unit_tests} PROPERTY WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # --- MSIS tests
 
-add_test(NAME MSIS
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}MSIS'); assert(~isempty(r)), assertSuccess(r)"
-)
+add_test(NAME MSIS COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestMSIS/*');")
 
-set_tests_properties(${unit_tests} MSIS PROPERTIES
+set_tests_properties(Unit Grid MSIS PROPERTIES
 REQUIRED_FILES ${setup_m}
 FIXTURES_REQUIRED lint_fxt
 FIXTURES_SETUP unit_fxt
@@ -63,7 +49,7 @@ FIXTURES_SETUP unit_fxt
 # --- data download tests
 
 add_test(NAME DataIO
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}DataIO'); assert(~isempty(r)), assertSuccess(r)"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestDataIO/*')"
 )
 
 set_tests_properties(DataIO PROPERTIES
@@ -74,7 +60,7 @@ FIXTURES_SETUP io_fxt
 # --- integration tests
 
 add_test(NAME Dryrun
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Dryrun'); assert(~isempty(r)), assertSuccess(r)"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestDryrun/*')"
 )
 set_tests_properties(Dryrun PROPERTIES
 FIXTURES_REQUIRED io_fxt
@@ -82,7 +68,7 @@ FIXTURES_SETUP dryrun_fxt
 )
 
 add_test(NAME Project
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), r=runtests('${tmod}Project'); assert(~isempty(r)), assertSuccess(r)"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestProject/*')"
 )
 set_property(TEST Project PROPERTY FIXTURES_REQUIRED dryrun_fxt)
 
