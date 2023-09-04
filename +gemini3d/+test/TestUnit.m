@@ -1,21 +1,36 @@
 classdef TestUnit < matlab.unittest.TestCase
 
+properties
+  TestData
+end
+
+methods(TestMethodSetup)
+
+function setup_env(tc)
+tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
+import matlab.unittest.fixtures.EnvironmentVariableFixture
+
+tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
+
+fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
+tc.applyFixture(fixture)
+
+end
+end
+
 methods (Test)
 
 
 function test_nml_gemini_envvar(tc)
+tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
+import matlab.unittest.fixtures.EnvironmentVariableFixture
 
-import gemini3d.fileio.expand_envvar
+fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
+tc.applyFixture(fixture)
 
-old = getenv("GEMINI_CIROOT");
+out = gemini3d.fileio.expand_envvar("@GEMINI_CIROOT@/foo");
 
-setenv("GEMINI_CIROOT", "abc123")
-
-out = expand_envvar("@GEMINI_CIROOT@/foo");
-
-setenv("GEMINI_CIROOT", old)
-
-tc.verifyEqual(out, fullfile("abc123", "foo"))
+tc.verifyEqual(out, fullfile(tc.TestData.outdir, "foo"))
 
 
 end
