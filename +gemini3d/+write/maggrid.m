@@ -1,18 +1,17 @@
-function maggrid(filename, xmag)
-
+function maggrid(file, xmag)
+% write magnetic grid to HDF5 file for reading by Gemini3D "magcalc" program
+% typically called by gemini3d.model.magcalc()
 arguments
-  filename (1,1) string
+  file (1,1) string
   xmag (1,1) struct
 end
 
-import stdlib.expanduser
-
-filename = expanduser(filename);
+import stdlib.h5save
 
 % error checking on struct fields
-assert(isfield(xmag,"R"),"R field of xmag must be defined");
-assert(isfield(xmag,"THETA"),"THETA field of xmag must be defined");
-assert(isfield(xmag,"PHI"),"PHI field of xmag must be defined");
+for n = ["R", "THETA", "PHI"]
+  assert(isfield(xmag, n), n + " field of xmag is not defined")
+end
 
 % default value for gridsize
 if ~isfield(xmag, "gridsize")
@@ -27,33 +26,19 @@ else
 end %if
 
 %% write the file
-[parent, ~, ext] = fileparts(filename);
-assert(isfolder(parent), parent + " parent directory does not exist")
-
-switch ext
-  case ".h5", writemagh5(filename, xmag, gridsize)
-  otherwise, error("gemini3d:write:maggrid:value_error", "Unknown file type %s" , filename)
-end %switch
-
-end %function
-
-
-function writemagh5(fn, mag, gridsize)
-
-import stdlib.h5save
-
 % hdf5 files can optionally store a gridsize variable which tells readers how to
 % reshape the data into 2D or 3D arrays.
 % NOTE: the Fortran magcalc.f90 is looking for flat list.
 
-disp("write: " + fn)
+file = stdlib.expanduser(file);
+disp("write: " + file)
 
-freal = 'float32';      % default input files to real32
+freal = 'float32';      % default "magcalc" input files are real32 to save space
 
-h5save(fn, "/lpoints",numel(mag.R), "type", "int32");
-h5save(fn, "/r", mag.R(:), "type", freal);
-h5save(fn, "/theta", mag.THETA(:), "type", freal);
-h5save(fn, "/phi", mag.PHI(:), "type", freal);
-h5save(fn, "/gridsize", gridsize, "type", "int32");
+h5save(file, "/lpoints", numel(mag.R), "type", "int32");
+h5save(file, "/r", mag.R(:), "type", freal);
+h5save(file, "/theta", mag.THETA(:), "type", freal);
+h5save(file, "/phi", mag.PHI(:), "type", freal);
+h5save(file, "/gridsize", gridsize, "type", "int32");
 
 end %function

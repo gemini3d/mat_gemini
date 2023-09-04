@@ -1,7 +1,10 @@
 function magcalc(direc, dang, xg)
+% based on config file, create set of input points for Gemini3D "magcalc" program
+% via gemini3d.write.maggrid()
 arguments
   direc (1,1) string
-  dang (1,1) {mustBeNumeric} = 1.5 % ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)
+  dang (1,1) {mustBeNumeric} = 1.5
+  % ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)
   xg struct = struct.empty
 end
 
@@ -74,7 +77,7 @@ mag.R = r;
 mag.PHI = phi;
 mag.THETA = theta;
 mag.gridsize =[lr,ltheta,lphi];
-filename = fullfile(direc, "inputs/magfieldpoints.h5");
-gemini3d.write.maggrid(filename, mag)
+
+gemini3d.write.maggrid(fullfile(direc, "inputs/magfieldpoints.h5"), mag)
 
 end % function

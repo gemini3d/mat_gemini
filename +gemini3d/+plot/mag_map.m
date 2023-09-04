@@ -1,4 +1,5 @@
 function mag_map(direc)
+% read output of Gemini3D "magcalc" program and plot on nice geographic map
 arguments
   direc (1,1) string
 end
@@ -9,9 +10,9 @@ assert(gemini3d.sys.has_mapping(), "Mapping Toolbox is needed")
 
 direc = stdlib.expanduser(direc);
 
-%SIMULATIONS LOCAITON
-pdir = fullfile(direc, "plots");
-stdlib.makedir(pdir)
+%SIMULATION location
+plot_dir = fullfile(direc, "plots");
+stdlib.makedir(plot_dir)
 
 %SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
@@ -131,7 +132,7 @@ for it=1:length(cfg.times)-1
   subplot(1,3,3, 'parent', fig)
   plotBphi(Bphitp(:,:,:,it), cfg, ttxt);
 
-  pfn = fullfile(pdir, "B-" + filename + ".png");
+  pfn = fullfile(plot_dir, "B-" + filename + ".png");
   disp("write: " + pfn)
   exportgraphics(fig, pfn, "resolution", 300)
 
