@@ -18,7 +18,7 @@ assert(lx3==256, int2str(size(lx3)))
 assert(all(size(f) == [lx1,lx2,lx3]), 'array size mismatch')
 
 if ~gemini3d.sys.isinteractive
-  if ~nargout, clear, end
+  if ~nargout, clear('x1'), end
   return
 end
 
@@ -52,7 +52,7 @@ c=colorbar('peer', ax3);
 ylabel(c,'f')
 title(ax3, '3D interp x_2-x_3')
 
-if nargout==0, clear, end
+if nargout==0, clear('x1'), end
 end % function
 
 % fid=fopen(fn,'r');

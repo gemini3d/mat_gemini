@@ -28,7 +28,7 @@ gemini3d.assert_allclose(Tstrue(13,13),  0.763014494788105, rtol=1e-5, err_msg='
 disp('OK: 1d diffusion')
 
 if ~gemini3d.sys.isinteractive
-  if ~nargout, clear, end
+  if ~nargout, clear('x1'), end
   return
 end
 %% plots
@@ -54,7 +54,7 @@ for ax = [ax1,ax2,ax3]
   xlabel(ax,'time (sec)')
 end
 
-if ~nargout, clear, end
+if ~nargout, clear('x1'), end
 end % function
 
 
