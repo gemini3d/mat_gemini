@@ -1,60 +1,42 @@
-function magcalc(direc, dang, xg)
+  function magcalc(direc, dang, Ltheta, Lphi, xg)
 % based on config file, create set of input points for Gemini3D "magcalc" program
 % via gemini3d.write.maggrid()
 arguments
   direc (1,1) string
   dang (1,1) {mustBeNumeric} = 1.5
-  % ANGULAR RANGE TO COVER FOR THE CALCLUATIONS (THIS IS FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID)
+  % ANGULAR RANGE TO COVER FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID
+  Ltheta (1,1) {mustBeInteger, mustBePositive} = 40
+  Lphi (1,1) {mustBeInteger, mustBePositive} = 40
   xg struct = struct.empty
 end
 
 gemini3d.sys.check_stdlib()
 
-direc = stdlib.expanduser(direc);
-assert(isfolder(direc), direc + " is not a directory")
-
-%SIMULATION META-DATA
+%% SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
 
-%WE ALSO NEED TO LOAD THE GRID FILE
+%% LOAD THE GRID FILE
 if isempty(xg)
   xg = gemini3d.read.grid(direc);
-  disp('Grid loaded')
+  disp("Grid loaded: " + xg.filename)
 end
-%  lx1 = xg.lx(1);
-lx3 = xg.lx(3);
-%  lh=lx1;   %possibly obviated in this version - need to check
-if (lx3==1)
-    flag2D=true;
-    disp('2D meshgrid')
-    %     x1=xg.x1(3:end-2);
-    %     x2=xg.x2(3:end-2);
-    %     x3=xg.x3(3:end-2);
-    %     [X2,X1]=meshgrid(x2(:),x1(1:lh)');
+
+flag2D = (xg.lx(3) == 1 || xg.lx(2) == 1);
+
+%% TABULATE THE SOURCE OR GRID CENTER LOCATION
+
+if isempty(cfg.sourcemlon)
+  thdist = mean(xg.theta, 'all');
+  phidist = mean(xg.phi, 'all');
 else
-    flag2D=false;
-    disp('3D meshgrid')
-    %     x1=xg.x1(3:end-2);
-    %     x2=xg.x2(3:end-2);
-    %     x3=xg.x3(3:end-2);
-    %     [X2,X1,X3]=meshgrid(x2(:),x1(1:lh)',x3(:));
+  thdist = pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
+  phidist = deg2rad(cfg.sourcemlon);
 end
 
-  %TABULATE THE SOURCE OR GRID CENTER LOCATION
-  if isempty(cfg.sourcemlon)
-    thdist=mean(xg.theta, 'all');
-    phidist=mean(xg.phi, 'all');
-  else
-    thdist= pi/2 - deg2rad(cfg.sourcemlat);    %zenith angle of source location
-    phidist= deg2rad(cfg.sourcemlon);
-  end
-
-%FIELD POINTS OF INTEREST (CAN/SHOULD BE DEFINED INDEPENDENT OF SIMULATION GRID)
-ltheta=40;
+%% FIELD POINTS OF INTEREST 
+% CAN/SHOULD BE DEFINED INDEPENDENT OF SIMULATION GRID
 if flag2D
-  lphi=1;
-else
-  lphi=40;
+  Lphi=1;
 end
 lr=1;
 
@@ -63,20 +45,20 @@ thmax=thdist + deg2rad(dang);
 phimin=phidist - deg2rad(dang);
 phimax=phidist + deg2rad(dang);
 
-theta=linspace(thmin,thmax,ltheta);
+theta = linspace(thmin,thmax, Ltheta);
 if flag2D
   phi=phidist;
 else
-  phi=linspace(phimin,phimax,lphi);
+  phi=linspace(phimin, phimax, Lphi);
 end
-r=6370e3*ones(ltheta,lphi);                          %use ground level for altitude for all field points
+r=6370e3*ones(Ltheta, Lphi);                          %use ground level for altitude for all field points
 [phi,theta]=meshgrid(phi,theta);
 
 %% CREATE AN INPUT FILE OF FIELD POINTS
 mag.R = r;
 mag.PHI = phi;
 mag.THETA = theta;
-mag.gridsize =[lr,ltheta,lphi];
+mag.gridsize = [lr, Ltheta, Lphi];
 
 gemini3d.write.maggrid(fullfile(direc, "inputs/magfieldpoints.h5"), mag)
 

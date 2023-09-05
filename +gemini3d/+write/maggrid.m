@@ -1,28 +1,28 @@
-function maggrid(file, xmag)
+function maggrid(file, mag)
 % write magnetic grid to HDF5 file for reading by Gemini3D "magcalc" program
 % typically called by gemini3d.model.magcalc()
 arguments
   file (1,1) string
-  xmag (1,1) struct
+  mag (1,1) struct
 end
 
 import stdlib.h5save
 
 % error checking on struct fields
 for n = ["R", "THETA", "PHI"]
-  assert(isfield(xmag, n), n + " field of xmag is not defined")
+  assert(isfield(mag, n), n + " field of xmag is not defined")
 end
 
 % default value for gridsize
-if ~isfield(xmag, "gridsize")
-  if isvector(xmag.R)
+if ~isfield(mag, "gridsize")
+  if isvector(mag.R)
     warning("maggrid --> Defaulting gridsize to flat list...")
-    gridsize=[numel(xmag.R),-1,-1];
+    gridsize=[numel(mag.R),-1,-1];
   else
-    gridsize = size(xmag.R);
+    gridsize = size(mag.R);
   end
 else
-  gridsize=xmag.gridsize;
+  gridsize=mag.gridsize;
 end %if
 
 %% write the file
