@@ -8,16 +8,14 @@ if ~ismac
   return
 end
 
+prefix_path = ["/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"];
 
 sys_path = getenv("PATH");
 
 [ret, homebrew_prefix] = system('brew --prefix');
-if ret ~= 0
-  homebrew_prefix = string.empty;
+if ret == 0
+  prefix_path = [homebrew_prefix, prefix_path];
 end
-
-prefix_path = [homebrew_prefix, ...
-"/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"];
 
 for p = prefix_path
   if contains(sys_path, p)
