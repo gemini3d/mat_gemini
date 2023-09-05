@@ -67,7 +67,8 @@ elseif ret == -1073741515
   % Windows 0xc0000135, missing DLL
   msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
     "such as LAPACK. " + ...
-    "Currently, we are missing a DLL on your system and gemini.bin with shared libs cannot run.";
+    "A DLL is missing on your system and gemini.bin cannot run." + ...
+    "This can also happen if Gemini3D was built with oneAPI and you're not currently in the oneAPI Command Prompt.";
    error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
 else
   error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
