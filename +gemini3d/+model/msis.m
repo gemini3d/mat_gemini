@@ -96,12 +96,12 @@ else
 end
 
 disp(join(cmd, " "))
-[stat, msg] = stdlib.subprocess_run(cmd);
+[stat, ~, stderr] = stdlib.sys.subprocess_run(cmd);
 % output written to file
 switch stat
   case 0  % good
   case -1073741515, error("if on Windows, is libgfortran on PATH?")
-  otherwise, error('problem running MSIS %s %s', strjoin(cmd), msg)
+    otherwise, error('problem running MSIS %s %s', strjoin(cmd), stderr)
 end
 
 assert(isfile(out), "gemini3d:model:msis:FileNotFoundError", "MSIS output file %s not found, did msis_setup %s run properly?", out, exe)

@@ -73,7 +73,7 @@ end
 
 function test_msis2_setup(tc)
 
-inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
+inputs_dir =  tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture(PreservingOnFailure=true)).Folder;
 
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
   'msis_version', 21, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
