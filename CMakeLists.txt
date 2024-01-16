@@ -4,12 +4,19 @@
 
 cmake_minimum_required(VERSION 3.20)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "Please use out-of-source builds
+  cmake -Bbuild")
+endif()
+
 project(MatGemini
 LANGUAGES NONE
 VERSION 5.5.0
 )
 
 enable_testing()
+
+file(GENERATE OUTPUT .gitignore CONTENT "*")
 
 include(cmake/options.cmake)
 
