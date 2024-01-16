@@ -2,7 +2,7 @@ function setup_macos()
 
 %% MacOS PATH workaround
 % Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
-% Matlab on Linux or Windows does, so we apply these MacOS-specific workaround
+% Matlab on Linux, hence this MacOS-specific workaround
 
 if ~ismac
   return
