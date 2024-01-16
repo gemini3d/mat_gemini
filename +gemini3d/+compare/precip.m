@@ -9,7 +9,7 @@ end
 
 time = opts.time;
 % often we reuse precipitation inputs without copying over files
-for i = 1:size(time)
+for i = 1:length(time)
   ref = gemini3d.read.precip(ref_dir, time(i));
   new = gemini3d.read.precip(new_dir, time(i));
 

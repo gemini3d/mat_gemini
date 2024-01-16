@@ -17,7 +17,7 @@ else
 end
 
 % often we reuse Efield inputs without copying over files
-for i = 1:size(time)
+for i = 1:length(time)
   ref = gemini3d.read.Efield(ref_dir, time(i));
   new = gemini3d.read.Efield(new_dir, time(i));
 
