@@ -261,7 +261,6 @@ if (flag2D)
   colormap(parula(256));
 %   set(gca,'FontSize',FS);
   axis xy;
-  datetick;
   axis tight;
   if isMATLABReleaseOlderThan('R2022a')
     caxis([-max(abs(dvTEC), [], 'all'), max(abs(dvTEC), [], 'all')]) %#ok<CAXIS>
