@@ -4,6 +4,7 @@ env:
   GEMINI_CIROOT: ~/ci
   CMAKE_BUILD_TYPE: Release
   CTEST_NO_TESTS_ACTION: error
+  CMAKE_BUILD_PARALLEL_LEVEL: 3
 
 on:
   push:
@@ -19,6 +20,7 @@ on:
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
 # R2020b, R2021a, R2021b: GCC version=9
 # R2022a, R2022b: GCC version=10
+# R2023a: worked with GCC 11, 12, 13, ...
 
 jobs:
 
@@ -33,9 +35,9 @@ jobs:
 # full tests require R2023a -- MatGemini itself works with R2020b or newer
 
     env:
-      CC: gcc-12
-      CXX: g++-12
-      FC: gfortran-12
+      CC: gcc-13
+      CXX: g++-13
+      FC: gfortran-13
 
     steps:
 
@@ -45,7 +47,7 @@ jobs:
         release: ${{ matrix.release }}
 
     - name: Checkout Gemini3D-External
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: gemini3d/external
         path: gemext
@@ -63,13 +65,13 @@ jobs:
     - name: Install Gemini3D libraries
       timeout-minutes: 15
       run: |
-        cmake -B build -Dfind:BOOL=true -Damr:BOOL=false -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
-        cmake --build build --parallel
+        cmake -B build -Dfind:BOOL=true -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
+        cmake --build build
         cmake --install build
       working-directory: gemext
 
     - name: Checkout Gemini3D
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: gemini3d/gemini3d
         path: gemini3d
@@ -78,12 +80,12 @@ jobs:
       timeout-minutes: 15
       run: |
         cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }} -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}
-        cmake --build build --parallel
+        cmake --build build
         cmake --install build
       working-directory: gemini3d
 
     - name: Git Checkout ${{ github.action_repository }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: true
 
