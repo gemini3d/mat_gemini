@@ -1,21 +1,33 @@
-function setup_macos()
+function macos_path()
 
 %% MacOS PATH workaround
-% Matlab does not seem to load .zshrc or otherwise pickup shell "export" like
-% Matlab on Linux, hence this MacOS-specific workaround
+% Matlab does not load .zshrc
 
 if ~ismac
   return
 end
 
+%% homebrew path
 prefix_path = ["/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"];
-
-sys_path = getenv("PATH");
 
 [ret, homebrew_prefix] = system('brew --prefix');
 if ret == 0
-  prefix_path = [homebrew_prefix, prefix_path];
+  prefix_path = [strip(homebrew_prefix), prefix_path];
 end
+
+addpath_if_needed(prefix_path)
+
+%% matlab own path
+matlab_path = fullfile(matlabroot, "bin");
+
+addpath_if_needed(matlab_path)
+
+end % function
+
+
+function addpath_if_needed(prefix_path)
+
+sys_path = getenv("PATH");
 
 for p = prefix_path
   if contains(sys_path, p)
@@ -29,4 +41,4 @@ end
 
 setenv('PATH', sys_path)
 
-end % function
+end

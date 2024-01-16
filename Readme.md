@@ -38,7 +38,7 @@ and then
 
 MatGemini finds Gemini3D by environment variable [GEMINI_ROOT](./docs/env.md).
 
-If the system used is an offline (no Internet) system (some HPC are offline for security), see [package doc](./docs/package.md).
+If the system used is an offline (no Internet) system (some HPC are offline for security), see [doc](./docs/package.md).
 
 For general usage and applications see [usage doc](./docs/usage.md) or
 [troubleshooting doc](./docs/troubleshoot.md).

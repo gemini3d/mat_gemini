@@ -10,7 +10,6 @@ set(gemini_args
 -Dmsis2:BOOL=${msis2}
 -Dglow:BOOL=${glow}
 -Dhwm14:BOOL=${hwm14}
--Dcpp:BOOL=on
 -DCMAKE_INSTALL_PREFIX:PATH=${PROJECT_BINARY_DIR}
 )
 if(CMAKE_PREFIX_PATH)
