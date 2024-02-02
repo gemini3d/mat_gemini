@@ -20,7 +20,7 @@ end
 %generation code that was fixed as of commit:  75f359801fb237c55251277bc623f738106dd82d
 %glon=xg.glon;
 %glat=xg.glat;
-[glat,glon] = gemini3d.geomag2geog(double(xg.theta),double(xg.phi));    %use alternative calculation that always works
+[glat,glon] = gemini3d.geomag2geog(xg.theta,xg.phi);    %use alternative calculation that always works
 thetactr=mean(xg.theta, 'all');
 phictr=mean(xg.phi, 'all');
 mlatctr=90- rad2deg(thetactr);
@@ -28,7 +28,7 @@ mlonctr=rad2deg(phictr);
 
 lx1=xg.lx(1); lx2=xg.lx(2); lx3=xg.lx(3);
 inds1=3:lx1+2; inds2=3:lx2+2; inds3=3:lx3+2;
-x1=double(xg.x1(inds1)); x2=double(xg.x2(inds2)); x3=double(xg.x3(inds3));
+x1=xg.x1(inds1); x2=xg.x2(inds2); x3=xg.x3(inds3);
 
 % force wrapping of longitude
 %if wraplon
