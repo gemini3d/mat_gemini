@@ -47,7 +47,7 @@ end
 
 %% compare
 if isinteger(desired)
-  actual = cast(actual, 'like', desired);
+  actual = cast(actual, like=desired);
 end
 measdiff = abs(actual-desired);
 tol = opts.atol + opts.rtol * abs(desired);

@@ -15,13 +15,15 @@ on:
     - ".github/workflows/ci.yml"
     - "!scripts/**"
 
-# full tests require R2023a -- MatGemini itself works with R2020b or newer
+# full tests require R2023a -- MatGemini itself works with R2021a or newer
 
 # R2020a is missing several "mustBe" functions
+# R2020b is missing name-value arguments
+
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
 
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2021b-supported-compilers.pdf
-# R2020b, R2021a, R2021b: GCC-8
+# R2021a, R2021b: GCC-8
 
 # R2022a, R2022b, R2023a, R2023b: GCC-10
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2023a-supported-compilers.pdf

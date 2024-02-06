@@ -18,7 +18,7 @@ phig = deg2rad(loncorrected);
 thetat = acos(cos(thetagp).*cos(thetan)+sin(thetagp).*sin(thetan).*cos(phig-phin));
 argtmp = (cos(thetagp)-cos(thetat).*cos(thetan))./(sin(thetat).*sin(thetan));
 alpha = acos( max(min(argtmp,1),-1) );
-phit = zeros(size(lat),'single');    % this should really detect the precision of the input
+phit = zeros(size(lat), like=lat);
 
 i = (phin>phig & phin-phig>pi) | (phin<phig & phig-phin<pi);
 phit(i) = pi-alpha(i);
