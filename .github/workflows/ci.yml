@@ -39,6 +39,9 @@ jobs:
       matrix:
         release: [R2023a]
         os: [ubuntu-latest, macos-latest]
+        include:
+        - release: R2023b
+          os: ubuntu-latest
 
     steps:
 
