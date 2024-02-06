@@ -1,10 +1,9 @@
 name: matlab
 
 env:
-  GEMINI_CIROOT: ~/ci
   CMAKE_BUILD_TYPE: Release
   CTEST_NO_TESTS_ACTION: error
-  CMAKE_BUILD_PARALLEL_LEVEL: 3
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
 
 on:
   push:
@@ -16,11 +15,17 @@ on:
     - ".github/workflows/ci.yml"
     - "!scripts/**"
 
+# full tests require R2023a -- MatGemini itself works with R2020b or newer
+
 # R2020a is missing several "mustBe" functions
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
-# R2020b, R2021a, R2021b: GCC version=9
-# R2022a, R2022b: GCC version=10
-# R2023a: worked with GCC 11, 12, 13, ...
+
+# https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2021b-supported-compilers.pdf
+# R2020b, R2021a, R2021b: GCC-8
+
+# R2022a, R2022b, R2023a, R2023b: GCC-10
+# https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2023a-supported-compilers.pdf
+
 
 jobs:
 
@@ -32,17 +37,16 @@ jobs:
       matrix:
         release: [R2023a]
         os: [ubuntu-latest, macos-latest]
-# full tests require R2023a -- MatGemini itself works with R2020b or newer
 
     env:
-      CC: gcc-13
-      CXX: g++-13
-      FC: gfortran-13
+      CC: gcc-11
+      CXX: g++-11
+      FC: gfortran-11
 
     steps:
 
     - name: Install MATLAB
-      uses: matlab-actions/setup-matlab@v1
+      uses: matlab-actions/setup-matlab@v2
       with:
         release: ${{ matrix.release }}
 
@@ -64,10 +68,7 @@ jobs:
 
     - name: Install Gemini3D libraries
       timeout-minutes: 15
-      run: |
-        cmake -B build -Dfind:BOOL=true -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }}
-        cmake --build build
-        cmake --install build
+      run: cmake -Dmumps_only:BOOL=true -Dprefix:PATH=${{ runner.temp }} -P build-online.cmake
       working-directory: gemext
 
     - name: Checkout Gemini3D
@@ -91,8 +92,9 @@ jobs:
 
     - name: Run Matlab tests (buildtool)
       timeout-minutes: 15
-      uses: matlab-actions/run-build@v1
+      uses: matlab-actions/run-build@v2
       env:
         GEMINI_ROOT: ${{ runner.temp }}
+        GEMINI_CIROOT: ~/ci
 
 # save CI time by not running duplicitive CMake tests
