@@ -40,12 +40,18 @@ jobs:
         release: [R2023a]
         os: [ubuntu-latest, macos-latest]
 
-    env:
-      CC: gcc-11
-      CXX: g++-11
-      FC: gfortran-11
-
     steps:
+
+    - name: compatible GCC compiler (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        echo "CC=gcc-10" >> $GITHUB_ENV
+        echo "CXX=g++-10" >> $GITHUB_ENV
+        echo "FC=gfortran-10" >> $GITHUB_ENV
+
+    - name: GCC compiler (macOS)
+      if: runner.os == 'macOS'
+      run: echo "FC=gfortran-13" >> $GITHUB_ENV
 
     - name: Install MATLAB
       uses: matlab-actions/setup-matlab@v2
