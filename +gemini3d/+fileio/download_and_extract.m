@@ -28,7 +28,7 @@ function archive = download_data(name, data_dir, url_file)
 
 if isempty(url_file)
   lib_file = fullfile(gemini3d.root(), "../cmake/libraries.json");
-  url_file = fullfile(gemini3d.root(), "+test/ref_data.json");
+  url_file = fullfile(gemini3d.root(), "../test/ref_data.json");
 
   libs = jsondecode(fileread(lib_file));
 

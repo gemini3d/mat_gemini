@@ -25,11 +25,8 @@ set(exclude
 --exclude-vcs
 --exclude=.github/
 --exclude=.archive/
---exclude=+test/data/
---exclude=+test/ref_data.json
---exclude=code-coverage/
---exclude=test-results/
---exclude=resources/project/
+--exclude=test/data/
+--exclude=test/ref_data.json
 --exclude=build*/
 )
 

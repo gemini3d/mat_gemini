@@ -4,7 +4,7 @@ properties
   TestData
 end
 
-methods(TestMethodSetup)
+methods(TestClassSetup)
 
 function check_stdlib(tc)
 try

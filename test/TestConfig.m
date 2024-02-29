@@ -4,7 +4,7 @@ properties
 TestData
 end
 
-methods(TestMethodSetup)
+methods(TestClassSetup)
 
 function config_path(tc)
 tc.TestData.cwd = fileparts(mfilename("fullpath"));

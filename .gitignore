@@ -7,5 +7,5 @@ resources/project/
 *.asv
 *.m~
 
-+gemini3d/+test/data/
-+gemini3d/+test/ref_data.json
+test/data/
+test/ref_data.json

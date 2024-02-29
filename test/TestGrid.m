@@ -1,6 +1,6 @@
 classdef TestGrid < matlab.unittest.TestCase
 
-methods(TestMethodSetup)
+methods(TestClassSetup)
 
 function check_stdlib(tc)
 try

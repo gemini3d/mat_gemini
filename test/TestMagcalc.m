@@ -8,7 +8,7 @@ properties
 end
 
 methods(TestMethodSetup)
-
+% Method instead of class to allow parallel testing
 function check_stdlib(tc)
 try
   gemini3d.sys.check_stdlib()

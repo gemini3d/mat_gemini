@@ -25,7 +25,7 @@ arguments
   test_name (1,1) string = "*"
 end
 
-r = runtests('gemini3d.test', Name="gemini3d.test." + test_name);
+r = runtests('test/', Name=test_name);
 
 assert(~isempty(r))
 assertSuccess(r)

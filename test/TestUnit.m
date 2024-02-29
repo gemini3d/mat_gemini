@@ -4,7 +4,7 @@ properties
   TestData
 end
 
-methods(TestMethodSetup)
+methods(TestClassSetup)
 
 function setup_env(tc)
 tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
