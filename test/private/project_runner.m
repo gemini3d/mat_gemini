@@ -22,7 +22,8 @@ for k = ["indat_file", "indat_size", "indat_grid"]
 end
 %% patch eq_dir to use reference data
 if isfield(p, 'eq_dir')
-  eq_dir = fullfile(fileparts(test_dir), stdlib.path_tail(p.eq_dir));
+  [~, n] = fileparts(p.eq_dir);
+  eq_dir = stdlib.join(stdlib.parent(test_dir), n);
   if isfolder(eq_dir)
     disp("Using " + eq_dir + " for equilibrium data")
     p.eq_dir = eq_dir;
