@@ -79,7 +79,7 @@ jobs:
 
     - name: Install Gemini3D libraries
       timeout-minutes: 15
-      run: cmake -Dmumps_only:BOOL=true -Dprefix:PATH=${{ runner.temp }} -P build-online.cmake
+      run: cmake -Dmumps_only:BOOL=true -Dprefix:PATH=${{ runner.temp }} -P build.cmake
       working-directory: gemext
 
     - name: Checkout Gemini3D
