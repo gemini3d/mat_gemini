@@ -6,11 +6,13 @@ Ensure environment variable GEMINI_ROOT is set to the top-level directory where 
 ## Simulation prep:  calling GEMINI core model components from MATLAB
 
 Features requiring Gemini3D runs include "gemini3d.model.setup" and "gmeini3d.run".
-If MacOS issues with CMake or Git not found, try running from Matlab:
+If **macOS** issues with CMake or Git not found, try running from Matlab:
 
 ```sh
 gemini3d.sys.macos_path()
 ```
+
+Note that **macOS** Matlab does not source ~/.zshrc, so environment variables set there are not seen by Matlab.
 
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
