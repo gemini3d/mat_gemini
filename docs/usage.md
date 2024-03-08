@@ -9,7 +9,7 @@ Features requiring Gemini3D runs include "gemini3d.model.setup" and "gmeini3d.ru
 If MacOS issues with CMake or Git not found, try running from Matlab:
 
 ```sh
-macos_path()
+gemini3d.sys.macos_path()
 ```
 
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
