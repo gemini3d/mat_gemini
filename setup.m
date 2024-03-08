@@ -5,6 +5,7 @@ assert(~isMATLABReleaseOlderThan('R2021a'), 'MatGemini requires Matlab >= R2021a
 
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
+setenv("MATGEMINI", cwd)
 
 %% ensure matlab-stdlib is present
 gemini3d.sys.check_stdlib()
