@@ -8,14 +8,11 @@ if ~ismac
 end
 
 %% homebrew path
-prefix_path = ["/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"];
-
 [ret, homebrew_prefix] = system('brew --prefix');
 if ret == 0
-  prefix_path = [strip(homebrew_prefix), prefix_path];
+  addpath_if_needed(fullfile(strip(homebrew_prefix), "bin"))
 end
 
-addpath_if_needed(prefix_path)
 
 %% matlab own path
 matlab_path = fullfile(matlabroot, "bin");
