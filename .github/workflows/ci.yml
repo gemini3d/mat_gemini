@@ -40,7 +40,7 @@ jobs:
         release: [R2023a]
         os: [ubuntu-latest, macos-latest]
         include:
-        - release: R2023b
+        - release: R2024a
           os: ubuntu-latest
 
     steps:
