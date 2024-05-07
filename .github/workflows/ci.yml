@@ -38,10 +38,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2023a]
+        release: [R2024a]
         os: [ubuntu-latest, macos-latest]
         include:
-        - release: R2024a
+        - release: R2023a
           os: ubuntu-latest
 
     steps:
