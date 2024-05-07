@@ -4,6 +4,7 @@ env:
   CMAKE_BUILD_TYPE: Release
   CTEST_NO_TESTS_ACTION: error
   CMAKE_BUILD_PARALLEL_LEVEL: 4
+  CMAKE_INSTALL_PREFIX: ~/libgem
 
 on:
   push:
@@ -85,7 +86,7 @@ jobs:
     - name: Install Gemini3D
       timeout-minutes: 15
       run: |
-        cmake -B build --install-prefix ${{ runner.temp }}
+        cmake -B build
         cmake --build build
         cmake --install build
       working-directory: gemini3d
