@@ -25,7 +25,7 @@ on:
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2021b-supported-compilers.pdf
 # R2021a, R2021b: GCC-8
 
-# R2022a, R2022b, R2023a, R2023b: GCC-10
+# R2022a, R2022b, R2023a, R2023b, R2024a: GCC-10
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2023a-supported-compilers.pdf
 
 
@@ -36,6 +36,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         release: [R2023a]
         os: [ubuntu-latest, macos-latest]
@@ -61,37 +62,30 @@ jobs:
       with:
         release: ${{ matrix.release }}
 
-    - name: Checkout Gemini3D-External
-      uses: actions/checkout@v4
-      with:
-        repository: gemini3d/external
-        path: gemext
-
     - name: Install Prereqs (Linux)
       if: runner.os == 'Linux'
       run: |
         sudo apt update
-        sudo $(cmake -P gemext/scripts/requirements.cmake)
+        sudo apt install --no-install-recommends libopenmpi-dev openmpi-bin libhdf5-dev ninja-build
+# don't install libscalapack-openmpi-dev, it is broken CMake package
+# don't remove sudo apt update or every once in a while all the jobs will fail when the GA runner
+# is out of sync with the upstream Ubuntu package repos
 
     - name: Install Prereqs (Macos)
       if: runner.os == 'macOS'
-      run: $(cmake -P gemext/scripts/requirements.cmake)
-
-    - name: Install Gemini3D libraries
-      timeout-minutes: 15
-      run: cmake -Dmumps_only:BOOL=true -Dprefix:PATH=${{ runner.temp }} -P build.cmake
-      working-directory: gemext
+      run: brew install ninja open-mpi hdf5 scalapack
 
     - name: Checkout Gemini3D
       uses: actions/checkout@v4
       with:
         repository: gemini3d/gemini3d
         path: gemini3d
+        submodules: true
 
     - name: Install Gemini3D
       timeout-minutes: 15
       run: |
-        cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=${{ runner.temp }} -DCMAKE_PREFIX_PATH:PATH=${{ runner.temp }}
+        cmake -B build --install-prefix ${{ runner.temp }}
         cmake --build build
         cmake --install build
       working-directory: gemini3d
