@@ -25,7 +25,7 @@ gemini3d.sys.check_stdlib()
 
 %% find msis_setup executable
 exe = gemini3d.find.gemini_exe("msis_setup");
-assert(~isempty(exe), "gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/external.git to setup Gemini3D msis_setup")
+assert(~isempty(exe), "gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/gemini3d.git to setup Gemini3D msis_setup")
 
 %% MSIS file API
 % binary files are MUCH faster than stdin/stdout pipes

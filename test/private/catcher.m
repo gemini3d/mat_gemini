@@ -7,7 +7,7 @@ end
 if any(contains(err.message, ["msis21.parm not found", "msis20.parm not found"]))
   tc.assumeFail("MSIS 2 not enabled")
 elseif err.identifier == "gemini3d:model:msis:FileNotFoundError"
-  tc.assumeFail("msis_setup program not found. Compile with https://github.com/gemini3d/gemini3d/external.git")
+  tc.assumeFail("msis_setup program not found. Compile with https://github.com/gemini3d/gemini3d/gemini3d.git")
 elseif contains(err.message, "HDF5 library version mismatched error")
   tc.assumeFail("HDF5 shared library conflict Matlab <=> system:  " + err.message)
 elseif contains(err.message, "GLIBCXX")

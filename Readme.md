@@ -4,7 +4,9 @@
 [![DOI](https://zenodo.org/badge/246748210.svg)](https://zenodo.org/badge/latestdoi/246748210)
 [![View MatGemini on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/78676-matgemini)
 
-These scripts form the basic core needed to work with Gemini3D ionospheric model to:
+These scripts form the basic core needed to work with
+[Gemini3D](https://github.com/gemini3d/gemini3d)
+ionospheric model to:
 
 * generate a new simulation from scratch
 * run a simulation
@@ -30,11 +32,6 @@ setup
 Then run desired MatGemini commands.
 
 ---
-
-If Gemini3D needs to be built, install Gemini3D
-[gemini3d/external](https://github.com/gemini3d/external)
-and then
-[Gemini3D](https://github.com/gemini3d/gemini3d).
 
 MatGemini finds Gemini3D by environment variable [GEMINI_ROOT](./docs/env.md).
 
