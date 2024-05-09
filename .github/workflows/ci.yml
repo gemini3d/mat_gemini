@@ -16,10 +16,7 @@ on:
     - ".github/workflows/ci.yml"
     - "!scripts/**"
 
-# full tests require R2023a -- MatGemini itself works with R2021a or newer
-
-# R2020a is missing several "mustBe" functions
-# R2020b is missing name-value arguments
+# full tests require >= R2023a
 
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
 
@@ -64,14 +61,14 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt update
-        sudo apt install --no-install-recommends libopenmpi-dev openmpi-bin libhdf5-dev ninja-build
+        sudo apt install --no-install-recommends libopenmpi-dev openmpi-bin libhdf5-dev
 # don't install libscalapack-openmpi-dev, it is broken CMake package
 # don't remove sudo apt update or every once in a while all the jobs will fail when the GA runner
 # is out of sync with the upstream Ubuntu package repos
 
     - name: Install Prereqs (Macos)
       if: runner.os == 'macOS'
-      run: brew install ninja open-mpi hdf5 scalapack
+      run: brew install open-mpi hdf5 scalapack
 
     - name: Cache install Gemini3D
       id: cache-gemini
