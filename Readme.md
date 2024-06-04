@@ -39,3 +39,7 @@ If the system used is an offline (no Internet) system (some HPC are offline for 
 
 For general usage and applications see [usage doc](./docs/usage.md) or
 [troubleshooting doc](./docs/troubleshoot.md).
+
+## Acknowledgement
+
+MatGemini was partly funded by NASA NNH19ZDA001N-HDEE grant 80NSSC20K0176.
