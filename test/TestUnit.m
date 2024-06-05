@@ -12,7 +12,7 @@ import matlab.unittest.fixtures.EnvironmentVariableFixture
 
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 
-fixture = EnvironmentVariableFixture("GEMCI_ROOT", tc.TestData.outdir);
+fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
 tc.applyFixture(fixture)
 
 end
@@ -25,10 +25,10 @@ function test_nml_gemini_envvar(tc)
 tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
-fixture = EnvironmentVariableFixture("GEMCI_ROOT", tc.TestData.outdir);
+fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
 tc.applyFixture(fixture)
 
-out = gemini3d.fileio.expand_envvar("@GEMCI_ROOT@/foo");
+out = gemini3d.fileio.expand_envvar("@GEMINI_CIROOT@/foo");
 
 tc.verifyEqual(out, fullfile(tc.TestData.outdir, "foo"))
 

@@ -63,5 +63,6 @@ jobs:
       uses: matlab-actions/run-build@v2
       env:
         GEMCI_ROOT: ${{ github.workspace }}/gemci
+        GEMINI_CIROOT: ~/ci
 
-# save CI time by not running duplicitive CMake tests
+#
