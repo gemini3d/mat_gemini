@@ -37,7 +37,7 @@ tc.TestData.ref_dir = fullfile(cwd, "data");
 % temporary working directory
 tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
 
-fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
+fixture = EnvironmentVariableFixture("GEMCI_ROOT", tc.TestData.outdir);
 tc.applyFixture(fixture)
 
 end
