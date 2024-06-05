@@ -4,6 +4,22 @@ runs:
 
     steps:
 
+    - name: compatible GCC compiler (Linux)
+      shell: bash
+      if: runner.os == 'Linux'
+      run: |
+        echo "CC=gcc-10" >> $GITHUB_ENV
+        echo "CXX=g++-10" >> $GITHUB_ENV
+        echo "FC=gfortran-10" >> $GITHUB_ENV
+
+    - name: GCC compiler (macOS)
+      shell: bash
+      if: runner.os == 'macOS'
+      run: |
+        echo "CC=gcc-13" >> $GITHUB_ENV
+        echo "CXX=g++-13" >> $GITHUB_ENV
+        echo "FC=gfortran-13" >> $GITHUB_ENV
+
     - name: Checkout GemGI (for simulation config.nml inputs)
       uses: actions/checkout@v4
       with:
@@ -16,8 +32,7 @@ runs:
       with:
         path: |
           ${{ env.CMAKE_INSTALL_PREFIX }}
-        key: ${{ runner.os }}-gemini-${{ hashFiles('gemini3d/CMakeLists.txt') }}
-      # weak check that gemini3d has changed since last cache update
+        key: ${{ runner.os }}-gemini
 
     - name: Checkout Gemini3D
       if: steps.cache-gemini.outputs.cache-hit != 'true'
