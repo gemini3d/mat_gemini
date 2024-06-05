@@ -14,7 +14,7 @@ on:
     - "**.cmake"
     - "**/CMakeLists.txt"
     - "cmake/libraries.json"
-    - ".github/workflows/ci.yml"
+    - ".github/workflows/**"
     - "!scripts/**"
 
 # full tests require >= R2023a
