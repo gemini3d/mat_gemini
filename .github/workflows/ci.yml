@@ -3,6 +3,7 @@ name: matlab
 env:
   CMAKE_BUILD_TYPE: Release
   CTEST_NO_TESTS_ACTION: error
+  CMAKE_GENERATOR: Ninja
   CMAKE_BUILD_PARALLEL_LEVEL: 4
   CMAKE_INSTALL_PREFIX: ~/libs
   GEMINI_ROOT: ~/libs
@@ -37,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2024a]
+        release: [R2024a, R2023a]
         os: [ubuntu-22.04]
 
     steps:
@@ -64,5 +65,3 @@ jobs:
       env:
         GEMCI_ROOT: ${{ github.workspace }}/gemci
         GEMINI_CIROOT: ~/ci
-
-#
