@@ -59,7 +59,7 @@ end
 function dryrun(cmd)
 
 disp("dryrun: " + join(cmd, " "))
-[ret, stdout, stderr] = stdlib.sys.subprocess_run([cmd, "-dryrun"]);
+[ret, stdout, stderr] = stdlib.subprocess_run([cmd, "-dryrun"]);
 if ret == 0
   % check for operating system failure that returned 0 but did nothing or failed
   assert(any(contains([stdout, stderr], "OK: Gemini dry run")), cmd(1) + " didn't run correctly." + stderr)

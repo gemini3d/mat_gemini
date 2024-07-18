@@ -45,7 +45,7 @@ folder = gemini3d.fileio.expand_envvar(folder);
 folder = stdlib.expanduser(folder);
 % in case absolute path was specified
 
-if ~isfolder(folder) && ~stdlib.is_absolute_path(folder)
+if ~isfolder(folder) && ~stdlib.is_absolute(folder)
   folder = fullfile(top, folder);
 end
 

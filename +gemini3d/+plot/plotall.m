@@ -50,7 +50,7 @@ end
 %% determine if GLOW
 if isfield(cfg, "aurmap_dir")
   % glow sim
-  if stdlib.is_absolute_path(cfg.aurmap_dir)
+  if stdlib.is_absolute(cfg.aurmap_dir)
     aurmap_dir = cfg.aurmap_dir;
   else
     aurmap_dir = fullfile(direc, cfg.aurmap_dir);

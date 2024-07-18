@@ -96,7 +96,7 @@ else
 end
 
 disp(join(cmd, " "))
-[stat, ~, stderr] = stdlib.sys.subprocess_run(cmd);
+[stat, ~, stderr] = stdlib.subprocess_run(cmd);
 % output written to file
 switch stat
   case 0  % good
