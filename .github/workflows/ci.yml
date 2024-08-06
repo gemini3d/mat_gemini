@@ -38,8 +38,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2024a, R2023a]
-        os: [ubuntu-22.04]
+        release: [latest-including-prerelease, R2023a]
+        os: [ubuntu-latest]
 
     steps:
 
