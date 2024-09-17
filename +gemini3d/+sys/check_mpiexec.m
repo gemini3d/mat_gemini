@@ -39,7 +39,7 @@ if isempty(exe)
   return
 end
 % get gemini.bin compiler ID
-[~, vendor] = system(stdlib.absolute_path(exe) + " -compiler");
+[~, vendor] = system(stdlib.canonical(exe) + " -compiler");
 if contains(vendor, 'GNU') && contains(msg, 'Intel(R) MPI Library')
   warning("MinGW is not compatible with Intel MPI %s", mpiexec)
   mpiexec = string.empty;
