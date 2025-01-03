@@ -22,6 +22,13 @@ arguments
   cfg (1,1) struct
 end
 
+% parameter controlling altitude of top of grid in open dipole.
+if (isfield(cfg,"grid_openparm"))
+  gopen = cfg.grid_openparm;
+else
+  gopen=100.0;
+end
+
 % (dtheta,dphi,lpp,lqp,lphip,altmin,glat,glon,gridflag)
 %% PAD GRID WITH GHOST CELLS
 lq = cfg.lq + 4;
@@ -63,9 +70,9 @@ if cfg.gridflag==0      %open dipole grid
 %     thetamax=thetamin+pi/50;        %open
 %     thetamax=thetamin+pi/30;        %open
    if thetatd < pi/2   %northern hemisphere
-     thetamax=thetax2min+pi/100;
+     thetamax=thetax2min+pi/gopen;
    else
-     thetamax=thetax2max-pi/100;
+     thetamax=thetax2max-pi/gopen;
    end
 else                %close dipole grid
    if thetatd < pi/2 %NH
