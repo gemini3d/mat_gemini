@@ -1,5 +1,7 @@
+%% DATELAB: convert datetime to Gemini3D string filename time
+% microsecond resolution
+
 function strlab = datelab(time)
-% convert datetime to Gemini3D string filename time: microsecond resolution
 arguments
   time datetime
 end
@@ -13,4 +15,4 @@ for i = 1:length(day)
   strlab(i) = string(day(i)) + "_" + num2str(UTsec(i), '%012.6f');
 end
 
-end % function
+end

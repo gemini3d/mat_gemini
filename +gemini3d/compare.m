@@ -1,9 +1,10 @@
-function compare(outdir, refdir, opts)
-%% compare entire output directory data files, and input files
+%%COMPARE compare entire output directory data files, and input files
 %
 % absolute and relative tolerance account for slight IEEE-754 based differences,
 % including non-associative, non-commutative floating-point arithmetic.
 % these parameters are a bit arbitrary.
+
+function compare(outdir, refdir, opts)
 
 % per MZ Oct 17, 2018:
 % Ti,Te=1 K

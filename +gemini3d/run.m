@@ -1,10 +1,10 @@
-function run(outdir, config_path, opts)
-%% setup and run Gemini simulation
+%% RUN setup and run Gemini3D simulation
 %
 % Example:
 %
-% gemini3d.run(output_dir, nml_path)
+%   gemini3d.run(output_dir, nml_path)
 
+function run(outdir, config_path, opts)
 arguments
   outdir (1,1) string
   config_path (1,1) string

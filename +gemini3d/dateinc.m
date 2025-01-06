@@ -12,4 +12,4 @@ ymdnew = [t1.Year, t1.Month, t1.Day];
 t1_midnight = datetime(t1.Year, t1.Month, t1.Day);
 UTsecnew = seconds(t1 - t1_midnight);
 
-end % function
+end

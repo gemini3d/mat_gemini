@@ -1,5 +1,6 @@
+%% CHECK_GRID basic check that grid is reasonable
+
 function ok = check_grid(xg)
-% sanity check grid
 arguments
   xg (1,1) struct
 end
