@@ -11,32 +11,6 @@ Use the correct path on your system, not the literal text above.
 
 ## Windows Subsystem for Linux (WSL)
 
-Windows users are generally recommended to use WSL for ease of building Gemini3D and associated libraries.
-Users that have Gemini3D compiled in WSL and using native Windows Matlab need to refer to the WSL Gemini3D location in GEMINI_ROOT using the WSL Windows path syntax prefixed with `\\wsl$`.
-Determine this location by from Windows Terminal:
-
-```sh
-wsl --list
-```
-
-the typical result is like:
-
-```
-Windows Subsystem for Linux Distributions:
-Ubuntu (Default)
-```
-
-Note the name of the "default" distro.
-
-Check in Windows Explorer for the path to the Gemini3D install in WSL. 
-It might be like (for username "me"):
-
-```
-\\wsl$\Ubuntu\home\me\libgem_gnu
-```
-
-Set the environment variable in Matlab like:
-
-```matlab
-setenv("GEMINI_ROOT", "\\wsl$\Ubuntu\home\me\libgem_gnu")
-```
+Windows users can use Intel oneAPI to build Gemini3D and associated libraries natively from Windows.
+Another choice is to generate the simulation files on Windows Matlab, then access those files from WSL to run the simulation.
+That is, the Gemini3D code is compiled in Linux under WSL and run there.

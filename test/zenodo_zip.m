@@ -8,9 +8,7 @@ arguments
   saveplot_fmt (1,:) string = "png"
 end
 
-import stdlib.expanduser
-
-path = expanduser(path);
+path = stdlib.expanduser(path);
 
 if ~contains(glob, '*')
   % if given single directory, will list files in that directory instead of the directory

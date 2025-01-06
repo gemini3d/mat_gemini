@@ -5,10 +5,8 @@ function cfg = setup_if_needed(opts, outdir, config_path)
     config_path (1,1) string
   end
 
-  import stdlib.expanduser
-
-  config_path = expanduser(config_path);
-  outdir = expanduser(outdir);
+  config_path = stdlib.expanduser(config_path);
+  outdir = stdlib.expanduser(outdir);
 
   cfg = gemini3d.read.config(config_path);
   cfg.outdir = outdir;

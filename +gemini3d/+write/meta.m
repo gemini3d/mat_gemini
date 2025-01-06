@@ -6,10 +6,7 @@ arguments
   cfg (1,1) struct
 end
 
-import stdlib.expanduser
-import stdlib.posix
-
-filename = expanduser(filename);
+filename = stdlib.expanduser(filename);
 
 mat = struct("arch", computer('arch'), "version", version());
 git = struct("version", in1.git_version, "remote", in1.remote, "branch", in1.branch, ...
@@ -19,7 +16,7 @@ js = struct("matlab", mat, "git", git);
 
 if isfield(cfg, "eq_dir")
   % JSON does not allow unescaped backslash
-  js.eq = struct("eq_dir", posix(cfg.eq_dir));
+  js.eq = struct("eq_dir", stdlib.posix(cfg.eq_dir));
   hashfn = fullfile(cfg.eq_dir, "sha256sum.txt");
   if isfile(hashfn)
     js.eq.sha256 = strtrim(fileread(hashfn));

@@ -89,11 +89,7 @@ end
 
 function msis_run(exe, in, out)
 
-if stdlib.is_wsl_path(exe)
-  cmd = ["wsl", stdlib.winpath2wslpath(exe), stdlib.winpath2wslpath(in), stdlib.winpath2wslpath(out)];
-else
-  cmd = [exe, in, out];
-end
+cmd = [exe, in, out];
 
 disp(join(cmd, " "))
 [stat, ~, stderr] = stdlib.subprocess_run(cmd);

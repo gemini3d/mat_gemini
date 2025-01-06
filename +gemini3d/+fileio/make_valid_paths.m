@@ -5,8 +5,6 @@ arguments
   top string = string.empty
 end
 
-import stdlib.with_suffix
-
 if isfield(cfg, 'outdir')
   cfg.outdir = stdlib.expanduser(cfg.outdir);
 elseif ~isempty(top)

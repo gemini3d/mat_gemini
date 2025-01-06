@@ -15,7 +15,9 @@ bindirs = [".", "msis", "bin", "build", "build/bin", "build/msis", ...
 for p = paths
   if isempty(p), continue, end
   for b = bindirs
-    exe = stdlib.which(name, fullfile(p, b));
+    % important to expanduser(p) because which() may find the ~/exe on Unix-like
+    % systems, but stdlib.subprocess_run doesn't like the leading tilde.
+    exe = stdlib.which(name, stdlib.join(stdlib.expanduser(p), b));
     if ~isempty(exe)
       return
     end

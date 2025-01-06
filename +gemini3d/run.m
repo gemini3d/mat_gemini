@@ -43,14 +43,10 @@ end % function
 
 function cmd = gemini_cmd(exe, outdir, mpi_exe)
 
-if stdlib.is_wsl_path(exe)
-  cmd = ["wsl", stdlib.winpath2wslpath(exe), stdlib.winpath2wslpath(outdir)];
-else
-  cmd = [exe, outdir];
-  mpiexec = gemini3d.sys.check_mpiexec(mpi_exe, exe);
-  if ~isempty(mpiexec)
-    cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
-  end
+cmd = [exe, outdir];
+mpiexec = gemini3d.sys.check_mpiexec(mpi_exe, exe);
+if ~isempty(mpiexec)
+  cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
 end
 
 end
