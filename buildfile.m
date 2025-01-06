@@ -20,6 +20,8 @@ setup()
 
 gemini3d.sys.macos_path()
 
+% leave this assert here to fail CI as "setup()" only warns, and CI will seem to pass
+% but actually be skipping several tests.
 exe = gemini3d.find.gemini_exe("msis_setup");
 assert(~isempty(exe), "need to setup Gemini3D and/or set environment variable GEMINI_ROOT")
 end

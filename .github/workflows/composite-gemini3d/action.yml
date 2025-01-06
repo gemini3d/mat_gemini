@@ -36,7 +36,7 @@ runs:
       if: steps.cache-gemini.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        cmake -B build
-        cmake --build build
+        cmake --preset default
+        cmake --build --preset default
         cmake --install build
       working-directory: gemini3d
