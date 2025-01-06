@@ -15,7 +15,7 @@ runs:
       with:
         path: |
           ${{ env.CMAKE_INSTALL_PREFIX }}
-        key: ${{ runner.os }}-gemini
+        key: ${{ runner.os }}-gemini-${{ env.CXX }}
 
     - name: Checkout Gemini3D
       if: steps.cache-gemini.outputs.cache-hit != 'true'
