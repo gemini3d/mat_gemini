@@ -1,10 +1,9 @@
-function p = read_nml(apath)
-% for reading simulation config*.nml.
+%% READ_NML reads simulation config*.nml Fortran namelist files
 % Fortran namelist is a standard format.
-%
-% returns struct.empty if file not found
+% returns a struct with the namelist variables as fields.
+function p = read_nml(apath)
 arguments
-  apath (1,1) string {mustBeNonzeroLengthText}
+  apath (1,1) string
 end
 
 fn = gemini3d.find.config(apath);

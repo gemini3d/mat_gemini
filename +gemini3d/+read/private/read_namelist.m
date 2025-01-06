@@ -1,3 +1,5 @@
+%% READ_NAMELIST read Fortran namlist to struct
+
 function params = read_namelist(filename, namelist)
 
 arguments
@@ -31,7 +33,8 @@ while ~feof(fid)
 
   pat = '^\s*(\w+)\s*=\s*[''\"]?([^!''\"]*)[''\"]?';
   matches = regexp(line, pat, 'tokens');
-  if isempty(matches)  % blank, commented or malformed line
+  if isempty(matches)
+    % blank, commented or malformed line
     continue
   end
 
