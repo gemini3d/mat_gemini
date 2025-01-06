@@ -3,13 +3,6 @@ runs:
     using: 'composite'
 
     steps:
-
-    - name: GCC compiler (macOS)
-      shell: bash
-      if: runner.os == 'macOS'
-      run: |
-        echo "FC=gfortran-14" >> $GITHUB_ENV
-
     - name: Checkout GemGI (for simulation config.nml inputs)
       uses: actions/checkout@v4
       with:

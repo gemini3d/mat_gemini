@@ -28,13 +28,13 @@ jobs:
 
   linux:
     timeout-minutes: 30
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
+    # Ubuntu 22.04 GA Linux runner has GCC-10, needed for Matlab R2022a..R2024b
 
     strategy:
       fail-fast: false
       matrix:
         release: [R2024b, R2023a]
-        os: [ubuntu-latest]
 
     steps:
 
@@ -62,6 +62,10 @@ jobs:
       timeout-minutes: 15
       env:
         CMAKE_INSTALL_PREFIX: ${{ github.workspace }}/libs
+        CC: gcc-10
+        CXX: g++-10
+        FC: gfortran-10
+    # avoid GLIBCXX conflicts causing subprocess_run to not work
 
     - name: Run Matlab tests (buildtool)
       timeout-minutes: 15
