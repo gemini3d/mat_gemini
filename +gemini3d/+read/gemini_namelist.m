@@ -1,7 +1,7 @@
-%% READ_NML reads simulation config*.nml Fortran namelist files
+%% GEMINI_NAMELIST reads simulation config*.nml Fortran namelist files
 % Fortran namelist is a standard format.
 % returns a struct with the namelist variables as fields.
-function p = read_nml(apath)
+function p = gemini_namelist(apath)
 arguments
   apath (1,1) string
 end
@@ -10,13 +10,13 @@ fn = gemini3d.find.config(apath);
 assert(~isempty(fn), "Invalid simulation directory: no simulation config file config.nml found in " + apath)
 
 %% required namelists
-p = read_namelist(fn, 'base');
+p = gemini3d.read.namelist(fn, 'base');
 
 t0 = datetime(p.ymd(1), p.ymd(2), p.ymd(3)) + seconds(p.UTsec0);
 p.times = t0:seconds(p.dtout):(t0 + seconds(p.tdur));
 
-p = merge_struct(p, read_namelist(fn, 'flags'));
-p = merge_struct(p, read_namelist(fn, 'files'));
+p = merge_struct(p, gemini3d.read.namelist(fn, 'flags'));
+p = merge_struct(p, gemini3d.read.namelist(fn, 'files'));
 
 %% optional namelists
 if ~isfield(p, 'nml')
@@ -57,15 +57,17 @@ p = read_if_present(p, fn, 'glow');
 
 p = read_if_present(p, fn, 'milestone');
 
-end % function
+end
+
 
 function p = read_if_present(p, fn, namelist)
-% read a namelist, if it exists, otherwise don't modify the input struct
+%% READ_IF_PRESENT read a namelist, if it exists
+% otherwise don't modify the input struct
 
 try
-  p = merge_struct(p, read_namelist(fn, namelist));
+  p = merge_struct(p, gemini3d.read.namelist(fn, namelist));
 catch excp
-  if excp.identifier ~= "read_namelist:namelist_not_found"
+  if excp.identifier ~= "gemini3d:read:namelist:namelist_not_found"
     rethrow(excp)
   end
 end

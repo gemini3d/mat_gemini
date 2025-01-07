@@ -38,17 +38,23 @@ Qprecip_background = 0.0
 E0precip = 5e3
 Etarg = 50e-3   ! V/m
 Efield_lonwidth = 0.142857
-eqdir = '@GEMINI_CIROOT@/test2d_eq'
+eqdir = '@GEMINI_CIROOT@/test2d_eq'  ! environment variable between @ @
+/
+
+&expandCheck
+singlequote = '@GEMINI_CIROOT@/test123' !  @ @  with single quotes
+doublequote = '@GEMINI_CIROOT@/test321' !  @ @ with double quotes
+listvar = 'first', 'second', "third"  ! also a comment
 /
 
 &precip
 dtprec = 5.0
-prec_dir = 'inputs/prec_inputs/'
+prec_dir = "inputs/prec_inputs/"   ! checking that double quotes work
 /
 
 &efield
 dtE0 = 1.0
-E0_dir = 'inputs/Efield_inputs/'
+E0_dir = 'inputs/Efield_inputs/'  ! checking that single quotes work
 /
 
 &glow

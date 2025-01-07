@@ -4,6 +4,6 @@ arguments
   direc (1,1) string
 end
 
-cfg = read_nml(direc);
+cfg = gemini3d.read.gemini_namelist(direc);
 
 end

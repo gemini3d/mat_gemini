@@ -8,14 +8,24 @@ methods(TestClassSetup)
 
 function config_path(tc)
 tc.TestData.cwd = fileparts(mfilename("fullpath"));
+tc.TestData.config = stdlib.join(tc.TestData.cwd, "config.nml");
 end
 
 end
+
 
 methods(Test)
 
+function test_read_namelist(tc)
+s = gemini3d.read.namelist(tc.TestData.config, "expandCheck");
+
+tc.verifyEqual(s.singlequote, "@GEMINI_CIROOT@/test123")
+tc.verifyEqual(s.doublequote, "@GEMINI_CIROOT@/test321")
+
+end
+
 function test_find_config(tc)
-tc.verifyEqual(gemini3d.find.config(tc.TestData.cwd), fullfile(tc.TestData.cwd, "config.nml"))
+tc.verifyEqual(gemini3d.find.config(tc.TestData.cwd), tc.TestData.config)
 end
 
 function test_read_config(tc)
