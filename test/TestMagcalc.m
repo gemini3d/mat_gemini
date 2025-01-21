@@ -26,7 +26,7 @@ end
 end
 
 function setup_env(tc)
-tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
+tc.assumeFalse(isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
 cwd = fileparts(mfilename('fullpath'));
@@ -34,8 +34,7 @@ cwd = fileparts(mfilename('fullpath'));
 tc.TestData.cwd = cwd;
 tc.TestData.ref_dir = fullfile(cwd, "data");
 
-% temporary working directory
-tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
+tc.TestData.outdir = tc.createTemporaryFolder();
 
 fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
 tc.applyFixture(fixture)

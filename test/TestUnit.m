@@ -1,16 +1,16 @@
 classdef TestUnit < matlab.unittest.TestCase
 
 properties
-  TestData
+TestData
 end
 
 methods(TestClassSetup)
 
 function setup_env(tc)
-tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
+tc.assumeFalse(isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
-tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
+tc.TestData.outdir = tc.createTemporaryFolder();
 
 fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);
 tc.applyFixture(fixture)
@@ -22,7 +22,7 @@ methods (Test)
 
 
 function test_nml_gemini_envvar(tc)
-tc.assumeTrue(~isMATLABReleaseOlderThan('R2023a'))
+tc.assumeFalse(isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
 fixture = EnvironmentVariableFixture("GEMINI_CIROOT", tc.TestData.outdir);

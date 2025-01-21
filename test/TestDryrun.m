@@ -38,8 +38,7 @@ try
 catch e
   catcher(e, tc)
 end
-% temporary working directory
-tc.TestData.outdir = tc.applyFixture(matlab.unittest.fixtures.TemporaryFolderFixture()).Folder;
+tc.TestData.outdir = tc.createTemporaryFolder();
 end
 
 end
