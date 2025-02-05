@@ -23,13 +23,20 @@ Get MatGemini code:
 git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
 ```
 
-If Gemini3D has previously been setup, from Matlab configure/check MatGemini paths:
+We assume that Gemini3D binary executables have previously been built on your computer.
+From Matlab, configure/check MatGemini paths:
 
 ```matlab
-setup
+buildtool setup
 ```
 
 Then run desired MatGemini commands.
+
+The Gemini3D self-tests can be run with:
+
+```matlab
+buildtool test
+```
 
 ---
 

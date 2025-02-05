@@ -11,3 +11,4 @@ test/data/
 test/ref_data.json
 
 CodeIssues.sarif
+TestResults.xml
