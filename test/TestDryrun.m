@@ -22,6 +22,12 @@ catch e
 end
 end
 
+
+function check_mpiexec(tc)
+tc.assumeNotEmpty(stdlib.which("mpiexec"), "MPIEXEC was not on PATH")
+end
+
+
 function setup_sim(tc)
 
 exe = gemini3d.find.gemini_exe("gemini3d.run");
