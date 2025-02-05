@@ -39,7 +39,7 @@ function test_msis00_setup(tc)
 inputs_dir = tc.createTemporaryFolder();
 
 cfg = struct('times', datetime(2015, 1, 2, 0, 0, 43200), 'f107', 100.0, 'f107a', 100.0, 'Ap', 4, ...
-  'msis_version', 0, 'indat_size', fullfile(inputs_dir.Folder, "simsize.h5"));
+  'msis_version', 0, 'indat_size', fullfile(inputs_dir, "simsize.h5"));
 
 try
   atmos = gemini3d.model.msis(cfg, tc.TestData.xg);
