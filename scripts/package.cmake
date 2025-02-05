@@ -1,5 +1,5 @@
 # Create offline installable archive of this repository
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.31)
 
 find_package(Git REQUIRED)
 
@@ -18,26 +18,13 @@ if(NOT tar)
 endif()
 
 if(NOT DEFINED archive)
-  set(archive mat_gemini.tar.bz2)
+  set(archive mat_gemini.zip)
 endif()
 
-set(exclude
---exclude-vcs
---exclude=.github/
---exclude=.archive/
---exclude=test/data/
---exclude=test/ref_data.json
---exclude=build*/
-)
 
-
-message(STATUS "create archive ${archive}")
-execute_process(
-COMMAND ${tar} --create --file ${archive} --bzip2 ${exclude} .
+file(ARCHIVE_CREATE OUTPUT ${archive}
+PATHS ./
+FORMAT zip
 WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..
-RESULT_VARIABLE ret
+VERBOSE
 )
-if(NOT ret EQUAL 0)
-  message(FATAL_ERROR "Failed to create archive ${archive}:
-  ${ret}")
-endif()
