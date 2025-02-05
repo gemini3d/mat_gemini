@@ -8,9 +8,12 @@ if ~ismac
 end
 
 %% homebrew path
-[ret, homebrew_prefix] = system('brew --prefix');
-if ret == 0
-  addpath_if_needed(fullfile(strip(homebrew_prefix), "bin"))
+for brew = ["brew", "/opt/homebrew/bin/brew", "/usr/local/bin/brew"]
+  [ret, homebrew_prefix] = system(brew + " --prefix");
+  if ret == 0
+    addpath_if_needed(fullfile(strip(homebrew_prefix), "bin"))
+    break
+  end
 end
 
 
