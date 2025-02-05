@@ -23,11 +23,7 @@ if isfield(cfg, "eq_dir")
   end
 end
 
-if isMATLABReleaseOlderThan('R2021a')
-  json = jsonencode(js);
-else
-  json = jsonencode(js, "PrettyPrint", true);
-end
+json = jsonencode(js, PrettyPrint=true);
 
 fid = fopen(filename, 'w');
 if fid < 1
