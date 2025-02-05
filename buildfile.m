@@ -1,15 +1,18 @@
 function plan = buildfile
 plan = buildplan(localfunctions);
+
 plan.DefaultTasks = "test";
-plan("test").Dependencies = ["check", "setup"];
+
+plan("test") = matlab.buildtool.tasks.TestTask("test", Strict=false);
+plan("test").Dependencies = ["setup"];
+
+
+if ~isMATLABReleaseOlderThan("R2024a")
+  check_paths = ["+gemini3d/", "test"];
+  plan("check") = matlab.buildtool.tasks.CodeIssuesTask(check_paths, ...
+    IncludeSubfolders=true, ...
+    WarningThreshold=0, Results="CodeIssues.sarif");
 end
-
-
-function checkTask(~)
-
-issues = codeIssues("+gemini3d/");
-
-assert(isempty(issues.Issues), formattedDisplayText(issues.Issues))
 
 end
 
@@ -24,16 +27,4 @@ gemini3d.sys.macos_path()
 % but actually be skipping several tests.
 exe = gemini3d.find.gemini_exe("msis_setup");
 assert(~isempty(exe), "need to setup Gemini3D and/or set environment variable GEMINI_ROOT")
-end
-
-function testTask(~, test_name)
-arguments
-  ~
-  test_name (1,1) string = "*"
-end
-
-r = runtests('test/', Name=test_name);
-
-assert(~isempty(r))
-assertSuccess(r)
 end
