@@ -12,6 +12,7 @@ on:
     - "cmake/libraries.json"
     - ".github/workflows/**"
     - "!scripts/**"
+    - "!examples/**"
 
 # full tests require >= R2023a
 
