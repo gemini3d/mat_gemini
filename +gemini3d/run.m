@@ -36,7 +36,7 @@ gemini3d.write.meta(fullfile(cfg.outdir, "setup_run.json"), gemini3d.git_revisio
 
 disp("run: " + join(cmd, " "))
 ret = stdlib.subprocess_run(cmd);
-assert(ret == 0, 'Gemini run failed, error code %d', ret)
+assert(ret == 0, "gemini3d:run:RuntimeError", 'Gemini run failed, error code %d', ret)
 
 end % function
 
