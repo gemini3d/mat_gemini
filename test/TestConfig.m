@@ -8,7 +8,7 @@ methods(TestClassSetup)
 
 function config_path(tc)
 tc.TestData.cwd = fileparts(mfilename("fullpath"));
-tc.TestData.config = stdlib.join(tc.TestData.cwd, "config.nml");
+tc.TestData.config = tc.TestData.cwd + "/config.nml";
 end
 
 end

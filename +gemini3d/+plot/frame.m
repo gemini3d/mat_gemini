@@ -51,7 +51,7 @@ if isnan(i)
 end
 time = cfg.times(i);
 %% LOAD THE FRAME NEAREST TO THE REQUESTED TIME
-dat = gemini3d.read.frame(direc, "time", time);
+dat = gemini3d.read.frame(direc, time=time);
 disp(dat.filename + ' => ' + func2str(plotfun))
 
 %% SET THE Color LIMITS FOR THE PLOTS

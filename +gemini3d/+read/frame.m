@@ -4,15 +4,15 @@ function dat = frame(filename, opts)
 %
 % example use
 % dat = gemini3d.read.frame(filename)
-% dat = gemini3d.read.frame(folder, "time", datetime)
-% dat = gemini3d.read.frame(filename, "config", cfg)
-% dat = gemini3d.read.frame(filename, "vars", vars)
+% dat = gemini3d.read.frame(folder, time=datetime)
+% dat = gemini3d.read.frame(filename, config=cfg)
+% dat = gemini3d.read.frame(filename, vars=vars)
 %
 % The "vars" argument allows loading a subset of variables.
 % for example:
 %
-% gemini3d.read.frame(..., "ne")
-% gemini3d.read.frame(..., ["ne", "Te"])
+% gemini3d.read.frame(..., vars="ne")
+% gemini3d.read.frame(..., vars=["ne", "Te"])
 
 arguments
   filename (1,1) string {mustBeNonzeroLengthText}

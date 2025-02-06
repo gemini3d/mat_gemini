@@ -56,7 +56,7 @@ methods(Test)
 function test_dryrun(tc)
 
 try
-  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, "dryrun", true)
+  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, dryrun=true)
 catch e
   catcher(e, tc)
 end

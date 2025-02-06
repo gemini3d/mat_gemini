@@ -75,7 +75,7 @@ catch e
 end
 
 try
-  gemini3d.compare(cfg.indat_grid, test_dir, "only", "grid")
+  gemini3d.compare(cfg.indat_grid, test_dir, only="grid")
 catch e
   if e.identifier == "gemini3d:compare:grid:allclose_error"
     tc.verifyFail("gemini3d.compare.grid data mismatch")
@@ -105,7 +105,7 @@ xg = gemini3d.read.grid(test_dir);
 gemini3d.efield.Efield_BCs(p, xg);
 
 time = p.times(1):seconds(p.dtE0):p.times(end);
-gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), "only", 'efield', "time", time)
+gemini3d.compare(fullfile(tc.TestData.outdir, E0_dir), fullfile(test_dir, E0_dir), only='efield', time=time)
 end
 
 
@@ -130,7 +130,7 @@ xg = gemini3d.read.grid(test_dir);
 gemini3d.particles.particles_BCs(p, xg);
 
 try
-  gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), "only","precip", "time", p.times)
+  gemini3d.compare(fullfile(tc.TestData.outdir, prec_dir), fullfile(test_dir, prec_dir), only="precip", time=p.times)
 catch e
   if e.identifier == "gemini3d:compare:precip:allclose_error"
     tc.verifyFail("preciptation data didn't match reference")
@@ -149,7 +149,7 @@ catch err
 end
 
 try
-  gemini3d.compare(tc.TestData.outdir, fullfile(tc.TestData.ref_dir, name), "only", "in")
+  gemini3d.compare(tc.TestData.outdir, fullfile(tc.TestData.ref_dir, name), only="in")
 catch e
   if e.identifier == "gemini3d:compare:input:allclose_error"
     tc.verifyFail("generated plasma data didn't match reference")
@@ -200,7 +200,7 @@ h = gemini3d.plot.init(gemini3d.read.grid(d3));
 tc.verifySize(h, [1,10])
 tc.verifyClass(h, 'matlab.ui.Figure')
 
-gemini3d.plot.frame(d3, datetime(2013, 2, 20, 5, 5, 0), "figures", h)
+gemini3d.plot.frame(d3, datetime(2013, 2, 20, 5, 5, 0), figures=h)
 close(h)
 end
 

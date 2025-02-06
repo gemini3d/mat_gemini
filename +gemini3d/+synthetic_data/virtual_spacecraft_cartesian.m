@@ -93,7 +93,7 @@ for iorb=1:lorb
           if (firstprev && firstnext || abs(datemodprev-datebufnext) >= seconds(dtout/2))               % only load a prev buffer if the desired previous model date (datemodprev) is not the existing next buffer (datebufnext)
               fprintf('Loading previous buffer... %s \n', datenow);
 
-              dat=gemini3d.read.frame(direc, 'time', datemodprev);
+              dat=gemini3d.read.frame(direc, time=datemodprev);
               neprev=double(dat.ne); viprev=double(dat.v1); Tiprev=double(dat.Ti); Teprev=double(dat.Te);
               J1prev=double(dat.J1); J2prev=double(dat.J2); J3prev=double(dat.J3); v2prev=double(dat.v2);
               v3prev=double(dat.v3);
@@ -127,7 +127,7 @@ for iorb=1:lorb
     if (abs(datebufnext-datemodnext) >= seconds(dtout/2) || firstnext)    %need to reload the next output frame into data buffers
       fprintf('Loading next buffer... %s\n', datenow)
 
-      dat=gemini3d.read.frame(direc, 'time', datemodnext);
+      dat=gemini3d.read.frame(direc, time=datemodnext);
       nenext=double(dat.ne); vinext=double(dat.v1); Tinext=double(dat.Ti); Tenext=double(dat.Te);
       J1next=double(dat.J1); J2next=double(dat.J2); J3next=double(dat.J3); v2next=double(dat.v2);
       v3next=double(dat.v3);

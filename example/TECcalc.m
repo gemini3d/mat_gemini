@@ -123,7 +123,7 @@ dvTEC=[];
 
 for it=1:length(cfg.times)
     %LOAD DIST. FILE
-    dat = gemini3d.read.frame(direc, "time", cfg.times(it), "vars", "ne");
+    dat = gemini3d.read.frame(direc, time=cfg.times(it), vars="ne");
 
     %DEFINE A MESHGRID BASED ON SIMULATION OUTPUT AND DO INTERPOLATION
     if (~flag2D)
@@ -151,7 +151,7 @@ for it=1:length(cfg.times)
 
 
     %LOAD CONTROL SIMULATION
-    dat = gemini3d.read.frame(direc_control, "time", cfg.times(it), "vars", "ne");
+    dat = gemini3d.read.frame(direc_control, time=cfg.times(it), vars="ne");
 
 
     %DEFINE A MESHGRID BASED ON CONTROL SIMULATION OUTPUT AND DO INTERPOLATION
