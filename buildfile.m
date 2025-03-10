@@ -1,5 +1,6 @@
 function plan = buildfile
 plan = buildplan(localfunctions);
+plan.DefaultTasks = "setup";
 
 check_paths = ["+gemini3d/", "test"];
 
@@ -15,7 +16,6 @@ if ~isMATLABReleaseOlderThan("R2023b")
   plan("check") = matlab.buildtool.tasks.CodeIssuesTask(check_paths, codeIssuesArgs{:});
   plan("test") = matlab.buildtool.tasks.TestTask(testTaskArgs{:});
 
-  plan.DefaultTasks = "test";
   plan("test").Dependencies = "setup";
 end
 
