@@ -30,8 +30,6 @@ endif()
 
 # -- MatGemini testing
 
-set(setup_m ${CMAKE_CURRENT_SOURCE_DIR}/setup.m)
-
 add_test(NAME Lint COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool check")
 
 # --- unit tests
@@ -45,25 +43,24 @@ endforeach()
 
 # --- MSIS tests
 
-add_test(NAME MSIS COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestMSIS/*');")
-set_property(TEST Unit Grid MSIS PROPERTY REQUIRED_FILES ${setup_m})
+add_test(NAME MSIS COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool test('TestMSIS/*');")
 
 # --- data download tests
 
 add_test(NAME DataIO
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestDataIO/*')"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool test('TestDataIO/*')"
 )
 
 # --- integration tests
 
 add_test(NAME Dryrun
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestDryrun/*')"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool test('TestDryrun/*')"
 )
 set_property(TEST Dryrun PROPERTY FIXTURES_SETUP dryrun_fxt)
 set_property(TEST Dryrun DataIO PROPERTY RUN_SERIAL true)
 
 add_test(NAME Project
-COMMAND ${Matlab_MAIN_PROGRAM} -batch "run('${setup_m}'), buildtool test('TestProject/*')"
+COMMAND ${Matlab_MAIN_PROGRAM} -batch "buildtool test('TestProject/*')"
 )
 set_property(TEST Project PROPERTY FIXTURES_REQUIRED dryrun_fxt)
 

@@ -1,7 +1,5 @@
 %[text] `This simulation takes less than 1 minute on a typical computer, even a Raspberry Pi.`
-%[text] `First we must ensure MatGemini is on the Matlab path:`
-cwd = which('gemini3d');
-run(fullfile(cwd, 'setup.m'))
+%[text] `First, from the mat_gemini-scripts directory run "buildtool setup"`
 %[text] `Pick an arbitrary output directory:`
 outdir = '~/simulations/2dns_fang/';
 %[text] `Simulation will fail if rerun, so get rid of existing output files first.`
