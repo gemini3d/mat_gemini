@@ -1,4 +1,4 @@
-  function magcalc(direc, dang, Ltheta, Lphi, xg)
+  function magcalc(direc, dang, Ltheta, Lphi, alt, xg)
 % based on config file, create set of input points for Gemini3D "magcalc" program
 % via gemini3d.write.maggrid()
 arguments
@@ -7,6 +7,7 @@ arguments
   % ANGULAR RANGE TO COVER FOR THE FIELD POINTS - SOURCE POINTS COVER ENTIRE GRID
   Ltheta (1,1) {mustBeInteger, mustBePositive} = 40
   Lphi (1,1) {mustBeInteger, mustBePositive} = 40
+  alt (1,1) {mustBeFloat, mustBeFinite} = 0e3
   xg struct = struct.empty
 end
 
@@ -51,7 +52,7 @@ if flag2D
 else
   phi=linspace(phimin, phimax, Lphi);
 end
-r=6370e3*ones(Ltheta, Lphi);                          %use ground level for altitude for all field points
+r=6370e3*ones(Ltheta, Lphi) + alt;                          %use ground level for altitude for all field points
 [phi,theta]=meshgrid(phi,theta);
 
 %% CREATE AN INPUT FILE OF FIELD POINTS
