@@ -1,7 +1,7 @@
 function [xg, ok] = grid(apath)
 %% reads simulation grid
 arguments
-  apath (1,1) string {mustBeFolder}
+  apath (1,1) string
 end
 
 simsize_fn = gemini3d.find.simsize(apath);
