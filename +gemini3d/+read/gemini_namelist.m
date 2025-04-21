@@ -57,6 +57,10 @@ p = read_if_present(p, fn, 'glow');
 
 p = read_if_present(p, fn, 'milestone');
 
+p = read_if_present(p, fn, 'aurora_parameters');
+
+p = read_if_present(p, fn, 'replication');
+
 end
 
 
