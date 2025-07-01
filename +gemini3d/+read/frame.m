@@ -31,7 +31,7 @@ if ~isfile(filename)
   end
 end
 
-assert(~isempty(filename) && isfile(filename), "Invalid simulation directory: no data file found")
+assert(isfile(filename), "Invalid simulation directory: no data file found")
 
 if isempty(opts.cfg)
   parent = fileparts(filename);

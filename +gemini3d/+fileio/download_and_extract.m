@@ -13,9 +13,6 @@ gemini3d.sys.check_stdlib()
 
 data_dir = stdlib.expanduser(data_dir);
 test_dir = fullfile(data_dir, name);
-if isfolder(test_dir)
-  return
-end
 
 archive = download_data(name, data_dir, url_ini);
 
@@ -63,6 +60,7 @@ arguments
 end
 
 if isfield(urls.(name), "sha256")
+  disp("checking sha256sum of " + archive)
   if stdlib.sha256sum(archive) ~= urls.(name).sha256
     warning('gemini3d:fileio:download_and_extract:hash_error', ...
       '%s sha256 hash does not match, file may be corrupted', archive)

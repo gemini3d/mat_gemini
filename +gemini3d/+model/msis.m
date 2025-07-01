@@ -71,7 +71,7 @@ UTsec0 = seconds(time - datetime(time.Year, time.Month, time.Day));
 alt = xg.alt/1e3;
 alt(alt <= 0) = 1;
 
-h5save(file, "/msis_version", msis_version, 'type', 'int32')
+h5save(file, "/msis_version", msis_version, type='int32')
 h5save(file, "/doy", doy, 'type', 'int32')
 h5save(file, "/UTsec", UTsec0)
 h5save(file, "/f107a", f107a)

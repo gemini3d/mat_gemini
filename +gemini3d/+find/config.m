@@ -1,7 +1,7 @@
 function filename = config(direc)
 %% get configuration file
 arguments
-  direc (1,1) string {mustBeNonzeroLengthText}
+  direc {mustBeTextScalar}
 end
 
 gemini3d.sys.check_stdlib()

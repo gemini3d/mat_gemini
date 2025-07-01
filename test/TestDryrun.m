@@ -24,14 +24,17 @@ end
 
 
 function check_mpiexec(tc)
-tc.assumeNotEmpty(stdlib.which("mpiexec"), "MPIEXEC was not on PATH")
+[s, ~] = system('mpiexec -help');
+tc.assumeEqual(s, 0, "MPIEXEC not found or working")
 end
 
 
 function setup_sim(tc)
 
-exe = gemini3d.find.gemini_exe("gemini3d.run");
-tc.assumeNotEmpty(exe, "gemini3d.run program not found. Compile with https://github.com/gemini3d/gemini3d.git")
+n = "gemini3d.run";
+
+exe = gemini3d.find.gemini_exe(n);
+tc.assumeNotEmpty(exe, n +" program not found. Compile with https://github.com/gemini3d/gemini3d.git")
 
 name = "mini2dew_eq";
 

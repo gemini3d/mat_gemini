@@ -4,6 +4,10 @@ arguments
   name (1,1) string {mustBeNonzeroLengthText}
 end
 
+if ispc() && ~endsWith(name, ".exe", IgnoreCase=true)
+  name = name + ".exe";
+end
+
 gemini3d.sys.check_stdlib()
 
 paths = [fullfile(gemini3d.root(), ".."), ...

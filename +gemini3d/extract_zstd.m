@@ -10,12 +10,12 @@ end
 archive = stdlib.absolute(archive);
 out_dir = stdlib.absolute(out_dir);
 
-exe = stdlib.which("cmake");
-if isempty(exe)
+[s, ~] = system('cmake --version');
+if s ~= 0
   extract_zstd_bin(archive, out_dir)
 end
 
-[ret, msg] = stdlib.subprocess_run([exe, "-E", "tar", "xf", archive], "cwd", out_dir);
+[ret, msg] = stdlib.subprocess_run(["cmake", "-E", "tar", "xf", archive], cwd=out_dir);
 assert(ret == 0, "problem extracting %s   %s", archive, msg)
 
 end
@@ -29,12 +29,13 @@ arguments
   out_dir (1,1) string
 end
 
-exe = stdlib.which("zstd");
-assert(~isempty(exe), "need to have Zstd installed: https://github.com/facebook/zstd")
+[s, ~] = system('zstd -h');
+assert(s == 0, "zstd not found, please install it or add it to your PATH");
 
-tar_arc = tempname;
+cmd = "zstd -d " + archive + " -o " + tempname;
+disp(cmd)
 
-ret = system(exe + " -d " + archive + " -o " + tar_arc);
+ret = system(cmd);
 assert(ret == 0, "problem extracting %s", archive)
 
 untar(tar_arc, out_dir)

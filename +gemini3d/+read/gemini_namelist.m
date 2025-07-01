@@ -3,7 +3,7 @@
 % returns a struct with the namelist variables as fields.
 function p = gemini_namelist(apath)
 arguments
-  apath (1,1) string
+  apath {mustBeTextScalar}
 end
 
 fn = gemini3d.find.config(apath);
