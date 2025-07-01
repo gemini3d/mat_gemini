@@ -94,8 +94,10 @@ function msis_run(exe, in, out)
 
 cmd = [exe, in, out];
 
-disp(join(cmd, " "))
-[stat, ~, stderr] = stdlib.subprocess_run(cmd);
+scmd = join(cmd, " ");
+disp(scmd)
+
+[stat, stderr] = system(scmd);
 % output written to file
 switch stat
   case 0  % good

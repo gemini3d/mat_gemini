@@ -15,7 +15,7 @@ end
 %% setup new test data
 p = gemini3d.read.config(test_dir);
 tc.assumeNotEmpty(p)
-p.outdir = tc.TestData.outdir;
+p.outdir = tc.outdir;
 
 for k = ["indat_file", "indat_size", "indat_grid"]
   p.(k) = stdlib.with_suffix(p.(k), ".h5");

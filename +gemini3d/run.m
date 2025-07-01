@@ -54,20 +54,25 @@ end
 
 function dryrun(cmd)
 
-disp("dryrun: " + join(cmd, " "))
-[ret, stdout, stderr] = stdlib.subprocess_run([cmd, "-dryrun"]);
+cmd = [cmd, "-dryrun"];
+
+scmd = join(cmd, " ");
+disp("dryrun: " + scmd)
+% [ret, stdout, stderr] = stdlib.subprocess_run(cmd);
+% msg = stdout + stderr;
+[ret, msg] = system(scmd);
 if ret == 0
   % check for operating system failure that returned 0 but did nothing or failed
-  assert(any(contains([stdout, stderr], "OK: Gemini dry run")), cmd(1) + " didn't run correctly." + stderr)
+  assert(any(contains(msg, "OK: Gemini dry run")), cmd(1) + " didn't run correctly." + msg)
 elseif ret == -1073741515
   % Windows 0xc0000135, missing DLL
-  msg = stderr + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
+  msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
     "such as LAPACK. " + ...
     "A DLL is missing on your system and gemini.bin cannot run." + ...
     "This can also happen if Gemini3D was built with oneAPI and you're not currently in the oneAPI Command Prompt.";
    error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", msg)
 else
-  error("gemini3d:run:RuntimeError", "Gemini dryrun failed %s", stderr)
+  error("gemini3d:run:RuntimeError", "Gemini dryrun failed %d %s", ret, msg)
 end
 
 end
