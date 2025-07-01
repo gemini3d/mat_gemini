@@ -33,12 +33,13 @@ end %if
 file = stdlib.expanduser(file);
 disp("write: " + file)
 
-freal = 'float32';      % default "magcalc" input files are real32 to save space
+freal = 'single';
+% 'single' is real 32-bit floating point
 
-h5save(file, "/lpoints", numel(mag.R), "type", "int32");
-h5save(file, "/r", mag.R(:), "type", freal);
-h5save(file, "/theta", mag.THETA(:), "type", freal);
-h5save(file, "/phi", mag.PHI(:), "type", freal);
-h5save(file, "/gridsize", gridsize, "type", "int32");
+h5save(file, "/lpoints", numel(mag.R), type="int32");
+h5save(file, "/r", mag.R(:), type=freal);
+h5save(file, "/theta", mag.THETA(:), type=freal);
+h5save(file, "/phi", mag.PHI(:), type=freal);
+h5save(file, "/gridsize", gridsize, type="int32");
 
 end %function

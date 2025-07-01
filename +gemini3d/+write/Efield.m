@@ -38,7 +38,8 @@ if isfile(fn)
   delete(fn)
 end
 
-freal = 'float32';
+freal = 'single';
+% 'single' is real 32-bit floating point
 
 h5save(fn, '/mlon', E.mlon, "size", llon, "type", freal)
 h5save(fn, '/mlat', E.mlat, "size", llat, "type", freal)

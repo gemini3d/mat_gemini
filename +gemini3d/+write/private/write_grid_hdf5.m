@@ -21,7 +21,8 @@ fn = p.indat_grid;
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
-freal = 'float32';
+freal = 'single';
+% 'single' is real 32-bit floating point
 
 h5save(fn, '/x1', xg.x1, "size", lx1 + Ng, "type", freal)
 h5save(fn, '/x1i', xg.x1i, "size", lx1+1, "type", freal)

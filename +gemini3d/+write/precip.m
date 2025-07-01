@@ -25,7 +25,8 @@ if isfile(fn), delete(fn), end
 h5save(fn, '/llon', pg.llon, "type", "int32")
 h5save(fn, '/llat', pg.llat, "type", "int32")
 
-freal = 'float32';
+freal = 'single';
+% 'single' is real 32-bit floating point
 
 fn = fullfile(outdir, 'simgrid.h5');
 if isfile(fn), delete(fn), end

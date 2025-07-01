@@ -31,7 +31,8 @@ import stdlib.h5save
 disp("write " + fn)
 if isfile(fn), delete(fn), end
 
-freal = 'float32';
+freal = 'single';
+% 'single' is real 32-bit floating point
 
 h5save(fn, '/nsall', ics.ns, "type",  freal)
 h5save(fn, '/vs1all', ics.vs1, "type", freal)

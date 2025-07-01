@@ -76,13 +76,16 @@ h5save(file, "/doy", doy, 'type', 'int32')
 h5save(file, "/UTsec", UTsec0)
 h5save(file, "/f107a", f107a)
 h5save(file, "/f107", f107)
+
 h5save(file, "/Ap", repmat(ap, [1, 7]))
-% float32 to save disk IO time/space
-% ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not
-% suitable for Fortran
-h5save(file, "/glat", xg.glat, 'size', xg.lx, 'type', 'float32');
-h5save(file, "/glon", xg.glon, 'size', xg.lx, 'type', 'float32');
-h5save(file, "/alt", alt, 'size', xg.lx, 'type', 'float32');
+% ensure the disk array has 3 dimensions--Matlab collapses to 2D and that's not suitable for Fortran
+
+freal = 'single';
+% 'single' is real 32-bit floating point
+
+h5save(file, "/glat", xg.glat, 'size', xg.lx, 'type', freal);
+h5save(file, "/glon", xg.glon, 'size', xg.lx, 'type', freal);
+h5save(file, "/alt", alt, 'size', xg.lx, 'type', freal);
 
 end
 
