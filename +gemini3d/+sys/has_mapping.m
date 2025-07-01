@@ -1,6 +1,5 @@
 function ok = has_mapping()
 
-addons = matlab.addons.installedAddons();
-ok = any(addons.Name == "Mapping Toolbox");
+ok = gemini3d.sys.has_addon("Mapping Toolbox");
 
 end

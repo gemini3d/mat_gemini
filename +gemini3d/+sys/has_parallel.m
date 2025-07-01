@@ -1,6 +1,5 @@
 function ok = has_parallel()
 
-addons = matlab.addons.installedAddons();
-ok = any(addons.Name == "Parallel Computing Toolbox");
+ok = gemini3d.sys.has_addon("Parallel Computing Toolbox");
 
 end
