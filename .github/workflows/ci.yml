@@ -56,7 +56,7 @@ jobs:
         submodules: true
 
     - name: Run Matlab syntax checks
-      if: ${{ matrix.release >= 'R2023b' || startsWith(matrix.release, 'latest') }}
+      if: ${{ matrix.release >= 'R2023b' }}
       timeout-minutes: 15
       uses: matlab-actions/run-build@v2
       with:
