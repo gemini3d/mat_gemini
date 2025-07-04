@@ -7,6 +7,10 @@ end
 
 gemini3d.sys.check_stdlib()
 
+if ispc() && ~endsWith(name, ".exe")
+  name = name + ".exe";
+end
+
 paths = [fullfile(gemini3d.root(), ".."), ...
   string(getenv("GEMINI_ROOT")), ...
   string(getenv("CMAKE_PREFIX_PATH"))];
