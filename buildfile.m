@@ -30,9 +30,13 @@ end
 end
 
 
-function setupTask(~)
+function setupTask(~, envfile)
+arguments
+  ~
+  envfile {mustBeTextScalar} = ''
+end
 
-setup()
+setup(envfile)
 
 gemini3d.sys.macos_path()
 
