@@ -13,9 +13,10 @@ end
 
 paths = [fullfile(gemini3d.root(), ".."), ...
   string(getenv("GEMINI_ROOT")), ...
-  string(getenv("CMAKE_PREFIX_PATH"))];
-bindirs = [".", "msis", "bin", "build", "build/bin", "build/msis", ...
-  "build/Release", "build/RelWithDebInfo", "build/Debug"];
+  string(getenv("CMAKE_PREFIX_PATH")), ...
+  fullfile(gemini3d.root(), "../../gemini3d/build/local")];
+
+bindirs = [".", "bin"];
 
 for p = paths
   if isempty(p), continue, end
