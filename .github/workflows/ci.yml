@@ -69,10 +69,12 @@ jobs:
         name: ${{ matrix.release }}-${{ runner.os }}-codeissues
         path: CodeIssues.sarif
 
-    - uses: ./.github/workflows/composite-pkg
+    - name: Install prereqs
+      uses: ./.github/workflows/composite-pkg
       timeout-minutes: 15
 
-    - uses: ./.github/workflows/composite-gemini3d
+    - name: install Gemini3D executables
+      uses: ./.github/workflows/composite-gemini3d
       timeout-minutes: 15
       env:
         CMAKE_INSTALL_PREFIX: ${{ github.workspace }}/libs
@@ -81,12 +83,36 @@ jobs:
         FC: gfortran-10
     # avoid GLIBCXX conflicts causing subprocess_run to not work
 
-    - name: Run Matlab tests (buildtool)
+    - name: set test env vars
+      run: |
+        echo "GEMINI_ROOT=${{ github.workspace }}/libs" >> $GITHUB_ENV
+        echo "GEMCI_ROOT=${{ github.workspace }}/gemci" >> $GITHUB_ENV
+        echo "GEMINI_CIROOT=${{ github.workspace }}/ci" >> $GITHUB_ENV
+
+    - name: Run Matlab tests
+      if: ${{ matrix.release < 'R2024b' }}
       timeout-minutes: 15
       uses: matlab-actions/run-build@v2
-      env:
-        GEMINI_ROOT: ${{ github.workspace }}/libs
-        GEMCI_ROOT: ${{ github.workspace }}/gemci
-        GEMINI_CIROOT: ${{ github.workspace }}/ci
       with:
         tasks: test
+
+    - name: Run unit tests
+      if: ${{ matrix.release >= 'R2024b' }}
+      timeout-minutes: 5
+      uses: matlab-actions/run-build@v2
+      with:
+        tasks: test:unit
+
+    - name: Run MSIS tests
+      if: ${{ matrix.release >= 'R2024b' }}
+      timeout-minutes: 5
+      uses: matlab-actions/run-build@v2
+      with:
+        tasks: test:msis
+
+    - name: Run Gemini3D tests
+      if: ${{ matrix.release >= 'R2024b' }}
+      timeout-minutes: 5
+      uses: matlab-actions/run-build@v2
+      with:
+        tasks: test:gemini

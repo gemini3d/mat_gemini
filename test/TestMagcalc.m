@@ -42,7 +42,7 @@ tc.applyFixture(fixture)
 end
 end
 
-methods (Test)
+methods (Test, TestTags="unit")
 
 function test_magcalc_generate_input(tc, name)
 
@@ -66,7 +66,7 @@ gemini3d.model.magcalc(tc.TestData.outdir, 1.5, Ltheta, Lphi)
 %% rudimentary check of file sizes
 
 
-file = tc.TestData.outdir + "/inputs/magfieldpoints.h5";
+file = fullfile(tc.TestData.outdir, "inputs/magfieldpoints.h5");
 R = h5read(file, "/r");
 
 if contains(name, "3d")

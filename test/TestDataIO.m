@@ -37,7 +37,7 @@ tc.outdir = tc.createTemporaryFolder();
 end
 end
 
-methods (Test)
+methods (Test, TestTags="unit")
 
 function test_find_simsize(tc)
 tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.data_path), fullfile(tc.name, "inputs/simsize.h5")))

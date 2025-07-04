@@ -14,7 +14,7 @@ end
 end
 
 
-methods(Test, TestTags="config")
+methods(Test, TestTags="unit")
 
 function test_read_namelist(tc)
 s = gemini3d.read.namelist(tc.config, "expandCheck");

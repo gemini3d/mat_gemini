@@ -43,7 +43,7 @@ tc.applyFixture(fixture)
 end
 end
 
-methods (Test)
+methods (Test, TestTags="unit")
 
 function test_cartesian_grid(tc)
 
@@ -132,12 +132,17 @@ try
   gemini3d.compare(fullfile(tc.outdir, prec_dir), fullfile(test_dir, prec_dir), only="precip", time=p.times)
 catch e
   if e.identifier == "gemini3d:compare:precip:allclose_error"
-    tc.verifyFail("preciptation data didn't match reference")
+    tc.verifyFail("precipitation data didn't match reference")
   else
     rethrow(e)
   end
 end
 end
+
+end
+
+
+methods (Test, TestTags="gemini")
 
 function test_gemini3d_run(tc, name)
 
@@ -164,6 +169,10 @@ elseif e.identifier == "gemini3d:compare:output:allclose_error"
 end
 
 end
+
+end
+
+methods (Test, TestTags=["gemini", "plot"])
 
 function test_plot_2d(tc)
 

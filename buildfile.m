@@ -1,8 +1,8 @@
 function plan = buildfile
+import matlab.unittest.selectors.HasTag
+
 plan = buildplan(localfunctions);
 plan.DefaultTasks = "setup";
-
-check_paths = ["+gemini3d/", "test"];
 
 if ~isMATLABReleaseOlderThan("R2023b")
   codeIssuesArgs = {"IncludeSubfolders",true, "WarningThreshold",0};
@@ -13,8 +13,16 @@ if ~isMATLABReleaseOlderThan("R2023b")
     testTaskArgs(end+1:end+2) = {"TestResults","TestResults.xml"};
   end
 
+  check_paths = ["+gemini3d/", "test/"];
   plan("check") = matlab.buildtool.tasks.CodeIssuesTask(check_paths, codeIssuesArgs{:});
-  plan("test") = matlab.buildtool.tasks.TestTask(testTaskArgs{:});
+
+  if isMATLABReleaseOlderThan("R2024b")
+    plan("test") = matlab.buildtool.tasks.TestTask(testTaskArgs{:});
+  else
+    plan("test:msis") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="msis");
+    plan("test:gemini") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="gemini");
+    plan("test:unit") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="unit");
+  end
 
   plan("test").Dependencies = "setup";
 end

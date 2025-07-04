@@ -11,7 +11,7 @@ end
 end
 end
 
-methods (Test)
+methods (Test, TestTags="unit")
 
 
 function test_dipole_grid(tc)

@@ -53,7 +53,7 @@ end
 end
 
 
-methods(Test)
+methods(Test, TestTags="gemini")
 
 
 function test_dryrun(tc)

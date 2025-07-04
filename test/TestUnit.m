@@ -18,7 +18,7 @@ tc.applyFixture(fixture)
 end
 end
 
-methods (Test)
+methods (Test, TestTags="unit")
 
 
 function test_nml_gemini_envvar(tc)

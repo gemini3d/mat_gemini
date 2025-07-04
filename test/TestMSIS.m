@@ -32,7 +32,7 @@ end
 
 end
 
-methods (Test)
+methods (Test, TestTags="msis")
 
 function test_msis00_setup(tc)
 
