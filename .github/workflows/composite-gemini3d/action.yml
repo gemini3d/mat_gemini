@@ -30,6 +30,6 @@ runs:
       shell: bash
       run: |
         cmake --preset default
-        cmake --build build -t msis_setup gemini3d.run gemini.bin
+        cmake --build build
         cmake --install build
       working-directory: gemini3d
