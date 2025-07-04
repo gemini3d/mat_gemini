@@ -1,8 +1,8 @@
 function project_runner(tc, name, ref_dir)
 arguments
   tc (1,1) matlab.unittest.TestCase
-  name (1,1) string
-  ref_dir (1,1) string
+  name {mustBeTextScalar}
+  ref_dir {mustBeTextScalar}
 end
 
 test_dir = fullfile(ref_dir, name);

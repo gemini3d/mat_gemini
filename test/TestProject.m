@@ -178,7 +178,10 @@ function test_plot_2d(tc)
 
 tname = "mini2dew_glow";
 
-project_runner(tc, tname, fullfile(tc.cwd, "data"))
+gemini3d.fileio.download_and_extract("mini2dew_eq", tc.ref_dir)
+% need equil sim check to avoid race condition
+
+project_runner(tc, tname, tc.ref_dir)
 
 data_dir = fullfile(tc.cwd, "data", tname);
 
@@ -197,9 +200,13 @@ close(h)
 end
 
 function test_plot_3d(tc)
+
 tname = 'mini3d_glow';
 
-project_runner(tc, tname, fullfile(tc.cwd, "data"))
+gemini3d.fileio.download_and_extract("mini3d_eq", tc.ref_dir)
+% need equil sim check to avoid race condition
+
+project_runner(tc, tname, tc.ref_dir)
 
 % test 3D plots
 d3 = fullfile(tc.cwd, "data", tname);

@@ -1,7 +1,8 @@
 classdef TestDryrun < matlab.unittest.TestCase
 
 properties
-  TestData
+  datapath
+  outdir
 end
 
 methods(TestClassSetup)
@@ -39,7 +40,7 @@ tc.assumeNotEmpty(exe, n +" program not found. Compile with https://github.com/g
 name = "mini2dew_eq";
 
 cwd = fileparts(mfilename('fullpath'));
-tc.TestData.datapath = fullfile(cwd, "data", name);
+tc.datapath = fullfile(cwd, "data", name);
 
 % get files if needed
 try
@@ -47,7 +48,7 @@ try
 catch e
   catcher(e, tc)
 end
-tc.TestData.outdir = tc.createTemporaryFolder();
+tc.outdir = tc.createTemporaryFolder();
 end
 
 end
@@ -59,7 +60,7 @@ methods(Test, TestTags="gemini")
 function test_dryrun(tc)
 
 try
-  gemini3d.run(tc.TestData.outdir, tc.TestData.datapath, dryrun=true)
+  gemini3d.run(tc.outdir, tc.datapath, dryrun=true)
 catch e
   catcher(e, tc)
 end
