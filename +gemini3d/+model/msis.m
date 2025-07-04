@@ -27,15 +27,16 @@ gemini3d.sys.check_stdlib()
 exe = gemini3d.find.gemini_exe("msis_setup");
 assert(~isempty(exe), "gemini3d:model:msis:FileNotFoundError", "Please clone and install https://github.com/gemini3d/gemini3d.git to setup Gemini3D msis_setup")
 
+cwd = stdlib.parent(exe);
 %% MSIS file API
 % binary files are MUCH faster than stdin/stdout pipes
 
 msis_infile = tempname;
 msis_outfile = tempname;
 
-msis_input(p, xg, time, msis_infile)
+msis_input(p, xg, time, msis_infile, cwd)
 
-msis_run(exe, msis_infile, msis_outfile)
+msis_run(exe, msis_infile, msis_outfile, cwd)
 
 atmos = msis_output(msis_outfile);
 atmos.time = time;
@@ -43,7 +44,7 @@ atmos.time = time;
 end % function
 
 
-function msis_input(p, xg, time, file)
+function msis_input(p, xg, time, file, cwd)
 
 import stdlib.h5save
 
@@ -51,6 +52,10 @@ if isfield(p, "msis_version")
   msis_version = p.msis_version;
 else
   msis_version = 0;
+end
+
+if msis_version == 21
+  mustBeFile(fullfile(cwd, "msis21.parm"))
 end
 
 %% CONVERT DATES/TIMES/INDICES INTO MSIS-FRIENDLY FORMAT
@@ -72,7 +77,7 @@ alt = xg.alt/1e3;
 alt(alt <= 0) = 1;
 
 h5save(file, "/msis_version", msis_version, type='int32')
-h5save(file, "/doy", doy, 'type', 'int32')
+h5save(file, "/doy", doy, type='int32')
 h5save(file, "/UTsec", UTsec0)
 h5save(file, "/f107a", f107a)
 h5save(file, "/f107", f107)
@@ -83,26 +88,28 @@ h5save(file, "/Ap", repmat(ap, [1, 7]))
 freal = 'single';
 % 'single' is real 32-bit floating point
 
-h5save(file, "/glat", xg.glat, 'size', xg.lx, 'type', freal);
-h5save(file, "/glon", xg.glon, 'size', xg.lx, 'type', freal);
-h5save(file, "/alt", alt, 'size', xg.lx, 'type', freal);
+h5save(file, "/glat", xg.glat, size=xg.lx, type=freal);
+h5save(file, "/glon", xg.glon, size=xg.lx, type=freal);
+h5save(file, "/alt", alt, size=xg.lx, type=freal);
 
 end
 
 
-function msis_run(exe, in, out)
+function msis_run(exe, in, out, cwd)
 
 cmd = [exe, in, out];
 
-scmd = join(cmd, " ");
+scmd = join(cmd);
 disp(scmd)
 
-[stat, stderr] = system(scmd);
+% stdlib.parent needed so msis 2.x finds msis21.parm
+[stat, msg] = stdlib.subprocess_run(cmd, cwd=cwd);
+
 % output written to file
 switch stat
   case 0  % good
   case -1073741515, error("if on Windows, is libgfortran on PATH?")
-    otherwise, error('problem running MSIS %s %s', strjoin(cmd), stderr)
+    otherwise, error('problem running MSIS %s %s', scmd, msg)
 end
 
 assert(isfile(out), "gemini3d:model:msis:FileNotFoundError", "MSIS output file %s not found, did msis_setup %s run properly?", out, exe)
