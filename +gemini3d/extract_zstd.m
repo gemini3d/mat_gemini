@@ -3,8 +3,8 @@
 
 function extract_zstd(archive, out_dir)
 arguments
-  archive (1,1) string
-  out_dir (1,1) string
+  archive {mustBeTextScalar, mustBeFile}
+  out_dir {mustBeTextScalar}
 end
 
 archive = stdlib.absolute(archive);
@@ -25,15 +25,14 @@ function extract_zstd_bin(archive, out_dir)
 % Extract .zst in two steps .zst => .tar =>
 % to avoid problems with old system tar.
 arguments
-  archive (1,1) string
-  out_dir (1,1) string
+  archive {mustBeTextScalar}
+  out_dir {mustBeTextScalar}
 end
 
 [s, ~] = system('zstd -h');
 assert(s == 0, "zstd not found, please install it or add it to your PATH");
 
-cmd = "zstd -d " + archive + " -o " + tempname;
-disp(cmd)
+cmd = ["zstd", "-d", archive, "-o", tempname];
 
 ret = system(cmd);
 assert(ret == 0, "problem extracting %s", archive)
