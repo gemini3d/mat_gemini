@@ -13,17 +13,18 @@ end
 
 paths = [fullfile(gemini3d.root(), ".."), ...
   string(getenv("GEMINI_ROOT")), ...
-  string(getenv("CMAKE_PREFIX_PATH")), ...
-  fullfile(gemini3d.root(), "../../gemini3d/build/local")];
+  string(getenv("CMAKE_PREFIX_PATH"))];
 
-bindirs = [".", "bin"];
+bindirs = [".", "bin", "build", "build/msis", "build/local"];
 
 for p = paths
   if isempty(p), continue, end
   for b = bindirs
     % important to expanduser(p) because which() may find the ~/exe on Unix-like
     % systems, but stdlib.subprocess_run doesn't like the leading tilde.
-    exe = stdlib.which(name, stdlib.join(stdlib.expanduser(p), b));
+    ps = stdlib.join(stdlib.expanduser(p), b);
+    exe = stdlib.which(name, ps);
+    % disp(ps + filesep + name)
     if ~isempty(exe)
       return
     end

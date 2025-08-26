@@ -1,20 +1,14 @@
 function plan = buildfile
-import matlab.unittest.selectors.HasTag
 
 plan = buildplan(localfunctions);
 plan.DefaultTasks = "setup";
 
 if ~isMATLABReleaseOlderThan("R2023b")
-  codeIssuesArgs = {"IncludeSubfolders",true, "WarningThreshold",0};
-  testTaskArgs = {"test", "Strict",false};
+  testTaskArgs = {"test/", "Strict", false};
 
   if ~isMATLABReleaseOlderThan("R2024a")
-    codeIssuesArgs(end+1:end+2) = {"Results","CodeIssues.sarif"};
     testTaskArgs(end+1:end+2) = {"TestResults","TestResults.xml"};
   end
-
-  check_paths = ["+gemini3d/", "test/"];
-  plan("check") = matlab.buildtool.tasks.CodeIssuesTask(check_paths, codeIssuesArgs{:});
 
   if isMATLABReleaseOlderThan("R2024b")
     plan("test") = matlab.buildtool.tasks.TestTask(testTaskArgs{:});
@@ -47,6 +41,19 @@ assert(~isempty(exe), "need to setup Gemini3D and/or set environment variable GE
 
 gem_exe = gemini3d.find.gemini_exe("gemini.bin");
 assert(~isempty(gem_exe), "could not find gemini.bin")
+end
 
+
+function checkTask(context)
+root = context.Plan.RootFolder;
+
+c = codeIssues(root + ["/test", "/+gemini3d"]);
+
+if isempty(c.Issues)
+  fprintf('%d files checked OK with %s under %s\n', numel(c.Files), c.Release, root)
+else
+  disp(c.Issues)
+  error("Errors found in " + join(c.Issues.Location, newline))
+end
 
 end

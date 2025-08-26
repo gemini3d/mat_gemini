@@ -2,6 +2,7 @@ name: matlab
 
 env:
   CMAKE_BUILD_TYPE: Release
+  CMAKE_GENERATOR: Ninja
 
 on:
   push:
@@ -51,7 +52,7 @@ jobs:
         cache: true
 
     - name: Git Checkout ${{ github.action_repository }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
 
@@ -61,13 +62,6 @@ jobs:
       uses: matlab-actions/run-build@v2
       with:
         tasks: check
-
-    - name: Upload CodeIssues
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.release }}-${{ runner.os }}-codeissues
-        path: CodeIssues.sarif
 
     - name: Install prereqs
       uses: ./.github/workflows/composite-pkg
