@@ -6,8 +6,6 @@ end
 
 gemini3d.sys.check_stdlib()
 
-assert(gemini3d.sys.has_mapping(), "Mapping Toolbox is needed")
-
 direc = stdlib.expanduser(direc);
 
 %SIMULATION location
@@ -48,21 +46,21 @@ Bthetat=zeros(1,ltheta,lphi, length(cfg.times));
 Bphit=zeros(1,ltheta,lphi, length(cfg.times));
 
 for it=2:length(cfg.times)-1    %starts at second time step due to weird magcalc quirk
-  filename = gemini3d.datelab(cfg.times(it));
+  filename = gemini3d.datelab(cfg.times(it)) + ".h5";
 
-  data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Br');
+  data = h5read(fullfile(direc,'magfields', filename), '/magfields/Br');
 
   Brt(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Brt(:,:,:,it)=Brt(:,ilatsort,:,it);
   Brt(:,:,:,it)=Brt(:,:,ilonsort,it);
 
-  data = h5read(fullfile(direc, 'magfields', filename + ".h5"), '/magfields/Btheta');
+  data = h5read(fullfile(direc, 'magfields', filename), '/magfields/Btheta');
 
   Bthetat(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Bthetat(:,:,:,it)=Bthetat(:,ilatsort,:,it);
   Bthetat(:,:,:,it)=Bthetat(:,:,ilonsort,it);
 
-  data = h5read(fullfile(direc,'magfields', filename + ".h5"), '/magfields/Bphi');
+  data = h5read(fullfile(direc,'magfields', filename), '/magfields/Bphi');
 
   Bphit(:,:,:,it)=reshape(data,[1,ltheta,lphi]);
   Bphit(:,:,:,it)=Bphit(:,ilatsort,:,it);

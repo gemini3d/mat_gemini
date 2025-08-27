@@ -71,12 +71,10 @@ if ~visible
     % https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html
     if opts.parallel > 1
       % specific number of workers requested
-      if gemini3d.sys.has_parallel()
-        pool = gcp('nocreate');
-        if isempty(pool) || pool.NumWorkers ~= optfions.parallel
-          delete(pool)
-          parpool('local', opts.parallel)
-        end
+      pool = gcp('nocreate');
+      if isempty(pool) || pool.NumWorkers ~= opts.parallel
+        delete(pool)
+        parpool('local', opts.parallel)
       end
     end
     parfor t = cfg.times

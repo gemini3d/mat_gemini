@@ -16,6 +16,6 @@ if do_coverage
   addCoverage(runner)
 end
 
-suite = TestSuite.fromPackage('gemini3d', 'IncludingSubpackages', true);
+suite = TestSuite.fromPackage('gemini3d', IncludingSubpackages=true);
 
 end

@@ -54,15 +54,15 @@ else
   figure;
   hold on;
   flag2D=false;
-  if gemini3d.sys.has_mapping()
-    ha=gca;
-%        axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+30),abs(sourcemlat)+30],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
+  ha=gca;
+  try
+    % axesm('MapProjection','Mercator','MapLatLimit',[-(abs(sourcemlat)+30),abs(sourcemlat)+30],'MapLonLimit',[sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10])
     axesm('MapProjection','Mercator', ...
-      'MapLatLimit', double([-(abs(sourcemlat)+dmlat/2+5),abs(sourcemlat)+dmlat/2+5]), ...
-      'MapLonLimit', double([sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10]))
+      MapLatLimit=double([-(abs(sourcemlat)+dmlat/2+5),abs(sourcemlat)+dmlat/2+5]), ...
+      MapLonLimit=double([sourcemlonplot-dmlon/2-10,sourcemlonplot+dmlon/2+10]))
     plotfun=@plot3m;
-  else
-    ha=gca;
+  catch e
+    mappingException(e)
     plotfun=@plot3;   %no mapping toolbox so we'll do normal plots - the annoying thing is that these should be lon,lat,alt so all the plots statements have to be switched
   end
 end
@@ -101,7 +101,8 @@ if (flag2D)    %2D grid, don't use a map to plot and show things in polar coordi
   set(h,'LineWidth',LW,'Color',[0 0 0]);
   ha=h;
 else    %this is a 3D grid and we can plot it on a map if the user has the appropriate toolbox(es)
-  if gemini3d.sys.has_mapping()
+
+  try % Mapping Toolbox
     % plots are done lat,lon,alt for plot3m
     plotfun(mlat(:,1,1),mlon(:,1,1),alt(:,1,1),'LineWidth',LW);
     plotfun(mlat(:,1,end),mlon(:,1,end),alt(:,1,end),altlinestyle,'LineWidth',LW);
@@ -170,10 +171,10 @@ else    %this is a 3D grid and we can plot it on a map if the user has the appro
     z=squeeze(alt(end,end,ix3:xg.lx(3)));
     plotfun(x,y,z,altlinestyle,'LineWidth',LW);
 
-    xlabel('magnetic longitude (deg.)');
-    ylabel('magnetic latitude (deg.)');
-    zlabel('altitidue (km)');
-  else    %plotting is done lon,lat,alt with plot3
+  catch e
+    mappingException(e)
+
+    %plotting is done lon,lat,alt with plot3
     plotfun(mlon(:,1,1),mlat(:,1,1),alt(:,1,1),'LineWidth',LW);
     plotfun(mlon(:,1,end),mlat(:,1,end),alt(:,1,end),altlinestyle,'LineWidth',LW);
     plotfun(mlon(:,end,1),mlat(:,end,1),alt(:,end,1),'LineWidth',LW);
@@ -241,10 +242,12 @@ else    %this is a 3D grid and we can plot it on a map if the user has the appro
     z=squeeze(alt(end,end,ix3:xg.lx(3)));
     plotfun(x,y,z,altlinestyle,'LineWidth',LW);
 
-    xlabel('magnetic latitude (deg.)');
-    ylabel('magnetic longitude (deg.)');
-    zlabel('altitidue (km)');
   end
+
+  xlabel('magnetic longitude (deg.)');
+  ylabel('magnetic latitude (deg.)');
+  zlabel('altitude (km)');
+
   h=gca;     %now go back and make all lines the same color...
   % lline = numel(h.Children);
   for iline=1:16    %the last three children are the surface and text label objects
@@ -424,7 +427,7 @@ if flag2D
   h=polarplot(terr_theta,terr_r,'c:');
   set(h,'LineWidth',LW);
 else
-  if gemini3d.sys.has_mapping()
+  try % Mapping Toolbox
     hold on;
     %ax=axis;
     coastlat = load('coastlines', 'coastlat').coastlat;
@@ -441,6 +444,8 @@ else
     plotfun(mlatcoast,mloncoast,zeros(size(mlatcoast)),'b-','LineWidth',0.5);
     setm(gca,'MeridianLabel','on','ParallelLabel','on','MLineLocation',10,'PLineLocation',10,'MLabelLocation',10,'PLabelLocation',10);
     hold off;
+  catch e
+    mappingException(e)
   end
   view(270,35);
   axis tight;

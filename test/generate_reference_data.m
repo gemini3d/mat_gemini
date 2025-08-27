@@ -20,7 +20,7 @@ end
 topdir = stdlib.expanduser(topdir);
 outdir = stdlib.expanduser(outdir);
 
-assert(isfolder(topdir), '%s is not a folder', topdir)
+mustBeFolder(topdir)
 
 %% run each simulation
 names = get_testnames(topdir, only);
@@ -30,7 +30,7 @@ disp(names)
 
 for n = names
   gemini3d.run(fullfile(outdir, n), fullfile(topdir, n), ...
-    'overwrite', opts.overwrite, 'gemini_exe', opts.gemini_exe)
+    overwrite=opts.overwrite, gemini_exe=opts.gemini_exe)
 end
 
 end % function

@@ -3,7 +3,7 @@ function path_new = mpi_path()
 
 path_new = getenv("PATH");
 
-if ~gemini3d.sys.has_parallel()
+if ~stdlib.has_parallel_toolbox()
   return
 end
 
