@@ -4,10 +4,6 @@ arguments
   only (1,:) string = string.empty
 end
 
-import stdlib.expanduser
-
-topdir = expanduser(topdir);
-
 names = get_testnames(topdir, only);
 
 mustBeNonempty(names)
