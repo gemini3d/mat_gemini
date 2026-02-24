@@ -4,14 +4,14 @@ runs:
 
     steps:
     - name: Checkout GemGI (for simulation config.nml inputs)
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: gemini3d/gemci
         path: ${{ github.workspace }}/gemci
 
     - name: Cache install Gemini3D
       id: cache-gemini
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: |
           ${{ env.CMAKE_INSTALL_PREFIX }}
@@ -19,7 +19,7 @@ runs:
 
     - name: Checkout Gemini3D
       if: steps.cache-gemini.outputs.cache-hit != 'true'
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: gemini3d/gemini3d
         path: gemini3d

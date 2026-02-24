@@ -36,12 +36,12 @@ jobs:
   linux:
     timeout-minutes: 30
     runs-on: ubuntu-22.04
-    # Ubuntu 22.04 GA Linux runner has GCC-10, needed for Matlab R2022a..R2025a
+    # Ubuntu 22.04 GA Linux runner has GCC-10, needed for Matlab R2022a..R2025b
 
     strategy:
       fail-fast: false
       matrix:
-        release: [R2025a, R2023b]
+        release: [R2025b, R2023b]
 
     steps:
 
@@ -52,7 +52,7 @@ jobs:
         cache: true
 
     - name: Git Checkout ${{ github.action_repository }}
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         submodules: true
 
