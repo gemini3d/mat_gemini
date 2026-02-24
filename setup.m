@@ -1,6 +1,6 @@
 function setup(envfile)
 arguments
-  envfile {mustBeTextScalar} = ''
+  envfile {mustBeTextScalar} = '~/gemini3d.env'
 end
 %% run this before running Gemini Matlab scripts
 

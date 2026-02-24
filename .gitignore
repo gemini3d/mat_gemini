@@ -1,6 +1,8 @@
 *.job
 *.job.*
 
+*.env
+
 *.asv
 *.m~
 
