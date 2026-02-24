@@ -22,7 +22,7 @@ runs:
       uses: actions/checkout@v6
       with:
         repository: gemini3d/gemini3d
-        path: gemini3d
+        path: ${{ github.workspace }}/gemini3d
         submodules: true
 
     - name: non-cache Install Gemini3D
@@ -32,4 +32,4 @@ runs:
         cmake --preset default
         cmake --build build
         cmake --install build
-      working-directory: gemini3d
+      working-directory: ${{ github.workspace }}/gemini3d
