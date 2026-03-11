@@ -1,3 +1,6 @@
+name: composite-pkg
+description: Install packages for Gemini3D
+
 runs:
 
   using: 'composite'

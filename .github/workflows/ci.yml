@@ -84,28 +84,28 @@ jobs:
         echo "GEMCI_ROOT=${{ github.workspace }}/gemci" >> ~/gemini3d.env
         echo "GEMINI_CIROOT=${{ github.workspace }}/ci" >> ~/gemini3d.env
 
-    - name: Run Matlab tests
+    - name: Run Matlab (< R2024b) tests
       if: ${{ matrix.release < 'R2024b' }}
       timeout-minutes: 15
       uses: matlab-actions/run-build@v2
       with:
         tasks: test
 
-    - name: Run unit tests
+    - name: Run unit tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v2
       with:
         tasks: test:unit
 
-    - name: Run MSIS tests
+    - name: Run MSIS tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v2
       with:
         tasks: test:msis
 
-    - name: Run Gemini3D tests
+    - name: Run Gemini3D tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v2
