@@ -1,6 +1,9 @@
+name: composite-gemini3d
+description: Cache, checkout, and install Gemini3D executables
+
 runs:
 
-    using: 'composite'
+    using: composite
 
     steps:
     - name: Checkout GemGI (for simulation config.nml inputs)
@@ -9,19 +12,25 @@ runs:
         repository: gemini3d/gemci
         path: ${{ github.workspace }}/gemci
 
+    - name: Resolve Gemini3D remote SHA
+      id: gemini3d-sha
+      shell: bash
+      run: |
+        echo "sha=$(git ls-remote https://github.com/gemini3d/gemini3d.git HEAD | cut -f1)" >> "$GITHUB_OUTPUT"
+
     - name: Cache install Gemini3D
       id: cache-gemini
       uses: actions/cache@v5
       with:
-        path: |
-          ${{ env.CMAKE_INSTALL_PREFIX }}
-        key: ${{ runner.os }}-gemini-${{ env.CXX }}
+        path: ${{ env.CMAKE_INSTALL_PREFIX }}
+        key: ${{ runner.os }}-gemini-${{ env.CXX }}-${{ steps.gemini3d-sha.outputs.sha }}
 
     - name: Checkout Gemini3D
       if: steps.cache-gemini.outputs.cache-hit != 'true'
       uses: actions/checkout@v6
       with:
         repository: gemini3d/gemini3d
+        ref: ${{ steps.gemini3d-sha.outputs.sha }}
         path: ${{ github.workspace }}/gemini3d
         submodules: true
 
