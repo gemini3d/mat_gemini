@@ -1,9 +1,5 @@
 name: matlab
 
-env:
-  CMAKE_BUILD_TYPE: Release
-  CMAKE_GENERATOR: Ninja
-
 on:
   push:
     paths:
@@ -59,7 +55,7 @@ jobs:
     - name: Run Matlab syntax checks
       if: ${{ matrix.release >= 'R2023b' }}
       timeout-minutes: 15
-      uses: matlab-actions/run-build@v2
+      uses: matlab-actions/run-build@v3
       with:
         tasks: check
 
@@ -87,27 +83,27 @@ jobs:
     - name: Run Matlab (< R2024b) tests
       if: ${{ matrix.release < 'R2024b' }}
       timeout-minutes: 15
-      uses: matlab-actions/run-build@v2
+      uses: matlab-actions/run-build@v3
       with:
         tasks: test
 
     - name: Run unit tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
-      uses: matlab-actions/run-build@v2
+      uses: matlab-actions/run-build@v3
       with:
         tasks: test:unit
 
     - name: Run MSIS tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
-      uses: matlab-actions/run-build@v2
+      uses: matlab-actions/run-build@v3
       with:
         tasks: test:msis
 
     - name: Run Gemini3D tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
       timeout-minutes: 5
-      uses: matlab-actions/run-build@v2
+      uses: matlab-actions/run-build@v3
       with:
         tasks: test:gemini
