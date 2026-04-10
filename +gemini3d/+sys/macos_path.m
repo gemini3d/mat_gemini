@@ -1,9 +1,9 @@
 function macos_path()
 
 %% MacOS PATH workaround
-% Matlab does not load .zshrc
+% Matlab does not load .zshrc if started from the Applications dock Matlab icon
 
-if ~ismac
+if ~ismac()
   return
 end
 
