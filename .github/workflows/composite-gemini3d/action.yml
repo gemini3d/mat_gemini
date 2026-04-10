@@ -26,20 +26,9 @@ runs:
       path: ${{ env.CMAKE_INSTALL_PREFIX }}
       key: ${{ runner.os }}-gemini-${{ env.CXX }}-${{ steps.gemini3d-sha.outputs.sha }}
 
-  - name: Checkout Gemini3D
-    if: steps.cache-gemini.outputs.cache-hit != 'true'
-    uses: actions/checkout@v6
-    with:
-      repository: gemini3d/gemini3d
-      ref: ${{ steps.gemini3d-sha.outputs.sha }}
-      path: ${{ github.workspace }}/gemini3d
-      submodules: true
-
   - name: non-cache Install Gemini3D
     if: steps.cache-gemini.outputs.cache-hit != 'true'
     shell: bash
     run: |
-      cmake --preset default
-      cmake --build build
+      cmake --workflow build
       cmake --install build
-    working-directory: ${{ github.workspace }}/gemini3d

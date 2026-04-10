@@ -1,0 +1,54 @@
+{
+  "version": 6,
+
+"configurePresets": [
+{
+  "name": "default",
+  "binaryDir": "build",
+  "generator": "Ninja",
+  "cacheVariables": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_COMPILE_WARNING_AS_ERROR": false,
+    "CMAKE_LINK_WARNING_AS_ERROR": true
+  }
+}
+],
+"buildPresets": [
+  {
+    "name": "default",
+    "configurePreset": "default"
+  }
+],
+"testPresets": [
+{
+  "name": "default",
+  "configurePreset": "default",
+  "output": {
+    "outputOnFailure": true,
+    "verbosity": "verbose"
+  },
+  "execution": {
+    "noTestsAction": "error",
+    "scheduleRandom": true,
+    "stopOnFailure": false
+  }
+}
+],
+"workflowPresets": [
+  {
+    "name": "default",
+    "steps": [
+      { "type": "configure", "name": "default" },
+      { "type": "build", "name": "default" },
+      { "type": "test", "name": "default" }
+    ]
+  },
+    {
+    "name": "build",
+    "steps": [
+      { "type": "configure", "name": "default" },
+      { "type": "build", "name": "default" }
+    ]
+  }
+]
+}
