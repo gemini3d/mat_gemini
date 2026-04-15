@@ -8,14 +8,16 @@ if ~ismac()
 end
 
 %% homebrew path
-for brew = ["brew", getenv('HOMEBREW_PREFIX') + "/bin/brew", "/opt/homebrew/bin/brew", "/usr/local/bin/brew"]
-  [ret, homebrew_prefix] = system(brew + " --prefix");
-  if ret == 0
-    addpath_if_needed(fullfile(strip(homebrew_prefix), "bin"))
-    break
+prefixes = getenv("HOMEBREW_PREFIX");
+if isfolder(prefixes)
+  addpath_if_needed(fullfile(prefixes, 'bin'))
+else
+  prefixes = fullfile(["/opt/homebrew", "/usr/local"], "bin");
+  i = find(isfolder(prefixes), 1);
+  if ~isempty(i)
+    addpath_if_needed(prefixes(i))
   end
 end
-
 
 %% matlab own path
 matlab_path = fullfile(matlabroot, "bin");
@@ -26,19 +28,18 @@ end % function
 
 
 function addpath_if_needed(prefix_path)
-
-sys_path = getenv("PATH");
-
-for p = prefix_path
-  if contains(sys_path, p)
-    return
-  elseif isfolder(p)
-    disp("Adding prefix to Matlab path: " + p)
-    sys_path = p + pathsep + sys_path;
-    break
-  end
+arguments
+  prefix_path (1,1) string {mustBeFolder}
 end
 
-setenv('PATH', sys_path)
+sys_path = getenv('PATH');
+
+paths = split(sys_path, pathsep);
+
+if ~any(contains(paths, prefix_path))
+  disp("Adding prefix to Matlab path: " + prefix_path)
+  sys_path = append(prefix_path, pathsep, sys_path);
+  setenv('PATH', sys_path)
+end
 
 end

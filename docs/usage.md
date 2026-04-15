@@ -12,7 +12,9 @@ If **macOS** issues with CMake or Git not found, try running from Matlab:
 gemini3d.sys.macos_path()
 ```
 
-Note that **macOS** Matlab does not source ~/.zshrc, so environment variables set there are not seen by Matlab.
+Note that **macOS** Matlab
+[does not source ~/.zshrc if started from the Applications dock Matlab icon](https://www.scivision.dev/macos-matlab-no-zshrc/),
+so environment variables set there may not be seen by Matlab.
 
 Optionally, run the self-tests from Matlab in the mat_gemini/ directory:
 
