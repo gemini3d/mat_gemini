@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2025b, R2023b]
+        release: [R2026a, R2023b]
 
     steps:
 
@@ -49,7 +49,7 @@ jobs:
         cache: true
 
     - name: Git Checkout ${{ github.action_repository }}
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         submodules: true
 
