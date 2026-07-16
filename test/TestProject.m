@@ -1,4 +1,4 @@
-classdef TestProject < matlab.unittest.TestCase
+classdef TestProject < StdlibCheck
 properties (TestParameter)
   name = {"mini2dew_eq", "mini2dew_fang", "mini2dew_glow", ...
           "mini2dns_eq", "mini2dns_fang", "mini2dns_glow", ...
@@ -12,15 +12,6 @@ properties
 end
 
 methods(TestClassSetup)
-
-function check_stdlib(tc)
-try
-  gemini3d.sys.check_stdlib()
-catch e
-  tc.fatalAssertFail(e.message)
-end
-end
-
 function check_root(tc)
 try
   gemini3d.root();

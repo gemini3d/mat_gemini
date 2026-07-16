@@ -1,4 +1,4 @@
-classdef TestMagcalc < matlab.unittest.TestCase
+classdef TestMagcalc < StdlibCheck
 properties (TestParameter)
   name = {"mini2dew_fang", "mini2dns_fang", "mini3d_fang"}
 end
@@ -9,13 +9,6 @@ end
 
 methods(TestMethodSetup)
 % Method instead of class to allow parallel testing
-function check_stdlib(tc)
-try
-  gemini3d.sys.check_stdlib()
-catch e
-  tc.fatalAssertFail(e.message)
-end
-end
 
 function check_root(tc)
 try

@@ -103,16 +103,16 @@ scmd = join(cmd);
 disp(scmd)
 
 % stdlib.parent needed so msis 2.x finds msis21.parm
-[stat, msg] = stdlib.subprocess_run(cmd, cwd=cwd);
+[stat, ~, err] = stdlib.subprocess_run(cmd, cwd=cwd);
 
 % output written to file
 switch stat
   case 0  % good
   case -1073741515, error("if on Windows, is libgfortran on PATH?")
-    otherwise, error('problem running MSIS %s %s', scmd, msg)
+    otherwise, error('problem running MSIS %s %s', scmd, err)
 end
 
-assert(isfile(out), "gemini3d:model:msis:FileNotFoundError", "MSIS output file %s not found, did msis_setup %s run properly?", out, exe)
+assert(isfile(out), "gemini3d:model:msis:FileNotFoundError", "MSIS output file %s not found, did msis_setup %s run properly? %s", out, exe, err)
 
 end
 

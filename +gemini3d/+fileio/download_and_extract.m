@@ -55,7 +55,7 @@ function check_data(name, archive, urls)
 
 if isfield(urls.(name), "sha256")
   disp("checking sha256sum of " + archive)
-  if stdlib.sha256sum(archive) ~= urls.(name).sha256
+  if stdlib.file_checksum(archive, "sha256") ~= urls.(name).sha256
     warning('gemini3d:fileio:download_and_extract:hash_error', ...
       '%s sha256 hash does not match, file may be corrupted', archive)
   end

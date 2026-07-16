@@ -4,7 +4,7 @@
 function extract_zstd(archive, out_dir)
 arguments
   archive {mustBeTextScalar, mustBeFile}
-  out_dir {mustBeTextScalar}
+  out_dir {mustBeTextScalar, mustBeFolder}
 end
 
 archive = stdlib.absolute(archive);

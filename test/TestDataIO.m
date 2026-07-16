@@ -1,4 +1,4 @@
-classdef TestDataIO < matlab.unittest.TestCase
+classdef TestDataIO < StdlibCheck
 
 properties
 cwd = fileparts(mfilename('fullpath'))
@@ -8,16 +8,6 @@ outdir
 end
 
 methods(TestClassSetup)
-
-function check_stdlib(tc)
-try
-  gemini3d.sys.check_stdlib()
-catch e
-  tc.fatalAssertFail(e.message)
-end
-end
-
-
 function setup_env(tc)
 
 dpath = fullfile(tc.cwd, "data");

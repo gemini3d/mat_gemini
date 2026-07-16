@@ -1,18 +1,10 @@
-classdef TestMSIS < matlab.unittest.TestCase
+classdef TestMSIS < StdlibCheck
 
 properties
 xg
 end
 
 methods(TestClassSetup)
-
-function check_stdlib(tc)
-try
-  gemini3d.sys.check_stdlib()
-catch e
-  tc.fatalAssertFail(e.message)
-end
-end
 
 function setup_grid(tc)
 lx = [4, 2, 3];

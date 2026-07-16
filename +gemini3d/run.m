@@ -59,23 +59,21 @@ cmd = [cmd, "-dryrun"];
 
 scmd = join(cmd, " ");
 disp("dryrun: " + scmd)
-% [ret, stdout, stderr] = stdlib.subprocess_run(cmd);
-% msg = stdout + stderr;
-[ret, msg] = system(scmd);
+[ret, stdout, stderr] = stdlib.subprocess_run(cmd);
 if ret == 0
   % check for operating system failure that returned 0 but did nothing or failed
-  assert(any(contains(msg, "OK: Gemini dry run")), cmd(1) + " didn't run correctly." + msg)
+  assert(any(contains(stdout, "OK: Gemini dry run")), cmd(1) + " didn't run correctly." + stderr)
   return
 end
 
 if ret == -1073741515
 % Windows 0xc0000135, missing DLL
- msg = msg + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
+ msg = stderr + " On Windows, it's best to build Gemini3D with static libraries--including all numeric libraries " + ...
   "such as LAPACK. " + ...
   "A DLL is missing on your system and gemini.bin cannot run." + ...
   "This can also happen if Gemini3D was built with oneAPI and you're not currently in the oneAPI Command Prompt.";
 elseif ispc() && ret == 128
- msg = msg + " with Windows and Intel oneAPI, it's best to run Gemini3D from the oneAPI command prompt instead of from within Matlab. " + ...
+ msg = stderr + " with Windows and Intel oneAPI, it's best to run Gemini3D from the oneAPI command prompt instead of from within Matlab. " + ...
   "from Windows Terminal, run matlab and Gemini3D like   matlab -batch 'gemini3d.run('/path/to/mysim')' " + ...
   " for self tests do like    matlab -batch 'buildtool test:gemini'";
 end

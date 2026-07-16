@@ -1,4 +1,4 @@
-classdef TestDryrun < matlab.unittest.TestCase
+classdef TestDryrun < StdlibCheck
 
 properties
   datapath
@@ -6,15 +6,6 @@ properties
 end
 
 methods(TestClassSetup)
-
-function check_stdlib(tc)
-try
-  gemini3d.sys.check_stdlib()
-catch e
-  tc.fatalAssertFail(e.message)
-end
-end
-
 function check_root(tc)
 try
   gemini3d.root();
@@ -25,8 +16,16 @@ end
 
 
 function check_mpiexec(tc)
-[s, ~] = system('mpiexec -help');
-tc.assumeEqual(s, 0, "MPIEXEC not found or working")
+cmd = 'mpiexec -help';
+mpi_root = getenv("I_MPI_ROOT");
+if ispc() && ~isempty(mpi_root)
+  bat = fullfile(mpi_root, 'oneapi-vars.bat');
+  if isfile(bat)
+    cmd = ['"', bat, '" && ', cmd];
+  end
+end
+[s, msg] = system(cmd);
+tc.assumeEqual(s, 0, "MPIEXEC not found or working " + msg)
 end
 
 
