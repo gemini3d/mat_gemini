@@ -16,12 +16,15 @@ function setvars = oneapi_setvars()
 % cmd = ['"', char(setvars), '" && icx --version'];
 % [ret, msg] = system(cmd);
 
-assert(isenv("ONEAPI_ROOT"), "environnment variable ONEAPI_ROOT is necessary to locate oneAPI.")
-
 oneapi_root = getenv("ONEAPI_ROOT");
 
-setvars = fullfile(oneapi_root, "setvars.bat");
+setvars = string.empty;
 
-assert(isfile(setvars), "setvar.bat not found under " + oneapi_root)
+if ~isempty(oneapi_root)
+  bat = fullfile(oneapi_root, "oneapi-vars.bat");
+  if isfile(bat)
+    setvars = bat;
+  end
+end
 
 end

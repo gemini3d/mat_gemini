@@ -1,6 +1,9 @@
+%% CHECK_MPIEXEC verify if mpiexec is available and working
+% on Windows, setup oneAPI environment within command
+
 function mpiexec = check_mpiexec(mpiexec)
 arguments
-  mpiexec string {mustBeScalarOrEmpty}
+  mpiexec (1,1) string = "mpiexec"
 end
 
 mpiexec = stdlib.which(mpiexec);

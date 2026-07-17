@@ -16,16 +16,7 @@ end
 
 
 function check_mpiexec(tc)
-cmd = 'mpiexec -help';
-mpi_root = getenv("I_MPI_ROOT");
-if ispc() && ~isempty(mpi_root)
-  bat = fullfile(mpi_root, 'oneapi-vars.bat');
-  if isfile(bat)
-    cmd = ['"', bat, '" && ', cmd];
-  end
-end
-[s, msg] = system(cmd);
-tc.assumeEqual(s, 0, "MPIEXEC not found or working " + msg)
+tc.assumeNotEmpty(gemini3d.sys.check_mpiexec(), "MPIEXEC not found or working")
 end
 
 

@@ -43,11 +43,23 @@ end % function
 
 
 function cmd = gemini_cmd(exe, outdir, mpi_exe)
+arguments
+  exe (1,1) string
+  outdir (1,1) string
+  mpi_exe (1,1) string
+end
 
 cmd = [exe, outdir];
 mpiexec = gemini3d.sys.check_mpiexec(mpi_exe);
 if ~isempty(mpiexec)
   cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
+end
+
+if ispc()
+  setvars = gemini3d.sys.oneapi_setvars();
+  if isfile(setvars)
+    cmd = ['"' + setvars + '"', "&&", cmd];
+  end
 end
 
 end
