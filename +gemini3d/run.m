@@ -45,7 +45,7 @@ end % function
 function cmd = gemini_cmd(exe, outdir, mpi_exe)
 
 cmd = [exe, outdir];
-mpiexec = gemini3d.sys.check_mpiexec(mpi_exe, exe);
+mpiexec = gemini3d.sys.check_mpiexec(mpi_exe);
 if ~isempty(mpiexec)
   cmd = [cmd, "-mpiexec", '"' + mpiexec + '"'];
 end
