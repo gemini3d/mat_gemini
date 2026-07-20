@@ -20,9 +20,6 @@ concurrency:
 
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
 
-# https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2021b-supported-compilers.pdf
-# R2021a, R2021b: GCC-8
-
 # R2022a..R2024b: GCC-10
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2023a-supported-compilers.pdf
 
@@ -37,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2026a, R2023b]
+        release: [R2026a, R2022b]
 
     steps:
 
