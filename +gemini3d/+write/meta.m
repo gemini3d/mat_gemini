@@ -8,15 +8,14 @@ end
 
 filename = stdlib.expanduser(filename);
 
-mat = struct("arch", computer('arch'), "version", version());
-git = struct("version", in1.git_version, "remote", in1.remote, "branch", in1.branch, ...
-"commit", in1.commit, "porcelain", in1.porcelain);
+mat = struct(arch=computer('arch'), version=matlabRelease.Release);
+git = struct(remote=in1.remote, branch=in1.branch, commit=in1.commit, porcelain=in1.porcelain);
 
-js = struct("matlab", mat, "git", git);
+js = struct(matlab=mat, git=git);
 
 if isfield(cfg, "eq_dir")
   % JSON does not allow unescaped backslash
-  js.eq = struct("eq_dir", stdlib.posix(cfg.eq_dir));
+  js.eq = struct(eq_dir=stdlib.posix(cfg.eq_dir));
   hashfn = fullfile(cfg.eq_dir, "sha256sum.txt");
   if isfile(hashfn)
     js.eq.sha256 = strtrim(fileread(hashfn));
@@ -30,7 +29,7 @@ if fid < 1
   error('write:meta:os_error', 'could not create file %s', filename)
 end
 
-fprintf(fid, json);
+fprintf(fid, '%s', json);
 
 fclose(fid);
 
