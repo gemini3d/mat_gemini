@@ -13,7 +13,8 @@ ionospheric model to:
 * read simulation output
 * plot simulation output
 
-The latter two functions are independent of the core GEMINI fortran/C model and as such can be used without first downloading and building.  I.e. to load and plot output data one does not need the main GEMINI fortran/C code, but creating input and running the GEMINI model from matlab require the core fortran/C code.
+The latter two functions are independent of the core GEMINI fortran/C model and as such can be used without first downloading and building.
+I.e. to load and plot output data one does not need GEMINI3D installed, but creating input or running the GEMINI3D model from Matlab requires GEMINI3D installed.
 
 ## Quick Start:  loading and plotting data only
 

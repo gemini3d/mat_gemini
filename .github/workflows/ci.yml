@@ -16,6 +16,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# leave these env vars so that Gemini3D caching works
+env:
+  CMAKE_BUILD_TYPE: Release
+  CMAKE_INSTALL_PREFIX: ~/libgem
+  GEMINI_ROOT: ~/libgem
+  CMAKE_GENERATOR: Ninja
+
 # full tests require >= R2023a
 
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
@@ -34,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        release: [R2026a, R2022b]
+        release: [R2026a, R2023a]
 
     steps:
 

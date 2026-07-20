@@ -1,5 +1,7 @@
 function plan = buildfile
 
+assert(~isMATLABReleaseOlderThan('R2023a'), 'MatGemini requires Matlab >= R2023a. You are running Matlab %s', version())
+
 plan = buildplan(localfunctions);
 plan.DefaultTasks = "setup";
 
