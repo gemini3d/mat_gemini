@@ -5,22 +5,35 @@ assert(~isMATLABReleaseOlderThan('R2023a'), 'MatGemini requires Matlab >= R2023a
 plan = buildplan(localfunctions);
 plan.DefaultTasks = "setup";
 
-if ~isMATLABReleaseOlderThan("R2023b")
-  testTaskArgs = {"test/", "Strict", false};
+if isMATLABReleaseOlderThan("R2023b")
+  plan("test_unit") = matlab.buildtool.Task(Actions=@(context) test_run(context, "unit"));
+  plan("test_msis") = matlab.buildtool.Task(Actions=@(context) test_run(context, "msis"));
+  plan("test_gemini") = matlab.buildtool.Task(Actions=@(context) test_run(context, "gemini"));
+  plan("test") = matlab.buildtool.Task(Dependencies=["test_unit", "test_msis", "test_gemini"]);
+else
+  testTaskArgs = {fullfile(plan.RootFolder, "test"), "Strict", false};
 
   if ~isMATLABReleaseOlderThan("R2024a")
     testTaskArgs(end+1:end+2) = {"TestResults","TestResults.xml"};
   end
 
   if isMATLABReleaseOlderThan("R2024b")
-    plan("test") = matlab.buildtool.tasks.TestTask(testTaskArgs{:});
+    plan("test_unit") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="unit");
+    plan("test_msis") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="msis");
+    plan("test_gemini") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="gemini");
+    plan("test") = matlab.buildtool.Task(Dependencies=["test_unit", "test_msis", "test_gemini"]);
   else
     plan("test:msis") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="msis");
     plan("test:gemini") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="gemini");
     plan("test:unit") = matlab.buildtool.tasks.TestTask(testTaskArgs{:}, Tag="unit");
+    plan("test").Dependencies = "setup";
   end
+end
 
-  plan("test").Dependencies = "setup";
+if isMATLABReleaseOlderThan("R2024b")
+  plan("test_unit").Dependencies = "setup";
+  plan("test_msis").Dependencies = "setup";
+  plan("test_gemini").Dependencies = "setup";
 end
 
 end
@@ -62,5 +75,31 @@ else
   disp(c.Issues)
   error("Errors found in " + join(c.Issues.Location, newline))
 end
+
+end
+
+
+function test_run(context, tag)
+
+test_root = fullfile(context.Plan.RootFolder, "test");
+
+suite = testsuite(test_root, InvalidFileFoundAction="error", Tag=tag);
+
+runner = testrunner('textoutput');
+r = runner.run(suite);
+
+assert(~isempty(r), 'No tests were run')
+
+Lf = sum([r.Failed]);
+Lok = sum([r.Passed]);
+Lk = sum([r.Incomplete]);
+Lt = numel(r);
+assert(Lf == 0, sprintf('%d / %d tests failed', Lf, Lt))
+
+if Lk
+  fprintf('%d / %d tests skipped\n', Lk, Lt);
+end
+
+fprintf('%d / %d tests succeeded\n', Lok, Lt);
 
 end

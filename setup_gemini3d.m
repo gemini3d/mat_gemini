@@ -3,21 +3,15 @@ arguments
   envfile {mustBeTextScalar} = ''
   stdlib_url {mustBeTextScalar} = ''
 end
-%% run this before running Gemini Matlab scripts
-
-cwd = fileparts(mfilename('fullpath'));
-addpath(cwd)
 
 %% ensure matlab-stdlib is present
 gemini3d.sys.check_stdlib(stdlib_url)
 
 %% load environment file if it exists
-if ~isMATLABReleaseOlderThan('R2023a')
-  e = stdlib.expanduser(envfile);
-  if isfile(e)
-    disp("Loading environment file: " + e)
-    loadenv(e)
-  end
+e = stdlib.expanduser(envfile);
+if isfile(e)
+  disp("Loading environment file: " + e)
+  loadenv(e)
 end
 
 %% check if msis_setup is found--needed to setup simulations

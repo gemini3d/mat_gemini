@@ -1,4 +1,4 @@
-classdef TestMSIS < StdlibCheck
+classdef TestMSIS < SharedPath
 
 properties
 xg

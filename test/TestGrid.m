@@ -1,4 +1,4 @@
-classdef TestGrid < StdlibCheck
+classdef TestGrid < SharedPath
 
 
 methods (Test, TestTags="unit")

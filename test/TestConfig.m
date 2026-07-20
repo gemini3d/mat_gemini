@@ -1,4 +1,4 @@
-classdef TestConfig < matlab.unittest.TestCase
+classdef TestConfig < SharedPath
 
 properties
 cwd = fileparts(mfilename("fullpath"))
@@ -8,7 +8,8 @@ end
 methods(TestClassSetup)
 
 function config_path(tc)
-tc.config = fullfile(tc.cwd, "config.nml");
+tc.config = fullfile(tc.cwd, 'config.nml');
+tc.assumeThat(tc.config, matlab.unittest.constraints.IsFile)
 end
 
 end
@@ -25,7 +26,7 @@ tc.verifyEqual(s.doublequote, "@GEMINI_CIROOT@/test321")
 end
 
 function test_find_config(tc)
-tc.verifyEqual(gemini3d.find.config(tc.cwd), tc.config)
+tc.verifyTrue(stdlib.samepath(gemini3d.find.config(tc.cwd), tc.config))
 end
 
 function test_read_config(tc)

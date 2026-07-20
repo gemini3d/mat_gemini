@@ -4,15 +4,19 @@ function p = expand_envvar(p)
 % returns input if no @ found.
 
 arguments
-  p (1,1) string
+  p {mustBeTextScalar}
 end
 
-i = strfind(p, "@");
+i = strfind(p, '@');
 if length(i) < 2
   return
 end
 
-envvar = extractBetween(p, i(1)+1, i(2)-1);
+if ischar(p)
+  envvar = p(i(1)+1:i(2)-1);
+else
+  envvar = extractBetween(p, i(1)+1, i(2)-1);
+end
 r = getenv(envvar);
 if strlength(r) < 1
   error("gemini3d:fileio:expand_envvar", "environment variable %s not defined or empty", envvar)
@@ -20,4 +24,4 @@ end
 
 p = fullfile(extractBefore(p, i(1)), r, extractAfter(p, i(2)));
 
-end % function expand_envvar
+end 

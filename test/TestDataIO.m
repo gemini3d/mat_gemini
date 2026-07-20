@@ -1,4 +1,4 @@
-classdef TestDataIO < StdlibCheck
+classdef TestDataIO < SharedPath
 
 properties
 cwd = fileparts(mfilename('fullpath'))
@@ -34,9 +34,8 @@ tc.verifyTrue(endsWith(gemini3d.find.simsize(tc.data_path), fullfile(tc.name, "i
 end
 
 function test_get_mpi_count(tc)
-import gemini3d.sys.get_mpi_count
 C = gemini3d.sys.get_cpu_count();
-Cm = get_mpi_count(tc.data_path);
+Cm = gemini3d.sys.get_mpi_count(tc.data_path);
 tc.verifyTrue(Cm >= 1 && Cm <= C)
 end
 

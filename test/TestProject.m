@@ -1,4 +1,4 @@
-classdef TestProject < StdlibCheck
+classdef TestProject < SharedPath
 properties (TestParameter)
   name = {"mini2dew_eq", "mini2dew_fang", "mini2dew_glow", ...
           "mini2dns_eq", "mini2dns_fang", "mini2dns_glow", ...
@@ -21,7 +21,6 @@ end
 end
 
 function setup_env(tc)
-tc.assumeFalse(isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
 tc.ref_dir = fullfile(tc.cwd, "data");

@@ -1,4 +1,4 @@
-classdef TestDryrun < StdlibCheck
+classdef TestDryrun < SharedPath
 
 properties
   datapath

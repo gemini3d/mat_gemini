@@ -1,4 +1,4 @@
-classdef TestMagcalc < StdlibCheck
+classdef TestMagcalc < SharedPath
 properties (TestParameter)
   name = {"mini2dew_fang", "mini2dns_fang", "mini3d_fang"}
 end
@@ -19,7 +19,6 @@ end
 end
 
 function setup_env(tc)
-tc.assumeFalse(isMATLABReleaseOlderThan('R2023a'))
 import matlab.unittest.fixtures.EnvironmentVariableFixture
 
 cwd = fileparts(mfilename('fullpath'));
