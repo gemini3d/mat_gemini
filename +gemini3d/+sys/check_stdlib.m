@@ -1,4 +1,7 @@
-function is_ok = check_stdlib()
+function is_ok = check_stdlib(url)
+arguments
+  url {mustBeTextScalar} = ''
+end
 
 persistent stdlib_ok
 
@@ -7,21 +10,13 @@ if ~isempty(stdlib_ok) && stdlib_ok
   return
 end
 
-cwd = fileparts(mfilename('fullpath'));
-r = fullfile(cwd, "../..");
+p = which('stdlib.expanduser');
 
-p = what(fullfile(r, 'matlab-stdlib'));
-if ~isempty(p)
-  p = p(1);  % first entry is from matlabpath, later comes directory of that name
-end
-
-if isempty(p) || ~any(contains(p.packages, 'stdlib'))
-  ret = system("git -C " + r + " submodule update --init");
-  assert(ret == 0, "could not Git submodule update matlab-stdlib in " + r)
-end
-
-if ~contains(path(), r)
-  addpath(p.path)
+if isempty(p)
+  if ~isempty(url)
+    pkg = websave('stdlib.mltbx', url);
+    matlab.addons.toolbox.installToolbox(pkg);
+  end
 end
 
 stdlib_ok = stdlib.expanduser("~") ~= "~";

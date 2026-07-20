@@ -1,17 +1,15 @@
-function setup(envfile)
+function setup_gemini3d(envfile, stdlib_url)
 arguments
   envfile {mustBeTextScalar} = ''
+  stdlib_url {mustBeTextScalar} = ''
 end
 %% run this before running Gemini Matlab scripts
 
-assert(~isMATLABReleaseOlderThan('R2021a'), 'MatGemini requires Matlab >= R2021a. You are running Matlab %s', version())
-
 cwd = fileparts(mfilename('fullpath'));
 addpath(cwd)
-setenv('MATGEMINI', cwd)
 
 %% ensure matlab-stdlib is present
-gemini3d.sys.check_stdlib()
+gemini3d.sys.check_stdlib(stdlib_url)
 
 %% load environment file if it exists
 if ~isMATLABReleaseOlderThan('R2023a')
@@ -30,4 +28,4 @@ end
 
 disp("Using Gemini3D-MSIS " + exe)
 
-end % function
+end

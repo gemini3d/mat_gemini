@@ -21,8 +21,6 @@ arguments
   opts.vars (1,:) string = string.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 filename = stdlib.expanduser(filename);
 
 if ~isfile(filename)

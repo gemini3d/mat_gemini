@@ -1,3 +1,0 @@
-[submodule "matlab-stdlib"]
-	path = matlab-stdlib
-	url = https://github.com/geospace-code/matlab-stdlib

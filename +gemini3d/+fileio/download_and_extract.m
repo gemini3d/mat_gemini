@@ -9,8 +9,6 @@ arguments
   url_ini {mustBeTextScalar} = ''
 end
 
-gemini3d.sys.check_stdlib()
-
 test_dir = fullfile(data_dir, name);
 
 archive = download_data(name, data_dir, url_ini);

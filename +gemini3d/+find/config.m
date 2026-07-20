@@ -4,8 +4,6 @@ arguments
   direc {mustBeTextScalar}
 end
 
-gemini3d.sys.check_stdlib()
-
 direc = stdlib.expanduser(direc);
 
 filename = string.empty;

@@ -1,1 +1,7 @@
 *.m linguist-language=MATLAB
+*.m eol=lf
+*.md eol=lf
+*.cmake eol=lf
+*.py eol=lf
+*.json eol=lf
+*.yml eol=lf

@@ -24,18 +24,18 @@ end
 end
 
 
-function setupTask(~, envfile)
+function setupTask(context, envfile)
 arguments
-  ~
+  context
   envfile {mustBeTextScalar} = '~/gemini3d.env'
 end
 
-setup(envfile)
+meta = jsondecode(fileread(fullfile(context.Plan.RootFolder, 'codemeta.json')));
+
+setup_gemini3d(envfile, meta.softwareRequirements{1})
 
 gemini3d.sys.macos_path()
 
-% leave this assert here to fail CI as "setup()" only warns, and CI will seem to pass
-% but actually be skipping several tests.
 exe = gemini3d.find.gemini_exe('msis_setup');
 if isempty(exe)
   warning("need to setup Gemini3D 'cmake --workflow build && cmake --install build' and set environment variable GEMINI_ROOT")

@@ -9,8 +9,6 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 % make sure to add the default directory where the magnetic fields are to
 % be found
 

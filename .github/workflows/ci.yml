@@ -50,8 +50,6 @@ jobs:
 
     - name: Git Checkout ${{ github.action_repository }}
       uses: actions/checkout@v7
-      with:
-        submodules: true
 
     - name: Run Matlab syntax checks
       if: ${{ matrix.release >= 'R2023b' }}

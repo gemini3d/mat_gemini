@@ -1,11 +1,8 @@
 function exe = gemini_exe(name)
 %% Find an executable from the Gemini3D program set, using paths common to Gemini3D
 arguments
-  name (1,1) string {mustBeNonzeroLengthText}
+  name {mustBeTextScalar,mustBeNonzeroLengthText}
 end
-
-
-gemini3d.sys.check_stdlib()
 
 if ispc() && ~endsWith(name, ".exe")
   name = name + ".exe";
@@ -30,4 +27,4 @@ for p = paths
     end
   end
 end
-end % function
+end

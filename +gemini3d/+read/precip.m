@@ -4,8 +4,6 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 filename = stdlib.expanduser(filename);
 
 if ~isempty(time)

@@ -8,8 +8,6 @@ arguments
   refdir (1,1) string
 end
 
-gemini3d.sys.check_stdlib()
-
 assert(all(size(A) == size(B)), "gemini3d:plot:diff:shape_error", "size of new and ref arrays don't match")
 assert(ndims(A) <= 3, "gemini3d:plot:diff:shape_error", "for 3D or 2D arrays only")
 

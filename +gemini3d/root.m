@@ -10,7 +10,7 @@ end
 if isempty(p) || ~any(contains(p.classes, 'Gemini3d'))
   rp = fullfile(fileparts(mfilename('fullpath')), "..");
   error("gemini3d:root:FileNotFound", ...
-    "Gemini3D MatGemini package not found. Try running 'setup()' from the mat_gemini/ directory, which should be at: %s", rp)
+    "Gemini3D MatGemini package not found. Try running 'setup_gemini3d()' from the mat_gemini/ directory, which should be at: %s", rp)
 end
 
 gp = p(1).path;

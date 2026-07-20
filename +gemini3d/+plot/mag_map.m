@@ -4,8 +4,6 @@ arguments
   direc (1,1) string
 end
 
-gemini3d.sys.check_stdlib()
-
 direc = stdlib.expanduser(direc);
 
 %SIMULATION location

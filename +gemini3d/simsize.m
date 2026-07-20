@@ -3,8 +3,6 @@ arguments
   apath (1,1) string {mustBeNonzeroLengthText}
 end
 
-gemini3d.sys.check_stdlib()
-
 fn = gemini3d.find.simsize(apath);
 assert(~isempty(fn), "Invalid simulation directory: no simulation grid simgrid.h5 found in " + apath)
 

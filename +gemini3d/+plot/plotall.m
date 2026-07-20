@@ -20,8 +20,6 @@ arguments
   opts.parallel (1,1) {mustBeInteger} = 0
 end
 
-gemini3d.sys.check_stdlib()
-
 visible = isempty(saveplot_fmt);
 direc = stdlib.expanduser(direc);
 

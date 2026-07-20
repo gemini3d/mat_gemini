@@ -25,8 +25,6 @@ arguments
   opts.time (1,:) datetime = datetime.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 tol.rtol = 1e-5;
 tol.rtolN = 1e-5;  % TODO: need to update ref data
 tol.rtolT = 1e-5;

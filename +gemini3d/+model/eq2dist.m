@@ -6,8 +6,6 @@ arguments
   xg (1,1) struct
 end
 
-gemini3d.sys.check_stdlib()
-
 peq = read_equilibrium(p);
 %% read equilibrium grid
 [xgin, ok] = gemini3d.read.grid(p.eq_dir);

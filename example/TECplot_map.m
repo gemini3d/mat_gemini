@@ -1,9 +1,7 @@
 function TECplot_map(direc)
 arguments
-  direc (1,1) string {mustBeFolder}
+  direc {mustBeTextScalar,mustBeFolder}
 end
-
-gemini3d.sys.check_stdlib()
 
 stdlib.makedir(fullfile(direc, "TECplots"));    %store output plots with the simulation data
 stdlib.makedir(fullfile(direc, "TECplots_eps"));    %store output plots with the simulation data
@@ -95,6 +93,6 @@ for it=1:length(cfg.times)
 
 
     %PRINT THE THING
-    print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
-    print('-depsc2',[direc,'/TECplots_eps/',filename,'.eps']);
+    exportgraphics(gcf, fullfile(direc,'TECplots',filename+".png"), 'Resolution', 300);
+    exportgraphics(gcf, fullfile(direc,'TECplots_eps',filename+".eps"));
 end

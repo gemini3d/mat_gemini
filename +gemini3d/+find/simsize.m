@@ -5,8 +5,6 @@ arguments
   suffix (1,1) string {mustBeNonzeroLengthText} = ".h5"
 end
 
-gemini3d.sys.check_stdlib()
-
 apath = stdlib.expanduser(apath);
 
 file = string.empty;

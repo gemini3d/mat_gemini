@@ -5,8 +5,6 @@ arguments
   suffix (1,1) string {mustBeNonzeroLengthText} = ".h5"
 end
 
-gemini3d.sys.check_stdlib()
-
 filename = string.empty;
 
 stem0 = gemini3d.datelab(time);

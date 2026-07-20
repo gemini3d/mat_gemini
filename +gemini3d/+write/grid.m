@@ -6,8 +6,6 @@ arguments
   xg (1,1) struct
 end
 
-gemini3d.sys.check_stdlib()
-
 %% check the input struct to make sure needed fields are present
 assert(isfield(p, "indat_grid"), "gemini3d:write:grid:keyError", "config field indat_grid missing...")
 assert(isfield(p, "indat_size"), "gemini3d:write:grid:keyError", "config field indat_size missing...")

@@ -15,8 +15,6 @@ arguments
   opts.dryrun (1,1) logical = false
 end
 
-gemini3d.sys.check_stdlib()
-
 %% find gemini.bin executable
 gemini_exe = gemini3d.find.gemini_exe(opts.gemini_exe);
 assert(~isempty(gemini_exe), "gemini3d:run:file_not_found", ...

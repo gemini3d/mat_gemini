@@ -11,8 +11,6 @@ arguments
   xg struct = struct.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 %% SIMULATION META-DATA
 cfg = gemini3d.read.config(direc);
 
@@ -34,7 +32,7 @@ else
   phidist = deg2rad(cfg.sourcemlon);
 end
 
-%% FIELD POINTS OF INTEREST 
+%% FIELD POINTS OF INTEREST
 % CAN/SHOULD BE DEFINED INDEPENDENT OF SIMULATION GRID
 if flag2D
   Lphi=1;

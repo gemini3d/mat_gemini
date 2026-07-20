@@ -4,8 +4,6 @@ arguments
   time datetime {mustBeScalarOrEmpty} = datetime.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 if ~isempty(time)
   filename = gemini3d.find.frame(filename, time);
 end

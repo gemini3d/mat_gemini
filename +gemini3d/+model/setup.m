@@ -6,8 +6,6 @@ arguments
   out_dir string = string.empty
 end
 
-gemini3d.sys.check_stdlib()
-
 %% parse input
 if ~isstruct(cfg)
   % path to config.nml

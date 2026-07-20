@@ -1,5 +1,3 @@
-gemini3d.sys.check_stdlib()
-
 %SIMULATIONS LOCAITONS
 %simname='tohoku20113D_lowres/';
 %simname_control='tohoku20113D_lowres_control/';
@@ -246,7 +244,7 @@ for it=1:length(cfg.times)
       hold off;
       titlestring = string(cfg.times(it));
       title(titlestring);
-      print('-dpng',[direc,'/TECplots/',filename,'.png'],'-r300');
+      exportgraphics(gcf, fullfile(direc,'TECplots',filename+".png"), 'Resolution', 300)
     end
 end
 
@@ -276,10 +274,10 @@ if (flag2D)
   ax=axis;
   yline(cfg.sourcemlat,'r--','MarkerSize',10,'LineWidth',2);
   hold off;
-  print('-dpng',[direc,'/TECplots/TEC_timeseries.png'],'-r300');
+  exportgraphics(gcf, fullfile(direc,'TECplots',"TEC_timeseries.png"), 'Resolution', 300)
 end
 
 
 %SAVE THE DATA TO A .MAT FILE IN CASE WE3 NEED IT LATER
 t=cfg.times;
-save([direc,'/vTEC.mat'],'mlat','mlong','t','cfg','*vTEC*','-v7');
+save(fullfile(direc,'vTEC.mat'),'mlat','mlong','t','cfg','*vTEC*','-v7');

@@ -20,7 +20,7 @@ The latter two functions are independent of the core GEMINI fortran/C model and 
 Get MatGemini code:
 
 ```sh
-git clone --recurse-submodules https://github.com/gemini3d/mat_gemini
+git clone https://github.com/gemini3d/mat_gemini
 ```
 
 We assume that Gemini3D binary executables have previously been built on your computer.
