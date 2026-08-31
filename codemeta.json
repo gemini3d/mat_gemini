@@ -8,7 +8,7 @@
     "issueTracker": "https://github.com/gemini3d/gemini-matlab/issues",
     "name": "Gemini3D-Matlab",
     "softwareRequirements": [
-        "https://github.com/geospace-code/matlab-stdlib/releases/download/5.9.2/stdlib.mltbx"
+        "https://github.com/geospace-code/matlab-stdlib/releases/download/5.9.3/stdlib.mltbx"
     ],
     "identifier": "10.5281/zenodo.3877445",
     "description": "Core Matlab scripts for Gemini3D",

@@ -7,10 +7,9 @@ if ~isempty(p)
   p = p(1);  % first entry is from matlabpath, later comes directory of that name
 end
 
-if isempty(p) || ~any(contains(p.classes, 'Gemini3d'))
+if isempty(p)
   rp = fullfile(fileparts(mfilename('fullpath')), "..");
-  error("gemini3d:root:FileNotFound", ...
-    "Gemini3D MatGemini package not found. Try running 'setup_gemini3d()' from the mat_gemini/ directory, which should be at: %s", rp)
+  error("gemini3d:root:FileNotFound", "Gemini3D MatGemini package not found, try running 'buildtool setup' from %s.", rp)
 end
 
 gp = p(1).path;

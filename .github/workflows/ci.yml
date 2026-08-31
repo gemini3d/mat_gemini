@@ -4,30 +4,21 @@ on:
   push:
     paths:
     - "**.m"
-    - "**.cmake"
-    - "**/CMakeLists.txt"
-    - "cmake/libraries.json"
+    - "libraries.json"
     - ".github/workflows/**"
     - "!scripts/**"
-    - "!examples/**"
+    - "!example/**"
 
 # avoid wasted runs
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# leave these env vars so that Gemini3D caching works
-env:
-  CMAKE_BUILD_TYPE: Release
-  CMAKE_INSTALL_PREFIX: ~/libgem
-  GEMINI_ROOT: ~/libgem
-  CMAKE_GENERATOR: Ninja
-
 # full tests require >= R2023a
 
 # https://www.mathworks.com/support/requirements/supported-compilers-linux.html
 
-# R2022a..R2024b: GCC-10
+# R2022a..R2026a at least: GCC-10
 # https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/system-requirements-release-2023a-supported-compilers.pdf
 
 
@@ -35,13 +26,13 @@ jobs:
 
   linux:
     timeout-minutes: 30
-    runs-on: ubuntu-22.04
-    # Ubuntu 22.04 GA Linux runner has GCC-10, needed for Matlab R2022a..R2025b
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
       matrix:
-        release: [R2026a, R2023a]
+        release: [R2026a, R2024a]
+# R2024a is the earliest matlab Release to support ubuntu 24.04
 
     steps:
 
@@ -71,10 +62,6 @@ jobs:
       timeout-minutes: 15
       env:
         CMAKE_INSTALL_PREFIX: ${{ github.workspace }}/libs
-        CC: gcc-10
-        CXX: g++-10
-        FC: gfortran-10
-    # avoid GLIBCXX conflicts causing subprocess_run to not work
 
     # this works for Matlab >= R2023a
     - name: set test env vars in loadenv() file
@@ -103,6 +90,9 @@ jobs:
       uses: matlab-actions/run-build@v3
       with:
         tasks: test:msis
+      env:
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+
 
     - name: Run Gemini3D tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
@@ -110,3 +100,5 @@ jobs:
       uses: matlab-actions/run-build@v3
       with:
         tasks: test:gemini
+      env:
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6

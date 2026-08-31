@@ -64,6 +64,38 @@ end
 end
 
 
+function packageTask(context)
+
+uuid = "dd893656-62a3-41c7-bbf5-c091313bc634";
+name = "gemini3d";
+
+opts = matlab.addons.toolbox.ToolboxOptions(context.Plan.RootFolder, uuid);
+opts.OutputFile = fullfile(context.Plan.RootFolder, name + ".mltbx");
+
+meta = fileread(fullfile(context.Plan.RootFolder, "codemeta.json"));
+meta = jsondecode(meta);
+
+opts.ToolboxName = meta.name;
+% opts.ToolboxVersion = meta.version;
+opts.ToolboxFiles = fullfile(context.Plan.RootFolder, "+" + name);
+
+opts.SupportedPlatforms.Win64 = true;
+opts.SupportedPlatforms.Mac = true;
+opts.SupportedPlatforms.Glnxa64 = true;
+opts.SupportedPlatforms.MatlabOnline = true;
+
+opts.MinimumMatlabRelease = "R2024b";
+opts.MaximumMatlabRelease = "";
+
+opts.RequiredAddons = struct(Name="stdlib", ...
+  Identifier="fd5ea185-e475-4416-af11-1c26cb6212b2", ...
+  EarliestVersion="0.0", LatestVersion="999.0", ...
+  DownloadURL=string(meta.softwareRequirements{1}));
+
+matlab.addons.toolbox.packageToolbox(opts);
+end
+
+
 function checkTask(context)
 root = context.Plan.RootFolder;
 

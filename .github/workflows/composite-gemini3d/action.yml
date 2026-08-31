@@ -22,7 +22,7 @@ runs:
     id: cache-gemini
     uses: actions/cache@v6
     with:
-      path: ${{ env.CMAKE_INSTALL_PREFIX }}
+      path: ${{ github.workspace }}/libs
       key: ${{ runner.os }}-gemini-${{ env.CXX }}-${{ steps.gemini3d-sha.outputs.sha }}
 
   - name: Checkout Gemini3D
@@ -32,7 +32,6 @@ runs:
       repository: gemini3d/gemini3d
       ref: ${{ steps.gemini3d-sha.outputs.sha }}
       path: ${{ github.workspace }}/gemini3d
-      submodules: true
 
   - name: non-cache Install Gemini3D
     if: steps.cache-gemini.outputs.cache-hit != 'true'
