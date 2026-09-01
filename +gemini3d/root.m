@@ -9,7 +9,8 @@ end
 
 if isempty(p)
   rp = fullfile(fileparts(mfilename('fullpath')), "..");
-  error("gemini3d:root:FileNotFound", "Gemini3D MatGemini package not found, try running 'buildtool setup' from %s.", rp)
+  warning("gemini3d:root:FileNotFound", "Gemini3D MatGemini package not found, try running 'buildtool setup' from %s.", rp)
+  return
 end
 
 gp = p(1).path;

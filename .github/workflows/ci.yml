@@ -91,8 +91,8 @@ jobs:
       with:
         tasks: test:msis
       env:
-        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4
+# another possibility is removing Matlab's .so paths from LD_LIBRARY_PATH
 
     - name: Run Gemini3D tests (>= R2024b)
       if: ${{ matrix.release >= 'R2024b' }}
@@ -101,4 +101,4 @@ jobs:
       with:
         tasks: test:gemini
       env:
-        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4
