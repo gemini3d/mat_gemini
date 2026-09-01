@@ -15,8 +15,10 @@ repo = gitrepo(cwd);
 if ~isMATLABReleaseOlderThan('R2025a')
   git.remote = repo.Remotes(1).URL;
 end
-git.branch = repo.CurrentBranch(1).Name;
+if ~repo.IsDetached
+  git.branch = repo.CurrentBranch(1).Name;
+  git.porcelain = isempty(status(repo));
+end
 git.commit = repo.LastCommit(1).ID;
-git.porcelain = isempty(status(repo)) && ~repo.IsDetached;
 
 end
