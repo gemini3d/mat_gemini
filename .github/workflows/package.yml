@@ -42,4 +42,4 @@ jobs:
       uses: softprops/action-gh-release@v3
       if: github.ref_type == 'tag'
       with:
-        files: stdlib.mltbx
+        files: gemini3d.mltbx

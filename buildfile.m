@@ -92,7 +92,10 @@ opts.RequiredAddons = struct(Name="stdlib", ...
   EarliestVersion="0.0", LatestVersion="999.0", ...
   DownloadURL=string(meta.softwareRequirements{1}));
 
-matlab.addons.toolbox.packageToolbox(opts);
+matlab.addons.toolbox.packageToolbox(opts)
+
+disp(opts.OutputFile + " created")
+
 end
 
 
