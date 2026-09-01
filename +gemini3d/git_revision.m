@@ -11,6 +11,7 @@ if isMATLABReleaseOlderThan('R2023b')
 end
 
 repo = gitrepo(cwd);
+
 if ~isMATLABReleaseOlderThan('R2025a')
   git.remote = repo.Remotes(1).URL;
 end
