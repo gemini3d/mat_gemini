@@ -54,11 +54,11 @@ jobs:
         tasks: check
 
     - name: Install prereqs
-      uses: ./.github/workflows/composite-pkg
+      uses: gemini3d/gemini3d/.github/actions/composite-pkg@main
       timeout-minutes: 15
 
     - name: install Gemini3D executables
-      uses: ./.github/workflows/composite-gemini3d
+      uses: ./.github/actions/composite-gemini3d
       timeout-minutes: 15
       env:
         CMAKE_INSTALL_PREFIX: ${{ github.workspace }}/libs
