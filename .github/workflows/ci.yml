@@ -8,6 +8,8 @@ on:
     - ".github/workflows/**"
     - "!scripts/**"
     - "!example/**"
+  pull_request:
+  workflow_dispatch:
 
 # avoid wasted runs
 concurrency:
@@ -26,12 +28,12 @@ jobs:
 
   linux:
     timeout-minutes: 30
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        release: [R2026a, R2024a]
+        release: [latest, R2024a]
 # R2024a is the earliest matlab Release to support ubuntu 24.04
 
     steps:
@@ -71,21 +73,21 @@ jobs:
         echo "GEMINI_CIROOT=${{ github.workspace }}/ci" >> ~/gemini3d.env
 
     - name: Run Matlab (< R2024b) tests
-      if: ${{ matrix.release < 'R2024b' }}
+      if: ${{ matrix.release < 'R2024b' && !startsWith(matrix.release, 'latest') }}
       timeout-minutes: 15
       uses: matlab-actions/run-build@v3
       with:
         tasks: test
 
     - name: Run unit tests (>= R2024b)
-      if: ${{ matrix.release >= 'R2024b' }}
+      if: ${{ matrix.release >= 'R2024b' || startsWith(matrix.release, 'latest') }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v3
       with:
         tasks: test:unit
 
     - name: Run MSIS tests (>= R2024b)
-      if: ${{ matrix.release >= 'R2024b' }}
+      if: ${{ matrix.release >= 'R2024b' || startsWith(matrix.release, 'latest') }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v3
       with:
@@ -95,7 +97,7 @@ jobs:
 # another possibility is removing Matlab's .so paths from LD_LIBRARY_PATH
 
     - name: Run Gemini3D tests (>= R2024b)
-      if: ${{ matrix.release >= 'R2024b' }}
+      if: ${{ matrix.release >= 'R2024b' || startsWith(matrix.release, 'latest') }}
       timeout-minutes: 5
       uses: matlab-actions/run-build@v3
       with:
